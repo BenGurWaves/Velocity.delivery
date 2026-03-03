@@ -13,6 +13,22 @@
 </head>
 <body>
 
+  <!-- ── Nav ── -->
+  <nav class="nav nav--scrolled" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">Velocity<span class="logo-dot">.</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="/">Home</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#faq">FAQ</a>
+        <a href="#" class="nav-cta" id="navCtaLink">Get a free redesign</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
   <section class="auth-page">
       <div class="auth-card">
         <div class="auth-header">
@@ -68,6 +84,26 @@
   <script>
   (function () {
     'use strict';
+
+    // ── Mobile nav toggle ──
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (toggle && links) {
+      toggle.addEventListener('click', function() {
+        links.classList.toggle('is-open');
+        toggle.classList.toggle('is-open');
+      });
+      links.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          links.classList.remove('is-open');
+          toggle.classList.remove('is-open');
+        });
+      });
+    }
+
+    // CTA link goes to homepage start section
+    var ctaLink = document.getElementById('navCtaLink');
+    if (ctaLink) ctaLink.href = '/#start';
 
     var tabSI = document.getElementById('tabSignIn');
     var tabSU = document.getElementById('tabSignUp');
@@ -146,7 +182,6 @@
       localStorage.setItem('velocity_auth', 'true');
 
       // Call backend API to create account + send welcome email
-      // (fires in background — don't block redirect)
       try {
         fetch('/api/auth/signup', {
           method: 'POST',
@@ -172,7 +207,7 @@
       }, 800);
     });
 
-    // Sign In handler
+    // Sign In handler — also fetches any saved lead data from backend
     formSI.addEventListener('submit', function (e) {
       e.preventDefault();
       var btn = document.getElementById('siBtn');
@@ -184,25 +219,46 @@
       // Check localStorage for existing user
       var stored = localStorage.getItem('velocity_user');
       if (stored) {
-        var user = JSON.parse(stored);
-        if (user.email === email) {
+        var existing = JSON.parse(stored);
+        if (existing.email === email) {
           localStorage.setItem('velocity_auth', 'true');
           window.location.href = '/dashboard.html';
           return;
         }
       }
 
-      // For now, create a basic session (backend auth coming later)
-      localStorage.setItem('velocity_user', JSON.stringify({
+      // Create session and try to load any saved lead data from backend
+      var user = {
         email: email,
         website_url: '',
         created_at: new Date().toISOString(),
         plan: null,
         status: 'active',
         progress: 0
-      }));
-      localStorage.setItem('velocity_auth', 'true');
-      window.location.href = '/dashboard.html';
+      };
+
+      // Try to fetch saved redesign data for this email
+      fetch('/api/lead-data?email=' + encodeURIComponent(email))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.data) {
+            var d = data.data;
+            if (d.website_url) user.website_url = d.website_url;
+            if (d.business_name) user.business_name = d.business_name;
+            if (d.niche) user.niche = d.niche;
+            if (d.services) user.services = d.services;
+            if (d.location) user.location = d.location;
+            if (d.style) user.style = d.style;
+            if (d.site_type) user.site_type = d.site_type;
+            if (d.phone) user.phone = d.phone;
+          }
+        })
+        .catch(function() {})
+        .finally(function() {
+          localStorage.setItem('velocity_user', JSON.stringify(user));
+          localStorage.setItem('velocity_auth', 'true');
+          window.location.href = '/dashboard.html';
+        });
     });
   })();
   </script>
