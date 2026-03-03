@@ -349,14 +349,16 @@ function generateContentFromInput(biz) {
   const name = biz.name;
   const loc = biz.location || 'your area';
   const years = biz.years || '10+';
+  const archetype = detectArchetype(biz);
+  const config = getArchetypeConfig(archetype);
 
-  // Hero
+  // Hero — archetype-aware
   const hero = {
     headline: nicheData.heroHeadline,
     subtext: nicheData.heroSub,
-    tag: `Licensed & Insured • ${loc}`,
-    cta_primary: 'Get Your Free Quote',
-    cta_secondary: 'See Our Work',
+    tag: config.heroTag || (archetype === 'local-service' ? `Licensed & Insured • ${loc}` : null),
+    cta_primary: config.labels.cta,
+    cta_secondary: config.labels.services,
   };
 
   // Services
@@ -488,22 +490,180 @@ function getNicheContent(niche, biz) {
         { text: `We've used ${name} for three commercial buildouts. Work passes inspection the first time, every time.`, author: 'Mark S.', role: 'General Contractor' },
       ],
     },
+    // ── Creative / Artist / Music archetypes ──
+    'photography': {
+      heroHeadline: 'Moments worth remembering.',
+      heroSub: `${name} captures the stories that matter most. From intimate portraits to full-scale events, every frame is intentional.`,
+      services: [
+        { name: 'Portrait Sessions', desc: 'Studio and outdoor portraits that feel natural, not posed.' },
+        { name: 'Event Photography', desc: 'Weddings, corporate events, celebrations — captured as they unfold.' },
+        { name: 'Commercial Work', desc: 'Product shots, headshots, brand photography that tells your story.' },
+        { name: 'Photo Editing', desc: 'Professional retouching and color grading that matches your vision.' },
+      ],
+      aboutText: `${name} has been behind the lens for ${years} years. Every shoot starts with listening — understanding what you want to remember, and then making it happen.`,
+      testimonials: [
+        { text: 'The photos from our wedding still make me cry. In the best way.', author: 'Rachel & Mike', role: 'Wedding Clients' },
+        { text: `${name} made our whole team look like we actually enjoy our jobs. Which we do, but you know.`, author: 'Sarah L.', role: 'Marketing Director' },
+        { text: 'Finally, headshots I don\'t hate. Natural, professional, and I actually look like myself.', author: 'James K.', role: 'Client' },
+      ],
+    },
+    'musician': {
+      heroHeadline: 'Feel the music.',
+      heroSub: `${name} brings unforgettable live performance and original sound to every venue and event.`,
+      services: [
+        { name: 'Live Performance', desc: 'Solo, duo, or full band — tailored to your event and venue.' },
+        { name: 'Original Music', desc: 'Original compositions and arrangements for any occasion.' },
+        { name: 'Session Work', desc: 'Studio recording, session playing, and collaboration.' },
+        { name: 'Music Lessons', desc: 'Private and group lessons for all skill levels.' },
+      ],
+      aboutText: `${name} has been making music for ${years} years. From dive bars to concert halls, the goal is always the same — make people feel something real.`,
+      testimonials: [
+        { text: 'They played our wedding and every single guest was on the dance floor. Absolute magic.', author: 'Amy & Chris', role: 'Wedding' },
+        { text: 'Booked them for our corporate event. Professional, engaging, and the perfect vibe.', author: 'Mark T.', role: 'Event Planner' },
+        { text: 'Incredible talent and genuinely great people to work with.', author: 'Nina R.', role: 'Venue Manager' },
+      ],
+    },
+    // ── Food / Restaurant archetypes ──
+    'restaurant': {
+      heroHeadline: 'Come hungry. Leave happy.',
+      heroSub: `${name} has been a neighborhood favorite in ${loc} for ${years} years. Fresh ingredients, made-from-scratch recipes, and a table that feels like home.`,
+      services: [
+        { name: 'Dinner Service', desc: 'Seasonal menu featuring locally sourced ingredients and bold flavors.' },
+        { name: 'Weekend Brunch', desc: 'Handmade pastries, farm-fresh eggs, bottomless coffee, and no rush.' },
+        { name: 'Private Events', desc: 'Birthdays, anniversaries, corporate dinners — our space, your celebration.' },
+        { name: 'Catering', desc: 'Full-service catering with the same quality you get at our table.' },
+        { name: 'Takeout & Delivery', desc: 'Your favorites, packaged with care and ready when you are.' },
+      ],
+      aboutText: `${name} started with a simple idea: good food shouldn't be complicated.\\nEvery dish on our menu is made with care, from scratch, using ingredients we believe in.`,
+      testimonials: [
+        { text: 'This is our go-to spot. The pasta alone is worth the drive. Staff remembers your name after one visit.', author: 'Laura M.', role: `Regular, ${loc}` },
+        { text: 'Hosted my wife\'s birthday here. They went above and beyond — custom menu, perfect setup. She loved it.', author: 'David P.', role: 'Guest' },
+        { text: 'Best brunch in the area. The sourdough pancakes are unreal.', author: 'Kim S.', role: `Local, ${loc}` },
+      ],
+    },
+    // ── Health / Wellness archetypes ──
+    'dental': {
+      heroHeadline: 'A smile you actually feel good about.',
+      heroSub: `${name} provides gentle, judgment-free dental care for the whole family. ${years} years of building healthy smiles in ${loc}.`,
+      services: [
+        { name: 'Cleanings & Exams', desc: 'Thorough cleanings, digital x-rays, and personalized care plans.' },
+        { name: 'Cosmetic Dentistry', desc: 'Whitening, veneers, and smile makeovers that look natural.' },
+        { name: 'Restorative Care', desc: 'Crowns, bridges, implants — designed to last and feel like your own teeth.' },
+        { name: 'Emergency Care', desc: 'Same-day emergency appointments for pain, trauma, or broken teeth.' },
+      ],
+      aboutText: `${name} was built on the belief that everyone deserves a dentist they're not afraid of.\\nWe use the latest technology to make every visit as comfortable and efficient as possible.`,
+      testimonials: [
+        { text: 'I hadn\'t been to a dentist in 8 years. They made me feel zero judgment and got me back on track.', author: 'Ryan M.', role: `Patient, ${loc}` },
+        { text: 'My kids actually look forward to their appointments. That says everything.', author: 'Jessica T.', role: `Parent, ${loc}` },
+        { text: 'Got veneers done here. The result looks completely natural. Best decision I\'ve made.', author: 'Amanda R.', role: 'Patient' },
+      ],
+    },
+    'salon': {
+      heroHeadline: 'Your look. Your rules. Our expertise.',
+      heroSub: `${name} is where great style meets genuine care. Walk in feeling fine. Walk out feeling incredible. Serving ${loc} for ${years} years.`,
+      services: [
+        { name: 'Haircuts & Styling', desc: 'Precision cuts and styles tailored to your face shape, lifestyle, and personality.' },
+        { name: 'Color & Highlights', desc: 'From subtle balayage to bold transformations — always healthy, always beautiful.' },
+        { name: 'Treatments', desc: 'Deep conditioning, keratin smoothing, scalp treatments for healthier hair.' },
+        { name: 'Special Occasions', desc: 'Wedding updos, event styling, blowouts — look your best when it matters most.' },
+      ],
+      aboutText: `${name} was founded on the idea that a great salon experience is about more than just the cut.\\nOur stylists listen first, then create something that works for your real life.`,
+      testimonials: [
+        { text: 'Best color I\'ve ever had. She actually listened to what I wanted instead of doing her own thing.', author: 'Megan L.', role: `Client, ${loc}` },
+        { text: 'Been coming here for 3 years. Wouldn\'t trust my hair with anyone else.', author: 'Taylor K.', role: 'Regular Client' },
+        { text: 'Got my wedding updo done here. It lasted all night and I felt incredible.', author: 'Sophie R.', role: 'Bride' },
+      ],
+    },
+    // ── Professional archetypes ──
+    'law': {
+      heroHeadline: 'Experienced counsel when you need it most.',
+      heroSub: `${name} has represented clients across ${loc} for ${years} years. Straightforward advice. Strong advocacy. Results that matter.`,
+      services: [
+        { name: 'Personal Injury', desc: 'Accidents, slip-and-falls, wrongful death — we fight for fair compensation.' },
+        { name: 'Family Law', desc: 'Divorce, custody, adoption — compassionate guidance through difficult transitions.' },
+        { name: 'Business Law', desc: 'Contracts, disputes, formations — protecting your business interests.' },
+        { name: 'Estate Planning', desc: 'Wills, trusts, powers of attorney — securing your family\'s future.' },
+      ],
+      aboutText: `${name} was founded on the principle that good legal representation shouldn't be reserved for corporations.\\nWe give every client the same thorough, aggressive advocacy — regardless of the size of the case.`,
+      testimonials: [
+        { text: 'After my accident, they handled everything while I focused on recovery. Settlement exceeded my expectations.', author: 'Michael R.', role: 'Client' },
+        { text: 'Guided us through a complex custody situation with compassion and clarity. Can\'t thank them enough.', author: 'Jennifer H.', role: `Client, ${loc}` },
+        { text: 'Sharp, responsive, and they actually return your calls. Novel concept for a law firm.', author: 'David K.', role: 'Business Client' },
+      ],
+    },
+    'real-estate': {
+      heroHeadline: `Your next chapter in ${loc} starts here.`,
+      heroSub: `${name} helps buyers find their dream home and sellers get top dollar. ${years} years of local market expertise and honest guidance.`,
+      services: [
+        { name: 'Home Buying', desc: 'Full-service representation from search to closing. We negotiate hard so you don\'t have to.' },
+        { name: 'Home Selling', desc: 'Professional staging, marketing, and pricing strategy to sell fast and for more.' },
+        { name: 'Market Analysis', desc: 'Data-driven pricing based on comparable sales and current market conditions.' },
+        { name: 'Investment Property', desc: 'Multi-family, rentals, flips — we help investors identify and close on the right opportunities.' },
+      ],
+      aboutText: `${name} has been helping families in ${loc} find their perfect home for ${years} years.\\nWe're not about the hard sell. We're about the right fit.`,
+      testimonials: [
+        { text: 'Found us our dream home in a competitive market. Their negotiation skills saved us $30K.', author: 'The Martinez Family', role: `Buyers, ${loc}` },
+        { text: 'Sold our house in 5 days, $15K over asking. Their marketing strategy was incredible.', author: 'Robert & Carol T.', role: `Sellers, ${loc}` },
+        { text: 'Best realtor experience we\'ve ever had. Responsive, knowledgeable, and genuinely cares.', author: 'James W.', role: 'First-Time Buyer' },
+      ],
+    },
   };
 
   const n = niche.toLowerCase();
   if (niches[n]) return niches[n];
+  // Check partial matches for custom niche names
+  for (const [key, val] of Object.entries(niches)) {
+    if (n.includes(key) || key.includes(n)) return val;
+  }
 
-  // Generic
+  // Generic — detect archetype for better fallback
+  const arch = detectArchetype(biz);
+  if (arch === 'creative') {
+    return {
+      heroHeadline: `${niche ? capitalizeWords(niche) + '. ' : ''}Done differently.`,
+      heroSub: `${name} brings a fresh perspective to every project. ${years} years of creative work that speaks for itself.`,
+      services: [
+        { name: 'Creative Direction', desc: 'Vision, concept, and execution from start to finish.' },
+        { name: 'Custom Projects', desc: 'Tailored work that fits your specific vision and goals.' },
+        { name: 'Collaboration', desc: 'Working together to bring ideas to life with purpose.' },
+        { name: 'Consultation', desc: 'Let\'s talk about your project over coffee.' },
+      ],
+      aboutText: `${name} has been creating for ${years} years.\\nEvery project is a chance to make something meaningful.`,
+      testimonials: [
+        { text: 'Genuinely talented and a pleasure to work with. The final result blew everyone away.', author: 'Alex P.', role: 'Client' },
+        { text: `${name} brought a vision we didn't know we had. Exceeded every expectation.`, author: 'Jordan M.', role: 'Collaborator' },
+        { text: 'Professional, creative, and delivers on time. What more could you want?', author: 'Sam K.', role: 'Client' },
+      ],
+    };
+  }
+  if (arch === 'food') {
+    return {
+      heroHeadline: 'Good food. Great people. No pretense.',
+      heroSub: `${name} has been feeding ${loc} for ${years} years. Every plate is made with care, from scratch, with the best ingredients we can find.`,
+      services: [
+        { name: 'Dine In', desc: 'A warm, welcoming space with food that makes you want to come back.' },
+        { name: 'Takeout', desc: 'Your favorites, packaged with care and ready when you are.' },
+        { name: 'Catering', desc: 'Full-service catering for events of any size.' },
+        { name: 'Private Events', desc: 'Our space, your celebration. Custom menus available.' },
+      ],
+      aboutText: `${name} started with a simple belief: food should be honest, satisfying, and made with love.\\nWe've been a ${loc} favorite for ${years} years.`,
+      testimonials: [
+        { text: 'Our favorite spot. Everything on the menu is incredible and the staff remembers you.', author: 'Laura K.', role: `Regular, ${loc}` },
+        { text: 'Catered our company event — everyone raved about the food for weeks.', author: 'Tom R.', role: 'Client' },
+        { text: 'This place feels like home. If home had better food and someone else did the dishes.', author: 'Nina S.', role: 'Regular' },
+      ],
+    };
+  }
   return {
     heroHeadline: `The kind of ${niche || 'service'} you'll actually recommend to friends.`,
     heroSub: `${name} has served ${loc} for ${years} years. One job at a time — showing up on time, doing honest work, standing behind every project.`,
     services: [
-      { name: 'Core Service', desc: 'Our primary offering, delivered with the quality and attention that built our reputation.' },
-      { name: 'Consultation', desc: 'Free on-site assessment. Honest estimate. No obligations.' },
-      { name: 'Emergency Work', desc: 'When things can\'t wait, neither do we. Rapid response for urgent situations.' },
+      { name: 'Core Service', desc: 'Our primary offering, delivered with quality and attention to detail.' },
+      { name: 'Consultation', desc: 'Free assessment. Honest estimate. No obligations.' },
+      { name: 'Emergency Work', desc: 'When things can\'t wait, neither do we. Rapid response.' },
       { name: 'Maintenance', desc: 'Preventive maintenance keeps small issues from becoming big problems.' },
       { name: 'Custom Solutions', desc: 'Every project is different. We tailor our approach to fit your situation.' },
-      { name: 'Full Support', desc: 'From start to finish — planning, execution, cleanup, and follow-up.' },
+      { name: 'Full Support', desc: 'From planning to execution to follow-up. Complete peace of mind.' },
     ],
     aboutText: `${name} was built on a simple idea: do great work, charge a fair price, and treat every customer right.\\nWe've been serving ${loc} for ${years} years.`,
     testimonials: [
@@ -535,11 +695,129 @@ function enhanceServices(rawServices, nicheContent) {
 
 function capitalizeWords(str) { return (str || '').replace(/\b\w/g, c => c.toUpperCase()); }
 
-// ── Preview builder (creates final HTML from content) ─────────
+// ── Industry Archetype System ──────────────────────────────────
+//
+// Instead of one layout for all businesses, we classify into archetypes
+// and select different components, visual variables, and content framing.
+
+function detectArchetype(biz) {
+  const niche = (biz.niche || '').toLowerCase();
+  const siteType = (biz.siteType || '').toLowerCase();
+  const notes = (biz.notes || '').toLowerCase();
+  const name = (biz.name || '').toLowerCase();
+
+  // Creative / Artist / Musician
+  const creativeNiches = ['photography', 'videography', 'music', 'musician', 'artist', 'design', 'graphic', 'filmmaker', 'dj', 'band', 'producer', 'creative', 'art', 'illustration', 'tattoo'];
+  if (creativeNiches.some(n => niche.includes(n) || notes.includes(n) || name.includes(n)) || siteType === 'portfolio') {
+    return 'creative';
+  }
+
+  // Restaurant / Food / Hospitality
+  const foodNiches = ['restaurant', 'cafe', 'bakery', 'catering', 'bar', 'food', 'chef', 'bistro', 'pizzeria', 'brewery', 'coffee'];
+  if (foodNiches.some(n => niche.includes(n) || notes.includes(n))) {
+    return 'food';
+  }
+
+  // Health / Wellness / Beauty
+  const healthNiches = ['dental', 'chiropractic', 'fitness', 'personal training', 'salon', 'barbershop', 'spa', 'massage', 'yoga', 'therapy', 'medical', 'clinic', 'vet', 'wellness', 'skincare'];
+  if (healthNiches.some(n => niche.includes(n) || notes.includes(n))) {
+    return 'wellness';
+  }
+
+  // Professional / B2B / Corporate
+  const proNiches = ['law', 'legal', 'accounting', 'bookkeeping', 'consulting', 'insurance', 'real-estate', 'realtor', 'financial', 'marketing', 'agency', 'tech', 'software', 'it-services'];
+  if (proNiches.some(n => niche.includes(n) || notes.includes(n))) {
+    return 'professional';
+  }
+
+  // E-commerce / Retail
+  const retailNiches = ['ecommerce', 'shop', 'store', 'retail', 'boutique', 'fashion', 'jewelry'];
+  if (retailNiches.some(n => niche.includes(n) || notes.includes(n)) || siteType === 'ecommerce') {
+    return 'ecommerce';
+  }
+
+  // Nonprofit
+  if (niche.includes('nonprofit') || niche.includes('charity') || niche.includes('foundation')) {
+    return 'nonprofit';
+  }
+
+  // Default: Local Service (trades, home services, auto, etc.)
+  return 'local-service';
+}
+
+// Each archetype defines: component order, hero style, visual vars, section labels
+function getArchetypeConfig(archetype) {
+  const configs = {
+    'creative': {
+      heroStyle: 'fullscreen',    // full-bleed visual hero
+      sections: ['hero', 'portfolio-grid', 'about-story', 'testimonials', 'contact-simple'],
+      labels: { services: 'Work', about: 'The Story', reviews: 'Kind Words', cta: 'Let\'s Create' },
+      visual: { align: 'center', btnRadius: '100px', headingWeight: '300', spacing: 'airy', navStyle: 'minimal' },
+      heroTag: null, // no badge for creatives
+      showStats: false,
+      showTrustBar: false,
+    },
+    'food': {
+      heroStyle: 'split-image',   // image-forward with atmosphere
+      sections: ['hero', 'featured-items', 'about-story', 'gallery', 'testimonials', 'hours-location', 'cta'],
+      labels: { services: 'Menu Highlights', about: 'Our Story', reviews: 'What Guests Say', cta: 'Reserve a Table' },
+      visual: { align: 'center', btnRadius: '4px', headingWeight: '400', spacing: 'cozy', navStyle: 'classic' },
+      heroTag: null,
+      showStats: false,
+      showTrustBar: false,
+    },
+    'wellness': {
+      heroStyle: 'calm',          // soft, inviting, warm
+      sections: ['hero', 'services', 'how-it-works', 'about', 'testimonials', 'booking-cta'],
+      labels: { services: 'Services', about: 'About Us', reviews: 'Patient Reviews', cta: 'Book Your Appointment' },
+      visual: { align: 'left', btnRadius: '8px', headingWeight: '400', spacing: 'balanced', navStyle: 'classic' },
+      heroTag: 'Welcoming New Patients',
+      showStats: true,
+      showTrustBar: false,
+    },
+    'professional': {
+      heroStyle: 'corporate',     // clean, authoritative
+      sections: ['hero', 'services', 'process-steps', 'about', 'testimonials', 'cta'],
+      labels: { services: 'Practice Areas', about: 'About the Firm', reviews: 'Client Testimonials', cta: 'Schedule a Consultation' },
+      visual: { align: 'left', btnRadius: '6px', headingWeight: '600', spacing: 'tight', navStyle: 'corporate' },
+      heroTag: 'Trusted Advisors',
+      showStats: true,
+      showTrustBar: true,
+    },
+    'ecommerce': {
+      heroStyle: 'product-showcase',
+      sections: ['hero', 'featured-products', 'features', 'testimonials', 'cta'],
+      labels: { services: 'Featured', about: 'Our Brand', reviews: 'Customer Reviews', cta: 'Shop Now' },
+      visual: { align: 'center', btnRadius: '8px', headingWeight: '500', spacing: 'balanced', navStyle: 'classic' },
+      heroTag: 'Free Shipping on Orders $50+',
+      showStats: false,
+      showTrustBar: false,
+    },
+    'nonprofit': {
+      heroStyle: 'mission',
+      sections: ['hero', 'impact-stats', 'about-story', 'how-to-help', 'testimonials', 'cta'],
+      labels: { services: 'How We Help', about: 'Our Mission', reviews: 'Impact Stories', cta: 'Get Involved' },
+      visual: { align: 'center', btnRadius: '8px', headingWeight: '400', spacing: 'airy', navStyle: 'classic' },
+      heroTag: null,
+      showStats: true,
+      showTrustBar: false,
+    },
+    'local-service': {
+      heroStyle: 'trust',         // stats card, trust badges
+      sections: ['hero', 'trust-bar', 'services', 'about', 'testimonials', 'cta'],
+      labels: { services: 'Our Services', about: 'About Us', reviews: 'Reviews', cta: 'Get a Free Quote' },
+      visual: { align: 'left', btnRadius: '8px', headingWeight: '400', spacing: 'balanced', navStyle: 'classic' },
+      heroTag: null,// set dynamically
+      showStats: true,
+      showTrustBar: true,
+    },
+  };
+  return configs[archetype] || configs['local-service'];
+}
 
 function buildPreviewPage(biz, content) {
-  // Delegate to the existing generate.js-style builder
-  // This is a simplified inline version that produces the same output
+  const archetype = detectArchetype(biz);
+  const config = getArchetypeConfig(archetype);
   const t = getTheme(biz.style);
   const name = esc(biz.name);
   const phone = esc(biz.phone || '');
@@ -549,52 +827,197 @@ function buildPreviewPage(biz, content) {
   const contactEmail = esc(biz.email || '');
   const year = new Date().getFullYear();
   const isDark = biz.style === 'bold-dark';
+  const v = config.visual;
+  const labels = config.labels;
   const hero = content.hero || {};
   const services = content.services || [];
   const testimonials = content.testimonials || [];
   const stats = content.stats || [];
-  const cta = content.cta || {};
+  const ctaContent = content.cta || {};
   const about = content.about || {};
   const aboutParas = (about.paragraphs || []).join('<br><br>');
+
+  // Archetype-aware nav links
+  const navLinks = archetype === 'creative'
+    ? `<a href="#work">${labels.services}</a><a href="#about">${labels.about}</a><a href="#contact">Contact</a>`
+    : archetype === 'food'
+    ? `<a href="#menu">${labels.services}</a><a href="#about">${labels.about}</a><a href="#visit">Visit</a>`
+    : `<a href="#services">${labels.services}</a><a href="#about">${labels.about}</a><a href="#reviews">${labels.reviews}</a>`;
+
+  // Nav CTA varies by archetype
+  const navCta = archetype === 'creative'
+    ? `<a href="#contact" class="nav-cta">Get in Touch</a>`
+    : archetype === 'food'
+    ? (phone ? `<a href="tel:${phoneHref}" class="nav-cta">Reserve</a>` : `<a href="#visit" class="nav-cta">Visit Us</a>`)
+    : archetype === 'wellness'
+    ? `<a href="#contact" class="nav-cta">Book Now</a>`
+    : phone ? `<a href="tel:${phoneHref}" class="nav-cta">${phone}</a>` : '';
+
+  // Build sections based on archetype config
+  const sectionHtml = config.sections.map(section => {
+    switch(section) {
+      case 'hero': return buildHeroSection(archetype, config, { name, phone, phoneHref, loc, years, isDark, hero, stats, t, v, labels });
+      case 'trust-bar': return config.showTrustBar ? buildTrustBar(stats, t) : '';
+      case 'services': return buildServicesSection(services, { loc, isDark, v, labels, t });
+      case 'portfolio-grid': return buildPortfolioSection(services, { name, v, labels });
+      case 'featured-items': return buildFeaturedItems(services, { v, labels, isDark, t });
+      case 'how-it-works': return buildHowItWorks(biz, { v, labels });
+      case 'process-steps': return buildProcessSteps(biz, { v, labels });
+      case 'about': case 'about-story': return buildAboutSection(about, { name, years, loc, aboutParas, v, labels, config, isDark, t });
+      case 'testimonials': return buildTestimonialsSection(testimonials, { v, labels, isDark, t });
+      case 'gallery': return buildGallerySection({ name, v });
+      case 'hours-location': return buildHoursLocation({ name, phone, phoneHref, loc, contactEmail });
+      case 'booking-cta': return buildBookingCta({ name, phone, phoneHref, contactEmail, labels });
+      case 'contact-simple': return buildContactSimple({ name, phone, phoneHref, contactEmail, loc });
+      case 'impact-stats': return config.showStats ? buildTrustBar(stats, t) : '';
+      case 'how-to-help': return buildHowItWorks(biz, { v, labels });
+      case 'featured-products': return buildFeaturedItems(services, { v, labels, isDark, t });
+      case 'features': return buildHowItWorks(biz, { v, labels });
+      case 'cta': return buildCtaSection(ctaContent, { name, phone, phoneHref, contactEmail, v, labels, isDark, t });
+      default: return '';
+    }
+  }).join('\n');
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${name} — ${esc(capitalizeWords(biz.niche || 'Professional Services'))} in ${loc}</title>
+<title>${name} — ${esc(capitalizeWords(biz.niche || 'Professional Services'))}${loc !== 'Your Area' ? ' in ' + loc : ''}</title>
 <meta name="description" content="${esc((content.meta || {}).description || '')}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=${t.gFont}&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:${t.bg};--bg-alt:${t.bgAlt};--nav:${t.nav};--accent:${t.accent};--accent-hover:${t.accentHover};--accent-bg:${t.accentBg};--accent-bg-solid:${t.accentBgSolid};--trust:${t.trust};--text:${t.text};--text-sec:${t.textSec};--muted:${t.muted};--card:${t.card};--border:${t.border};--font:${t.font};--font-head:${t.fontHead};--r:8px;--rl:14px}
+:root{--bg:${t.bg};--bg-alt:${t.bgAlt};--nav:${t.nav};--accent:${t.accent};--accent-hover:${t.accentHover};--accent-bg:${t.accentBg};--accent-bg-solid:${t.accentBgSolid};--trust:${t.trust};--text:${t.text};--text-sec:${t.textSec};--muted:${t.muted};--card:${t.card};--border:${t.border};--font:${t.font};--font-head:${t.fontHead};--r:${v.btnRadius};--rl:14px;--heading-weight:${v.headingWeight}}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}a{color:inherit;text-decoration:none}img{max-width:100%;display:block}.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
 .nav{position:sticky;top:0;z-index:100;background:var(--nav);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}.logo{font-family:var(--font-head);font-size:20px;font-weight:400;letter-spacing:-.02em}.logo span{color:var(--accent)}.nav-links{display:flex;align-items:center;gap:28px;font-size:14px;color:var(--text-sec)}.nav-links a{transition:color .2s}.nav-links a:hover{color:var(--text)}.nav-cta{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:9px 20px;border-radius:var(--r);font-weight:600;font-size:13px;transition:all .2s}.nav-cta:hover{background:var(--accent-hover);color:#fff;transform:translateY(-1px)}.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px}.nav-toggle span{display:block;width:20px;height:2px;background:var(--text);margin:4px 0}
-.hero{padding:80px 24px 64px;background:${t.heroGrad};position:relative;overflow:hidden}.hero::after{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:var(--accent-bg);filter:blur(80px);pointer-events:none;opacity:.7}.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:16px;padding:6px 14px;background:var(--accent-bg-solid);border-radius:100px;border:1px solid var(--accent-bg)}.hero h1{font-family:var(--font-head);font-size:clamp(28px,4.5vw,46px);font-weight:400;line-height:1.12;letter-spacing:-.02em;margin-bottom:20px}.hero-sub{font-size:16px;color:var(--text-sec);line-height:1.75;margin-bottom:32px;max-width:500px}.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:14px 28px;border-radius:var(--r);font-weight:600;font-size:15px;transition:all .25s;border:none;cursor:pointer}.btn-p:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 24px ${isDark ? 'rgba(200,149,106,.2)' : 'rgba(0,0,0,.12)'}}.btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text-sec);padding:14px 28px;border-radius:var(--r);font-weight:500;font-size:15px;border:1px solid var(--border);transition:all .25s}.btn-o:hover{border-color:var(--accent);color:var(--accent)}.hero-proof{display:flex;align-items:center;gap:14px}.hero-stars{color:#f5b731;font-size:15px;letter-spacing:2px}.hero-proof-text{font-size:13px;color:var(--text-sec)}.hero-proof-text strong{color:var(--text)}
+.sec-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}.sec-title{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:var(--heading-weight);margin-bottom:12px}.sec-desc{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px;max-width:540px}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:14px 28px;border-radius:var(--r);font-weight:600;font-size:15px;transition:all .25s;border:none;cursor:pointer}.btn-p:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 24px ${isDark ? 'rgba(200,149,106,.2)' : 'rgba(0,0,0,.12)'}}.btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text-sec);padding:14px 28px;border-radius:var(--r);font-weight:500;font-size:15px;border:1px solid var(--border);transition:all .25s;cursor:pointer}.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.hero{padding:${v.spacing === 'airy' ? '100px' : '80px'} 24px ${v.spacing === 'airy' ? '80px' : '64px'};background:${t.heroGrad};position:relative;overflow:hidden;text-align:${v.align}}.hero::after{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:var(--accent-bg);filter:blur(80px);pointer-events:none;opacity:.7}.hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}.hero-split{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;text-align:left}.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:16px;padding:6px 14px;background:var(--accent-bg-solid);border-radius:100px;border:1px solid var(--accent-bg)}.hero h1{font-family:var(--font-head);font-size:clamp(28px,4.5vw,${archetype === 'creative' ? '56px' : '46px'});font-weight:${archetype === 'creative' ? '300' : 'var(--heading-weight)'};line-height:1.12;letter-spacing:-.02em;margin-bottom:20px}.hero-sub{font-size:16px;color:var(--text-sec);line-height:1.75;margin-bottom:32px;max-width:${v.align === 'center' ? '600px;margin-left:auto;margin-right:auto' : '500px'}}.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;${v.align === 'center' ? 'justify-content:center' : ''}}.hero-proof{display:flex;align-items:center;gap:14px;${v.align === 'center' ? 'justify-content:center' : ''}}.hero-stars{color:#f5b731;font-size:15px;letter-spacing:2px}.hero-proof-text{font-size:13px;color:var(--text-sec)}.hero-proof-text strong{color:var(--text)}
 .hero-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;box-shadow:0 24px 64px ${isDark ? 'rgba(0,0,0,.4)' : 'rgba(0,0,0,.08)'};position:relative}.hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);border-radius:var(--rl) var(--rl) 0 0}.hero-card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:20px}.hero-card-stat{font-family:var(--font-head);font-size:52px;line-height:1;margin-bottom:4px}.hero-card-desc{font-size:14px;color:var(--text-sec);margin-bottom:24px}.hero-card-row{display:flex;gap:12px}.hero-card-mini{flex:1;text-align:center;padding:14px 8px;background:var(--accent-bg-solid);border-radius:var(--r);border:1px solid var(--accent-bg)}.hero-card-mini strong{display:block;font-family:var(--font-head);font-size:22px;color:var(--accent)}.hero-card-mini span{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .trust{background:var(--trust);padding:24px}.trust-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap}.trust-item{display:flex;flex-direction:column;align-items:center;gap:2px}.trust-num{font-family:var(--font-head);font-size:24px;color:#fff;font-weight:400}.trust-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45)}
-.services{padding:80px 24px}.sec-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}.sec-title{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:12px}.sec-desc{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px;max-width:540px}.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.svc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;transition:all .3s}.svc-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px ${isDark ? 'rgba(0,0,0,.25)' : 'rgba(0,0,0,.06)'}}.svc-icon{width:44px;height:44px;border-radius:var(--r);background:var(--accent-bg-solid);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--accent);border:1px solid var(--accent-bg)}.svc-card h3{font-size:16px;font-weight:600;margin-bottom:8px}.svc-card p{font-size:13px;color:var(--text-sec);line-height:1.65}
-.about{padding:80px 24px;background:var(--bg-alt)}.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}.about-img{width:100%;aspect-ratio:4/3;background:var(--accent-bg-solid);border-radius:var(--rl);display:flex;align-items:center;justify-content:center;border:1px solid var(--accent-bg)}.about-img svg{width:80px;height:80px;color:var(--accent);opacity:.25}.about-text h2{font-family:var(--font-head);font-size:28px;font-weight:400;margin-bottom:20px}.about-text p{font-size:15px;color:var(--text-sec);line-height:1.8;margin-bottom:16px}.about-stats{display:flex;gap:32px;margin-top:28px;padding-top:24px;border-top:1px solid var(--border)}.about-stat{text-align:center}.about-stat strong{display:block;font-family:var(--font-head);font-size:32px;color:var(--accent)}.about-stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.reviews{padding:80px 24px}.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;display:flex;flex-direction:column}.review-stars{color:#f5b731;font-size:14px;letter-spacing:2px;margin-bottom:16px}.review-card blockquote{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:auto;padding-bottom:20px;flex:1}.review-card cite{font-style:normal;font-size:13px;font-weight:600;display:block;padding-top:16px;border-top:1px solid var(--border)}.review-card cite span{font-weight:400;color:var(--muted);font-size:12px;display:block;margin-top:2px}
-.cta{padding:80px 24px;background:var(--bg-alt);text-align:center}.cta-inner{max-width:600px;margin:0 auto}.cta h2{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:16px}.cta p{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.sect{padding:${v.spacing === 'airy' ? '100px' : v.spacing === 'tight' ? '60px' : '80px'} 24px}.sect-alt{background:var(--bg-alt)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.svc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;transition:all .3s}.svc-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px ${isDark ? 'rgba(0,0,0,.25)' : 'rgba(0,0,0,.06)'}}.svc-icon{width:44px;height:44px;border-radius:var(--r);background:var(--accent-bg-solid);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--accent);border:1px solid var(--accent-bg)}.svc-card h3{font-size:16px;font-weight:600;margin-bottom:8px}.svc-card p{font-size:13px;color:var(--text-sec);line-height:1.65}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.port-item{aspect-ratio:1;background:var(--accent-bg-solid);border-radius:var(--rl);border:1px solid var(--accent-bg);display:flex;align-items:center;justify-content:center;transition:all .3s;overflow:hidden;position:relative}.port-item:hover{transform:scale(1.02);box-shadow:0 12px 40px ${isDark ? 'rgba(0,0,0,.3)' : 'rgba(0,0,0,.08)'}}.port-item:nth-child(1){grid-column:span 2;grid-row:span 2;aspect-ratio:auto}.port-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff}.port-overlay h3{font-size:14px;font-weight:600}.port-overlay p{font-size:11px;opacity:.8}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.menu-item{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border)}.menu-item h3{font-size:15px;font-weight:600;margin-bottom:4px}.menu-item p{font-size:13px;color:var(--text-sec)}.menu-price{font-family:var(--font-head);font-size:16px;color:var(--accent);white-space:nowrap;margin-left:16px}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:steps}.step-card{text-align:center;padding:32px 24px;position:relative}.step-num{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:20px;font-weight:700;margin:0 auto 16px}.step-card h3{font-size:16px;font-weight:600;margin-bottom:8px}.step-card p{font-size:13px;color:var(--text-sec);line-height:1.65}
+.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}.about-img{width:100%;aspect-ratio:4/3;background:var(--accent-bg-solid);border-radius:var(--rl);display:flex;align-items:center;justify-content:center;border:1px solid var(--accent-bg)}.about-img svg{width:80px;height:80px;color:var(--accent);opacity:.25}.about-text h2{font-family:var(--font-head);font-size:28px;font-weight:var(--heading-weight);margin-bottom:20px}.about-text p{font-size:15px;color:var(--text-sec);line-height:1.8;margin-bottom:16px}.about-stats{display:flex;gap:32px;margin-top:28px;padding-top:24px;border-top:1px solid var(--border)}.about-stat{text-align:center}.about-stat strong{display:block;font-family:var(--font-head);font-size:32px;color:var(--accent)}.about-stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.gallery-item{aspect-ratio:1;background:var(--accent-bg-solid);border-radius:var(--r);border:1px solid var(--accent-bg);display:flex;align-items:center;justify-content:center}.gallery-item svg{width:32px;height:32px;color:var(--accent);opacity:.2}
+.reviews-grid{display:grid;grid-template-columns:repeat(${testimonials.length > 2 ? 3 : testimonials.length},1fr);gap:16px}.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;display:flex;flex-direction:column}.review-stars{color:#f5b731;font-size:14px;letter-spacing:2px;margin-bottom:16px}.review-card blockquote{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:auto;padding-bottom:20px;flex:1;font-style:${archetype === 'creative' ? 'italic' : 'normal'}}.review-card cite{font-style:normal;font-size:13px;font-weight:600;display:block;padding-top:16px;border-top:1px solid var(--border)}.review-card cite span{font-weight:400;color:var(--muted);font-size:12px;display:block;margin-top:2px}
+.hours-box{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;max-width:500px;margin:0 auto}.hours-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}.hours-row:last-child{border:none}
+.cta-sect{padding:80px 24px;background:var(--bg-alt);text-align:center}.cta-inner{max-width:600px;margin:0 auto}.cta-inner h2{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:var(--heading-weight);margin-bottom:16px}.cta-inner p{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:800px;margin:0 auto}.contact-info{display:flex;flex-direction:column;gap:16px}.contact-item{display:flex;align-items:flex-start;gap:12px}.contact-item svg{flex-shrink:0;color:var(--accent);margin-top:2px}.contact-item p{font-size:14px;color:var(--text-sec);line-height:1.6}.contact-item a{color:var(--accent)}
 footer{padding:48px 24px 32px;border-top:1px solid var(--border)}.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}.footer-brand .logo{margin-bottom:12px;display:inline-block}.footer-brand p{font-size:13px;color:var(--muted);line-height:1.6;max-width:240px}.footer-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px}.footer-col ul{list-style:none}.footer-col li{margin-bottom:6px}.footer-col a{font-size:13px;color:var(--text-sec);transition:color .2s}.footer-col a:hover{color:var(--accent)}.footer-bottom{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}.footer-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--accent);background:var(--accent-bg-solid);padding:4px 10px;border-radius:4px;font-weight:600;border:1px solid var(--accent-bg)}
-@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-card{display:none}.services-grid,.reviews-grid{grid-template-columns:1fr 1fr}.about-inner{grid-template-columns:1fr}.about-img{display:none}.footer-inner{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
-@media(max-width:600px){.services-grid,.reviews-grid{grid-template-columns:1fr}.trust-inner{gap:24px}.nav-links{display:none}.nav-toggle{display:block}.hero{padding:60px 20px 40px}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+@media(max-width:900px){.hero-split{grid-template-columns:1fr}.hero-card{display:none}.services-grid,.reviews-grid,.steps-grid{grid-template-columns:1fr 1fr}.portfolio-grid{grid-template-columns:1fr 1fr}.port-item:nth-child(1){grid-column:span 1;grid-row:span 1}.about-inner{grid-template-columns:1fr}.about-img{display:none}.footer-inner{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.menu-grid,.contact-grid{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.services-grid,.reviews-grid,.steps-grid,.portfolio-grid{grid-template-columns:1fr}.trust-inner{gap:24px}.nav-links{display:none}.nav-toggle{display:block}.hero{padding:60px 20px 40px}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}.gallery-grid{grid-template-columns:repeat(2,1fr)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.fu{animation:fadeUp .6s ease both}.fu1{animation-delay:.1s}.fu2{animation-delay:.2s}.fu3{animation-delay:.3s}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a href="#" class="logo">${name}<span>.</span></a><div class="nav-links"><a href="#services">Services</a><a href="#about">About</a><a href="#reviews">Reviews</a>${phone ? `<a href="tel:${phoneHref}" class="nav-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${phone}</a>` : ''}</div><button class="nav-toggle"><span></span><span></span><span></span></button></div></nav>
-<section class="hero"><div class="hero-inner"><div class="fu"><div class="hero-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Licensed &amp; Insured &#x2022; ${loc}</div><h1>${esc(hero.headline || '')}</h1><p class="hero-sub">${esc(hero.subtext || '')}</p><div class="hero-btns">${phone ? `<a href="tel:${phoneHref}" class="btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Get Your Free Quote</a>` : ''}<a href="#services" class="btn-o">See Our Work</a></div><div class="hero-proof"><span class="hero-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="hero-proof-text"><strong>4.9/5</strong> from 200+ reviews in ${loc}</span></div></div><div class="fu fu1"><div class="hero-card"><div class="hero-card-label">Why ${name}?</div><div class="hero-card-stat">${years}</div><div class="hero-card-desc">Years serving ${loc}</div><div class="hero-card-row"><div class="hero-card-mini"><strong>4.9</strong><span>Rating</span></div><div class="hero-card-mini"><strong>500+</strong><span>Projects</span></div><div class="hero-card-mini"><strong>100%</strong><span>Licensed</span></div></div></div></div></div></section>
-${stats.length ? `<div class="trust"><div class="trust-inner">${stats.map(s => `<div class="trust-item"><div class="trust-num">${esc(String(s.number))}</div><div class="trust-label">${esc(s.label)}</div></div>`).join('')}</div></div>` : ''}
-<section class="services" id="services"><div class="wrap"><div class="sec-tag">What We Do</div><div class="sec-title">Services</div><div class="sec-desc">Every project gets our full attention. Here's how we help homeowners and businesses in ${loc}.</div><div class="services-grid">${services.map((s, i) => `<div class="svc-card fu fu${Math.min(i, 3)}"><div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>${esc(s.name)}</h3><p>${esc(s.desc || s.description || '')}</p></div>`).join('')}</div></div></section>
-<section class="about" id="about"><div class="about-inner wrap"><div class="about-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="width:80px;height:80px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="about-text"><div class="sec-tag">About ${name}</div><h2>${esc(about.heading || 'Real people. Real work. Real results.')}</h2><p>${aboutParas || ''}</p><div class="about-stats"><div class="about-stat"><strong>${years}</strong><span>Years</span></div><div class="about-stat"><strong>500+</strong><span>Projects</span></div><div class="about-stat"><strong>4.9</strong><span>Rating</span></div></div></div></div></section>
-<section class="reviews" id="reviews"><div class="wrap"><div class="sec-tag">Reviews</div><div class="sec-title">What our customers say</div><div class="sec-desc">Real feedback from real people we've worked with.</div><div class="reviews-grid">${testimonials.map((t, i) => `<div class="review-card fu fu${i}"><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>${esc(t.text)}</blockquote><cite>${esc(t.author)}<span>${esc(t.role)}</span></cite></div>`).join('')}</div></div></section>
-<section class="cta"><div class="cta-inner"><div class="sec-tag">Ready?</div><h2>${esc(cta.heading || 'Let\'s talk about your project.')}</h2><p>${esc(cta.subtext || 'No pressure, no obligation.')}</p><div class="cta-btns">${phone ? `<a href="tel:${phoneHref}" class="btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call ${phone}</a>` : ''}${contactEmail ? `<a href="mailto:${contactEmail}" class="btn-o">Email Us</a>` : ''}</div></div></section>
-<footer><div class="footer-inner"><div class="footer-brand"><a href="#" class="logo">${name}<span>.</span></a><p>Serving ${loc} ${biz.years ? `for ${years} years` : 'and surrounding areas'}. Licensed, insured, and committed to quality.</p></div><div class="footer-col"><h4>Services</h4><ul>${services.slice(0, 4).map(s => `<li><a href="#services">${esc(s.name)}</a></li>`).join('')}</ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#services">Services</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul>${phone ? `<li><a href="tel:${phoneHref}">${phone}</a></li>` : ''}${contactEmail ? `<li><a href="mailto:${contactEmail}">${contactEmail}</a></li>` : ''}<li>${loc}</li></ul></div></div><div class="footer-bottom"><span>&copy; ${year} ${name}. All rights reserved.</span><span class="footer-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Redesigned by Velocity</span></div></footer>
+<nav class="nav"><div class="nav-inner"><a href="#" class="logo">${name}<span>.</span></a><div class="nav-links">${navLinks}${navCta}</div><button class="nav-toggle"><span></span><span></span><span></span></button></div></nav>
+${sectionHtml}
+<footer><div class="footer-inner"><div class="footer-brand"><a href="#" class="logo">${name}<span>.</span></a><p>${archetype === 'creative' ? esc(biz.tagline || biz.niche || 'Creative professional') + '.' : `Serving ${loc} ${biz.years ? 'for ' + years + ' years' : 'and surrounding areas'}.`}</p></div><div class="footer-col"><h4>${labels.services}</h4><ul>${services.slice(0, 4).map(s => `<li><a href="#services">${esc(s.name)}</a></li>`).join('')}</ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="#about">${labels.about}</a></li><li><a href="#reviews">${labels.reviews}</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul>${phone ? `<li><a href="tel:${phoneHref}">${phone}</a></li>` : ''}${contactEmail ? `<li><a href="mailto:${contactEmail}">${contactEmail}</a></li>` : ''}<li>${loc}</li></ul></div></div><div class="footer-bottom"><span>&copy; ${year} ${name}. All rights reserved.</span><span class="footer-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Redesigned by Velocity</span></div></footer>
 </body></html>`;
+}
+
+// ── Section Builders ──────────────────────────────────────────
+
+function buildHeroSection(archetype, config, d) {
+  const tag = config.heroTag || (archetype === 'local-service' ? `Licensed &amp; Insured &#x2022; ${d.loc}` : null);
+  const tagHtml = tag ? `<div class="hero-tag">${tag}</div>` : '';
+
+  if (archetype === 'creative') {
+    // Fullscreen centered hero — no stats card, no trust badges
+    return `<section class="hero"><div class="hero-inner"><div class="fu">${tagHtml}<h1>${esc(d.hero.headline || '')}</h1><p class="hero-sub">${esc(d.hero.subtext || '')}</p><div class="hero-btns"><a href="#work" class="btn-p">View My Work</a><a href="#contact" class="btn-o">Get in Touch</a></div></div></div></section>`;
+  }
+
+  if (archetype === 'food') {
+    return `<section class="hero"><div class="hero-inner"><div class="fu">${tagHtml}<h1>${esc(d.hero.headline || '')}</h1><p class="hero-sub">${esc(d.hero.subtext || '')}</p><div class="hero-btns">${d.phone ? `<a href="tel:${d.phoneHref}" class="btn-p">Make a Reservation</a>` : ''}<a href="#menu" class="btn-o">See Our Menu</a></div></div></div></section>`;
+  }
+
+  if (archetype === 'wellness') {
+    return `<section class="hero"><div class="hero-inner"><div class="hero-split"><div class="fu">${tagHtml}<h1>${esc(d.hero.headline || '')}</h1><p class="hero-sub">${esc(d.hero.subtext || '')}</p><div class="hero-btns"><a href="#contact" class="btn-p">Book Appointment</a><a href="#services" class="btn-o">Our Services</a></div></div><div class="fu fu1"><div class="hero-card"><div class="hero-card-label">Why choose ${d.name}?</div><div class="hero-card-row"><div class="hero-card-mini"><strong>${d.years}</strong><span>Years</span></div><div class="hero-card-mini"><strong>4.9</strong><span>Rating</span></div><div class="hero-card-mini"><strong>5000+</strong><span>Patients</span></div></div></div></div></div></div></section>`;
+  }
+
+  if (archetype === 'professional') {
+    return `<section class="hero"><div class="hero-inner"><div class="hero-split"><div class="fu">${tagHtml}<h1>${esc(d.hero.headline || '')}</h1><p class="hero-sub">${esc(d.hero.subtext || '')}</p><div class="hero-btns">${d.phone ? `<a href="tel:${d.phoneHref}" class="btn-p">Schedule Consultation</a>` : ''}<a href="#services" class="btn-o">Our Expertise</a></div></div><div class="fu fu1"><div class="hero-card"><div class="hero-card-label">${d.name}</div><div class="hero-card-stat">${d.years}</div><div class="hero-card-desc">Years of trusted expertise</div><div class="hero-card-row"><div class="hero-card-mini"><strong>4.9</strong><span>Rating</span></div><div class="hero-card-mini"><strong>500+</strong><span>Clients</span></div></div></div></div></div></div></section>`;
+  }
+
+  // Default: local-service — split hero with stats card + trust proof
+  return `<section class="hero"><div class="hero-inner"><div class="hero-split"><div class="fu"><div class="hero-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Licensed &amp; Insured &#x2022; ${d.loc}</div><h1>${esc(d.hero.headline || '')}</h1><p class="hero-sub">${esc(d.hero.subtext || '')}</p><div class="hero-btns">${d.phone ? `<a href="tel:${d.phoneHref}" class="btn-p">Get Your Free Quote</a>` : ''}<a href="#services" class="btn-o">See Our Work</a></div><div class="hero-proof"><span class="hero-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="hero-proof-text"><strong>4.9/5</strong> from 200+ reviews in ${d.loc}</span></div></div><div class="fu fu1"><div class="hero-card"><div class="hero-card-label">Why ${d.name}?</div><div class="hero-card-stat">${d.years}</div><div class="hero-card-desc">Years serving ${d.loc}</div><div class="hero-card-row"><div class="hero-card-mini"><strong>4.9</strong><span>Rating</span></div><div class="hero-card-mini"><strong>500+</strong><span>Projects</span></div><div class="hero-card-mini"><strong>100%</strong><span>Licensed</span></div></div></div></div></div></div></section>`;
+}
+
+function buildTrustBar(stats, t) {
+  if (!stats.length) return '';
+  return `<div class="trust"><div class="trust-inner">${stats.map(s => `<div class="trust-item"><div class="trust-num">${esc(String(s.number))}</div><div class="trust-label">${esc(s.label)}</div></div>`).join('')}</div></div>`;
+}
+
+function buildServicesSection(services, d) {
+  return `<section class="sect" id="services"><div class="wrap"><div class="sec-tag">${esc(d.labels.services)}</div><div class="sec-title">${esc(d.labels.services)}</div><div class="sec-desc">Every project gets our full attention. Here's how we help in ${d.loc}.</div><div class="services-grid">${services.map((s, i) => `<div class="svc-card fu fu${Math.min(i, 3)}"><div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>${esc(s.name)}</h3><p>${esc(s.desc || s.description || '')}</p></div>`).join('')}</div></div></section>`;
+}
+
+function buildPortfolioSection(services, d) {
+  // Creative archetype: showcase work as a visual grid instead of service cards
+  const items = services.map((s, i) => `<div class="port-item fu fu${Math.min(i, 3)}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".15"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><div class="port-overlay"><h3>${esc(s.name)}</h3><p>${esc((s.desc || '').substring(0, 60))}</p></div></div>`);
+  return `<section class="sect" id="work"><div class="wrap"><div class="sec-tag">${esc(d.labels.services)}</div><div class="sec-title">Selected Work</div><div class="sec-desc">A glimpse of recent projects and creative work.</div><div class="portfolio-grid">${items.join('')}</div></div></section>`;
+}
+
+function buildFeaturedItems(services, d) {
+  // Food / ecommerce: items with price-style layout
+  return `<section class="sect" id="menu"><div class="wrap"><div class="sec-tag">${esc(d.labels.services)}</div><div class="sec-title">${esc(d.labels.services)}</div><div class="menu-grid">${services.map(s => `<div class="menu-item"><div><h3>${esc(s.name)}</h3><p>${esc(s.desc || s.description || '')}</p></div></div>`).join('')}</div></div></section>`;
+}
+
+function buildHowItWorks(biz, d) {
+  const steps = [
+    { num: '1', title: 'Get in Touch', desc: 'Reach out for a free consultation. We listen to your needs and answer your questions.' },
+    { num: '2', title: 'Custom Plan', desc: 'We create a tailored plan based on your specific situation, timeline, and budget.' },
+    { num: '3', title: 'Deliver Results', desc: 'We execute with precision and keep you informed every step of the way.' },
+  ];
+  return `<section class="sect sect-alt"><div class="wrap"><div class="sec-tag" style="text-align:center">How It Works</div><div class="sec-title" style="text-align:center">Simple. Transparent. Effective.</div><div class="steps-grid">${steps.map(s => `<div class="step-card fu"><div class="step-num">${s.num}</div><h3>${s.title}</h3><p>${s.desc}</p></div>`).join('')}</div></div></section>`;
+}
+
+function buildProcessSteps(biz, d) {
+  const steps = [
+    { num: '1', title: 'Consultation', desc: 'We discuss your needs, evaluate your situation, and outline your options.' },
+    { num: '2', title: 'Strategy', desc: 'We develop a comprehensive strategy tailored to your specific goals.' },
+    { num: '3', title: 'Execution', desc: 'Our team delivers results with regular updates and full transparency.' },
+  ];
+  return `<section class="sect sect-alt"><div class="wrap"><div class="sec-tag" style="text-align:center">Our Process</div><div class="sec-title" style="text-align:center">How We Work</div><div class="steps-grid">${steps.map(s => `<div class="step-card fu"><div class="step-num">${s.num}</div><h3>${s.title}</h3><p>${s.desc}</p></div>`).join('')}</div></div></section>`;
+}
+
+function buildAboutSection(about, d) {
+  const statsHtml = d.config.showStats ? `<div class="about-stats"><div class="about-stat"><strong>${d.years}</strong><span>Years</span></div><div class="about-stat"><strong>500+</strong><span>Projects</span></div><div class="about-stat"><strong>4.9</strong><span>Rating</span></div></div>` : '';
+  return `<section class="sect sect-alt" id="about"><div class="about-inner wrap"><div class="about-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="width:80px;height:80px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="about-text"><div class="sec-tag">${esc(d.labels.about)}</div><h2>${esc(about.heading || 'Real people. Real work. Real results.')}</h2><p>${d.aboutParas || ''}</p>${statsHtml}</div></div></section>`;
+}
+
+function buildTestimonialsSection(testimonials, d) {
+  if (!testimonials.length) return '';
+  return `<section class="sect" id="reviews"><div class="wrap"><div class="sec-tag">${esc(d.labels.reviews)}</div><div class="sec-title">What people are saying</div><div class="sec-desc">Real feedback from real people.</div><div class="reviews-grid">${testimonials.map((t, i) => `<div class="review-card fu fu${i}"><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>${esc(t.text)}</blockquote><cite>${esc(t.author)}<span>${esc(t.role)}</span></cite></div>`).join('')}</div></div></section>`;
+}
+
+function buildGallerySection(d) {
+  const placeholders = Array.from({ length: 8 }, () => `<div class="gallery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`);
+  return `<section class="sect sect-alt"><div class="wrap"><div class="sec-tag">Gallery</div><div class="sec-title">Moments &amp; Atmosphere</div><div class="gallery-grid">${placeholders.join('')}</div></div></section>`;
+}
+
+function buildHoursLocation(d) {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const hours = days.map(day => `<div class="hours-row"><span>${day}</span><span>${day === 'Sunday' ? 'Closed' : '11:00 AM - 10:00 PM'}</span></div>`);
+  return `<section class="sect sect-alt" id="visit"><div class="wrap" style="text-align:center"><div class="sec-tag">Visit Us</div><div class="sec-title">Hours &amp; Location</div><div class="hours-box">${hours.join('')}<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)"><p style="font-size:14px;color:var(--text-sec)">${d.loc}</p>${d.phone ? `<p style="margin-top:8px"><a href="tel:${d.phoneHref}" style="color:var(--accent);font-weight:600">${d.phone}</a></p>` : ''}</div></div></div></section>`;
+}
+
+function buildBookingCta(d) {
+  return `<section class="cta-sect" id="contact"><div class="cta-inner"><div class="sec-tag">Ready?</div><h2>${esc(d.labels.cta)}</h2><p>We're accepting new patients and would love to help you. Schedule your first visit today.</p><div class="cta-btns">${d.phone ? `<a href="tel:${d.phoneHref}" class="btn-p">Call to Book</a>` : ''}<a href="mailto:${d.contactEmail || '#'}" class="btn-o">Email Us</a></div></div></section>`;
+}
+
+function buildContactSimple(d) {
+  return `<section class="sect sect-alt" id="contact"><div class="wrap" style="text-align:center"><div class="sec-tag">Contact</div><div class="sec-title">Let's work together</div><div class="contact-grid" style="text-align:left;margin-top:40px"><div class="contact-info">${d.phone ? `<div class="contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3"/></svg><p><a href="tel:${d.phoneHref}">${d.phone}</a></p></div>` : ''}${d.contactEmail ? `<div class="contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg><p><a href="mailto:${d.contactEmail}">${d.contactEmail}</a></p></div>` : ''}<div class="contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><p>${d.loc}</p></div></div><div style="background:var(--accent-bg-solid);border:1px solid var(--accent-bg);border-radius:var(--rl);padding:32px;text-align:center"><p style="font-size:15px;color:var(--text-sec);margin-bottom:16px">Ready to start a project?</p><a href="${d.contactEmail ? 'mailto:' + d.contactEmail : '#'}" class="btn-p" style="width:100%;justify-content:center">Get in Touch</a></div></div></div></section>`;
+}
+
+function buildCtaSection(ctaContent, d) {
+  return `<section class="cta-sect"><div class="cta-inner"><div class="sec-tag">Ready?</div><h2>${esc(ctaContent.heading || d.labels.cta)}</h2><p>${esc(ctaContent.subtext || 'No pressure, no obligation.')}</p><div class="cta-btns">${d.phone ? `<a href="tel:${d.phoneHref}" class="btn-p">Call ${d.phone}</a>` : ''}${d.contactEmail ? `<a href="mailto:${d.contactEmail}" class="btn-o">Email Us</a>` : ''}</div></div></section>`;
 }
 
 function getTheme(style) {

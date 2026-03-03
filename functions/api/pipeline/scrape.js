@@ -324,7 +324,7 @@ function extractContent(html, dna) {
   dna.paragraphs = [...new Set(dna.paragraphs)].slice(0, 15);
 
   // CTA buttons
-  const ctaMatches = html.matchAll(/<(?:a|button)[^>]*(?:class=["'][^"']*(?:btn|button|cta)[^"']*["')[^>]*>(.*?)<\/(?:a|button)>/gi);
+  const ctaMatches = html.matchAll(/<(?:a|button)[^>]*class=["'][^"']*(?:btn|button|cta)[^"']*["'][^>]*>(.*?)<\/(?:a|button)>/gi);
   for (const m of ctaMatches) {
     const t = stripTags(m[1]).trim();
     if (t.length > 2 && t.length < 60) dna.cta_texts.push(t);
