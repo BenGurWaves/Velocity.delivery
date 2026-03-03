@@ -77,15 +77,35 @@ export async function onRequestPost(context) {
       // KV not bound or write failed — continue
     }
 
+    // ── Persist lead data in KV for later retrieval by email ──
+    try {
+      if (context.env && (context.env.LEADS || context.env.DATA)) {
+        const kv = context.env.DATA || context.env.LEADS;
+        const existingRaw = await kv.get('redesign:' + email, { type: 'json' });
+        const redesignData = existingRaw || {};
+        // Merge new data with existing (keep previous questionnaire answers etc)
+        Object.assign(redesignData, lead);
+        // Preserve any additional fields sent (niche, services, style, etc)
+        const extraFields = ['business_name', 'niche', 'services', 'location', 'style', 'site_type', 'phone', 'contact_email', 'years', 'inspo_urls', 'notes', 'revision'];
+        for (const f of extraFields) {
+          if (body[f]) redesignData[f] = body[f];
+        }
+        await kv.put('redesign:' + email, JSON.stringify(redesignData), { expirationTtl: 7776000 });
+      }
+    } catch (_) {}
+
     // ── Send emails via Resend (if API key is set) ──────────
     const resendKey = context.env && context.env.RESEND_API_KEY;
+    let customerEmailSent = false;
+    let notificationSent = false;
+
     if (resendKey) {
       const fromEmail = (context.env.FROM_EMAIL || 'hello@velocity.delivery');
       const notifyEmail = context.env.NOTIFY_EMAIL || null;
 
-      // 1. Confirmation email to the lead
+      // 1. Confirmation email to the customer
       try {
-        await fetch('https://api.resend.com/emails', {
+        const res = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + resendKey,
@@ -94,18 +114,17 @@ export async function onRequestPost(context) {
           body: JSON.stringify({
             from: 'Velocity <' + fromEmail + '>',
             to: [email],
-            subject: 'Working on your preview',
+            subject: 'Your free redesign is on the way!',
             html: buildConfirmationEmail(websiteUrl),
           }),
         });
-      } catch (_) {
-        // Email send failed — don't block the response
-      }
+        customerEmailSent = res.ok;
+      } catch (_) {}
 
       // 2. Internal notification to agency owner
       if (notifyEmail) {
         try {
-          await fetch('https://api.resend.com/emails', {
+          const res = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
               'Authorization': 'Bearer ' + resendKey,
@@ -118,9 +137,8 @@ export async function onRequestPost(context) {
               html: buildNotificationEmail(websiteUrl, email),
             }),
           });
-        } catch (_) {
-          // Notification failed — don't block
-        }
+          notificationSent = res.ok;
+        } catch (_) {}
       }
     }
 
@@ -128,6 +146,8 @@ export async function onRequestPost(context) {
       JSON.stringify({
         success: true,
         message: 'Redesign request received.',
+        email_sent: customerEmailSent,
+        notification_sent: notificationSent,
       }),
       { status: 200, headers }
     );

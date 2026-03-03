@@ -21,6 +21,9 @@
         <a href="#" id="navUser" class="dash-user-nav"></a>
         <a href="#" id="signOut" class="nav-cta">Sign out</a>
       </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span>
+      </button>
     </div>
   </nav>
 
@@ -48,26 +51,66 @@
             <div class="q-row">
               <div class="input-wrap">
                 <label for="qName">Business name</label>
-                <input type="text" id="qName" placeholder="e.g. Thompson & Sons Roofing" required>
+                <input type="text" id="qName" placeholder="e.g. John's Roofing" required>
               </div>
               <div class="input-wrap">
                 <label for="qNiche">Industry / niche</label>
                 <select id="qNiche" required>
                   <option value="">Select your industry</option>
-                  <option value="roofing">Roofing</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="hvac">HVAC</option>
-                  <option value="electrical">Electrical</option>
-                  <option value="landscaping">Landscaping</option>
-                  <option value="painting">Painting</option>
-                  <option value="cleaning">Cleaning</option>
-                  <option value="pest-control">Pest Control</option>
-                  <option value="auto-repair">Auto Repair</option>
-                  <option value="construction">General Construction</option>
-                  <option value="handyman">Handyman</option>
-                  <option value="other">Other</option>
+                  <optgroup label="Trades &amp; Home Services">
+                    <option value="roofing">Roofing</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="hvac">HVAC / Heating &amp; Cooling</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="landscaping">Landscaping &amp; Lawn Care</option>
+                    <option value="painting">Painting</option>
+                    <option value="cleaning">Cleaning Services</option>
+                    <option value="pest-control">Pest Control</option>
+                    <option value="construction">General Construction</option>
+                    <option value="handyman">Handyman</option>
+                    <option value="flooring">Flooring</option>
+                    <option value="fencing">Fencing</option>
+                    <option value="moving">Moving &amp; Hauling</option>
+                    <option value="pool">Pool Service</option>
+                  </optgroup>
+                  <optgroup label="Auto &amp; Mechanical">
+                    <option value="auto-repair">Auto Repair</option>
+                    <option value="auto-detailing">Auto Detailing</option>
+                    <option value="towing">Towing</option>
+                  </optgroup>
+                  <optgroup label="Professional Services">
+                    <option value="law">Law / Legal</option>
+                    <option value="accounting">Accounting / Bookkeeping</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="consulting">Consulting</option>
+                    <option value="insurance">Insurance</option>
+                  </optgroup>
+                  <optgroup label="Health &amp; Wellness">
+                    <option value="dental">Dental</option>
+                    <option value="chiropractic">Chiropractic</option>
+                    <option value="fitness">Fitness / Personal Training</option>
+                    <option value="salon">Salon / Barbershop</option>
+                    <option value="spa">Spa / Massage</option>
+                  </optgroup>
+                  <optgroup label="Food &amp; Hospitality">
+                    <option value="restaurant">Restaurant / Caf&eacute;</option>
+                    <option value="catering">Catering</option>
+                    <option value="bakery">Bakery</option>
+                  </optgroup>
+                  <optgroup label="Other">
+                    <option value="ecommerce-biz">E-commerce / Online Store</option>
+                    <option value="photography">Photography / Videography</option>
+                    <option value="nonprofit">Nonprofit</option>
+                    <option value="other">Other (specify below)</option>
+                  </optgroup>
                 </select>
               </div>
+            </div>
+
+            <!-- Other industry input (shown when "Other" is selected) -->
+            <div class="input-wrap" id="otherNicheWrap" style="display:none;">
+              <label for="qNicheOther">Tell us your industry</label>
+              <input type="text" id="qNicheOther" placeholder="e.g. Pet grooming, Music lessons, Event planning...">
             </div>
 
             <div class="input-wrap">
@@ -82,13 +125,19 @@
 
             <div class="q-row">
               <div class="input-wrap">
-                <label for="qPhone">Phone number</label>
+                <label for="qPhone">Phone number <span class="label-hint">(phone or email required)</span></label>
                 <input type="tel" id="qPhone" placeholder="(602) 555-0187">
               </div>
               <div class="input-wrap">
-                <label for="qYears">Years in business</label>
-                <input type="text" id="qYears" placeholder="e.g. 35+">
+                <label for="qContactEmail">Contact email <span class="label-hint">(phone or email required)</span></label>
+                <input type="email" id="qContactEmail" placeholder="john@johnsroofing.com">
               </div>
+            </div>
+            <div class="q-contact-error" id="contactError" style="display:none;">Please provide at least one way for customers to reach you (phone or email).</div>
+
+            <div class="input-wrap">
+              <label for="qYears">Years in business</label>
+              <input type="text" id="qYears" placeholder="e.g. 35+">
             </div>
 
             <div class="q-row">
@@ -117,8 +166,13 @@
             </div>
 
             <div class="input-wrap">
+              <label for="qInspo">Websites you like <span class="label-hint">(optional &mdash; paste URLs for design inspiration)</span></label>
+              <textarea id="qInspo" rows="3" placeholder="Paste links to websites whose look/feel you want us to draw from. We'll analyze their colors, layout style, and small design touches for inspiration (never copy).&#10;&#10;e.g.&#10;https://example-roofing.com&#10;https://modern-plumber-site.com"></textarea>
+            </div>
+
+            <div class="input-wrap">
               <label for="qNotes">Anything else we should know?</label>
-              <textarea id="qNotes" rows="3" placeholder="Special requests, competitor sites you like, features you need..."></textarea>
+              <textarea id="qNotes" rows="3" placeholder="Special requests, features you need, branding preferences..."></textarea>
             </div>
 
             <div class="q-actions">
@@ -301,6 +355,22 @@
     document.getElementById('dashEmail').textContent = email;
     document.getElementById('navUser').textContent = email;
 
+    // Mobile nav toggle
+    var navToggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('is-open');
+        navToggle.classList.toggle('is-open');
+      });
+      navLinks.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          navLinks.classList.remove('is-open');
+          navToggle.classList.remove('is-open');
+        });
+      });
+    }
+
     // Sign out
     document.getElementById('signOut').addEventListener('click', function(e) {
       e.preventDefault();
@@ -308,6 +378,15 @@
       localStorage.removeItem('velocity_user');
       window.location.href = '/';
     });
+
+    // ── "Other" niche toggle ──
+    var nicheSelect = document.getElementById('qNiche');
+    var otherNicheWrap = document.getElementById('otherNicheWrap');
+    if (nicheSelect && otherNicheWrap) {
+      nicheSelect.addEventListener('change', function() {
+        otherNicheWrap.style.display = this.value === 'other' ? 'block' : 'none';
+      });
+    }
 
     // ── Determine current step ──
     var step = user.dashboard_step || 'questionnaire';
@@ -358,14 +437,30 @@
     document.getElementById('questionnaireForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Validate: at least one of phone or contact email
+      var phone = document.getElementById('qPhone').value.trim();
+      var contactEmail = document.getElementById('qContactEmail').value.trim();
+      var contactError = document.getElementById('contactError');
+      if (!phone && !contactEmail) {
+        contactError.style.display = 'block';
+        document.getElementById('qPhone').focus();
+        return;
+      }
+      contactError.style.display = 'none';
+
       user.business_name = document.getElementById('qName').value.trim();
       user.niche = document.getElementById('qNiche').value;
+      if (user.niche === 'other') {
+        user.niche_other = document.getElementById('qNicheOther').value.trim();
+      }
       user.services = document.getElementById('qServices').value.trim();
       user.location = document.getElementById('qLocation').value.trim();
-      user.phone = document.getElementById('qPhone').value.trim();
+      user.phone = phone;
+      user.contact_email = contactEmail;
       user.years = document.getElementById('qYears').value.trim();
       user.style = document.getElementById('qStyle').value;
       user.site_type = document.getElementById('qSiteType').value;
+      user.inspo_urls = document.getElementById('qInspo').value.trim();
       user.notes = document.getElementById('qNotes').value.trim();
       user.questionnaire_filled = true;
       localStorage.setItem('velocity_user', JSON.stringify(user));
@@ -379,11 +474,13 @@
             website_url: website,
             email: email,
             business_name: user.business_name,
-            niche: user.niche,
+            niche: user.niche === 'other' ? (user.niche_other || 'other') : user.niche,
             services: user.services,
             location: user.location,
+            phone: user.phone,
             style: user.style,
-            site_type: user.site_type
+            site_type: user.site_type,
+            inspo_urls: user.inspo_urls
           }),
         }).catch(function() {});
       } catch (_) {}
@@ -663,13 +760,22 @@
       showStep('questionnaire');
       // Re-fill saved answers
       if (user.business_name) document.getElementById('qName').value = user.business_name;
-      if (user.niche) document.getElementById('qNiche').value = user.niche;
+      if (user.niche) {
+        document.getElementById('qNiche').value = user.niche;
+        if (user.niche === 'other' && otherNicheWrap) {
+          otherNicheWrap.style.display = 'block';
+          if (user.niche_other) document.getElementById('qNicheOther').value = user.niche_other;
+        }
+      }
       if (user.services) document.getElementById('qServices').value = user.services;
       if (user.location) document.getElementById('qLocation').value = user.location;
       if (user.phone) document.getElementById('qPhone').value = user.phone;
+      if (user.contact_email) document.getElementById('qContactEmail').value = user.contact_email;
       if (user.years) document.getElementById('qYears').value = user.years;
       if (user.style) document.getElementById('qStyle').value = user.style;
       if (user.site_type) document.getElementById('qSiteType').value = user.site_type;
+      if (user.inspo_urls) document.getElementById('qInspo').value = user.inspo_urls;
+      if (user.notes) document.getElementById('qNotes').value = user.notes;
     }
 
   })();
