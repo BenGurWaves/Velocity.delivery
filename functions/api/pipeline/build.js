@@ -72,7 +72,7 @@ export async function onRequestPost(context) {
   }
 
   // Generate shared CSS
-  const stylesheet = generateStylesheet(theme, biz);
+  const stylesheet = generateStylesheet(theme, biz, archetype);
 
   // Build shared components
   const nav = buildNav(biz, pageList, theme);
@@ -81,7 +81,7 @@ export async function onRequestPost(context) {
   // Generate each page
   const pages = {};
   for (const page of pageList) {
-    const pageContent = generatePage(page, biz, content, theme, nav, footer, stylesheet, buildId);
+    const pageContent = generatePage(page, biz, content, theme, nav, footer, stylesheet, buildId, archetype);
     pages[page + '.html'] = pageContent;
   }
 
@@ -218,12 +218,12 @@ export async function onRequestOptions() {
 // PAGE GENERATORS
 // ═══════════════════════════════════════════════════════════════
 
-function generatePage(page, biz, content, theme, nav, footer, stylesheet, buildId) {
+function generatePage(page, biz, content, theme, nav, footer, stylesheet, buildId, archetype) {
   const name = esc(biz.name);
   const pageTitle = getPageTitle(page, biz);
 
   const bodyContent = {
-    index: () => buildHomePage(biz, content, theme),
+    index: () => buildHomePage(biz, content, theme, archetype),
     services: () => buildServicesPage(biz, content, theme),
     about: () => buildAboutPage(biz, content, theme),
     contact: () => buildContactPage(biz, content, theme, buildId),
@@ -324,95 +324,224 @@ function getPageTitle(page, biz) {
 
 // ── Homepage ──────────────────────────────────────────────────
 
-function buildHomePage(biz, content, theme) {
+function buildHomePage(biz, content, theme, archetype) {
   const name = esc(biz.name);
   const phone = esc(biz.phone || '');
   const phoneHref = (biz.phone || '').replace(/[^0-9+]/g, '');
   const loc = esc(biz.location || 'Your Area');
   const hero = content.hero || {};
   const stats = content.stats || [];
-  const services = (content.services || []).slice(0, 3);
+  const services = (content.services || []).slice(0, 6);
+  const servicesPreview = services.slice(0, 3);
   const testimonials = (content.testimonials || []).slice(0, 3);
   const cta = content.cta || {};
-  const isDark = biz.style === 'bold-dark';
+  const years = esc(biz.years || '10+');
 
-  return `
-<section class="hero">
+  // Layout selection based on archetype
+  const layoutMap = {
+    'local-service': 'trade', 'food': 'editorial', 'wellness': 'editorial',
+    'creative': 'statement', 'ecommerce': 'statement',
+    'professional': 'corporate', 'nonprofit': 'editorial',
+  };
+  const layout = layoutMap[archetype] || 'trade';
+
+  // ── Hero ──
+  let heroHtml;
+  if (layout === 'trade') {
+    heroHtml = `
+<section class="hero hero--trade">
   <div class="hero-inner">
     <div class="fu">
-      <div class="hero-tag">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        ${esc(hero.tag || 'Licensed & Insured • ' + loc)}
-      </div>
+      <div class="hero-badge">${esc(hero.tag || 'Licensed & Insured \u2022 ' + loc)}</div>
       <h1>${esc(hero.headline || 'Quality you can trust.')}</h1>
       <p class="hero-sub">${esc(hero.subtext || '')}</p>
       <div class="hero-btns">
-        ${phone ? `<a href="tel:${phoneHref}" class="btn-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${esc(hero.cta_primary || 'Get Your Free Quote')}</a>` : `<a href="contact.html" class="btn-p">${esc(hero.cta_primary || 'Get Your Free Quote')}</a>`}
-        <a href="services.html" class="btn-o">${esc(hero.cta_secondary || 'See Our Work')}</a>
-      </div>
-      <div class="hero-proof">
-        <span class="hero-stars">★★★★★</span>
-        <span class="hero-proof-text"><strong>4.9/5</strong> from 200+ reviews</span>
+        ${phone ? `<a href="tel:${phoneHref}" class="btn-p">${esc(hero.cta_primary || 'Call ' + phone)}</a>` : `<a href="contact.html" class="btn-p">${esc(hero.cta_primary || 'Get Your Free Quote')}</a>`}
+        <a href="services.html" class="btn-o">${esc(hero.cta_secondary || 'Our Services')}</a>
       </div>
     </div>
     <div class="fu fu1">
-      <div class="hero-card">
-        <div class="hero-card-label">Why ${name}?</div>
-        <div class="hero-card-stat">${esc(biz.years || '10+')}</div>
-        <div class="hero-card-desc">Years serving ${loc}</div>
-        <div class="hero-card-row">
-          <div class="hero-card-mini"><strong>4.9</strong><span>Rating</span></div>
-          <div class="hero-card-mini"><strong>500+</strong><span>Projects</span></div>
-          <div class="hero-card-mini"><strong>100%</strong><span>Licensed</span></div>
+      <div class="hero-stats-card">
+        <div class="hsc-top"><div class="hsc-big">${years}</div><div class="hsc-label">Years serving<br>${loc}</div></div>
+        <div class="hsc-row">
+          <div class="hsc-item"><strong>4.9</strong><span>Rating</span></div>
+          <div class="hsc-item"><strong>500+</strong><span>Projects</span></div>
+          <div class="hsc-item"><strong>100%</strong><span>Licensed</span></div>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-${stats.length ? `<div class="trust"><div class="trust-inner">${stats.map(s => `<div class="trust-item"><div class="trust-num">${esc(String(s.number))}</div><div class="trust-label">${esc(s.label)}</div></div>`).join('')}</div></div>` : ''}
-
-<section class="services" id="services">
-  <div class="wrap">
-    <div class="sec-tag">What We Do</div>
-    <div class="sec-title">Our Services</div>
-    <p class="sec-desc">Every project gets our full attention. Here's how we help homeowners and businesses in ${loc}.</p>
-    <div class="services-grid">
-${services.map((s, i) => `      <div class="svc-card fu fu${i}">
-        <div class="svc-icon">${getSvgIcon(s.icon || 'check')}</div>
-        <h3>${esc(s.name)}</h3>
-        <p>${esc(s.description)}</p>
-      </div>`).join('\n')}
+</section>`;
+  } else if (layout === 'editorial') {
+    heroHtml = `
+<section class="hero hero--editorial">
+  <div class="hero-center fu">
+    <div class="hero-badge-subtle">${esc(biz.niche || 'Professional Services')} &bull; ${loc}</div>
+    <h1>${esc(hero.headline || 'Quality you can trust.')}</h1>
+    <p class="hero-sub">${esc(hero.subtext || '')}</p>
+    <div class="hero-btns hero-btns--center">
+      ${phone ? `<a href="tel:${phoneHref}" class="btn-p">${esc(hero.cta_primary || phone)}</a>` : `<a href="contact.html" class="btn-p">${esc(hero.cta_primary || 'Get Started')}</a>`}
+      <a href="services.html" class="btn-o">${esc(hero.cta_secondary || 'Learn More')}</a>
     </div>
-    <div class="section-cta"><a href="services.html" class="btn-o">View All Services →</a></div>
   </div>
-</section>
-
-${testimonials.length ? `
-<section class="reviews" id="reviews">
+</section>`;
+  } else if (layout === 'statement') {
+    heroHtml = `
+<section class="hero hero--statement">
   <div class="wrap">
-    <div class="sec-tag">Reviews</div>
-    <div class="sec-title">What our customers say</div>
+    <div class="hero-statement-inner fu">
+      <h1>${esc(hero.headline || 'Quality you can trust.')}</h1>
+      <div class="hero-statement-side">
+        <p class="hero-sub">${esc(hero.subtext || '')}</p>
+        ${phone ? `<a href="tel:${phoneHref}" class="btn-p">${esc(hero.cta_primary || phone)}</a>` : `<a href="contact.html" class="btn-p">${esc(hero.cta_primary || 'Get in Touch')}</a>`}
+      </div>
+    </div>
+  </div>
+</section>`;
+  } else {
+    heroHtml = `
+<section class="hero hero--corporate">
+  <div class="hero-inner">
+    <div class="fu">
+      <div class="hero-badge-subtle">${esc(biz.niche || 'Professional Services')}</div>
+      <h1>${esc(hero.headline || 'Quality you can trust.')}</h1>
+      <p class="hero-sub">${esc(hero.subtext || '')}</p>
+      <div class="hero-credentials">
+        <div class="hc-item"><strong>${years}</strong> years in business</div>
+        <div class="hc-item"><strong>500+</strong> clients served</div>
+      </div>
+    </div>
+    <div class="fu fu1">
+      <div class="hero-form-card">
+        <h3>Request a Consultation</h3>
+        <p>Tell us about your needs.</p>
+        <a href="contact.html" class="btn-p btn-full">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>`;
+  }
+
+  // ── Trust bar ──
+  let trustHtml = '';
+  if (layout === 'trade') {
+    trustHtml = stats.length
+      ? `<div class="trust-bar"><div class="trust-inner">${stats.map(s => `<div class="tb-item"><strong>${esc(String(s.number))}</strong><span>${esc(s.label)}</span></div>`).join('')}</div></div>`
+      : `<div class="trust-bar"><div class="trust-inner"><div class="tb-item"><strong>${years}</strong><span>Years</span></div><div class="tb-item"><strong>4.9 &#9733;</strong><span>Rating</span></div><div class="tb-item"><strong>500+</strong><span>Jobs Done</span></div><div class="tb-item"><strong>100%</strong><span>Insured</span></div></div></div>`;
+  } else if (layout === 'editorial') {
+    trustHtml = `<div class="trust-subtle"><div class="wrap"><div class="ts-row"><div class="ts-item"><span class="ts-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.9/5 from 200+ reviews</div><div class="ts-divider"></div><div class="ts-item">${years} years in ${loc}</div><div class="ts-divider"></div><div class="ts-item">Licensed &amp; Insured</div></div></div></div>`;
+  } else if (layout === 'corporate') {
+    trustHtml = `<div class="trust-bar trust-bar--corp"><div class="trust-inner"><div class="tb-item"><strong>${years}+</strong><span>Years</span></div><div class="tb-item"><strong>500+</strong><span>Clients</span></div><div class="tb-item"><strong>4.9/5</strong><span>Rating</span></div><div class="tb-item"><strong>24hr</strong><span>Response</span></div></div></div>`;
+  }
+
+  // ── Services ──
+  let svcHtml;
+  if (layout === 'trade') {
+    svcHtml = `
+<section class="svc-section" id="services">
+  <div class="wrap">
+    <div class="sec-label">What We Do</div>
+    <h2 class="sec-heading">Our Services</h2>
+    <p class="sec-intro">Every project gets our full attention. Here's how we help in ${loc}.</p>
+    <div class="svc-rows">
+${servicesPreview.map((s, i) => `      <div class="svc-row fu fu${i}"><div class="svc-num">0${i + 1}</div><div class="svc-body"><h3>${esc(s.name)}</h3><p>${esc(s.description)}</p></div><a href="services.html" class="svc-arrow">&rarr;</a></div>`).join('\n')}
+    </div>
+    <div class="section-cta"><a href="services.html" class="btn-o">View All Services &rarr;</a></div>
+  </div>
+</section>`;
+  } else if (layout === 'statement') {
+    svcHtml = `
+<section class="svc-section svc-section--list" id="services">
+  <div class="wrap">
+    <div class="sec-label">Services</div>
+    <h2 class="sec-heading">What we do.</h2>
+    <div class="svc-list">
+${servicesPreview.map((s, i) => `      <div class="svc-list-item fu fu${i}"><h3>${esc(s.name)}</h3><p>${esc(s.description)}</p></div>`).join('\n')}
+    </div>
+    <div class="section-cta"><a href="services.html" class="btn-o">All Services &rarr;</a></div>
+  </div>
+</section>`;
+  } else if (layout === 'corporate') {
+    svcHtml = `
+<section class="svc-section" id="services">
+  <div class="wrap">
+    <div class="sec-label">Our Expertise</div>
+    <h2 class="sec-heading">How We Help</h2>
+    <p class="sec-intro">We bring clarity, precision, and results to every engagement.</p>
+    <div class="svc-feat-grid">
+${servicesPreview.map((s, i) => `      <div class="svc-feat fu fu${i}"><div class="svc-feat-bar"></div><h3>${esc(s.name)}</h3><p>${esc(s.description)}</p></div>`).join('\n')}
+    </div>
+    <div class="section-cta"><a href="services.html" class="btn-o">All Services &rarr;</a></div>
+  </div>
+</section>`;
+  } else {
+    svcHtml = `
+<section class="svc-section svc-section--editorial" id="services">
+  <div class="wrap">
+    <div class="sec-label">What We Offer</div>
+    <h2 class="sec-heading">Services</h2>
+    <div class="svc-grid-2">
+${servicesPreview.map((s, i) => `      <div class="svc-card-2 fu fu${i}"><div class="svc-card-2-num">${String(i + 1).padStart(2, '0')}</div><h3>${esc(s.name)}</h3><p>${esc(s.description)}</p></div>`).join('\n')}
+    </div>
+    <div class="section-cta"><a href="services.html" class="btn-o">View All &rarr;</a></div>
+  </div>
+</section>`;
+  }
+
+  // ── Reviews ──
+  let reviewsHtml = '';
+  if (testimonials.length) {
+    if (layout === 'trade' || layout === 'corporate') {
+      const t0 = testimonials[0];
+      const rest = testimonials.slice(1);
+      reviewsHtml = `
+<section class="reviews-section" id="reviews">
+  <div class="wrap">
+    <div class="sec-label">Reviews</div>
+    <h2 class="sec-heading">What our customers say</h2>
+    <div class="reviews-featured">
+      <div class="review-big fu"><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>&ldquo;${esc(t0.text)}&rdquo;</blockquote><cite><strong>${esc(t0.author)}</strong><span>${esc(t0.role)}</span></cite></div>
+      <div class="reviews-side">${rest.map((rv, i) => `<div class="review-sm fu fu${i + 1}"><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>${esc(rv.text)}</blockquote><cite><strong>${esc(rv.author)}</strong><span>${esc(rv.role)}</span></cite></div>`).join('')}</div>
+    </div>
+  </div>
+</section>`;
+    } else if (layout === 'statement') {
+      reviewsHtml = `
+<section class="reviews-section reviews-section--quotes" id="reviews">
+  <div class="wrap">
+    <div class="sec-label">Testimonials</div>
+    <div class="reviews-quotes">
+${testimonials.map((rv, i) => `      <div class="review-quote fu fu${i}"><blockquote>&ldquo;${esc(rv.text)}&rdquo;</blockquote><cite>${esc(rv.author)} &mdash; ${esc(rv.role)}</cite></div>`).join('\n')}
+    </div>
+  </div>
+</section>`;
+    } else {
+      reviewsHtml = `
+<section class="reviews-section" id="reviews">
+  <div class="wrap">
+    <div class="sec-label">Reviews</div>
+    <h2 class="sec-heading">What people are saying</h2>
     <div class="reviews-grid">
-${testimonials.map((t, i) => `      <div class="review-card fu fu${i}">
-        <div class="review-stars">★★★★★</div>
-        <blockquote>${esc(t.text)}</blockquote>
-        <cite>${esc(t.author)}<span>${esc(t.role)}</span></cite>
-      </div>`).join('\n')}
+${testimonials.map((rv, i) => `      <div class="review-card fu fu${i}"><div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>${esc(rv.text)}</blockquote><cite><strong>${esc(rv.author)}</strong><span>${esc(rv.role)}</span></cite></div>`).join('\n')}
     </div>
   </div>
-</section>` : ''}
+</section>`;
+    }
+  }
 
-<section class="cta">
-  <div class="cta-inner">
-    <div class="sec-tag">Ready?</div>
+  return `${heroHtml}
+${trustHtml}
+${svcHtml}
+${reviewsHtml}
+<section class="cta-section">
+  <div class="wrap"><div class="cta-inner">
     <h2>${esc(cta.heading || 'Let\'s talk about your project.')}</h2>
     <p>${esc(cta.subtext || 'No pressure, no obligation. Call us or send an email.')}</p>
     <div class="cta-btns">
       ${phone ? `<a href="tel:${phoneHref}" class="btn-p">${esc(cta.button_text || 'Call Now')}</a>` : ''}
       <a href="contact.html" class="btn-o">Contact Us</a>
     </div>
-  </div>
+  </div></div>
 </section>`;
 }
 
@@ -660,9 +789,8 @@ function buildNav(biz, pageList, theme) {
   return `<nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="logo">${name}<span>.</span></a>
-    <div class="nav-links">${links.join('')}${phone ? `<a href="tel:${phoneHref}" class="nav-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${phone}</a>` : ''}</div>
-    <button class="nav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-mobile-open')"><span></span><span></span><span></span></button>
-    <div class="nav-mobile">${links.join('')}</div>
+    <div class="nav-links" id="navLinks">${links.join('')}${phone ? `<a href="tel:${phoneHref}" class="nav-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${phone}</a>` : ''}</div>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('nav-open');this.classList.toggle('is-open')"><span></span><span></span><span></span></button>
   </div>
 </nav>`;
 }
@@ -806,8 +934,10 @@ function detectArchetype(biz) {
   return 'local-service';
 }
 
-function generateStylesheet(t, biz) {
+function generateStylesheet(t, biz, archetype) {
   const isDark = biz.style === 'bold-dark';
+  const shadow = isDark ? 'rgba(0,0,0,.4)' : 'rgba(0,0,0,.08)';
+  const shadowHover = isDark ? 'rgba(0,0,0,.25)' : 'rgba(0,0,0,.06)';
   return `*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:${t.bg};--bg-alt:${t.bgAlt};--nav:${t.nav};--accent:${t.accent};--accent-hover:${t.accentHover};--accent-bg:${t.accentBg};--accent-bg-solid:${t.accentBgSolid};--trust:${t.trust};--text:${t.text};--text-sec:${t.textSec};--muted:${t.muted};--card:${t.card};--border:${t.border};--font:${t.font};--font-head:${t.fontHead};--r:8px;--rl:14px}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}a{color:inherit;text-decoration:none}img{max-width:100%;display:block}.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
@@ -816,42 +946,123 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:
 .logo{font-family:var(--font-head);font-size:20px;font-weight:400;color:var(--text);letter-spacing:-.02em}.logo span{color:var(--accent)}
 .nav-links{display:flex;align-items:center;gap:24px;font-size:14px;color:var(--text-sec)}.nav-links a{transition:color .2s}.nav-links a:hover,.nav-link--active{color:var(--accent)!important;font-weight:500}
 .nav-cta{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff!important;padding:9px 20px;border-radius:var(--r);font-weight:600;font-size:13px;transition:all .2s}.nav-cta:hover{background:var(--accent-hover);transform:translateY(-1px)}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px}.nav-toggle span{display:block;width:20px;height:2px;background:var(--text);margin:4px 0;transition:all .2s}
-.nav-mobile{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:24px;font-size:18px;z-index:99}
-.nav-mobile-open{display:flex!important}
-.hero{padding:80px 24px 64px;background:${t.heroGrad};position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:var(--accent-bg);filter:blur(80px);pointer-events:none;opacity:.7}
-.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:16px;padding:6px 14px;background:var(--accent-bg-solid);border-radius:100px;border:1px solid var(--accent-bg)}
-.hero h1{font-family:var(--font-head);font-size:clamp(28px,4.5vw,46px);font-weight:400;line-height:1.12;letter-spacing:-.02em;margin-bottom:20px}
-.hero-sub{font-size:16px;color:var(--text-sec);line-height:1.75;margin-bottom:32px;max-width:500px}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}.nav-toggle span{display:block;width:20px;height:2px;background:var(--text);transition:all .3s}
+.nav-toggle.is-open span:first-child{transform:rotate(45deg) translate(3px,5px)}.nav-toggle.is-open span:nth-child(2){opacity:0}.nav-toggle.is-open span:last-child{transform:rotate(-45deg) translate(3px,-5px)}
 .btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:14px 28px;border-radius:var(--r);font-weight:600;font-size:15px;transition:all .25s;border:none;cursor:pointer}
 .btn-p:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 24px ${isDark ? 'rgba(200,149,106,.2)' : 'rgba(0,0,0,.12)'}}
 .btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text-sec);padding:14px 28px;border-radius:var(--r);font-weight:500;font-size:15px;border:1px solid var(--border);transition:all .25s;cursor:pointer}
 .btn-o:hover{border-color:var(--accent);color:var(--accent)}.btn-full{width:100%;justify-content:center}
-.hero-proof{display:flex;align-items:center;gap:14px}.hero-stars{color:#f5b731;font-size:15px;letter-spacing:2px}
-.hero-proof-text{font-size:13px;color:var(--text-sec)}.hero-proof-text strong{color:var(--text)}
-.hero-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;box-shadow:0 24px 64px ${isDark ? 'rgba(0,0,0,.4)' : 'rgba(0,0,0,.08)'};position:relative}
-.hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);border-radius:var(--rl) var(--rl) 0 0}
-.hero-card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:20px}
-.hero-card-stat{font-family:var(--font-head);font-size:52px;color:var(--text);line-height:1;margin-bottom:4px}
-.hero-card-desc{font-size:14px;color:var(--text-sec);margin-bottom:24px}
-.hero-card-row{display:flex;gap:12px}.hero-card-mini{flex:1;text-align:center;padding:14px 8px;background:var(--accent-bg-solid);border-radius:var(--r);border:1px solid var(--accent-bg)}
-.hero-card-mini strong{display:block;font-family:var(--font-head);font-size:22px;color:var(--accent)}.hero-card-mini span{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.trust{background:var(--trust);padding:24px}.trust-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
-.trust-item{display:flex;flex-direction:column;align-items:center;gap:2px}.trust-num{font-family:var(--font-head);font-size:24px;color:#fff;font-weight:400}.trust-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45)}
-.services{padding:80px 24px}.sec-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
-.sec-title{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:12px}.sec-desc{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px;max-width:540px}
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sec-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.sec-heading{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:12px}
+.sec-intro{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px;max-width:540px}
+.hero-sub{font-size:16px;color:var(--text-sec);line-height:1.75;margin-bottom:32px;max-width:500px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.hero-btns--center{justify-content:center}
+.review-stars{color:#f5b731;font-size:14px;letter-spacing:2px;margin-bottom:12px}
+.section-cta{text-align:center;margin-top:32px}
+.svc-section{padding:80px 24px}
+.cta-section{padding:80px 24px;background:var(--bg-alt);text-align:center}.cta-inner{max-width:600px;margin:0 auto}
+.cta-inner h2{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:16px}
+.cta-inner p{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+/* Trade hero */
+.hero--trade{padding:80px 24px 64px;background:${t.heroGrad};position:relative;overflow:hidden}
+.hero--trade::after{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:var(--accent-bg);filter:blur(80px);pointer-events:none;opacity:.7}
+.hero--trade .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:16px;padding:6px 14px;background:var(--accent-bg-solid);border-radius:100px;border:1px solid var(--accent-bg)}
+.hero--trade h1{font-family:var(--font-head);font-size:clamp(28px,4.5vw,46px);font-weight:400;line-height:1.12;letter-spacing:-.02em;margin-bottom:20px}
+.hero-stats-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;box-shadow:0 24px 64px ${shadow}}
+.hsc-top{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.hsc-big{font-family:var(--font-head);font-size:56px;color:var(--accent);line-height:1}
+.hsc-label{font-size:14px;color:var(--text-sec);line-height:1.4}
+.hsc-row{display:flex;gap:12px}.hsc-item{flex:1;text-align:center;padding:14px 8px;background:var(--accent-bg-solid);border-radius:var(--r);border:1px solid var(--accent-bg)}
+.hsc-item strong{display:block;font-family:var(--font-head);font-size:22px;color:var(--accent)}.hsc-item span{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+/* Editorial hero */
+.hero--editorial{padding:100px 24px 80px;background:${t.heroGrad};text-align:center;position:relative;overflow:hidden}
+.hero--editorial::after{content:'';position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);width:700px;height:500px;border-radius:50%;background:var(--accent-bg);filter:blur(100px);pointer-events:none;opacity:.5}
+.hero-center{max-width:680px;margin:0 auto;position:relative;z-index:1}
+.hero-badge-subtle{font-size:13px;color:var(--text-sec);margin-bottom:20px;letter-spacing:.02em}
+.hero--editorial h1{font-family:var(--font-head);font-size:clamp(30px,5vw,52px);font-weight:400;line-height:1.1;letter-spacing:-.02em;margin-bottom:24px}
+.hero--editorial .hero-sub{max-width:520px;margin-left:auto;margin-right:auto;margin-bottom:36px}
+/* Statement hero */
+.hero--statement{padding:100px 24px 80px;background:var(--bg);position:relative}
+.hero--statement::before{content:'';position:absolute;inset:0;background:${t.heroGrad};opacity:.5}
+.hero-statement-inner{display:flex;gap:64px;align-items:flex-end;position:relative;z-index:1}
+.hero--statement h1{font-family:var(--font-head);font-size:clamp(36px,7vw,72px);font-weight:400;line-height:1.02;letter-spacing:-.03em;flex:1.5}
+.hero-statement-side{flex:1;padding-bottom:8px}
+.hero--statement .hero-sub{font-size:15px;margin-bottom:28px}
+/* Corporate hero */
+.hero--corporate{padding:80px 24px 64px;background:${t.heroGrad};position:relative;overflow:hidden}
+.hero--corporate .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:center;position:relative;z-index:1}
+.hero--corporate h1{font-family:var(--font-head);font-size:clamp(26px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-.02em;margin-bottom:20px}
+.hero-credentials{display:flex;gap:24px;font-size:14px;color:var(--text-sec)}.hero-credentials strong{color:var(--accent)}
+.hero-form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;box-shadow:0 24px 64px ${shadow}}
+.hero-form-card h3{font-family:var(--font-head);font-size:20px;margin-bottom:8px}.hero-form-card>p{font-size:13px;color:var(--text-sec);margin-bottom:20px}
+/* Trust bars */
+.trust-bar{background:var(--trust);padding:20px 24px}
+.trust-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.tb-item{display:flex;flex-direction:column;align-items:center;gap:2px}.tb-item strong{font-family:var(--font-head);font-size:20px;color:#fff;font-weight:400}.tb-item span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4)}
+.trust-bar--corp{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.trust-bar--corp .tb-item strong{color:var(--accent)}.trust-bar--corp .tb-item span{color:var(--muted)}
+.trust-subtle{padding:20px 24px;border-bottom:1px solid var(--border)}
+.ts-row{display:flex;align-items:center;justify-content:center;gap:24px;font-size:13px;color:var(--text-sec)}
+.ts-stars{color:#f5b731;letter-spacing:1px;margin-right:4px}.ts-divider{width:1px;height:16px;background:var(--border)}
+/* Service rows (trade) */
+.svc-rows{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--rl);overflow:hidden}
+.svc-row{display:flex;align-items:center;gap:24px;padding:28px 32px;background:var(--card);transition:all .3s}.svc-row:hover{background:var(--accent-bg-solid)}
+.svc-num{font-family:var(--font-head);font-size:28px;color:var(--accent);opacity:.4;flex-shrink:0;width:40px}.svc-row:hover .svc-num{opacity:1}
+.svc-body{flex:1}.svc-body h3{font-size:16px;font-weight:600;margin-bottom:4px}.svc-body p{font-size:13px;color:var(--text-sec);line-height:1.6}
+.svc-arrow{font-size:20px;color:var(--muted);transition:color .2s;flex-shrink:0}.svc-row:hover .svc-arrow{color:var(--accent)}
+/* Service grid-2 (editorial) */
+.svc-section--editorial{background:var(--bg-alt)}
+.svc-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.svc-card-2{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:32px;transition:all .3s;position:relative}
+.svc-card-2:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 32px ${shadowHover}}
+.svc-card-2-num{font-family:var(--font-head);font-size:36px;color:var(--accent);opacity:.15;position:absolute;top:16px;right:20px;line-height:1}
+.svc-card-2 h3{font-size:17px;font-weight:600;margin-bottom:8px}.svc-card-2 p{font-size:13px;color:var(--text-sec);line-height:1.65}
+/* Service list (statement) */
+.svc-section--list{border-top:1px solid var(--border)}
+.svc-list{border-top:1px solid var(--border)}
+.svc-list-item{padding:28px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 2fr;gap:32px;align-items:start}
+.svc-list-item h3{font-family:var(--font-head);font-size:18px;font-weight:400}.svc-list-item p{font-size:14px;color:var(--text-sec);line-height:1.7}
+/* Service features (corporate) */
+.svc-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.svc-feat{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.svc-feat:hover{border-color:var(--accent);transform:translateY(-2px)}
+.svc-feat-bar{width:40px;height:3px;background:var(--accent);border-radius:2px;margin-bottom:16px;transition:width .3s}.svc-feat:hover .svc-feat-bar{width:60px}
+.svc-feat h3{font-size:15px;font-weight:600;margin-bottom:8px}.svc-feat p{font-size:13px;color:var(--text-sec);line-height:1.65}
+/* Legacy service cards (services page) */
+.services{padding:80px 24px}.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .svc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;transition:all .3s}
-.svc-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px ${isDark ? 'rgba(0,0,0,.25)' : 'rgba(0,0,0,.06)'}}
+.svc-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px ${shadowHover}}
 .svc-icon{width:44px;height:44px;border-radius:var(--r);background:var(--accent-bg-solid);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--accent);border:1px solid var(--accent-bg)}
 .svc-icon--lg{width:56px;height:56px}.svc-card h3,.svc-card h2{font-size:16px;font-weight:600;margin-bottom:8px}.svc-card p{font-size:13px;color:var(--text-sec);line-height:1.65}
 .svc-link{display:inline-block;margin-top:12px;font-size:13px;color:var(--accent);font-weight:600}
 .svc-card--full{display:flex;gap:24px;align-items:flex-start}.svc-card--full .svc-content{flex:1}
 .services-grid--full{grid-template-columns:1fr 1fr;gap:20px}
-.section-cta{text-align:center;margin-top:32px}
+.sec-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.sec-title{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:12px}.sec-desc{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px;max-width:540px}
+/* Reviews */
+.reviews-section{padding:80px 24px}.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;display:flex;flex-direction:column}
+.review-card blockquote{font-size:14px;color:var(--text-sec);line-height:1.7;flex:1;padding-bottom:16px}
+.review-card cite{font-style:normal;font-size:13px;display:block;padding-top:16px;border-top:1px solid var(--border)}.review-card cite strong{display:block;color:var(--text)}.review-card cite span{font-size:12px;color:var(--muted)}
+.reviews-featured{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;margin-top:32px}
+.review-big{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:40px;display:flex;flex-direction:column;justify-content:center}
+.review-big blockquote{font-family:var(--font-head);font-size:20px;line-height:1.5;color:var(--text);margin-bottom:20px;font-weight:400}
+.review-big cite{font-style:normal;font-size:14px}.review-big cite strong{display:block;color:var(--text)}.review-big cite span{font-size:12px;color:var(--muted)}
+.reviews-side{display:flex;flex-direction:column;gap:16px}
+.review-sm{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:24px;flex:1}
+.review-sm blockquote{font-size:13px;color:var(--text-sec);line-height:1.65;margin-bottom:12px}
+.review-sm cite{font-style:normal;font-size:12px}.review-sm cite strong{color:var(--text)}.review-sm cite span{color:var(--muted);margin-left:4px}
+.reviews-section--quotes{border-top:1px solid var(--border)}
+.reviews-quotes{max-width:700px;margin-top:32px}
+.review-quote{padding:32px 0;border-bottom:1px solid var(--border)}
+.review-quote blockquote{font-family:var(--font-head);font-size:18px;line-height:1.5;color:var(--text);margin-bottom:12px;font-weight:400}
+.review-quote cite{font-size:13px;color:var(--muted);font-style:normal}
+/* Legacy reviews page */
+.reviews{padding:80px 24px}.reviews-grid--full{grid-template-columns:repeat(2,1fr)}
+.reviews-stats{text-align:center;margin-bottom:48px}.reviews-big-num{font-family:var(--font-head);font-size:64px;color:var(--text);line-height:1}
+.reviews-big-num span{font-size:32px;color:var(--muted)}.reviews-stars-row{color:#f5b731;font-size:24px;letter-spacing:4px;margin:8px 0}.reviews-stats p{color:var(--text-sec);font-size:14px}
+/* Pages */
 .page-hero{padding:100px 24px 48px;background:var(--bg-alt)}.page-title{font-family:var(--font-head);font-size:clamp(26px,4vw,40px);font-weight:400;margin-bottom:12px}
 .page-sub{font-size:16px;color:var(--text-sec);line-height:1.7;max-width:600px}
 .about-full{padding:64px 24px}.about-story{max-width:700px;margin:0 auto}.about-story p{font-size:16px;color:var(--text-sec);line-height:1.85;margin-bottom:20px}
@@ -859,15 +1070,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:
 .value-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:24px}.value-card h3{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--accent)}.value-card p{font-size:13px;color:var(--text-sec);line-height:1.6}
 .about-stats-section{padding:64px 24px}.about-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:800px;margin:0 auto;text-align:center}
 .about-stat-block strong{display:block;font-family:var(--font-head);font-size:40px;color:var(--accent);line-height:1;margin-bottom:6px}.about-stat-block span{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.reviews{padding:80px 24px}.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.reviews-grid--full{grid-template-columns:repeat(2,1fr)}
-.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;display:flex;flex-direction:column}
-.review-stars{color:#f5b731;font-size:14px;letter-spacing:2px;margin-bottom:16px}
-.review-card blockquote{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:auto;padding-bottom:20px;flex:1}
-.review-card cite{font-style:normal;font-size:13px;font-weight:600;color:var(--text);display:block;padding-top:16px;border-top:1px solid var(--border)}
-.review-card cite span{font-weight:400;color:var(--muted);font-size:12px;display:block;margin-top:2px}
-.reviews-stats{text-align:center;margin-bottom:48px}.reviews-big-num{font-family:var(--font-head);font-size:64px;color:var(--text);line-height:1}
-.reviews-big-num span{font-size:32px;color:var(--muted)}.reviews-stars-row{color:#f5b731;font-size:24px;letter-spacing:4px;margin:8px 0}.reviews-stats p{color:var(--text-sec);font-size:14px}
+/* Contact */
 .contact-section{padding:64px 24px}.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;max-width:900px;margin:0 auto}
 .contact-info h2{font-family:var(--font-head);font-size:24px;margin-bottom:24px}
 .contact-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}.contact-icon{width:44px;height:44px;border-radius:var(--r);background:var(--accent-bg-solid);display:flex;align-items:center;justify-content:center;color:var(--accent);border:1px solid var(--accent-bg);flex-shrink:0}
@@ -879,9 +1082,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:
 .form-group label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
 .form-group input,.form-group textarea{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;transition:border-color .2s}
 .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--accent)}
-.cta{padding:80px 24px;background:var(--bg-alt);text-align:center}.cta-inner{max-width:600px;margin:0 auto}
-.cta h2{font-family:var(--font-head);font-size:clamp(22px,3.5vw,34px);font-weight:400;margin-bottom:16px}
-.cta p{font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:28px}.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+/* Footer */
 footer{padding:48px 24px 32px;border-top:1px solid var(--border);background:var(--bg)}
 .footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
 .footer-brand .logo{margin-bottom:12px;display:inline-block}.footer-brand p{font-size:13px;color:var(--muted);line-height:1.6;max-width:240px}
@@ -889,8 +1090,8 @@ footer{padding:48px 24px 32px;border-top:1px solid var(--border);background:var(
 .footer-col ul{list-style:none}.footer-col li{margin-bottom:6px}.footer-col a{font-size:13px;color:var(--text-sec);transition:color .2s}.footer-col a:hover{color:var(--accent)}
 .footer-bottom{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
 .footer-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--accent);background:var(--accent-bg-solid);padding:4px 10px;border-radius:4px;font-weight:600;border:1px solid var(--accent-bg)}
-@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-card{display:none}.services-grid,.reviews-grid{grid-template-columns:1fr 1fr}.services-grid--full{grid-template-columns:1fr}.about-stats-grid,.values-grid{grid-template-columns:1fr 1fr}.contact-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
-@media(max-width:600px){.services-grid,.reviews-grid,.reviews-grid--full{grid-template-columns:1fr}.trust-inner{gap:24px}.nav-links{display:none}.nav-toggle{display:block}.hero{padding:60px 20px 40px}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}.form-row{grid-template-columns:1fr}.about-stats-grid,.values-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.hero-inner,.hero--corporate .hero-inner,.hero--trade .hero-inner{grid-template-columns:1fr!important}.hero-stats-card,.hero-form-card{display:none}.hero--statement .hero-statement-inner{flex-direction:column;gap:24px}.reviews-featured{grid-template-columns:1fr}.services-grid,.reviews-grid,.svc-grid-2,.svc-feat-grid{grid-template-columns:1fr 1fr}.services-grid--full{grid-template-columns:1fr}.about-stats-grid,.values-grid{grid-template-columns:1fr 1fr}.contact-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+@media(max-width:600px){.nav-links{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:24px;font-size:18px;z-index:99}.nav-links.nav-open{display:flex!important}.nav-toggle{display:flex}.services-grid,.reviews-grid,.reviews-grid--full,.svc-grid-2,.svc-feat-grid{grid-template-columns:1fr}.trust-inner,.ts-row{flex-direction:column;gap:12px;text-align:center}.hero{padding:60px 20px 40px!important}.hero--statement h1{font-size:32px!important}.svc-list-item{grid-template-columns:1fr}.svc-row{flex-direction:column;gap:8px}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}.form-row{grid-template-columns:1fr}.about-stats-grid,.values-grid{grid-template-columns:1fr}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.fu{animation:fadeUp .6s ease both}.fu0{animation-delay:.1s}.fu1{animation-delay:.2s}.fu2{animation-delay:.3s}.fu3{animation-delay:.4s}`;
 }
 
