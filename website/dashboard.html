@@ -1000,15 +1000,23 @@
       var yrs = user.years || '10+';
       var style = user.style || 'modern-clean';
       var arch = detectClientArchetype(user.niche);
-      var colors = {
-        'modern-clean': { bg: '#f8f7f4', nav: '#fff', accent: '#1a6b44', trust: '#1a3a2a', text: '#1a2e22', muted: '#5c6b65', card: '#f3f6f4' },
-        'bold-dark': { bg: '#0e0c0a', nav: '#121010', accent: '#c8956a', trust: '#1a1614', text: '#e8ddd3', muted: '#a89f94', card: '#1a1815' },
-        'warm-friendly': { bg: '#faf6f1', nav: '#fff', accent: '#c66b2e', trust: '#3b2a18', text: '#2e2218', muted: '#7a6a56', card: '#f5efe8' },
-        'professional': { bg: '#f5f6f8', nav: '#fff', accent: '#2955a3', trust: '#1a2a4a', text: '#1a2030', muted: '#6b7280', card: '#eef1f6' },
-        'rustic': { bg: '#f4f0e8', nav: '#fff', accent: '#7a6040', trust: '#3a3020', text: '#2e2418', muted: '#8a7c6a', card: '#ede8de' },
-        'surprise': { bg: '#faf8ff', nav: '#fff', accent: '#7c3aed', trust: '#2a1a4a', text: '#1e1b2e', muted: '#6b6580', card: '#f2f0fa' }
+      // Archetype-first color palettes (matches server-side getTheme)
+      var archColors = {
+        'local-service': { bg: '#fafaf5', nav: '#fff', accent: '#1a5632', trust: '#14301e', text: '#1a2e1c', muted: '#4d5e4f', card: '#ecf4ef' },
+        'food': { bg: '#fdf8f3', nav: '#fdf8f3', accent: '#8b2252', trust: '#3a1522', text: '#2c1a18', muted: '#6b524e', card: '#fff' },
+        'creative': { bg: '#ffffff', nav: '#fff', accent: '#111111', trust: '#111111', text: '#111111', muted: '#999999', card: '#f6f6f6' },
+        'wellness': { bg: '#f5faf6', nav: '#f5faf6', accent: '#4a7c59', trust: '#2a4a32', text: '#1e3228', muted: '#5a7562', card: '#e8f2eb' },
+        'professional': { bg: '#f4f5f7', nav: '#fff', accent: '#1e3a5f', trust: '#0f1f33', text: '#1a2030', muted: '#4a5568', card: '#e8eef6' },
       };
-      var c = colors[style] || colors['modern-clean'];
+      // Style overrides
+      var styleOverrides = {
+        'bold-dark': { bg: '#0e0c0a', nav: '#121010', text: '#e8ddd3', muted: '#a89f94', card: '#1a1815', trust: '#1a1614' },
+        'warm-friendly': { accent: '#c66b2e' },
+        'surprise': { accent: '#7c3aed' },
+      };
+      var c = archColors[arch] || archColors['local-service'];
+      var so = styleOverrides[style];
+      if (so) { for (var k in so) c[k] = so[k]; }
       while (services.length < 4) services.push('Service');
       services = services.slice(0, 4);
 
@@ -1132,15 +1140,32 @@
         if (data.url) {
           window.location.href = data.url;
         } else {
-          user.dashboard_step = 'building';
-          localStorage.setItem('velocity_user', JSON.stringify(user));
-          showStep('building');
+          var errMsg = data.error || 'Payment system unavailable. Please try again later.';
+          approveBtn.textContent = errMsg;
+          approveBtn.style.background = 'var(--red-soft)';
+          approveBtn.style.color = 'var(--red)';
+          approveBtn.style.border = '1px solid var(--red)';
+          setTimeout(function() {
+            approveBtn.textContent = 'Continue with ' + user.plan.charAt(0).toUpperCase() + user.plan.slice(1) + ' \u2014 ' + user.plan_price;
+            approveBtn.disabled = false;
+            approveBtn.style.background = '';
+            approveBtn.style.color = '';
+            approveBtn.style.border = '';
+          }, 4000);
         }
       })
       .catch(function() {
-        user.dashboard_step = 'building';
-        localStorage.setItem('velocity_user', JSON.stringify(user));
-        showStep('building');
+        approveBtn.textContent = 'Connection error. Please try again.';
+        approveBtn.style.background = 'var(--red-soft)';
+        approveBtn.style.color = 'var(--red)';
+        approveBtn.style.border = '1px solid var(--red)';
+        setTimeout(function() {
+          approveBtn.textContent = 'Continue with ' + user.plan.charAt(0).toUpperCase() + user.plan.slice(1) + ' \u2014 ' + user.plan_price;
+          approveBtn.disabled = false;
+          approveBtn.style.background = '';
+          approveBtn.style.color = '';
+          approveBtn.style.border = '';
+        }, 4000);
       });
     });
 
