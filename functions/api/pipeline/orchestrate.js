@@ -959,8 +959,18 @@ function buildServicesSection(services, d) {
 }
 
 function buildPortfolioSection(services, d) {
-  // Creative archetype: showcase work as a visual grid instead of service cards
-  const items = services.map((s, i) => `<div class="port-item fu fu${Math.min(i, 3)}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".15"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><div class="port-overlay"><h3>${esc(s.name)}</h3><p>${esc((s.desc || '').substring(0, 60))}</p></div></div>`);
+  // Creative archetype: abstract project tiles that look like real work
+  const fills = ['var(--accent)', 'var(--trust)', 'var(--muted)'];
+  const items = services.map((s, i) => {
+    const f = fills[i % fills.length];
+    const patterns = [
+      `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><circle cx="40%" cy="40%" r="30%" fill="${f}" opacity=".1"/><circle cx="60%" cy="55%" r="20%" fill="${f}" opacity=".15"/>`,
+      `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><rect x="10%" y="15%" width="80%" height="50%" rx="8" fill="${f}" opacity=".08"/><rect x="20%" y="72%" width="60%" height="6" rx="3" fill="var(--muted)" opacity=".12"/>`,
+      `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><polygon points="150,20 280,180 20,180" fill="${f}" opacity=".08"/><circle cx="50%" cy="30%" r="12%" fill="${f}" opacity=".12"/>`,
+      `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><rect x="5%" y="5%" width="42%" height="90%" rx="6" fill="${f}" opacity=".07"/><rect x="53%" y="5%" width="42%" height="43%" rx="6" fill="${f}" opacity=".1"/><rect x="53%" y="52%" width="42%" height="43%" rx="6" fill="${f}" opacity=".06"/>`,
+    ];
+    return `<div class="port-item fu fu${Math.min(i, 3)}"><svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;position:absolute;top:0;left:0">${patterns[i % patterns.length]}</svg><div class="port-overlay"><h3>${esc(s.name)}</h3><p>${esc((s.desc || '').substring(0, 60))}</p></div></div>`;
+  });
   return `<section class="sect" id="work"><div class="wrap"><div class="sec-tag">${esc(d.labels.services)}</div><div class="sec-title">Selected Work</div><div class="sec-desc">A glimpse of recent projects and creative work.</div><div class="portfolio-grid">${items.join('')}</div></div></section>`;
 }
 
@@ -989,7 +999,9 @@ function buildProcessSteps(biz, d) {
 
 function buildAboutSection(about, d) {
   const statsHtml = d.config.showStats ? `<div class="about-stats"><div class="about-stat"><strong>${d.years}</strong><span>Years</span></div><div class="about-stat"><strong>500+</strong><span>Projects</span></div><div class="about-stat"><strong>4.9</strong><span>Rating</span></div></div>` : '';
-  return `<section class="sect sect-alt" id="about"><div class="about-inner wrap"><div class="about-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="width:80px;height:80px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="about-text"><div class="sec-tag">${esc(d.labels.about)}</div><h2>${esc(about.heading || 'Real people. Real work. Real results.')}</h2><p>${d.aboutParas || ''}</p>${statsHtml}</div></div></section>`;
+  // Rich team/person illustration instead of empty box
+  const aboutIllustration = `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"><rect width="400" height="300" rx="14" fill="var(--accent-bg-solid)"/><rect x="20" y="20" width="360" height="170" rx="10" fill="var(--card)" stroke="var(--border)"/><circle cx="130" cy="90" r="40" fill="var(--accent-bg)"/><circle cx="130" cy="80" r="16" fill="var(--accent)" opacity=".25"/><path d="M130 96c-18 0-30 14-30 24h60c0-10-12-24-30-24z" fill="var(--accent)" opacity=".18"/><rect x="200" y="55" width="140" height="8" rx="4" fill="var(--accent)" opacity=".18"/><rect x="200" y="75" width="120" height="5" rx="3" fill="var(--muted)" opacity=".15"/><rect x="200" y="90" width="150" height="5" rx="3" fill="var(--muted)" opacity=".12"/><rect x="200" y="105" width="100" height="5" rx="3" fill="var(--muted)" opacity=".12"/><rect x="200" y="135" width="80" height="24" rx="var(--r)" fill="var(--accent)" opacity=".2"/><rect x="30" y="210" width="105" height="70" rx="8" fill="var(--card)" stroke="var(--border)"/><text x="82" y="245" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)" font-family="sans-serif">${d.years}</text><text x="82" y="262" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="sans-serif">YEARS</text><rect x="148" y="210" width="105" height="70" rx="8" fill="var(--card)" stroke="var(--border)"/><text x="200" y="245" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)" font-family="sans-serif">4.9</text><text x="200" y="262" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="sans-serif">RATING</text><rect x="265" y="210" width="105" height="70" rx="8" fill="var(--card)" stroke="var(--border)"/><text x="317" y="245" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)" font-family="sans-serif">500+</text><text x="317" y="262" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="sans-serif">CLIENTS</text></svg>`;
+  return `<section class="sect sect-alt" id="about"><div class="about-inner wrap"><div class="about-img" style="background:none;border:none">${aboutIllustration}</div><div class="about-text"><div class="sec-tag">${esc(d.labels.about)}</div><h2>${esc(about.heading || 'Real people. Real work. Real results.')}</h2><p>${d.aboutParas || ''}</p>${statsHtml}</div></div></section>`;
 }
 
 function buildTestimonialsSection(testimonials, d) {
@@ -998,8 +1010,20 @@ function buildTestimonialsSection(testimonials, d) {
 }
 
 function buildGallerySection(d) {
-  const placeholders = Array.from({ length: 8 }, () => `<div class="gallery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`);
-  return `<section class="sect sect-alt"><div class="wrap"><div class="sec-tag">Gallery</div><div class="sec-title">Moments &amp; Atmosphere</div><div class="gallery-grid">${placeholders.join('')}</div></div></section>`;
+  // Generate varied abstract gallery tiles that look like real photos
+  const colors = ['var(--accent)', 'var(--trust)', 'var(--accent-bg-solid)', 'var(--muted)'];
+  const patterns = [
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><circle cx="50%" cy="40%" r="25%" fill="var(--accent)" opacity=".12"/><rect x="10%" y="65%" width="80%" height="4" rx="2" fill="var(--muted)" opacity=".15"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><rect x="15%" y="20%" width="70%" height="40%" rx="6" fill="var(--accent)" opacity=".08"/><rect x="25%" y="70%" width="50%" height="4" rx="2" fill="var(--muted)" opacity=".15"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><circle cx="30%" cy="35%" r="15%" fill="var(--accent)" opacity=".15"/><circle cx="65%" cy="50%" r="20%" fill="var(--accent)" opacity=".08"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><polygon points="50,15 85,75 15,75" fill="var(--accent)" opacity=".1"/><rect x="20%" y="80%" width="60%" height="3" rx="2" fill="var(--muted)" opacity=".12"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><rect x="10%" y="10%" width="35%" height="80%" rx="6" fill="var(--accent)" opacity=".08"/><rect x="55%" y="20%" width="35%" height="60%" rx="6" fill="var(--accent)" opacity=".12"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><circle cx="50%" cy="45%" r="30%" fill="var(--accent)" opacity=".06"/><circle cx="50%" cy="45%" r="18%" fill="var(--accent)" opacity=".1"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><rect x="5%" y="30%" width="90%" height="40%" rx="8" fill="var(--accent)" opacity=".07"/><rect x="15%" y="75%" width="30%" height="4" rx="2" fill="var(--muted)" opacity=".15"/>`,
+    `<rect width="100%" height="100%" fill="var(--accent-bg-solid)"/><path d="M0 80 Q50 20 100 60 Q150 100 200 50" stroke="var(--accent)" stroke-width="2" fill="none" opacity=".15" transform="scale(1.5)"/>`,
+  ];
+  const items = patterns.map(p => `<div class="gallery-item"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">${p}</svg></div>`);
+  return `<section class="sect sect-alt"><div class="wrap"><div class="sec-tag">Gallery</div><div class="sec-title">Moments &amp; Atmosphere</div><div class="gallery-grid">${items.join('')}</div></div></section>`;
 }
 
 function buildHoursLocation(d) {
