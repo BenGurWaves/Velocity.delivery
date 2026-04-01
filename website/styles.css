@@ -40,7 +40,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   width:200%;
   height:200%;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:.022;
+  opacity:.04;
   pointer-events:none;
   z-index:9000;
   animation:gr .5s steps(2) infinite;
@@ -182,7 +182,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   left:var(--px);
   transform:translateY(-50%);
   font-family:'Instrument Serif',Georgia,serif;
-  font-size:clamp(6rem,24.5vw,32rem);
+  font-size:clamp(6rem,26vw,32rem);
   font-weight:400;
   line-height:.88;
   letter-spacing:-.055em;
@@ -218,7 +218,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 }
 .hero-sub span {
   display:block;
-  color:var(--muted);
+  color:rgba(222,200,181,.35);
   font-size:.6rem;
   letter-spacing:.14em;
   text-transform:uppercase;
@@ -234,11 +234,13 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   width:1px;
   height:44px;
   background:var(--border2);
-  animation:scrollpulse 2.5s ease-in-out infinite;
+  transform-origin:top;
+  animation:scrollpulse 2s ease-in-out infinite;
 }
 @keyframes scrollpulse {
-  0%,100% { opacity:.2; transform:scaleY(1) }
-  50%      { opacity:.85; transform:scaleY(.45) }
+  0%   { transform:scaleY(0); transform-origin:top; opacity:0 }
+  40%  { opacity:1 }
+  100% { transform:scaleY(1); transform-origin:top; opacity:0 }
 }
 .hero-scroll span {
   font-size:.52rem;
@@ -373,8 +375,8 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   position:fixed;
   top:0;
   left:0;
-  width:300px;
-  height:200px;
+  width:380px;
+  height:260px;
   pointer-events:none;
   z-index:500;
   opacity:0;
@@ -574,6 +576,10 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   line-height:1.8;
   max-width:40ch;
 }
+/* First service item has more presence */
+.svc-item:first-child .svc-body h3 {
+  font-size:clamp(1.8rem,3.2vw,3rem);
+}
 .svc-footer {
   margin-top:clamp(4rem,7vw,7rem);
   display:flex;
@@ -593,7 +599,9 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   position:relative;
   font-size:.7rem;
   letter-spacing:.08em;
-  color:var(--dim);
+  color:var(--sand);
+  border-bottom:1px solid var(--border2);
+  padding-bottom:2px;
 }
 .svc-cta::after {
   content:'';
@@ -676,6 +684,9 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 .ft-links a:hover { color:var(--sand) }
 
 /* ── Responsive ── */
+@media(max-width:1280px){
+  .intro { grid-template-columns:0.4fr 1.8fr }
+}
 @media(max-width:1024px){
   .studio-grid { grid-template-columns:1fr }
   .studio-left { display:none }
@@ -695,10 +706,10 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   body { cursor:auto }
   a, button { cursor:pointer }
 
-  /* Nav — keep only last link (Contact) to save space */
+  /* Nav — all links at compact size */
   .nav { height:56px }
-  .nav-links { gap:1.5rem }
-  .nav-links a:not(:last-child) { display:none }
+  .nav-links { gap:1.2rem }
+  .nav-links a { font-size:.6rem; letter-spacing:.07em }
 
   /* Hero — name still dominates but fits */
   .hero-name {
