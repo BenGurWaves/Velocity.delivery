@@ -191,7 +191,7 @@
             <div class="project-timeline">
               ${getTimeline(p.status)}
             </div>
-            ${p.preview_url ? '<a href="' + esc(p.preview_url) + '" target="_blank" class="project-preview-banner">View Your Website Preview &rarr;</a>' : ''}
+            ${p.preview_url ? '<a href="' + safeUrl(p.preview_url) + '" target="_blank" rel="noopener noreferrer" class="project-preview-banner">View Your Website Preview &rarr;</a>' : ''}
           </div>
         `).join('');
 
@@ -216,6 +216,13 @@
       const d = document.createElement('div');
       d.textContent = str;
       return d.innerHTML;
+    }
+    function safeUrl(url) {
+      try {
+        const u = new URL(url);
+        if (u.protocol !== 'https:' && u.protocol !== 'http:') return '#';
+        return esc(url);
+      } catch { return '#'; }
     }
 
     init();

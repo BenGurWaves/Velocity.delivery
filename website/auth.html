@@ -63,7 +63,8 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const plan = params.get('plan');
+    const VALID_PLANS = ['landing', 'full', 'premium'];
+    const plan = VALID_PLANS.includes(params.get('plan')) ? params.get('plan') : null;
     const action = params.get('action');
 
     // If already logged in, redirect immediately

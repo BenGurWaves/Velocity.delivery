@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   VELOCITY v14 — Expensive by design.
+   VELOCITY v15 — Expensive by design.
    One word owns the viewport. Nothing is safe.
 ───────────────────────────────────────────── */
 
@@ -118,6 +118,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 /* ── Nav ── */
 .nav {
   position:fixed;
+  top:0; right:0; bottom:auto; left:0;
   inset:0 0 auto;
   z-index:1000;
   height:64px;
@@ -129,6 +130,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 }
 .nav.s {
   background:rgba(13,12,9,.92);
+  -webkit-backdrop-filter:blur(20px);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
@@ -165,6 +167,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 
 /* ── Hero ── */
 .hero {
+  min-height:100vh;
   min-height:100svh;
   padding:0 var(--px);
   display:flex;
@@ -197,7 +200,6 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 /* Letter spans for stagger animation */
 .hero-name .letter {
   display:inline-block;
-  will-change:transform;
 }
 
 /* Footer row at bottom of hero */
@@ -715,6 +717,7 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   /* Hero — name fills width, dramatic */
   .hero {
     padding-bottom:clamp(2.5rem,6vw,4rem);
+    min-height:100vh;
     min-height:100svh;
   }
   .hero-name {

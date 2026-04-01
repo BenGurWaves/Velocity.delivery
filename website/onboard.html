@@ -329,7 +329,8 @@
     })();
 
     const params = new URLSearchParams(window.location.search);
-    const plan = params.get('plan') || 'full';
+    const VALID_PLANS = ['landing', 'full', 'premium'];
+    const plan = VALID_PLANS.includes(params.get('plan')) ? params.get('plan') : 'full';
     const planNames = { landing: 'Landing Page', full: 'Full Website', premium: 'Premium' };
     const planPrices = { landing: '$250', full: '$500', premium: '$1,000' };
     let currentStep = 1;
