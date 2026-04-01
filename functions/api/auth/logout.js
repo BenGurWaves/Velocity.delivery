@@ -20,7 +20,7 @@ export async function onRequestPost(context) {
   return json(
     { success: true },
     200,
-    { 'Set-Cookie': 'session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0' }
+    { 'Set-Cookie': 'session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0' }
   );
 }
 

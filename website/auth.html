@@ -1,405 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Velocity — Sign In</title>
-  <meta name="description" content="Sign in or create your Velocity account to manage your website redesign.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>V</text></svg>">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign In — Velocity</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/styles.css?v=7">
 </head>
 <body>
 
-  <!-- ── Nav ── -->
-  <nav class="nav nav--scrolled" id="nav">
-    <div class="nav-inner">
-      <div class="logo-wrap"><a href="/" class="logo">Velocity<span class="logo-dot">.</span></a><a href="https://calyvent.com" target="_blank" class="logo-sub">by Calyvent</a></div>
-      <div class="nav-links" id="navLinks">
-        <a href="/">Home</a>
-        <a href="/#pricing">Pricing</a>
-        <a href="/#faq">FAQ</a>
-        <a href="#" class="nav-cta" id="navCtaLink">Get a free redesign</a>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Velocity<i>.</i></div>
+      <div class="auth-by">by <a href="https://calyvent.com" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1px;">Calyvent</a></div>
+
+      <!-- Login Form -->
+      <div id="login-form">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Sign in to your dashboard.</p>
+        <div id="login-error" class="auth-error"></div>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="login-email" class="form-input" placeholder="you@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Your password" required>
+          </div>
+          <button type="submit" class="form-btn" id="login-btn">Sign In</button>
+        </form>
+        <div class="auth-switch">
+          Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
+        </div>
       </div>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span>
-      </button>
+
+      <!-- Signup Form -->
+      <div id="signup-form" style="display:none">
+        <h2 class="auth-title">Create your account</h2>
+        <p class="auth-subtitle" id="signup-plan-text">Start your project today.</p>
+        <div id="signup-error" class="auth-error"></div>
+        <form onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="you@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="At least 8 characters" required minlength="8">
+          </div>
+          <input type="hidden" id="signup-plan" value="">
+          <button type="submit" class="form-btn" id="signup-btn">Create Account</button>
+        </form>
+        <div class="auth-switch">
+          Already have an account? <a href="#" onclick="showLogin()">Sign in</a>
+        </div>
+      </div>
+
     </div>
-  </nav>
-
-  <section class="auth-page">
-      <div class="auth-card">
-        <div class="auth-header">
-          <div class="logo-wrap" style="align-items:center;"><a href="/" class="logo">Velocity<span class="logo-dot">.</span></a><a href="https://calyvent.com" target="_blank" class="logo-sub">by Calyvent</a></div>
-          <p class="auth-subtitle">Manage your website redesign</p>
-        </div>
-
-        <!-- Tab toggle -->
-        <div class="auth-tabs">
-          <button class="auth-tab auth-tab--active" id="tabSignIn" type="button">Sign in</button>
-          <button class="auth-tab" id="tabSignUp" type="button">Create account</button>
-        </div>
-
-        <!-- ── SIGN IN FORM ── -->
-        <form class="auth-form" id="signInForm">
-          <div class="input-wrap">
-            <label for="siEmail">Email</label>
-            <input type="email" id="siEmail" name="email" placeholder="you@yourbusiness.com" required autocomplete="email">
-          </div>
-          <div class="input-wrap">
-            <label for="siPassword">Password</label>
-            <input type="password" id="siPassword" name="password" placeholder="Your password" required autocomplete="current-password">
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="siBtn">Sign in</button>
-          <div class="auth-error" id="siError" style="display:none;"></div>
-          <p class="auth-fine">Don't have an account? <a href="#" id="switchToSignUp">Create one</a></p>
-        </form>
-
-        <!-- ── SIGN UP FORM ── -->
-        <form class="auth-form" id="signUpForm" style="display:none;">
-          <!-- Account type toggle -->
-          <div class="input-wrap">
-            <label>Account type</label>
-            <div class="auth-type-toggle">
-              <button type="button" class="auth-type-btn auth-type-btn--active" id="typeBusiness">Business Owner</button>
-              <button type="button" class="auth-type-btn" id="typePersonal">Individual / Creator</button>
-            </div>
-          </div>
-          <div class="input-wrap">
-            <label for="suEmail">Email</label>
-            <input type="email" id="suEmail" name="email" placeholder="you@yourbusiness.com" required autocomplete="email">
-          </div>
-          <div class="input-wrap">
-            <label for="suPassword">Password</label>
-            <input type="password" id="suPassword" name="password" placeholder="Create a password" required autocomplete="new-password" minlength="8">
-            <div class="pw-strength" id="pwStrength">
-              <div class="pw-strength-bar"><div class="pw-strength-fill"></div></div>
-              <div class="pw-strength-text" id="pwStrengthText"></div>
-            </div>
-          </div>
-          <div class="input-wrap">
-            <label for="suPasswordConfirm">Confirm password</label>
-            <input type="password" id="suPasswordConfirm" name="password_confirm" placeholder="Type it again" required autocomplete="new-password" minlength="8">
-          </div>
-          <div class="input-wrap" id="suWebsiteWrap">
-            <label for="suWebsite">Your website URL</label>
-            <input type="url" id="suWebsite" name="website_url" placeholder="https://yourbusiness.com">
-            <label style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;display:flex;align-items:center;gap:4px;cursor:pointer;">
-              <input type="checkbox" id="suNoWebsite" class="styled-checkbox"> I don't have a website yet
-            </label>
-          </div>
-          <div style="margin-bottom:1rem;">
-            <label style="font-size:0.75rem;color:var(--text-secondary);display:flex;align-items:flex-start;gap:6px;cursor:pointer;line-height:1.5;">
-              <input type="checkbox" id="suAgreeTerms" required class="styled-checkbox"> I agree to the <a href="/terms" style="color:var(--accent);text-decoration:underline;">Terms and Conditions</a> and <a href="/privacy" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a> of this website.
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="suBtn">Create account</button>
-          <div class="auth-error" id="suError" style="display:none;"></div>
-          <p class="auth-fine">Already have an account? <a href="#" id="switchToSignIn">Sign in</a></p>
-        </form>
-      </div>
-  </section>
+  </div>
 
   <script>
-  (function () {
-    'use strict';
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get('plan');
+    const action = params.get('action');
 
-    // ── Password strength meter ──
-    var pwInput = document.getElementById('suPassword');
-    var pwStrength = document.getElementById('pwStrength');
-    var pwStrengthText = document.getElementById('pwStrengthText');
-    if (pwInput && pwStrength) {
-      pwInput.addEventListener('input', function () {
-        var val = pwInput.value;
-        var score = 0;
-        if (val.length >= 8) score++;
-        if (val.length >= 12) score++;
-        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
-        if (/\d/.test(val)) score++;
-        if (/[^A-Za-z0-9]/.test(val)) score++;
-        pwStrength.className = 'pw-strength';
-        if (val.length === 0) { pwStrengthText.textContent = ''; return; }
-        var levels = [
-          { cls: 'pw-strength--weak', text: 'Weak' },
-          { cls: 'pw-strength--weak', text: 'Weak' },
-          { cls: 'pw-strength--fair', text: 'Fair' },
-          { cls: 'pw-strength--good', text: 'Good' },
-          { cls: 'pw-strength--strong', text: 'Strong' },
-        ];
-        var level = levels[Math.min(score, 4)];
-        pwStrength.classList.add(level.cls);
-        pwStrengthText.textContent = level.text;
-      });
-    }
-
-    // ── Mobile nav toggle ──
-    var toggle = document.getElementById('navToggle');
-    var links = document.getElementById('navLinks');
-    if (toggle && links) {
-      toggle.addEventListener('click', function() {
-        links.classList.toggle('is-open');
-        toggle.classList.toggle('is-open');
-      });
-      links.querySelectorAll('a').forEach(function(a) {
-        a.addEventListener('click', function() {
-          links.classList.remove('is-open');
-          toggle.classList.remove('is-open');
-        });
-      });
-    }
-
-    // CTA link goes to homepage start section
-    var ctaLink = document.getElementById('navCtaLink');
-    if (ctaLink) ctaLink.href = '/#start';
-
-    // ── Account type toggle ──
-    var accountType = 'business';
-    var typeBiz = document.getElementById('typeBusiness');
-    var typePer = document.getElementById('typePersonal');
-    var websiteWrap = document.getElementById('suWebsiteWrap');
-    if (typeBiz && typePer) {
-      typeBiz.addEventListener('click', function() {
-        accountType = 'business';
-        typeBiz.classList.add('auth-type-btn--active');
-        typePer.classList.remove('auth-type-btn--active');
-        if (websiteWrap) websiteWrap.style.display = '';
-        var emailInput = document.getElementById('suEmail');
-        if (emailInput) emailInput.placeholder = 'you@yourbusiness.com';
-      });
-      typePer.addEventListener('click', function() {
-        accountType = 'personal';
-        typePer.classList.add('auth-type-btn--active');
-        typeBiz.classList.remove('auth-type-btn--active');
-        if (websiteWrap) websiteWrap.style.display = 'none';
-        var emailInput = document.getElementById('suEmail');
-        if (emailInput) emailInput.placeholder = 'johndoe@gmail.com';
-      });
-    }
-
-    // ── "I don't have a website" checkbox ──
-    var noWebsiteBox = document.getElementById('suNoWebsite');
-    var websiteInput = document.getElementById('suWebsite');
-    if (noWebsiteBox && websiteInput) {
-      noWebsiteBox.addEventListener('change', function() {
-        if (this.checked) {
-          websiteInput.removeAttribute('required');
-          websiteInput.disabled = true;
-          websiteInput.value = '';
-          websiteInput.style.opacity = '0.5';
-        } else {
-          websiteInput.disabled = false;
-          websiteInput.style.opacity = '1';
-        }
-      });
-    }
-
-    var tabSI = document.getElementById('tabSignIn');
-    var tabSU = document.getElementById('tabSignUp');
-    var formSI = document.getElementById('signInForm');
-    var formSU = document.getElementById('signUpForm');
-    var switchToSignUp = document.getElementById('switchToSignUp');
-    var switchToSignIn = document.getElementById('switchToSignIn');
-
-    function showSignIn() {
-      tabSI.classList.add('auth-tab--active');
-      tabSU.classList.remove('auth-tab--active');
-      formSI.style.display = 'block';
-      formSU.style.display = 'none';
-    }
-    function showSignUp() {
-      tabSU.classList.add('auth-tab--active');
-      tabSI.classList.remove('auth-tab--active');
-      formSU.style.display = 'block';
-      formSI.style.display = 'none';
-    }
-
-    tabSI.addEventListener('click', showSignIn);
-    tabSU.addEventListener('click', showSignUp);
-    switchToSignUp.addEventListener('click', function(e) { e.preventDefault(); showSignUp(); });
-    switchToSignIn.addEventListener('click', function(e) { e.preventDefault(); showSignIn(); });
-
-    // Pre-fill from URL params (coming from main form)
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('email')) {
-      document.getElementById('suEmail').value = params.get('email');
-    }
-    if (params.get('website')) {
-      document.getElementById('suWebsite').value = params.get('website');
-    }
-    // If we have pre-fill params, default to sign-up tab
-    if (params.get('email') || params.get('website')) {
-      showSignUp();
-    }
-
-    // Sign Up handler — awaits API response so session cookie is set
-    formSU.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var errorEl = document.getElementById('suError');
-      errorEl.style.display = 'none';
-
-      var email = document.getElementById('suEmail').value.trim();
-      var pass = document.getElementById('suPassword').value;
-      var passConfirm = document.getElementById('suPasswordConfirm').value;
-      var website = document.getElementById('suWebsite').value.trim();
-      var noWebsite = document.getElementById('suNoWebsite').checked;
-      var agreeTerms = document.getElementById('suAgreeTerms');
-
-      if (pass !== passConfirm) {
-        errorEl.textContent = 'Passwords do not match. Try again.';
-        errorEl.style.display = 'block';
-        return;
-      }
-      if (pass.length < 8) {
-        errorEl.textContent = 'Password must be at least 8 characters.';
-        errorEl.style.display = 'block';
-        return;
-      }
-      if (agreeTerms && !agreeTerms.checked) {
-        errorEl.textContent = 'Please agree to the Terms and Conditions to continue.';
-        errorEl.style.display = 'block';
-        return;
-      }
-      if (accountType === 'business' && !website && !noWebsite) {
-        errorEl.textContent = 'Please enter your website URL or check "I don\'t have a website yet".';
-        errorEl.style.display = 'block';
-        return;
-      }
-
-      var btn = document.getElementById('suBtn');
-      btn.textContent = 'Creating account...';
-      btn.disabled = true;
-
-      fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ email: email, password: pass, website_url: website || '', account_type: accountType, no_website: noWebsite, agreed_terms: true }),
-      })
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-      .then(function(res) {
-        if (!res.ok && res.data.error) {
-          if (res.data.error.toLowerCase().indexOf('exists') !== -1) {
-            errorEl.textContent = 'An account with this email already exists. Try signing in instead.';
+    // If already logged in, redirect immediately
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          if (plan) {
+            window.location.href = '/onboard.html?plan=' + plan;
           } else {
-            errorEl.textContent = res.data.error;
-          }
-          errorEl.style.display = 'block';
-          btn.textContent = 'Create account';
-          btn.disabled = false;
-          return;
-        }
-
-        var user = {
-          email: email,
-          website_url: website || '',
-          account_type: accountType,
-          created_at: new Date().toISOString(),
-          plan: null,
-          status: 'preview_pending',
-          progress: 0,
-          project_id: res.data.project_id || null,
-        };
-        localStorage.setItem('velocity_user', JSON.stringify(user));
-        localStorage.setItem('velocity_auth', 'true');
-        window.location.href = '/dashboard.html';
-      })
-      .catch(function() {
-        errorEl.textContent = 'Unable to create account. Please check your connection and try again.';
-        errorEl.style.display = 'block';
-        btn.textContent = 'Create account';
-        btn.disabled = false;
-      });
-    });
-
-    // Sign In handler — server-validated only, no fallback
-    formSI.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var errorEl = document.getElementById('siError');
-      errorEl.style.display = 'none';
-      var btn = document.getElementById('siBtn');
-      btn.textContent = 'Signing in...';
-      btn.disabled = true;
-
-      var email = document.getElementById('siEmail').value.trim();
-      var password = document.getElementById('siPassword').value;
-
-      if (!email || !password) {
-        errorEl.textContent = 'Please enter your email and password.';
-        errorEl.style.display = 'block';
-        btn.textContent = 'Sign in';
-        btn.disabled = false;
-        return;
-      }
-
-      fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ email: email, password: password }),
-      })
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-      .then(function(res) {
-        if (!res.ok) {
-          errorEl.textContent = res.data.error || 'Invalid email or password.';
-          errorEl.style.display = 'block';
-          btn.textContent = 'Sign in';
-          btn.disabled = false;
-          return;
-        }
-
-        // Authenticated by server — proceed
-        var user = {
-          email: (res.data && res.data.email) || email,
-          plan: (res.data && res.data.plan) || null,
-          created_at: new Date().toISOString(),
-          status: 'active',
-        };
-
-        // Try to load saved lead/questionnaire data
-        fetch('/api/lead-data?email=' + encodeURIComponent(email))
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            if (data && data.data) {
-              var d = data.data;
-              if (d.website_url) user.website_url = d.website_url;
-              if (d.business_name) user.business_name = d.business_name;
-              if (d.niche) user.niche = d.niche;
-              if (d.services) user.services = d.services;
-              if (d.location) user.location = d.location;
-              if (d.style) user.style = d.style;
-              if (d.site_type) user.site_type = d.site_type;
-              if (d.phone) user.phone = d.phone;
-              if (d.preview_id) user.preview_id = d.preview_id;
-              if (d.preview_url) user.preview_url = d.preview_url;
-              if (d.questionnaire_filled) user.questionnaire_filled = true;
-              if (d.preview_id) user.preview_ready = true;
-            }
-          })
-          .catch(function() {})
-          .finally(function() {
-            var existing = JSON.parse(localStorage.getItem('velocity_user') || '{}');
-            if (existing.email === email) {
-              Object.keys(existing).forEach(function(k) {
-                if (!(k in user) || user[k] === null || user[k] === undefined) {
-                  user[k] = existing[k];
-                }
-              });
-            }
-            localStorage.setItem('velocity_user', JSON.stringify(user));
-            localStorage.setItem('velocity_auth', 'true');
             window.location.href = '/dashboard.html';
-          });
-      })
-      .catch(function() {
-        errorEl.textContent = 'Unable to connect. Please check your connection and try again.';
-        errorEl.style.display = 'block';
-        btn.textContent = 'Sign in';
+          }
+          return;
+        }
+      } catch {}
+    })();
+
+    if (action === 'signup' || plan) showSignup();
+
+    if (plan) {
+      document.getElementById('signup-plan').value = plan;
+      const names = { landing: 'Landing Page — $250', full: 'Full Website — $500', premium: 'Premium — $1,000' };
+      document.getElementById('signup-plan-text').textContent = names[plan] || 'Start your project today.';
+    }
+
+    function showLogin() {
+      document.getElementById('login-form').style.display = '';
+      document.getElementById('signup-form').style.display = 'none';
+    }
+    function showSignup() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('signup-form').style.display = '';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const errEl = document.getElementById('login-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('login-email').value,
+            password: document.getElementById('login-password').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+        window.location.href = '/dashboard.html';
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
         btn.disabled = false;
-      });
-    });
-  })();
+        btn.textContent = 'Sign In';
+      }
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const btn = document.getElementById('signup-btn');
+      const errEl = document.getElementById('signup-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('signup-email').value,
+            password: document.getElementById('signup-password').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Signup failed');
+        // If plan selected, redirect to checkout
+        const selectedPlan = document.getElementById('signup-plan').value;
+        if (selectedPlan) {
+          window.location.href = '/onboard.html?plan=' + selectedPlan;
+        } else {
+          window.location.href = '/dashboard.html';
+        }
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
   </script>
+
 </body>
 </html>

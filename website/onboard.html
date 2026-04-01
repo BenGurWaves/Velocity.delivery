@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tell Us About Your Project — Velocity</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/styles.css?v=7">
+  <style>
+    .onboard-page {
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    .onboard-nav {
+      padding: 0 var(--section-pad-x);
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .onboard-nav-logo {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+    .onboard-nav-logo i { font-style: italic; color: var(--dusty-trail); }
+    .onboard-step-label {
+      font-size: var(--font-label);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .onboard-content {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: var(--space-lg) 24px var(--space-xl);
+    }
+    .onboard-plan {
+      font-size: var(--font-label);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dusty-trail);
+      margin-bottom: var(--space-xs);
+    }
+    .onboard-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .onboard-sub {
+      font-size: var(--font-small);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      line-height: 1.7;
+    }
+
+    /* Steps indicator */
+    .steps-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: var(--space-lg);
+    }
+    .step-dot {
+      height: 3px;
+      flex: 1;
+      background: var(--border);
+      border-radius: 2px;
+      transition: background 0.4s var(--ease-out-expo);
+    }
+    .step-dot.active { background: var(--dusty-trail); }
+    .step-dot.done { background: var(--woodland); }
+
+    /* Form steps */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .form-group { margin-bottom: var(--space-md); }
+
+    .form-textarea {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      font-size: var(--font-body);
+      font-family: inherit;
+      color: var(--text);
+      background: transparent;
+      outline: none;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color var(--dur-fast);
+    }
+    .form-textarea:focus { border-color: var(--dusty-trail); }
+    .form-textarea::placeholder { color: var(--text-muted); }
+
+    /* Style options */
+    .style-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .style-option {
+      padding: 16px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      text-align: center;
+    }
+    .style-option:hover { border-color: var(--dusty-trail); }
+    .style-option.selected {
+      border-color: var(--woodland);
+      background: rgba(87, 62, 46, 0.04);
+    }
+    .style-option-name {
+      font-size: var(--font-small);
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .style-option-desc {
+      font-size: var(--font-label);
+      color: var(--text-muted);
+    }
+
+    /* Navigation buttons */
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+    .btn-back {
+      font-size: var(--font-small);
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: color var(--dur-fast);
+    }
+    .btn-back:hover { color: var(--text); }
+    .btn-next {
+      padding: 12px 32px;
+      background: var(--text);
+      color: var(--white);
+      border: 1px solid var(--text);
+      font-size: var(--font-small);
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .btn-next:hover { background: var(--woodland); border-color: var(--woodland); }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Review card */
+    .review-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: var(--font-small);
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-label { color: var(--text-muted); }
+    .review-value { color: var(--text); font-weight: 500; text-align: right; max-width: 60%; }
+    .review-total {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-sm) 0 0;
+      margin-top: var(--space-xs);
+      border-top: 1px solid var(--text);
+      font-size: var(--font-h3);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="onboard-page">
+    <nav class="onboard-nav">
+      <a href="/" class="onboard-nav-logo">Velocity<i>.</i></a>
+      <span class="onboard-step-label" id="step-label">Step 1 of 4</span>
+    </nav>
+
+    <div class="onboard-content">
+      <div class="steps-indicator" id="steps-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <!-- Step 1: About your business -->
+      <div class="form-step active" id="step-1">
+        <div class="onboard-plan" id="plan-label">Full Website — $500</div>
+        <h1 class="onboard-title">Tell us about your business.</h1>
+        <p class="onboard-sub">This helps us design something that fits your brand. Every detail matters.</p>
+
+        <div class="form-group">
+          <label class="form-label">Business Name</label>
+          <input type="text" id="biz-name" class="form-input" placeholder="Your business or brand name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">What do you do?</label>
+          <textarea id="biz-desc" class="form-textarea" placeholder="Briefly describe your business, products, or services"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Website (if any)</label>
+          <input type="text" id="biz-url" class="form-input" placeholder="https://yoursite.com or leave blank">
+        </div>
+
+        <div class="form-actions">
+          <a href="/dashboard.html" class="btn-back">Save & finish later</a>
+          <button class="btn-next" onclick="goStep(2)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Design preferences -->
+      <div class="form-step" id="step-2">
+        <div class="onboard-plan" id="plan-label-2"></div>
+        <h1 class="onboard-title">What should it feel like?</h1>
+        <p class="onboard-sub">Pick the style that best represents your brand. We'll tailor the design around it.</p>
+
+        <div class="form-group">
+          <label class="form-label">Design Style</label>
+          <div class="style-grid" id="style-options">
+            <div class="style-option" data-style="minimal" onclick="selectStyle(this)">
+              <div class="style-option-name">Minimal</div>
+              <div class="style-option-desc">Clean, open, refined</div>
+            </div>
+            <div class="style-option" data-style="bold" onclick="selectStyle(this)">
+              <div class="style-option-name">Bold</div>
+              <div class="style-option-desc">Strong, confident, striking</div>
+            </div>
+            <div class="style-option" data-style="warm" onclick="selectStyle(this)">
+              <div class="style-option-name">Warm</div>
+              <div class="style-option-desc">Inviting, natural, earthy</div>
+            </div>
+            <div class="style-option" data-style="professional" onclick="selectStyle(this)">
+              <div class="style-option-name">Professional</div>
+              <div class="style-option-desc">Corporate, trustworthy, sharp</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brand Colors (optional)</label>
+          <input type="text" id="brand-colors" class="form-input" placeholder="e.g. navy blue, gold, white — or leave blank">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Websites you admire (optional)</label>
+          <textarea id="inspiration" class="form-textarea" placeholder="Links to sites whose design you like — helps us understand your taste"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-back" onclick="goStep(1)">Back</button>
+          <button class="btn-next" onclick="goStep(3)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Content & features -->
+      <div class="form-step" id="step-3">
+        <div class="onboard-plan" id="plan-label-3"></div>
+        <h1 class="onboard-title">What do you need on the site?</h1>
+        <p class="onboard-sub">Tell us what pages and features matter most. We'll handle the rest.</p>
+
+        <div class="form-group">
+          <label class="form-label">Pages you need</label>
+          <textarea id="pages-needed" class="form-textarea" placeholder="e.g. Home, About, Services, Contact, Menu, Portfolio, Blog..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Must-have features</label>
+          <textarea id="features" class="form-textarea" placeholder="e.g. Contact form, booking system, photo gallery, social media links..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Anything else we should know?</label>
+          <textarea id="notes" class="form-textarea" placeholder="Timeline, special requests, content you'll provide — anything helps"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-back" onclick="goStep(2)">Back</button>
+          <button class="btn-next" onclick="goStep(4)">Review & Pay</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Review & Pay -->
+      <div class="form-step" id="step-4">
+        <div class="onboard-plan" id="plan-label-4"></div>
+        <h1 class="onboard-title">Review your brief.</h1>
+        <p class="onboard-sub">Make sure everything looks right. You can always update details later from your dashboard.</p>
+
+        <div class="review-card" id="review-card">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-back" onclick="goStep(3)">Back</button>
+          <button class="btn-next" id="pay-btn" onclick="handlePay()">Confirm & Pay</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Auth check — redirect if not logged in
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) { window.location.href = '/auth.html?plan=' + (new URLSearchParams(window.location.search).get('plan') || 'full') + '&action=signup'; return; }
+      } catch { window.location.href = '/auth.html'; }
+    })();
+
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get('plan') || 'full';
+    const planNames = { landing: 'Landing Page', full: 'Full Website', premium: 'Premium' };
+    const planPrices = { landing: '$250', full: '$500', premium: '$1,000' };
+    let currentStep = 1;
+    let selectedStyleValue = '';
+
+    // Set plan labels
+    const planText = (planNames[plan] || 'Full Website') + ' — ' + (planPrices[plan] || '$500');
+    document.getElementById('plan-label').textContent = planText;
+
+    function selectStyle(el) {
+      document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedStyleValue = el.dataset.style;
+    }
+
+    function goStep(step) {
+      // Hide current
+      document.getElementById('step-' + currentStep).classList.remove('active');
+      // Show target
+      document.getElementById('step-' + step).classList.add('active');
+      currentStep = step;
+
+      // Update indicators
+      const dots = document.querySelectorAll('.step-dot');
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active', 'done');
+        if (i + 1 < step) dot.classList.add('done');
+        if (i + 1 === step) dot.classList.add('active');
+      });
+      document.getElementById('step-label').textContent = 'Step ' + step + ' of 4';
+
+      // Set plan labels on each step
+      const label = document.getElementById('plan-label-' + step);
+      if (label) label.textContent = planText;
+
+      // Build review on step 4
+      if (step === 4) buildReview();
+
+      window.scrollTo(0, 0);
+    }
+
+    function buildReview() {
+      const data = [
+        ['Plan', planText],
+        ['Business', document.getElementById('biz-name').value || '—'],
+        ['Description', document.getElementById('biz-desc').value || '—'],
+        ['Current Site', document.getElementById('biz-url').value || 'None'],
+        ['Style', selectedStyleValue ? selectedStyleValue.charAt(0).toUpperCase() + selectedStyleValue.slice(1) : '—'],
+        ['Colors', document.getElementById('brand-colors').value || 'Designer\'s choice'],
+        ['Pages', document.getElementById('pages-needed').value || '—'],
+        ['Features', document.getElementById('features').value || '—'],
+      ];
+
+      const notes = document.getElementById('notes').value;
+      if (notes) data.push(['Notes', notes]);
+
+      let html = data.map(([label, value]) =>
+        '<div class="review-row"><span class="review-label">' + label + '</span><span class="review-value">' + esc(value) + '</span></div>'
+      ).join('');
+
+      html += '<div class="review-total"><span>Total</span><span>' + (planPrices[plan] || '$500') + '</span></div>';
+
+      document.getElementById('review-card').innerHTML = html;
+    }
+
+    async function handlePay() {
+      const btn = document.getElementById('pay-btn');
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+
+      // Get user first
+      try {
+        const meRes = await fetch('/api/auth/me');
+        if (!meRes.ok) { window.location.href = '/auth.html'; return; }
+        const user = await meRes.json();
+
+        // Save the brief to the server
+        const briefData = {
+          plan,
+          business_name: document.getElementById('biz-name').value,
+          business_desc: document.getElementById('biz-desc').value,
+          current_url: document.getElementById('biz-url').value,
+          style: selectedStyleValue,
+          brand_colors: document.getElementById('brand-colors').value,
+          inspiration: document.getElementById('inspiration').value,
+          pages: document.getElementById('pages-needed').value,
+          features: document.getElementById('features').value,
+          notes: document.getElementById('notes').value,
+        };
+
+        await fetch('/api/brief/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(briefData),
+        });
+
+        // Start checkout
+        const res = await fetch('/api/stripe/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan, email: user.email }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Confirm & Pay';
+          alert('Error: ' + (data.error || 'Could not start checkout.'));
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Confirm & Pay';
+        alert('Connection error. Please try again.');
+      }
+    }
+
+    function esc(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+  </script>
+
+</body>
+</html>

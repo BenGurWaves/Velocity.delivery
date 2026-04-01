@@ -1,0 +1,6 @@
+name = "velocitydelivery"
+pages_build_output_dir = "website"
+
+[[kv_namespaces]]
+binding = "DATA"
+id = "8b323901125c4e96a7e92e89525bf9ab"

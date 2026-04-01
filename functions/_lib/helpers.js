@@ -3,29 +3,34 @@
  * Password hashing (PBKDF2), session management, CORS, JSON responses
  */
 
-export const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Credentials': 'true',
-};
+export function getCorsHeaders(request) {
+  const origin = request?.headers?.get('Origin') || '';
+  const allowed = ['https://velocity.calyvent.com', 'https://calyvent.com'];
+  const allow = allowed.includes(origin) ? origin : allowed[0];
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    'Access-Control-Allow-Credentials': 'true',
+  };
+}
 
-export function json(data, status = 200, extraHeaders = {}) {
+export function json(data, status = 200, extraHeaders = {}, request = null) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json', ...CORS_HEADERS, ...extraHeaders },
+    headers: { 'Content-Type': 'application/json', ...getCorsHeaders(request), ...extraHeaders },
   });
 }
 
-export function err(message, status = 400) {
-  return json({ error: message }, status);
+export function err(message, status = 400, request = null) {
+  return json({ error: message }, status, {}, request);
 }
 
-export function corsPreflightResponse() {
+export function corsPreflightResponse(request = null) {
   return new Response(null, {
     status: 204,
     headers: {
-      ...CORS_HEADERS,
+      ...getCorsHeaders(request),
       'Access-Control-Max-Age': '86400',
     },
   });
@@ -69,7 +74,7 @@ export async function createSession(kv, email) {
   const sessionId = generateId();
   const session = { email, created_at: new Date().toISOString() };
   await kv.put(`session:${sessionId}`, JSON.stringify(session), {
-    expirationTtl: 86400 * 30, // 30 days
+    expirationTtl: 86400 * 30,
   });
   return sessionId;
 }
@@ -87,7 +92,7 @@ export async function getSession(kv, request) {
 }
 
 export function sessionCookie(sessionId, maxAge = 86400 * 30) {
-  return `session=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`;
+  return `session=${sessionId}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
 }
 
 // ── KV helper ─────────────────────────────────────────────
@@ -99,7 +104,7 @@ export function getKV(env) {
 // ── HTML escaping ─────────────────────────────────────────
 
 export function esc(str) {
-  return str
+  return (str || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

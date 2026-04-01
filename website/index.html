@@ -3,338 +3,329 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Velocity — Custom Websites, Built Fast</title>
-  <meta name="description" content="Professional websites designed and built in 48 hours. Custom-coded, deployed, and live. Starting at $250.">
-  <meta property="og:title" content="Velocity — Custom Websites, Built Fast">
-  <meta property="og:description" content="Professional websites designed and built in 48 hours. Custom-coded, deployed, and live. Starting at $250.">
-  <meta property="og:url" content="https://velocity.calyvent.com">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Velocity — Custom Websites, Built Fast">
-  <meta name="twitter:description" content="Professional websites designed and built in 48 hours. Starting at $250.">
+  <title>Velocity — Web Design Studio</title>
+  <meta name="description" content="Custom websites designed and built in 48 hours. Hand-coded, deployed, and live. By Calyvent.">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/styles.css?v=6">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Velocity",
-    "alternateName": "Velocity by Calyvent",
-    "description": "Custom website design and development studio. Professional websites built in 48 hours. Hand-coded, SEO optimized, deployed and live.",
-    "url": "https://velocity.calyvent.com",
-    "parentOrganization": {
-      "@type": "Organization",
-      "name": "Calyvent",
-      "url": "https://calyvent.com"
-    },
-    "serviceType": ["Web Design", "Web Development", "SEO"],
-    "areaServed": "Worldwide",
-    "priceRange": "$250 - $1,000",
-    "email": "hello@calyvent.com",
-    "offers": [
-      {
-        "@type": "Offer",
-        "name": "Landing Page",
-        "price": "250",
-        "priceCurrency": "USD",
-        "description": "One custom page, mobile responsive, SEO optimized, deployed in 48 hours"
-      },
-      {
-        "@type": "Offer",
-        "name": "Full Website",
-        "price": "500",
-        "priceCurrency": "USD",
-        "description": "Up to 5 pages, blog or portfolio, mobile responsive, SEO optimized, deployed in 5 days"
-      },
-      {
-        "@type": "Offer",
-        "name": "Premium",
-        "price": "1000",
-        "priceCurrency": "USD",
-        "description": "Up to 10 pages, advanced features, priority support, 30 days of revisions, deployed in 7 days"
-      }
-    ]
-  }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=10">
 </head>
 <body>
 
-  <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div>
-      <div class="preloader-text">Velocity<i>.</i></div>
-      <div class="preloader-counter" id="preloader-count">001</div>
+<div class="grain"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cdot" id="cdot"></div>
+
+<!-- Preloader -->
+<div class="pl" id="pl">
+  <span class="pl-word">Velocity<em>.</em></span>
+  <div class="pl-progress"><div id="pl-bar"></div></div>
+</div>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <a href="/" class="nav-brand">Velocity<em>.</em></a>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#studio">Studio</a>
+    <a href="mailto:hello@calyvent.com">Contact</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HERO — name fills the viewport
+══════════════════════════════════ -->
+<section class="hero">
+  <h1 class="hero-name" id="heroName">Velocity<em>.</em></h1>
+  <div class="hero-foot">
+    <p class="hero-sub">Web Design Studio<br><span>Custom websites. 48-hour delivery.</span></p>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </div>
+</section>
 
-  <!-- Nav -->
-  <nav class="nav" id="nav">
-    <a href="/" class="nav-logo">Velocity<i>.</i></a>
-    <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="/auth.html">Sign In</a></li>
-    </ul>
-  </nav>
+<!-- ══════════════════════════════════
+     INTRO — one sentence
+══════════════════════════════════ -->
+<section class="intro" id="intro">
+  <p class="intro-text">
+    We build websites for businesses that understand the difference between cheap and <em>worth&nbsp;it.</em>
+  </p>
+</section>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-label">Web Design Studio</div>
-      <h1>
-        <span><span class="word">We build</span></span><br>
-        <span><span class="word">websites.</span></span>
-      </h1>
-      <p class="hero-sub">Custom-designed. Hand-coded. Deployed in 48 hours. No templates, no page builders, no compromises.</p>
+<!-- ══════════════════════════════════
+     WORK — hover list
+══════════════════════════════════ -->
+<section class="work" id="work">
+  <div class="work-hdr">
+    <span class="label">Selected Work</span>
+  </div>
+
+  <div class="work-list" id="workList">
+    <a href="https://thread.calyvent.com" target="_blank" class="wl-item" data-color="#C8A882">
+      <span class="wl-num">01</span>
+      <span class="wl-name">Thread</span>
+      <span class="wl-type">Brand Infrastructure</span>
+      <span class="wl-year">2024</span>
+      <span class="wl-arrow">↗</span>
+    </a>
+    <div class="wl-sep"></div>
+    <a href="https://linkdrop.calyvent.com" target="_blank" class="wl-item" data-color="#8AA8C8">
+      <span class="wl-num">02</span>
+      <span class="wl-name">LinkDrop</span>
+      <span class="wl-type">SaaS Platform</span>
+      <span class="wl-year">2024</span>
+      <span class="wl-arrow">↗</span>
+    </a>
+    <div class="wl-sep"></div>
+    <a href="https://vault.calyvent.com" target="_blank" class="wl-item" data-color="#A8C8A0">
+      <span class="wl-num">03</span>
+      <span class="wl-name">The Vault</span>
+      <span class="wl-type">E-Commerce</span>
+      <span class="wl-year">2024</span>
+      <span class="wl-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Hover preview -->
+  <div class="work-preview" id="workPreview">
+    <div class="wp-inner" id="wpInner"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     STUDIO — who we are
+══════════════════════════════════ -->
+<section class="studio" id="studio">
+  <div class="studio-grid">
+    <div class="studio-left">
+      <span class="label">Studio</span>
     </div>
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="hero-scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- Statement -->
-  <section class="statement">
-    <div class="reveal">
-      <p>Your website is the first thing people see. If it looks cheap, they assume your work is too. We build sites that make you look like the <em>best in your field</em> — because you are.</p>
-    </div>
-  </section>
-
-  <!-- Work -->
-  <section class="work" id="work">
-    <div class="section-label reveal">Selected Work</div>
-
-    <div class="work-grid">
-      <a href="https://calyvent.com" target="_blank" class="work-item work-featured reveal">
-        <div class="work-item-media">
-          <img src="/work-calyvent.jpg" alt="Calyvent — Holding Company Website" class="work-img" loading="lazy">
+    <div class="studio-right">
+      <p class="studio-para">
+        Velocity is a web design studio by <a href="https://calyvent.com" target="_blank">Calyvent</a>. We build custom websites — hand-coded, not templated. Every project is designed from scratch to fit the brand it belongs to.
+      </p>
+      <p class="studio-para">
+        We work with founders, small businesses, and anyone who needs a website that doesn't look like everyone else's.
+      </p>
+      <div class="studio-facts">
+        <div class="sf">
+          <b>48h</b>
+          <span>Landing page delivery</span>
         </div>
-        <div class="work-item-info">
-          <span class="work-item-name">Calyvent</span>
-          <span class="work-item-type">Holding Company</span>
+        <div class="sf">
+          <b>Hand-coded</b>
+          <span>No WordPress. No Wix.</span>
         </div>
-      </a>
-
-      <div class="line-reveal"></div>
-
-      <div class="work-pair">
-        <a href="https://linkdrop.calyvent.com" target="_blank" class="work-item reveal">
-          <div class="work-item-media">
-            <img src="/work-linkdrop.jpg" alt="LinkDrop — Link-in-Bio Platform" class="work-img" loading="lazy">
-          </div>
-          <div class="work-item-info">
-            <span class="work-item-name">LinkDrop</span>
-            <span class="work-item-type">SaaS Platform</span>
-          </div>
-        </a>
-        <a href="https://vault.calyvent.com" target="_blank" class="work-item reveal">
-          <div class="work-item-media">
-            <img src="/work-vault.jpg" alt="The Vault — Digital Guide Library" class="work-img" loading="lazy">
-          </div>
-          <div class="work-item-info">
-            <span class="work-item-name">The Vault</span>
-            <span class="work-item-type">E-Commerce</span>
-          </div>
-        </a>
+        <div class="sf">
+          <b>Global CDN</b>
+          <span>Cloudflare deployment</span>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Services -->
-  <section class="services" id="services">
-    <div class="section-label reveal">What We Do</div>
-    <div class="services-header reveal">
-      <h2 class="services-title">Built for<br>performance.</h2>
-      <p class="services-intro">Every site we build is custom-coded, optimized for search engines, and designed to convert visitors into customers. No WordPress, no Wix, no shortcuts.</p>
-    </div>
-
-    <div class="services-list">
-      <div class="line-reveal-light"></div>
-      <div class="service-row reveal">
-        <span class="service-num">01</span>
-        <span class="service-name">Design</span>
-        <span class="service-desc">Custom layouts tailored to your brand and audience</span>
-      </div>
-      <div class="line-reveal-light"></div>
-      <div class="service-row reveal">
-        <span class="service-num">02</span>
-        <span class="service-name">Development</span>
-        <span class="service-desc">Hand-coded, fast-loading, responsive on every device</span>
-      </div>
-      <div class="line-reveal-light"></div>
-      <div class="service-row reveal">
-        <span class="service-num">03</span>
-        <span class="service-name">SEO</span>
-        <span class="service-desc">Built to rank on Google from day one</span>
-      </div>
-      <div class="line-reveal-light"></div>
-      <div class="service-row reveal">
-        <span class="service-num">04</span>
-        <span class="service-name">Deployment</span>
-        <span class="service-desc">Hosted, secured, and delivered globally via CDN</span>
-      </div>
-      <div class="line-reveal-light"></div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section class="pricing" id="pricing">
-    <div class="pricing-header reveal">
-      <h2 class="pricing-title">Pricing</h2>
-      <p class="pricing-sub">One payment. No subscriptions. No hidden fees.</p>
-    </div>
-
-    <div class="pricing-grid reveal">
-      <div class="price-card">
-        <div class="price-label">Landing Page</div>
-        <div class="price-amount">$250</div>
-        <div class="price-timeline">Delivered in 48 hours</div>
-        <ul class="price-features">
-          <li>One stunning page</li>
-          <li>Mobile responsive</li>
-          <li>SEO optimized</li>
-          <li>Contact form</li>
-          <li>Deployed and live</li>
-        </ul>
-        <button class="price-btn" onclick="selectPlan('landing')">Get Started</button>
-      </div>
-
-      <div class="price-card featured">
-        <div class="price-label">Full Website</div>
-        <div class="price-amount">$500</div>
-        <div class="price-timeline">Delivered in 5 days</div>
-        <ul class="price-features">
-          <li>Up to 5 pages</li>
-          <li>Mobile responsive</li>
-          <li>SEO optimized</li>
-          <li>Contact form</li>
-          <li>Blog or portfolio</li>
-          <li>Deployed and live</li>
-        </ul>
-        <button class="price-btn" onclick="selectPlan('full')">Get Started</button>
-      </div>
-
-      <div class="price-card">
-        <div class="price-label">Premium</div>
-        <div class="price-amount">$1,000</div>
-        <div class="price-timeline">Delivered in 7 days</div>
-        <ul class="price-features">
-          <li>Up to 10 pages</li>
-          <li>Mobile responsive</li>
-          <li>SEO optimized</li>
-          <li>Advanced features</li>
-          <li>Priority support</li>
-          <li>30 days of revisions</li>
-          <li>Deployed and live</li>
-        </ul>
-        <button class="price-btn" onclick="selectPlan('premium')">Get Started</button>
+<!-- ══════════════════════════════════
+     SERVICES — numbered
+══════════════════════════════════ -->
+<section class="services">
+  <div class="svc-list">
+    <div class="svc-item">
+      <span class="svc-n">01</span>
+      <div class="svc-body">
+        <h3>Design</h3>
+        <p>Custom layouts and typography. Built around your brand, not a template.</p>
       </div>
     </div>
-      <p style="text-align:center;margin-top:var(--space-lg);font-size:var(--font-label);color:var(--text-muted);letter-spacing:0.03em;">Looking for something beyond these plans? <a href="mailto:hello@calyvent.com" style="color:var(--text-secondary);border-bottom:1px solid var(--border);padding-bottom:1px;">Let's talk.</a></p>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta">
-    <div class="reveal">
-      <h2 class="cta-title">Let's build<br>something.</h2>
-      <a href="mailto:hello@calyvent.com" class="cta-email">hello@calyvent.com</a>
-      <p class="cta-note">Stripe &middot; Cash App &middot; Apple Pay &middot; Google Pay</p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div>
-        <div class="footer-brand">Velocity<i>.</i></div>
-        <div class="footer-by">by Calyvent</div>
-      </div>
-      <div class="footer-col">
-        <h4>Navigate</h4>
-        <a href="#work">Work</a>
-        <a href="#services">Services</a>
-        <a href="#pricing">Pricing</a>
-        <a href="/auth.html">Dashboard</a>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="mailto:hello@calyvent.com">Contact</a>
+    <div class="svc-item">
+      <span class="svc-n">02</span>
+      <div class="svc-body">
+        <h3>Development</h3>
+        <p>Hand-coded HTML, CSS, JavaScript. Fast, responsive, no bloat.</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span class="footer-copy">&copy; 2026 Velocity&trade; by Calyvent. All rights reserved.</span>
-      <div class="footer-legal">
-        <a href="/terms.html">Terms</a>
-        <a href="/privacy.html">Privacy</a>
+    <div class="svc-item">
+      <span class="svc-n">03</span>
+      <div class="svc-body">
+        <h3>SEO</h3>
+        <p>Built to rank. Schema markup, Core Web Vitals, clean code.</p>
       </div>
     </div>
-  </footer>
+    <div class="svc-item">
+      <span class="svc-n">04</span>
+      <div class="svc-body">
+        <h3>Deployment</h3>
+        <p>Live on Cloudflare. Global CDN, SSL, millisecond load times.</p>
+      </div>
+    </div>
+    <div class="svc-item">
+      <span class="svc-n">05</span>
+      <div class="svc-body">
+        <h3>Full-Stack</h3>
+        <p>SaaS, dashboards, APIs, automation. We build more than websites.</p>
+      </div>
+    </div>
+  </div>
+  <div class="svc-footer">
+    <p>Landing pages from <em>$250</em>. Full sites from <em>$500</em>. Custom work — let's talk.</p>
+    <a href="mailto:hello@calyvent.com" class="svc-cta">Start a project →</a>
+  </div>
+</section>
 
-  <script>
-    // Preloader
-    let count = 0;
-    const counter = document.getElementById('preloader-count');
-    const preloader = document.getElementById('preloader');
-    const countInterval = setInterval(() => {
-      count += Math.floor(Math.random() * 15) + 5;
-      if (count >= 100) { count = 100; clearInterval(countInterval); }
-      counter.textContent = String(count).padStart(3, '0');
-    }, 80);
-    window.addEventListener('load', () => {
-      count = 100;
-      counter.textContent = '100';
-      setTimeout(() => preloader.classList.add('loaded'), 400);
+<!-- ══════════════════════════════════
+     CTA — just the email
+══════════════════════════════════ -->
+<section class="cta">
+  <p class="cta-label">Ready to build?</p>
+  <a href="mailto:hello@calyvent.com" class="cta-email">hello@calyvent.com</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank">Calyvent</a></span>
+  <div class="ft-links">
+    <a href="/terms.html">Terms</a>
+    <a href="/privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── Preloader ── */
+(function(){
+  let p = 0;
+  const bar = document.getElementById('pl-bar');
+  const pl  = document.getElementById('pl');
+  const t = setInterval(()=>{
+    p += Math.random()*14+4;
+    if(p>=100){p=100;clearInterval(t);}
+    bar.style.width = p+'%';
+  }, 55);
+  window.addEventListener('load',()=>{
+    p=100; bar.style.width='100%';
+    setTimeout(()=>{ pl.classList.add('out'); boot(); }, 350);
+  });
+})();
+
+/* ── Boot animations ── */
+function boot(){
+
+  /* Hero name reveal */
+  gsap.from('#heroName', {
+    yPercent: 8, opacity: 0,
+    duration: 1.6, ease:'expo.out', delay: 0.1
+  });
+  gsap.from('.hero-foot', {
+    opacity:0, y:20,
+    duration:1.2, ease:'expo.out', delay:0.5
+  });
+
+  /* Intro */
+  gsap.from('.intro-text', {
+    scrollTrigger:{trigger:'.intro', start:'top 75%'},
+    opacity:0, y:50, duration:1.4, ease:'expo.out'
+  });
+
+  /* Work list */
+  gsap.from('.wl-item', {
+    scrollTrigger:{trigger:'.work-list', start:'top 80%'},
+    opacity:0, y:30, duration:1, ease:'expo.out',
+    stagger:0.1
+  });
+  gsap.from('.wl-sep', {
+    scrollTrigger:{trigger:'.work-list', start:'top 80%'},
+    scaleX:0, transformOrigin:'left',
+    duration:1.2, ease:'expo.out', stagger:0.1
+  });
+
+  /* Studio */
+  gsap.from(['.studio-para','.sf'], {
+    scrollTrigger:{trigger:'.studio', start:'top 75%'},
+    opacity:0, y:30, duration:1, ease:'expo.out', stagger:0.12
+  });
+
+  /* Services */
+  gsap.from('.svc-item', {
+    scrollTrigger:{trigger:'.services', start:'top 80%'},
+    opacity:0, x:-20, duration:0.9, ease:'expo.out', stagger:0.1
+  });
+  gsap.from('.svc-footer', {
+    scrollTrigger:{trigger:'.svc-footer', start:'top 90%'},
+    opacity:0, y:20, duration:1, ease:'expo.out'
+  });
+
+  /* CTA */
+  gsap.from(['.cta-label','.cta-email'], {
+    scrollTrigger:{trigger:'.cta', start:'top 80%'},
+    opacity:0, y:40, duration:1.4, ease:'expo.out', stagger:0.2
+  });
+}
+
+/* ── Work hover preview ── */
+(function(){
+  const items   = document.querySelectorAll('.wl-item');
+  const preview = document.getElementById('workPreview');
+  const inner   = document.getElementById('wpInner');
+  let mx=0, my=0, active=false;
+
+  // CSS mocks per project
+  const mocks = {
+    0: `<div class="mock-thread"><div class="mt-nav"><s></s><s></s><s></s></div><div class="mt-body"><div class="mt-sb"><div class="mt-sb-i a"></div><div class="mt-sb-i"></div><div class="mt-sb-i"></div><div class="mt-sb-i"></div></div><div class="mt-main"><div class="mt-r h"></div><div class="mt-rg"><div class="mt-r half"></div><div class="mt-r half acc"></div></div><div class="mt-r"></div><div class="mt-r s ad"></div></div></div></div>`,
+    1: `<div class="mock-linkdrop"><div class="ml-nav"><s></s><s></s><s></s></div><div class="ml-body"><div class="ml-av"></div><div class="ml-nb"></div><div class="ml-btn"></div><div class="ml-btn d"></div><div class="ml-btn d ac"></div></div></div>`,
+    2: `<div class="mock-vault"><div class="mv-nav"><s></s><s></s><s></s></div><div class="mv-grid"><div class="mv-card"><div class="mv-ci g"></div><div class="mv-cb"></div><div class="mv-cb s"></div></div><div class="mv-card"><div class="mv-ci"></div><div class="mv-cb"></div><div class="mv-cb s g"></div></div><div class="mv-card"><div class="mv-ci gd"></div><div class="mv-cb"></div><div class="mv-cb s"></div></div><div class="mv-card"><div class="mv-ci"></div><div class="mv-cb"></div><div class="mv-cb s g"></div></div></div></div>`
+  };
+
+  document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+
+  items.forEach((item, i)=>{
+    item.addEventListener('mouseenter', ()=>{
+      inner.innerHTML = mocks[i] || '';
+      preview.classList.add('show');
+      active=true;
     });
+    item.addEventListener('mouseleave', ()=>{
+      preview.classList.remove('show');
+      active=false;
+    });
+  });
 
-    // Nav scroll
-    window.addEventListener('scroll', () => {
-      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
-
-    // Reveal on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-
-    document.querySelectorAll('.reveal, .line-reveal, .line-reveal-light, .stagger')
-      .forEach(el => observer.observe(el));
-
-    // Update nav if logged in
-    (async () => {
-      try {
-        const res = await fetch('/api/auth/me');
-        if (res.ok) {
-          const signInLink = document.querySelector('.nav-links li:last-child a');
-          if (signInLink) {
-            signInLink.textContent = 'Dashboard';
-            signInLink.href = '/dashboard.html';
-          }
-        }
-      } catch {}
-    })();
-
-    // Plan selection — check if already logged in first
-    async function selectPlan(plan) {
-      try {
-        const res = await fetch('/api/auth/me');
-        if (res.ok) {
-          // Already logged in — skip auth, go straight to onboarding
-          window.location.href = '/onboard.html?plan=' + plan;
-          return;
-        }
-      } catch {}
-      // Not logged in — go to signup
-      window.location.href = '/auth.html?plan=' + plan + '&action=signup';
+  (function loop(){
+    if(active){
+      preview.style.transform = `translate(${mx+24}px,${my-80}px)`;
     }
-  </script>
+    requestAnimationFrame(loop);
+  })();
+})();
 
+/* ── Custom cursor ── */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches) return;
+  const c=document.getElementById('cursor'), d=document.getElementById('cdot');
+  let mx=-200,my=-200,cx=-200,cy=-200;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function loop(){
+    cx+=(mx-cx)*0.1; cy+=(my-cy)*0.1;
+    c.style.transform=`translate(${cx-20}px,${cy-20}px)`;
+    d.style.transform=`translate(${mx-3}px,${my-3}px)`;
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>c.classList.add('hover'));
+    el.addEventListener('mouseleave',()=>c.classList.remove('hover'));
+  });
+})();
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('s', scrollY>60);
+},{passive:true});
+</script>
 </body>
 </html>
