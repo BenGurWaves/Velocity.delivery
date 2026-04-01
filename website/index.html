@@ -115,7 +115,7 @@
           <div class="wp-sk-row xshort"></div>
           <div class="wp-sk-row"></div>
         </div>
-        <div class="wp-screenshot" id="wpShot"></div>
+        <img class="wp-screenshot" id="wpShot" src="" alt="" draggable="false">
       </div>
     </div>
   </div>
@@ -356,8 +356,8 @@ function boot(){
       skeleton.style.opacity = '1';
       address.textContent = item.dataset.url || '';
 
-      // Preload image as background
-      shot.style.backgroundImage = 'url(' + (item.dataset.img || '') + ')';
+      // Preload image
+      shot.src = item.dataset.img || '';
 
       // Show card
       preview.classList.add('show');

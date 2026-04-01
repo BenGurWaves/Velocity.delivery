@@ -479,18 +479,20 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 .wp-screenshot {
   position:absolute;
   inset:0;
-  background-size:100% auto;
-  background-position:top center;
-  background-repeat:no-repeat;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:top center;
   opacity:0;
   transition:opacity .5s ease;
+  transform-origin:top center;
 }
 .wp-screenshot.scrolling {
-  animation:wpScroll 18s linear forwards;
+  animation:wpPan 16s ease-in-out forwards;
 }
-@keyframes wpScroll {
-  0%   { background-position:top center }
-  100% { background-position:bottom center }
+@keyframes wpPan {
+  0%   { transform:scale(1)    translateY(0%)   }
+  100% { transform:scale(1.07) translateY(-3%)  }
 }
 
 /* ── Studio ── */
@@ -699,58 +701,114 @@ button { font-family:inherit; background:none; border:none; cursor:none }
   .wl-arrow { grid-column:3 }
 }
 @media(max-width:600px){
-  :root { --px: 1.25rem }
+  :root { --px: 1.5rem }
 
   /* Disable custom cursor on touch */
   .cursor, .cdot { display:none }
   body { cursor:auto }
   a, button { cursor:pointer }
 
-  /* Nav — all links at compact size */
-  .nav { height:56px }
-  .nav-links { gap:1.2rem }
-  .nav-links a { font-size:.6rem; letter-spacing:.07em }
+  /* Nav — compact, all links visible */
+  .nav { height:60px }
+  .nav-links { gap:1.6rem }
+  .nav-links a { font-size:.58rem; letter-spacing:.1em }
 
-  /* Hero — name still dominates but fits */
-  .hero-name {
-    font-size:clamp(4rem,22vw,9rem);
-    left:var(--px);
-    top:50%;
+  /* Hero — name fills width, dramatic */
+  .hero {
+    padding-bottom:clamp(2.5rem,6vw,4rem);
+    min-height:100svh;
   }
-  .hero-foot { flex-direction:column; align-items:flex-start; gap:1.5rem }
-  .hero-scroll { flex-direction:row; align-items:center }
-  .hero-scroll-line { width:32px; height:1px; animation:none }
-  .hero-scroll span { writing-mode:horizontal-tb; font-size:.5rem }
+  .hero-name {
+    font-size:clamp(4.2rem,23vw,10rem);
+    top:50%;
+    letter-spacing:-.05em;
+  }
+  .hero-foot {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1.8rem;
+  }
+  .hero-sub { font-size:.7rem; line-height:1.9 }
+  /* Scroll indicator horizontal on mobile */
+  .hero-scroll { flex-direction:row; align-items:center; gap:10px }
+  .hero-scroll-line {
+    width:36px; height:1px;
+    animation:none; opacity:.3;
+  }
+  .hero-scroll span {
+    writing-mode:horizontal-tb;
+    font-size:.5rem;
+    letter-spacing:.18em;
+  }
 
-  /* Intro — full width, smaller text */
+  /* Intro — full width, still editorial */
   .intro {
-    padding:clamp(5rem,12vw,8rem) var(--px);
+    padding:clamp(5rem,14vw,9rem) var(--px) clamp(4rem,10vw,7rem);
     grid-template-columns:1fr;
   }
   .intro-text {
     grid-column:1;
-    font-size:clamp(1.5rem,6.5vw,2.8rem);
+    font-size:clamp(1.65rem,7vw,3rem);
+    line-height:1.22;
   }
 
-  /* Work list */
+  /* Work list — large names, editorial rows */
+  .work { padding:clamp(4rem,10vw,8rem) var(--px) }
+  .work-hdr { margin-bottom:clamp(2rem,5vw,4rem) }
   .wl-item {
-    grid-template-columns:2rem 1fr 1.5rem;
-    padding:clamp(1.2rem,4vw,2.5rem) 0;
+    grid-template-columns:2.2rem 1fr 1.5rem;
+    padding:clamp(1.5rem,5vw,3rem) 0;
   }
-  .wl-name { font-size:clamp(1.8rem,9vw,3.5rem) }
+  .wl-num { font-size:.55rem }
+  .wl-name {
+    font-size:clamp(2.2rem,11vw,5rem);
+    letter-spacing:-.04em;
+  }
+  .wl-arrow { font-size:.85rem }
   .work-preview { display:none }
 
   /* Studio */
-  .studio-facts { flex-wrap:wrap; gap:2rem }
+  .studio { padding:clamp(4rem,12vw,8rem) var(--px) }
+  .studio-right { max-width:100% }
+  .studio-para { font-size:clamp(.85rem,3.5vw,.95rem) }
+  .studio-facts {
+    flex-wrap:wrap;
+    gap:clamp(1.5rem,5vw,3rem);
+    padding-top:2.5rem;
+  }
+  .sf b { font-size:clamp(1rem,4vw,1.4rem) }
 
   /* Services */
-  .svc-item { grid-template-columns:2rem 1fr; gap:1rem }
-  .svc-footer { flex-direction:column; align-items:flex-start; gap:1.5rem }
+  .services { padding:clamp(4rem,10vw,8rem) var(--px) }
+  .svc-item {
+    grid-template-columns:2rem 1fr;
+    gap:1.2rem;
+    padding:clamp(1.5rem,4vw,2.5rem) 0;
+  }
+  .svc-body h3 { font-size:clamp(1.3rem,5.5vw,2rem) }
+  .svc-item:first-child .svc-body h3 { font-size:clamp(1.5rem,6.5vw,2.4rem) }
+  .svc-body p { max-width:100% }
+  .svc-footer {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1.8rem;
+    margin-top:clamp(3rem,7vw,5rem);
+  }
+  .svc-cta { font-size:.65rem }
 
-  /* CTA email — still large but contained */
-  .cta-email { font-size:clamp(2.2rem,11vw,5rem) }
+  /* CTA — still huge, fills the screen width */
+  .cta { padding:clamp(5rem,13vw,9rem) var(--px) clamp(4rem,8vw,7rem) }
+  .cta-email {
+    font-size:clamp(2rem,11.5vw,5.5rem);
+    letter-spacing:-.04em;
+  }
 
   /* Footer */
-  .footer { flex-direction:column; align-items:flex-start; gap:.75rem }
-  .ft-links { gap:1.5rem }
+  .footer {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1rem;
+    padding:clamp(1.8rem,4vw,3rem) var(--px);
+  }
+  .ft-links { gap:1.8rem }
 }
