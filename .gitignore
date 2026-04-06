@@ -12,4 +12,6 @@ node_modules/
 venv/
 screenshots/
 previews/
+!website/previews/
+!website/previews/**
 builds/
