@@ -86,6 +86,24 @@ def stage(stage_name: str, categories: tuple, cities: tuple):
 
 
 @main.command()
+@click.argument('prospect_info', nargs=-1)
+@click.pass_context
+def prospect_auto(ctx: click.Context, prospect_info: tuple):
+    """Velocity Prospect Auto-Pipeline (/prospect-auto).
+    
+    Paste prospect info: 'Company Name, website, phone/email etc.'
+    Runs 6-phase autonomous agent.
+    """
+    from pipeline import prospect_auto
+    info = ' '.join(prospect_info)
+    if not info:
+        console.print('[red]Error: Provide prospect info e.g. "Acme Corp, https://acme.com"[/]')
+        return
+    console.print('[bold cyan]Starting /prospect-auto...[/]')
+    asyncio.run(prospect_auto.main(info))
+
+
+@main.command()
 @click.option("--host", default="0.0.0.0", help="Host to bind to")
 @click.option("--port", default=8000, type=int, help="Port to listen on")
 @click.option("--reload", is_flag=True, help="Enable auto-reload for development")
