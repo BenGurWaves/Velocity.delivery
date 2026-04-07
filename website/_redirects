@@ -2,3 +2,4 @@
 /dashboard  /dashboard.html           301
 /login      /auth.html                301
 /signup     /auth.html?action=signup  301
+/previews/*  /previews/$1              200
