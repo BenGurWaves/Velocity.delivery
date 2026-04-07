@@ -109,9 +109,9 @@
       height: 100%;
       object-fit: cover;
       object-position: center 30%;
-      opacity: 0.22;
-      mask-image: linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 100%);
+      opacity: 0.42;
+      mask-image: linear-gradient(to left, rgba(0,0,0,0.75) 0%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.75) 0%, transparent 100%);
     }
 
     .hero::before {
@@ -251,19 +251,19 @@
     /* ─── PHYSICIAN ─── */
     .physician-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 96px;
+      grid-template-columns: 1fr 1fr 0.7fr;
+      gap: 72px;
       align-items: start;
     }
 
     .physician-image {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      height: 420px;
       object-fit: cover;
       object-position: center;
-      opacity: 0.55;
-      margin-top: 40px;
-      filter: grayscale(20%);
+      opacity: 0.72;
+      filter: grayscale(15%);
+      display: block;
     }
 
     .physician-quote {
@@ -317,19 +317,6 @@
       background: var(--surface);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .concierge-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('assets/room.jpeg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.04;
-      pointer-events: none;
     }
 
     .concierge-header {
@@ -425,7 +412,24 @@
     }
 
     /* ─── CTA ─── */
-    .cta-section { text-align: center; }
+    .cta-section {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/room.jpeg');
+      background-size: cover;
+      background-position: center 40%;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .cta-inner { position: relative; z-index: 1; }
 
     .cta-inner { max-width: 600px; margin: 0 auto; }
 
@@ -617,7 +621,8 @@
       section { padding: 80px 24px; }
       .proof-strip { padding: 40px 24px; gap: 32px; flex-wrap: wrap; }
       .proof-divider { display: none; }
-      .physician-grid { grid-template-columns: 1fr; gap: 48px; }
+      .physician-grid { grid-template-columns: 1fr; gap: 40px; }
+      .physician-image { height: 260px; }
       .concierge-grid { grid-template-columns: 1fr; }
       .services-list { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 32px; padding: 40px 24px; }
@@ -715,8 +720,8 @@
           <li>42+ years in medicine</li>
         </ul>
       </div>
+      <img class="physician-image" src="assets/stethoscope.jpeg" alt="" aria-hidden="true" />
     </div>
-    <img class="physician-image" src="assets/stethoscope.jpeg" alt="" aria-hidden="true" />
   </section>
 
   <hr class="rule" />
