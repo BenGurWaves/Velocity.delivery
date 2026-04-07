@@ -102,15 +102,30 @@
       overflow: hidden;
     }
 
+    .hero-img {
+      position: absolute;
+      top: 0; right: 0;
+      width: 52%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      opacity: 0.22;
+      mask-image: linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 100%);
+    }
+
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 55% 55% at 75% 35%, rgba(44,61,85,0.12) 0%, transparent 65%),
-        radial-gradient(ellipse 35% 50% at 15% 75%, rgba(140,114,73,0.05) 0%, transparent 60%);
+        linear-gradient(to right, var(--ink) 40%, transparent 100%),
+        radial-gradient(ellipse 35% 50% at 15% 75%, rgba(133,111,71,0.05) 0%, transparent 60%);
       pointer-events: none;
+      z-index: 1;
     }
+
+    .hero-vline, .hero-eyebrow, .hero-title, .hero-footer-row { position: relative; z-index: 2; }
 
     .hero-vline {
       position: absolute;
@@ -241,6 +256,16 @@
       align-items: start;
     }
 
+    .physician-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.55;
+      margin-top: 40px;
+      filter: grayscale(20%);
+    }
+
     .physician-quote {
       font-family: 'DM Serif Display', Georgia, serif;
       font-size: clamp(26px, 3.5vw, 44px);
@@ -292,6 +317,19 @@
       background: var(--surface);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concierge-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/room.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.04;
+      pointer-events: none;
     }
 
     .concierge-header {
@@ -606,6 +644,7 @@
 
   <!-- HERO -->
   <div class="hero">
+    <img class="hero-img" src="assets/hands.jpeg" alt="" aria-hidden="true" />
     <div class="hero-vline"></div>
     <p class="hero-eyebrow">Upper East Side — New York — Est. 2001</p>
     <h1 class="hero-title">
@@ -677,6 +716,7 @@
         </ul>
       </div>
     </div>
+    <img class="physician-image" src="assets/stethoscope.jpeg" alt="" aria-hidden="true" />
   </section>
 
   <hr class="rule" />
