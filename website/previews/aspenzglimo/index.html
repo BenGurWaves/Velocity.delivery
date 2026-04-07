@@ -96,11 +96,13 @@
         .hero-image {
             position: absolute;
             inset: 0;
-            background:
-                linear-gradient(165deg, rgba(10,10,11,0.75) 0%, rgba(10,10,11,0.45) 45%, rgba(19,17,16,0.85) 100%),
-                radial-gradient(ellipse 90% 60% at 50% 100%, rgba(185,148,59,0.12) 0%, transparent 55%),
-                linear-gradient(180deg, #1a1c1f 0%, #0d0e10 40%, #0A0A0B 100%);
-            filter: brightness(0.92);
+            background-image:
+                linear-gradient(165deg, rgba(10,10,11,0.78) 0%, rgba(10,10,11,0.42) 42%, rgba(19,17,16,0.9) 100%),
+                radial-gradient(ellipse 90% 60% at 50% 100%, rgba(185,148,59,0.1) 0%, transparent 55%),
+                url('assets/hero-suburban.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.93);
         }
         .hero-content {
             position: relative;
@@ -179,13 +181,19 @@
         .feature p { color: var(--bone-dim); font-size: 0.9rem; }
         .fleet { background: var(--surface); }
         .fleet-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: center; }
-        .fleet-image {
+        .fleet-visual {
             aspect-ratio: 4/3;
-            background:
-                linear-gradient(135deg, rgba(185,148,59,0.08) 0%, transparent 50%),
-                linear-gradient(180deg, #1c1b19 0%, #0A0A0B 100%);
             border: 1px solid var(--border);
-            filter: brightness(0.95);
+            overflow: hidden;
+            background: var(--ink);
+        }
+        .fleet-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            filter: brightness(0.96);
         }
         .fleet-text h2 {
             font-family: 'Cormorant Garamond', serif;
@@ -194,6 +202,7 @@
             margin-bottom: 1.5rem;
         }
         .fleet-text p { color: var(--bone-dim); margin-bottom: 1.25rem; line-height: 1.7; }
+        .fleet-note { font-size: 0.75rem !important; opacity: 0.75; margin-top: -0.5rem !important; margin-bottom: 0 !important; }
         .fleet-details { list-style: none; margin-top: 1.5rem; }
         .fleet-details li {
             padding: 0.6rem 0;
@@ -306,7 +315,7 @@
     </nav>
 
     <section class="hero">
-        <div class="hero-image"></div>
+        <div class="hero-image" role="img" aria-label="Black full-size SUV at a snow-covered mountain lodge, twilight"></div>
         <div class="hero-content">
             <h1>Aspen ZG Limo</h1>
             <p>Private transportation to and from Aspen, Snowmass, and all Colorado airports</p>
@@ -341,10 +350,13 @@
 
     <section class="section fleet">
         <div class="fleet-content">
-            <div class="fleet-image"></div>
+            <div class="fleet-visual">
+                <img class="fleet-photo" src="assets/fleet-interior.png" width="1200" height="900" loading="lazy" decoding="async" alt="Illustrative luxury full-size SUV interior: leather seating, wood trim, soft ambient lighting.">
+            </div>
             <div class="fleet-text">
                 <h2>Our Fleet</h2>
                 <p>Late-model Chevrolet Suburban 4x4s, equipped for mountain conditions. Every vehicle accommodates up to seven adults with luggage.</p>
+                <p class="fleet-note">Interior shown is illustrative of the cabin standard, not a specific VIN.</p>
                 <ul class="fleet-details">
                     <li><span>•</span> Up to 7 passengers with luggage</li>
                     <li><span>•</span> Complimentary bottled water</li>
