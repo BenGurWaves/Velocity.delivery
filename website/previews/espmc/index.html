@@ -12,17 +12,19 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      /* Elevated from espmc.net's real palette — #304C78 (navy), #856F47 (brass) */
       --ink:         #0A0A0B;
-      --surface:     #111210;
-      --slate:       #2C3D55;
-      --slate-muted: rgba(44, 61, 85, 0.18);
+      --surface:     #0D1219;  /* dark navy-tinted surface, derived from #304C78 */
+      --navy:        #304C78;  /* their actual primary — glows on dark */
+      --navy-dim:    rgba(48, 76, 120, 0.22);
+      --navy-ghost:  rgba(48, 76, 120, 0.08);
       --bone:        #E5DDD0;
       --bone-dim:    rgba(229, 221, 208, 0.5);
       --bone-ghost:  rgba(229, 221, 208, 0.07);
-      --brass:       #8C7249;
-      --brass-dim:   rgba(140, 114, 73, 0.35);
-      --border:      rgba(229, 221, 208, 0.08);
-      --border-2:    rgba(229, 221, 208, 0.14);
+      --brass:       #856F47;  /* their actual secondary — already Quiet Luxury */
+      --brass-dim:   rgba(133, 111, 71, 0.35);
+      --border:      rgba(48, 76, 120, 0.18);   /* navy-tinted border */
+      --border-2:    rgba(229, 221, 208, 0.12);
     }
 
     html { scroll-behavior: smooth; }
