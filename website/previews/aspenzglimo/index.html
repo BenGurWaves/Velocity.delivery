@@ -96,8 +96,11 @@
         .hero-image {
             position: absolute;
             inset: 0;
-            background: url('assets/hero.jpg') center/cover;
-            filter: brightness(0.5);
+            background:
+                linear-gradient(165deg, rgba(10,10,11,0.75) 0%, rgba(10,10,11,0.45) 45%, rgba(19,17,16,0.85) 100%),
+                radial-gradient(ellipse 90% 60% at 50% 100%, rgba(185,148,59,0.12) 0%, transparent 55%),
+                linear-gradient(180deg, #1a1c1f 0%, #0d0e10 40%, #0A0A0B 100%);
+            filter: brightness(0.92);
         }
         .hero-content {
             position: relative;
@@ -178,8 +181,11 @@
         .fleet-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: center; }
         .fleet-image {
             aspect-ratio: 4/3;
-            background: url('assets/fleet.jpg') center/cover;
-            filter: brightness(0.7);
+            background:
+                linear-gradient(135deg, rgba(185,148,59,0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #1c1b19 0%, #0A0A0B 100%);
+            border: 1px solid var(--border);
+            filter: brightness(0.95);
         }
         .fleet-text h2 {
             font-family: 'Cormorant Garamond', serif;
@@ -402,9 +408,11 @@
             const overlay = document.getElementById('modalOverlay');
             const progressBar = document.getElementById('progressBar');
             overlay.classList.add('active');
+            progressBar.classList.remove('animating');
+            void progressBar.offsetWidth;
             progressBar.classList.add('animating');
             clearTimeout(modalTimer);
-            modalTimer = setTimeout(closeModal, 5000);
+            modalTimer = setTimeout(function () { closeModal(); }, 5000);
         }
         function closeModal(event) {
             const overlay = document.getElementById('modalOverlay');
