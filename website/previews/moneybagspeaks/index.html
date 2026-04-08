@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moneybag Speaks</title>
+  <title>Moneybag Speaks | 001</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -12,20 +12,17 @@
     rel="stylesheet">
   <style>
     :root {
-      /* The $500k Palette */
+      /* Organic Minimalism - $500k Palette */
       --sycamore: #969582;
       --desert: #B78962;
       --aqua: #97A2AD;
       --air: #F5F5F3;
-      /* Base cream */
       --ground: #1A1A18;
-      /* Deep dark warm grey, avoids pure black */
 
       --font-display: 'Cormorant Garamond', serif;
       --font-body: 'Inter', sans-serif;
     }
 
-    /* Reset & Base */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -44,8 +41,6 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
-      cursor: crosshair;
-      /* Gallery feel */
     }
 
     /* Typography */
@@ -62,17 +57,17 @@
     .meta {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.65rem;
+      font-size: 0.65em;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--sycamore);
     }
 
-    /* Slow Web Animations */
+    /* Slow Web Arrivals */
     @keyframes slowFadeUp {
       0% {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(50px);
       }
 
       100% {
@@ -81,157 +76,191 @@
       }
     }
 
-    @keyframes expandLine {
+    @keyframes slowFadeIn {
       0% {
-        width: 0;
+        opacity: 0;
+        filter: blur(10px);
       }
 
       100% {
-        width: 100vw;
+        opacity: 1;
+        filter: blur(0px);
       }
     }
 
     .reveal-1 {
-      animation: slowFadeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.2s * 1) both;
+      animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 1) both;
     }
 
     .reveal-2 {
-      animation: slowFadeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.2s * 2) both;
+      animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 2) both;
     }
 
     .reveal-3 {
-      animation: slowFadeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.2s * 4) both;
+      animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 3) both;
     }
 
-    /* Non-Standard Navigation */
+    .reveal-img {
+      animation: slowFadeIn 3s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 2) both;
+    }
+
+    /* The Void Navigation */
     .fixed-nav {
       position: fixed;
       top: 50%;
-      left: 3vw;
+      left: 2vw;
       transform: translateY(-50%) rotate(-90deg);
       transform-origin: left center;
       z-index: 100;
-      mix-blend-mode: difference;
+      mix-blend-mode: multiply;
     }
 
     .fixed-nav span {
-      font-size: 0.75rem;
+      font-size: 0.70rem;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--air);
+      letter-spacing: 0.25em;
+      color: var(--ground);
       cursor: pointer;
-      padding: 1rem;
+      padding: 1.5rem;
+      transition: color 0.6s ease;
     }
 
     .fixed-nav span:hover {
       color: var(--desert);
-      transition: color 0.6s ease;
     }
 
-    /* Layout & The Void */
-    .section-void {
-      min-height: 120vh;
-      width: 100vw;
-      position: relative;
-      display: flex;
+    /* Header Identity */
+    header {
+      position: absolute;
+      top: 5vw;
+      left: 10vw;
+      z-index: 10;
     }
 
-    /* Hero */
+    .brand-name {
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+      font-family: var(--font-display);
+    }
+
+    /* Hero Tension Layout */
     .hero {
-      align-items: flex-end;
-      padding: 8vw 5vw;
+      position: relative;
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
     }
 
     .hero-text {
-      width: 60%;
-      margin-left: 20%;
-      /* Asymmetry */
+      position: absolute;
+      left: 10vw;
+      top: 40vh;
+      width: 45vw;
       z-index: 2;
     }
 
     .hero h1 {
-      font-size: clamp(4rem, 10vw, 8rem);
+      font-size: clamp(3rem, 7vw, 6.5rem);
       margin-bottom: 2rem;
+      color: var(--ground);
     }
 
-    /* Materiality Texture Block - Replaces the missing 404 images */
-    .material-block {
+    .hero-image-wrap {
       position: absolute;
-      top: 0;
-      right: 0;
+      right: 5vw;
+      top: 15vh;
       width: 45vw;
-      height: 100vh;
-      background: linear-gradient(145deg, var(--sycamore), var(--air));
-      opacity: 0.4;
-      filter: url('#grain');
-      z-index: 0;
-    }
-
-    .material-accent {
-      position: absolute;
-      bottom: 10vh;
-      right: 15vw;
-      width: 20vw;
-      height: 30vh;
-      background: var(--desert);
-      opacity: 0.9;
-      filter: url('#grain') sepia(30%);
-      mix-blend-mode: multiply;
+      height: 70vh;
+      overflow: hidden;
       z-index: 1;
-      transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .material-accent:hover {
-      transform: scale(1.03) translateY(-10px);
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      background: url('assets/hero.jpg') center/cover no-repeat;
+      background-color: var(--aqua);
+      /* Fallback */
+      transform: scale(1.05);
+      transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
+      filter: grayscale(40%) sepia(10%);
     }
 
-    /* Editorial Section */
-    .editorial {
-      padding: 15vw 10vw;
+    .hero-image-wrap:hover .hero-image {
+      transform: scale(1);
+      filter: grayscale(0%) sepia(0%);
+    }
+
+    /* Doctrine Section */
+    .doctrine {
+      padding: 20vh 10vw;
       display: flex;
       flex-direction: column;
-      gap: 10vw;
+      gap: 15vh;
     }
 
-    .editorial-row {
+    .doctrine-block {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-top: 1px solid var(--aqua);
-      padding-top: 2rem;
+      border-top: 1px solid rgba(150, 149, 130, 0.2);
+      padding-top: 3rem;
     }
 
-    .editorial-row.reverse {
+    .doctrine-block.reverse {
       flex-direction: row-reverse;
     }
 
-    .ed-number {
+    .d-num {
       font-family: var(--font-display);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: var(--desert);
       flex: 1;
     }
 
-    .ed-content {
-      flex: 3;
-      max-width: 500px;
+    .d-content {
+      flex: 2;
+      max-width: 600px;
     }
 
-    .ed-content h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin-bottom: 1.5rem;
+    .d-content h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 2.5rem;
     }
 
-    .ed-content p {
-      font-size: 1rem;
+    .d-content p {
+      font-size: 1.1rem;
       color: var(--sycamore);
       font-weight: 300;
-      max-width: 80%;
+      line-height: 1.8;
+      margin-bottom: 2rem;
     }
 
-    /* Final CTA */
-    .conclusion {
-      min-height: 80vh;
+    .d-img-wrap {
+      flex: 2;
+      height: 60vh;
+      overflow: hidden;
+      margin-left: 5vw;
+    }
+
+    .doctrine-block.reverse .d-img-wrap {
+      margin-left: 0;
+      margin-right: 5vw;
+    }
+
+    .d-img {
+      width: 100%;
+      height: 100%;
+      background: url('assets/texture.jpg') center/cover no-repeat;
+      background-color: var(--sycamore);
+      /* Fallback */
+      filter: grayscale(20%);
+    }
+
+    /* Final Exhibition */
+    .exhibition {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -240,47 +269,34 @@
       background: var(--ground);
       color: var(--air);
       position: relative;
-      overflow: hidden;
     }
 
-    .conclusion::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--aqua);
-      opacity: 0.05;
-      filter: url('#grain');
-    }
-
-    .conclusion h2 {
+    .exhibition h2 {
       color: var(--air);
-      font-size: clamp(3rem, 7vw, 6rem);
-      z-index: 2;
-      margin-bottom: 3rem;
+      font-size: clamp(3rem, 6vw, 5rem);
+      max-width: 80%;
+      margin-bottom: 4rem;
     }
 
-    .editorial-link {
+    .btn-editorial {
       color: var(--desert);
       font-family: var(--font-body);
       font-weight: 300;
       font-size: 0.8rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-bottom 0.4s ease;
-      z-index: 2;
+      border-bottom: 1px solid rgba(183, 137, 98, 0.3);
+      padding-bottom: 0.5rem;
+      transition: all 0.4s ease;
       cursor: pointer;
     }
 
-    .editorial-link:hover {
-      border-bottom: 1px solid var(--desert);
+    .btn-editorial:hover {
+      border-bottom-color: var(--desert);
     }
 
-    /* Modal Spec explicitly adapted for light background */
+    /* Modal Architecture */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -288,7 +304,6 @@
       width: 100vw;
       height: 100vh;
       background: rgba(26, 26, 24, 0.98);
-      /* ground near-solid */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -355,17 +370,33 @@
       animation: progressDown 5s linear forwards;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-text {
-        width: 90%;
-        margin-left: 0;
+    /* Responsive Constraints */
+    @media (max-width: 900px) {
+      .hero-image-wrap {
+        position: relative;
+        width: 100vw;
+        right: 0;
+        top: 0;
+        height: 60vh;
       }
 
-      .editorial-row,
-      .editorial-row.reverse {
+      .hero-text {
+        position: relative;
+        left: 5vw;
+        top: -10vh;
+        width: 90vw;
+      }
+
+      .doctrine-block,
+      .doctrine-block.reverse {
         flex-direction: column;
-        gap: 2rem;
+        gap: 3rem;
+      }
+
+      .d-img-wrap {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
       }
 
       .fixed-nav {
@@ -377,60 +408,61 @@
 
 <body>
 
-  <!-- SVG Filter for "Materiality" / Grain -->
-  <svg style="display:none;">
-    <filter id="grain">
-      <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" result="fractal" />
-      <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.1 0" in="fractal"
-        result="coloredNoise" />
-      <feBlend mode="multiply" in="SourceGraphic" in2="coloredNoise" />
-    </filter>
-  </svg>
+  <header>
+    <div class="brand-name">Moneybag Speaks</div>
+  </header>
 
   <nav class="fixed-nav" onclick="openModal()">
-    <span>Discovery</span>
-    <span>Index</span>
+    <span>The Index</span>
+    <span>Methodology</span>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="section-void hero">
-    <div class="material-block"></div>
-    <div class="material-accent"></div>
-
+  <!-- Hero Tension Layout with Image -->
+  <section class="hero">
     <div class="hero-text">
-      <span class="meta reveal-1">001 — The Void</span>
+      <span class="meta reveal-1">001 — The Real Strategy</span>
       <h1 class="reveal-2">Architecture<br>Of Acquisition.</h1>
       <p class="meta reveal-3" style="max-width: 400px; color: var(--ground); line-height: 1.8;">
-        The algorithm dictates visibility. True authority requires structural separation. Entering the inner circle.
+        Social media shows you 10%. The algorithm dictates visibility. The newsletter is the 90% that is never posted
+        publicly.
       </p>
+    </div>
+
+    <div class="hero-image-wrap reveal-img" onclick="openModal()">
+      <div class="hero-image"></div>
     </div>
   </section>
 
-  <!-- Editorial Section -->
-  <section class="editorial">
-    <div class="editorial-row reveal-1">
-      <div class="ed-number">I.</div>
-      <div class="ed-content" onclick="openModal()">
+  <!-- Doctrine Section with 2nd Image -->
+  <section class="doctrine">
+    <div class="doctrine-block reveal-1" onclick="openModal()">
+      <div class="d-num">I.</div>
+      <div class="d-content">
         <h2>Systems <br>Beneath</h2>
         <p>Tactics for high-ticket acquisition that operate relentlessly beneath the surface. No superficial marketing,
-          only conversion architecture.</p>
+          only conversion architecture engineered for capital.</p>
+        <span class="btn-editorial">Explore Systems</span>
+      </div>
+      <div class="d-img-wrap">
+        <div class="d-img" style="background-image: url('assets/texture.jpg');"></div>
       </div>
     </div>
 
-    <div class="editorial-row reverse reveal-1">
-      <div class="ed-number" style="text-align: right;">II.</div>
-      <div class="ed-content" onclick="openModal()">
+    <div class="doctrine-block reverse reveal-1" onclick="openModal()">
+      <div class="d-num">II.</div>
+      <div class="d-content">
         <h2>Absolute <br>Authority</h2>
-        <p>Command the room. How you speak and carry yourself dictates the capital you command. Precision in execution
-          and presence.</p>
+        <p>Command the room. How you speak and carry yourself dictates the capital you command. Precision in execution,
+          presence, and structural positioning.</p>
+        <span class="btn-editorial">The Inner Circle</span>
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
-  <section class="conclusion">
-    <h2>The Unseen.</h2>
-    <a class="editorial-link" onclick="openModal()">Request Access To The Index</a>
+  <section class="exhibition">
+    <h2>The stuff I can't post publicly.</h2>
+    <a class="btn-editorial" onclick="openModal()">Request Newsletter Access</a>
   </section>
 
   <!-- Modal -->
@@ -438,9 +470,9 @@
     <div class="modal-box">
       <span class="meta" style="color: var(--desert); margin-bottom: 1rem; display: block;">Previewed by Velocity</span>
       <h3 class="modal-title">Atmospheric Depth.</h3>
-      <p class="modal-body">This architecture was forged by Velocity—the bespoke design studio by Calyvent. It is what
-        your digital materiality could feel like.</p>
-      <a href="https://velocity.calyvent.com" target="_blank" class="editorial-link">velocity.calyvent.com</a>
+      <p class="modal-body">This architecture was forged by Velocity—the bespoke design studio by Calyvent. It
+        represents exactly what Moneybag Speaks could command digitally.</p>
+      <a href="https://velocity.calyvent.com" target="_blank" class="btn-editorial">velocity.calyvent.com</a>
       <div class="modal-progress" id="modalProgress"></div>
     </div>
   </div>
@@ -471,18 +503,16 @@
       if (e.target === document.getElementById('previewModal')) closeModal();
     }
 
-    // Scroll reveal observer for the "Slow Web" feel
+    // Material Scroll Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.style.animationPlayState = 'running';
-        } else {
-          // Optional: reset for repeatable scroll
         }
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.editorial-row').forEach((el) => {
+    document.querySelectorAll('.doctrine-block').forEach((el) => {
       el.style.animationPlayState = 'paused';
       observer.observe(el);
     });
