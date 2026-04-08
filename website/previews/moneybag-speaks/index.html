@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moneybag Speaks | Royal</title>
+    <title>Moneybag Speaks | Royal Vol. II</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            /* Royal / $500k Palette */
+            /* Royal Palette */
             --onyx: #1B1B1B;
             --maroon: #5D2A2C;
             --sienna: #A65E44;
@@ -43,285 +43,273 @@
             overflow-x: hidden;
         }
 
-        /* Typography */
         h1,
         h2,
-        h3 {
+        h3,
+        h4 {
             font-family: var(--font-display);
-            font-weight: 400;
-            letter-spacing: -0.02em;
-            line-height: 1.05;
+            font-weight: 300;
+            line-height: 1.1;
             color: var(--rose);
         }
 
-        .meta {
+        .meta-text {
             font-family: var(--font-body);
             font-weight: 300;
-            font-size: 0.65em;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--sage);
-        }
-
-        /* Slow Web Arrivals */
-        @keyframes slowFadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slowFadeIn {
-            0% {
-                opacity: 0;
-                filter: blur(10px);
-            }
-
-            100% {
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        .reveal-1 {
-            animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 1) both;
-        }
-
-        .reveal-2 {
-            animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 2) both;
-        }
-
-        .reveal-3 {
-            animation: slowFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 3) both;
-        }
-
-        .reveal-img {
-            animation: slowFadeIn 3s cubic-bezier(0.16, 1, 0.3, 1) calc(0.3s * 2) both;
-        }
-
-        /* The Void Navigation */
-        .fixed-nav {
-            position: fixed;
-            top: 50%;
-            left: 2vw;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: left center;
-            z-index: 100;
-        }
-
-        .fixed-nav span {
-            font-size: 0.70rem;
-            text-transform: uppercase;
+            font-size: 0.75rem;
             letter-spacing: 0.25em;
+            text-transform: uppercase;
             color: var(--sage);
-            cursor: pointer;
-            padding: 1.5rem;
-            transition: color 0.6s ease;
         }
 
-        .fixed-nav span:hover {
-            color: var(--sienna);
+        /* Fixed Border Frame */
+        .frame {
+            position: fixed;
+            top: 2vw;
+            left: 2vw;
+            right: 2vw;
+            bottom: 2vw;
+            border: 1px solid rgba(166, 94, 68, 0.2);
+            /* Sienna */
+            pointer-events: none;
+            z-index: 50;
         }
 
-        /* Header Identity */
-        header {
+        /* Minimalist Top Nav */
+        nav {
             position: absolute;
-            top: 5vw;
-            left: 10vw;
-            z-index: 10;
-        }
-
-        .brand-name {
-            font-size: 1.2rem;
-            letter-spacing: 0.05em;
-            font-family: var(--font-display);
-            color: var(--sienna);
-        }
-
-        /* Hero Tension Layout - Mirrored to Onyx Background */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            width: 100vw;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-text {
-            position: absolute;
-            left: 10vw;
-            top: 40vh;
-            width: 45vw;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 7vw, 6.5rem);
-            margin-bottom: 2rem;
-            color: var(--rose);
-            text-shadow: 0px 4px 20px rgba(27, 27, 27, 0.4);
-        }
-
-        .hero-image-wrap {
-            position: absolute;
-            right: 5vw;
-            top: 15vh;
-            width: 45vw;
-            height: 70vh;
-            overflow: hidden;
-            z-index: 1;
-            border: 1px solid var(--maroon);
-        }
-
-        .hero-image {
-            width: 100%;
-            height: 100%;
-            background: url('assets/hero.png') center/cover no-repeat;
-            background-color: var(--maroon);
-            transform: scale(1.05);
-            transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
-            filter: saturate(0.8) contrast(1.1);
-        }
-
-        .hero-image-wrap:hover .hero-image {
-            transform: scale(1);
-            filter: saturate(1) contrast(1);
-        }
-
-        /* Doctrine Section */
-        .doctrine {
-            padding: 20vh 10vw;
-            display: flex;
-            flex-direction: column;
-            gap: 15vh;
-        }
-
-        .doctrine-block {
+            top: 4vw;
+            left: 4vw;
+            right: 4vw;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            border-top: 1px solid var(--maroon);
-            padding-top: 3rem;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
         }
 
-        .doctrine-block.reverse {
-            flex-direction: row-reverse;
-        }
-
-        .d-num {
+        .nav-brand {
+            color: var(--rose);
             font-family: var(--font-display);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
+            font-style: italic;
+        }
+
+        .nav-btn {
+            color: var(--sage);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.4s ease;
+        }
+
+        .nav-btn:hover {
             color: var(--sienna);
-            flex: 1;
         }
 
-        .d-content {
-            flex: 2;
+        /* Cinematic Hero */
+        .hero-cinematic {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Parallax Background using pseudo element */
+        .hero-cinematic::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            right: -10%;
+            bottom: -10%;
+            background: url('assets/hero.png') center/cover no-repeat;
+            z-index: 0;
+            filter: saturate(0.6) brightness(0.6) contrast(1.2);
+            transform: scale(1);
+            animation: slowZoom 20s ease-out infinite alternate;
+        }
+
+        .hero-cinematic::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(27, 27, 27, 0.8) 0%, rgba(93, 42, 44, 0.6) 100%);
+            /* Onyx to Maroon */
+            z-index: 1;
+        }
+
+        @keyframes slowZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            padding: 0 10vw;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(4rem, 12vw, 10rem);
+            color: var(--rose);
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
             max-width: 600px;
-        }
-
-        .d-content h2 {
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            margin-bottom: 2.5rem;
-        }
-
-        .d-content p {
-            font-size: 1.1rem;
+            margin: 0 auto;
             color: var(--sage);
             font-weight: 300;
-            line-height: 1.8;
-            margin-bottom: 2rem;
         }
 
-        .d-img-wrap {
-            flex: 2;
-            height: 60vh;
-            overflow: hidden;
-            margin-left: 5vw;
-            border: 1px solid rgba(166, 94, 68, 0.2);
-        }
-
-        .doctrine-block.reverse .d-img-wrap {
-            margin-left: 0;
-            margin-right: 5vw;
-        }
-
-        .d-img {
-            width: 100%;
-            height: 100%;
-            background: url('assets/texture.png') center/cover no-repeat;
-            background-color: var(--maroon);
-            filter: saturate(0.9);
-            transition: transform 1s ease;
-        }
-
-        .d-img-wrap:hover .d-img {
-            transform: scale(1.02);
-        }
-
-        /* Final Exhibition */
-        .exhibition {
-            min-height: 80vh;
+        /* Monumental Typography Section */
+        .manifesto {
+            background-color: var(--onyx);
+            padding: 25vh 5vw;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             text-align: center;
-            background: var(--maroon);
-            color: var(--rose);
             position: relative;
         }
 
-        .exhibition h2 {
-            color: var(--rose);
-            font-size: clamp(3rem, 6vw, 5rem);
-            max-width: 80%;
-            margin-bottom: 4rem;
+        .manifesto h2 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            max-width: 1200px;
+            line-height: 1.2;
         }
 
-        .btn-editorial {
+        .manifesto h2 span {
+            color: var(--sienna);
+            font-style: italic;
+        }
+
+        /* Horizontal Doctrine Strip */
+        .strip-wrapper {
+            width: 100vw;
+            background-color: var(--maroon);
+            padding: 10vh 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10vh;
+            box-shadow: inset 0 0 100px rgba(27, 27, 27, 0.9);
+        }
+
+        .strip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10vw;
+        }
+
+        .strip-item h3 {
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            width: 45%;
+        }
+
+        .strip-item p {
+            width: 45%;
+            font-size: 1.1rem;
             color: var(--rose);
+            opacity: 0.8;
+        }
+
+        /* Massive Image Frame Section */
+        .texture-frame {
+            min-height: 120vh;
+            background-color: var(--onyx);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15vh 10vw;
+        }
+
+        .frame-inner {
+            width: 100%;
+            height: 80vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .frame-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/texture.png') center/cover fixed;
+            filter: saturate(0.8) brightness(0.7);
+        }
+
+        .frame-content {
+            position: relative;
+            z-index: 2;
+            background: rgba(27, 27, 27, 0.85);
+            /* Onyx */
+            padding: 5rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            border: 1px solid rgba(200, 155, 148, 0.2);
+            /* Rose */
+        }
+
+        .frame-content p {
+            margin-bottom: 2rem;
+            color: var(--sage);
+        }
+
+        /* Elegant CTA Button */
+        .btn-luxe {
+            display: inline-block;
+            padding: 1.5rem 4rem;
             font-family: var(--font-body);
-            font-weight: 300;
             font-size: 0.8rem;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
+            color: var(--onyx);
+            background-color: var(--sienna);
             text-decoration: none;
-            border-bottom: 1px solid var(--sienna);
-            padding-bottom: 0.5rem;
-            transition: all 0.4s ease;
+            transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease;
             cursor: pointer;
         }
 
-        .btn-editorial:hover {
-            border-bottom-color: var(--rose);
-            color: var(--air);
+        .btn-luxe:hover {
+            background-color: var(--rose);
+            color: var(--maroon);
+            transform: translateY(-2px);
         }
 
+        /* Footer */
         footer {
-            padding: 4rem 0;
+            background-color: var(--onyx);
+            padding: 5vh 5vw;
             text-align: center;
-            color: var(--sage);
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            background: var(--onyx);
-            border-top: 1px solid rgba(166, 94, 68, 0.15);
-            /* Sienna border */
-        }
-
-        footer a {
-            color: var(--sienna);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--rose);
+            border-top: 1px solid rgba(125, 132, 113, 0.2);
+            /* Sage */
+            position: relative;
+            z-index: 10;
         }
 
         /* Modal Architecture */
@@ -331,8 +319,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(27, 27, 27, 0.98);
-            /* Onyx */
+            background: rgba(93, 42, 44, 0.95);
+            /* Maroon */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -351,35 +339,33 @@
             width: 100%;
             max-width: 600px;
             padding: 0 10vw;
-            position: relative;
-            transform: translateY(40px);
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .modal-overlay.active .modal-box {
-            transform: translateY(0);
+            transform: scale(1);
         }
 
         .modal-title {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--rose);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .modal-body {
             color: var(--sage);
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 300;
             margin-bottom: 3rem;
         }
 
         .modal-progress {
             position: absolute;
-            bottom: -40px;
+            bottom: 0;
             left: 0;
-            height: 1px;
+            height: 3px;
             background-color: var(--sienna);
             width: 100%;
             transform-origin: left;
@@ -399,37 +385,25 @@
             animation: progressDown 5s linear forwards;
         }
 
-        /* Responsive Constraints */
-        @media (max-width: 900px) {
-            .hero-image-wrap {
-                position: relative;
-                width: 100vw;
-                right: 0;
-                top: 0;
-                height: 60vh;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 4rem;
             }
 
-            .hero-text {
-                position: relative;
-                left: 5vw;
-                top: -10vh;
-                width: 90vw;
-            }
-
-            .doctrine-block,
-            .doctrine-block.reverse {
+            .strip-item {
                 flex-direction: column;
-                gap: 3rem;
+                text-align: center;
+                gap: 2rem;
             }
 
-            .d-img-wrap {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
+            .strip-item h3,
+            .strip-item p {
                 width: 100%;
             }
 
-            .fixed-nav {
-                display: none;
+            .frame-content {
+                padding: 3rem 2rem;
             }
         }
     </style>
@@ -437,82 +411,79 @@
 
 <body>
 
-    <header>
-        <div class="brand-name">Moneybag Speaks</div>
-    </header>
+    <!-- Static Overlay Frame -->
+    <div class="frame"></div>
 
-    <nav class="fixed-nav" onclick="openModal()">
-        <span>The Index</span>
-        <span>Methodology</span>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">M.S.</div>
+        <button class="nav-btn" onclick="openModal()">Menu</button>
     </nav>
 
-    <!-- Hero Tension Layout with Image -->
-    <section class="hero">
-        <div class="hero-text">
-            <span class="meta reveal-1">001 — The Real Strategy</span>
-            <h1 class="reveal-2">Architecture<br>Of Acquisition.</h1>
-            <p class="meta reveal-3" style="max-width: 400px; color: var(--sage); line-height: 1.8;">
-                Social media shows you 10%. The algorithm dictates visibility. The newsletter is the 90% that is never
-                posted publicly.
-            </p>
-        </div>
-
-        <div class="hero-image-wrap reveal-img" onclick="openModal()">
-            <div class="hero-image"></div>
+    <!-- Section 1: Cinematic Hero -->
+    <section class="hero-cinematic">
+        <div class="hero-content">
+            <span class="meta-text" style="display: block; margin-bottom: 2rem; color: var(--rose);">001 / Architecture
+                of Acquisition</span>
+            <h1>Systems of<br>Wealth.</h1>
+            <p>Social media shows you 10%. The algorithm dictates visibility. Step into the unseen framework.</p>
         </div>
     </section>
 
-    <!-- Doctrine Section with 2nd Image -->
-    <section class="doctrine">
-        <div class="doctrine-block reveal-1" onclick="openModal()">
-            <div class="d-num">I.</div>
-            <div class="d-content">
-                <h2>Systems <br>Beneath</h2>
-                <p>Tactics for high-ticket acquisition that operate relentlessly beneath the surface. No superficial
-                    marketing, only conversion architecture engineered for capital.</p>
-                <span class="btn-editorial">Explore Systems</span>
-            </div>
-            <div class="d-img-wrap">
-                <div class="d-img"></div>
-            </div>
+    <!-- Section 2: Monumental Typography -->
+    <section class="manifesto" onclick="openModal()">
+        <h2>The newsletter is the <span>ninety percent</span> that is never posted publicly.</h2>
+    </section>
+
+    <!-- Section 3: The Doctrine Strip -->
+    <section class="strip-wrapper">
+        <div class="strip-item" onclick="openModal()">
+            <h3>Systems Beneath.</h3>
+            <p>Tactics for high-ticket acquisition that operate relentlessly beneath the surface. No superficial
+                marketing, only conversion architecture.</p>
         </div>
 
-        <div class="doctrine-block reverse reveal-1" onclick="openModal()">
-            <div class="d-num">II.</div>
-            <div class="d-content">
-                <h2>Absolute <br>Authority</h2>
-                <p>Command the room. How you speak and carry yourself dictates the capital you command. Precision in
-                    execution, presence, and structural positioning.</p>
-                <span class="btn-editorial">The Inner Circle</span>
+        <div class="strip-item" onclick="openModal()">
+            <h3>Absolute Authority.</h3>
+            <p>Command the room. How you speak and carry yourself dictates the capital you command. Precision in
+                presence and positioning.</p>
+        </div>
+    </section>
+
+    <!-- Section 4: Massive Fixed Frame Image -->
+    <section class="texture-frame">
+        <div class="frame-inner">
+            <div class="frame-img"></div>
+            <div class="frame-content">
+                <h2>The Unseen.</h2>
+                <p>Request passage to the inner circle.</p>
+                <a class="btn-luxe" onclick="openModal()">Access Newsletter</a>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA -->
-    <section class="exhibition">
-        <h2>The stuff I can't post publicly.</h2>
-        <a class="btn-editorial" onclick="openModal()">Request Newsletter Access</a>
-    </section>
-
+    <!-- Footer -->
     <footer>
-        &copy; 2026 Velocity by Calyvent. All rights reserved.<br>
-        <a href="https://velocity.calyvent.com" target="_blank"
-            style="margin-top: 1rem; display: inline-block;">velocity.calyvent.com</a>
+        <p class="meta-text">&copy; 2026 Velocity by Calyvent. All rights reserved.</p>
+        <a href="https://velocity.calyvent.com" target="_blank" class="meta-text"
+            style="color: var(--sienna); text-decoration: none; display: inline-block; margin-top: 1rem;">velocity.calyvent.com</a>
     </footer>
 
-    <!-- Modal -->
+    <!-- Modal Component -->
     <div class="modal-overlay" id="previewModal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box">
-            <span class="meta" style="color: var(--sienna); margin-bottom: 1rem; display: block;">Previewed by
+            <span class="meta-text" style="color: var(--rose); margin-bottom: 1rem; display: block;">Previewed by
                 Velocity</span>
             <h3 class="modal-title">Atmospheric Depth.</h3>
-            <p class="modal-body">This architecture was forged by Velocity—the bespoke design studio by Calyvent. It
-                represents exactly what Moneybag Speaks could command digitally.</p>
-            <a href="https://velocity.calyvent.com" target="_blank" class="btn-editorial">velocity.calyvent.com</a>
-            <div class="modal-progress" id="modalProgress"></div>
+            <p class="modal-body">This cinematic scroll experience was forged by Velocity—the bespoke design studio by
+                Calyvent. It demonstrates an entirely new way to present authority.</p>
+            <a href="https://velocity.calyvent.com" target="_blank" class="btn-luxe" style="padding: 1rem 3rem;">View
+                Velocity</a>
         </div>
+        <div class="modal-progress" id="modalProgress"></div>
     </div>
 
+    <!-- Script for Modal Interactions -->
     <script>
         let timeoutId;
 
@@ -538,20 +509,6 @@
         function closeModalOnOverlay(e) {
             if (e.target === document.getElementById('previewModal')) closeModal();
         }
-
-        // Material Scroll Reveal
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.doctrine-block').forEach((el) => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
-        });
     </script>
 </body>
 
