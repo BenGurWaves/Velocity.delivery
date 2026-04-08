@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moneybag Speaks | Private Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #0A0A0B;
+            --bone: #F5F3EF;
+            --brass: #C9A96E;
+            --slate: #373f45;
+            --muted: #697177;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--bone);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header / Hero */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(245, 243, 239, 0.05);
+        }
+
+        .eyebrow {
+            color: var(--brass);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            max-width: 80%;
+        }
+
+        .hero-subtext {
+            font-size: 1.25rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            background-color: var(--brass);
+            color: var(--obsidian);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            border: none;
+        }
+
+        .cta-button:hover {
+            opacity: 0.8;
+        }
+
+        /* Sections */
+        section {
+            padding: 10rem 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            header { height: auto; padding: 8rem 0; }
+            h1 { max-width: 100%; }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(245, 243, 239, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-item span:last-child {
+            color: var(--brass);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* Social Proof Strip */
+        .social-strip {
+            background-color: var(--slate);
+            padding: 3rem 0;
+            opacity: 0.6;
+        }
+
+        .strip-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Modal */
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 11, 0.88);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #modal-box {
+            background: var(--obsidian);
+            border: 1px solid rgba(245, 243, 239, 0.09);
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+        }
+
+        #modal-box .eyebrow {
+            font-size: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        #modal-box h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #modal-box p {
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        #modal-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--brass);
+            width: 100%;
+            transform-origin: left;
+        }
+
+        footer {
+            padding: 4rem 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+            border-top: 1px solid rgba(245, 243, 239, 0.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <span class="eyebrow">The Unfiltered Strategy</span>
+            <h1>Moneybag Speaks.</h1>
+            <p class="hero-subtext">Business systems, client acquisition, and personal authority intelligence—delivered where the algorithm cannot reach.</p>
+            <button class="cta-button" onclick="openModal()">Enter the Newsletter</button>
+        </div>
+    </header>
+
+    <div class="social-strip">
+        <div class="container strip-content">
+            <span>26K+ YouTube Subscribers</span>
+            <span>•</span>
+            <span>75,000+ Audience Members</span>
+            <span>•</span>
+            <span>Trusted by the Industry</span>
+        </div>
+    </div>
+
+    <section>
+        <div class="container grid">
+            <div>
+                <h2>The Intelligence.</h2>
+                <p class="hero-subtext" style="font-size: 1rem;">Everything I can't post publicly.</p>
+            </div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span>Systemized Acquisition</span>
+                    <span>Verified</span>
+                </div>
+                <div class="feature-item">
+                    <span>Authority Coaching</span>
+                    <span>Exclusive</span>
+                </div>
+                <div class="feature-item">
+                    <span>Launch Access</span>
+                    <span>First Entry</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: rgba(55, 63, 69, 0.1);">
+        <div class="container grid">
+            <div>
+                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=2071&auto=format&fit=crop" alt="Business Intelligence" style="width: 100%; filter: grayscale(1) contrast(1.2); opacity: 0.6;">
+            </div>
+            <div>
+                <h2>The Mission.</h2>
+                <p>Dylan Madden provides the blueprints for modern wealth and influence. No hype, no social media fluff—just the raw systems required to dominate your niche.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Velocity by Calyvent. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal-overlay" onclick="closeModal()">
+        <div id="modal-box" onclick="event.stopPropagation()">
+            <span class="eyebrow">Previewed by Velocity</span>
+            <h3>This is a preview.</h3>
+            <p>This page was designed and built by Velocity — the bespoke design studio by Calint. It is not the live site. It is what your digital presence could look like.</p>
+            <a href="https://velocity.calyvent.com" target="_blank" class="cta-button" style="display: inline-block; font-size: 0.7rem;">Explore Velocity</a>
+            <div id="modal-progress"></div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById('modal-overlay');
+            const progress = document.getElementById('modal-progress');
+            modal.style.display = 'flex';
+
+            progress.style.transition = 'none';
+            progress.style.transform = 'scaleX(1)';
+
+            setTimeout(() => {
+                progress.style.transition = 'transform 5s linear';
+                progress.style.transform = 'scaleX(0)';
+            }, 10);
+
+            setTimeout(() => {
+                closeModal();
+            }, 5000);
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
