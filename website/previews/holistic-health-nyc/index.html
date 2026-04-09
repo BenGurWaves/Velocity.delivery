@@ -958,6 +958,27 @@
             color: var(--aureate);
             letter-spacing: 0.05em;
         }
+        .modal__btn {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--void);
+            background: linear-gradient(135deg, var(--aureate), #D4A85A);
+            padding: 1rem 2.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.6s var(--ease-luxury);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+        .modal__btn:hover {
+            box-shadow: 0 8px 40px rgba(196, 148, 74, 0.3);
+            transform: translateY(-2px);
+        }
         .modal__timer {
             margin-top: 2rem;
             font-size: 0.65rem;
@@ -1279,7 +1300,7 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <p class="footer__copy">© 2025 Dr. Laurie Greenberg, PhD — Soul-Centered Therapy. All rights reserved.</p>
+        <p class="footer__copy">Velocity by Calyvent</p>
         <a href="https://velocity.calyvent.com" target="_blank" class="footer__velocity">Designed by Velocity</a>
     </footer>
 
@@ -1287,11 +1308,10 @@
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <button class="modal__close" onclick="closeModal()">✕</button>
-            <p class="modal__eyebrow">Complimentary Consultation</p>
-            <h3 class="modal__title">Begin Your Journey<br>Toward Wholeness</h3>
-            <p class="modal__text">Dr. Greenberg offers a free 10-minute telephone consultation. Reach out to explore how soul-centered therapy can support your transformation.</p>
-            <p class="modal__contact">(212) 501-4647</p>
-            <p class="modal__email">DrLGreenberg@aol.com</p>
+            <p class="modal__eyebrow">Preview Notice</p>
+            <h3 class="modal__title">This is a<br>Website Mockup</h3>
+            <p class="modal__text">You're viewing a high-end preview designed by Velocity. This demonstrates what your professional website could look like with our cinematic design approach.</p>
+            <button class="modal__btn" onclick="window.open('https://velocity.calyvent.com', '_blank')">Visit Velocity</button>
             <p class="modal__timer" id="modalTimer"></p>
         </div>
     </div>
@@ -1372,6 +1392,16 @@
             document.body.style.overflow = '';
             clearInterval(modalTimeout);
         }
+
+        // Modal button click handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalBtn = document.querySelector('.modal__btn');
+            if (modalBtn) {
+                modalBtn.addEventListener('click', () => {
+                    window.open('https://velocity.calyvent.com', '_blank');
+                });
+            }
+        });
 
         document.getElementById('modalOverlay').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeModal();
