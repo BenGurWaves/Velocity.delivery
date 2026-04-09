@@ -445,20 +445,15 @@
       height: 60vh;
       z-index: 1;
       transform: translateX(-5%) rotate(-3deg);
-      background: linear-gradient(135deg, #1e4d2b 0%, #0f2817 50%, #1a1a1a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       box-shadow: 0 30px 60px rgba(0,0,0,0.4);
     }
     
-    .overlap-image-1::after {
-      content: 'Bespoke Excellence';
-      font-family: var(--font-display);
-      font-size: 2rem;
-      color: var(--gold);
-      font-style: italic;
-      opacity: 0.6;
+    .overlap-image-1 img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(15%) contrast(1.05) brightness(0.9);
     }
     
     .overlap-text-1 {
@@ -879,7 +874,9 @@
   <!-- Scene 4: Overlap — Chaos as composition -->
   <section class="scene-overlap" id="mastery">
     <div class="overlap-container">
-      <div class="overlap-image-1 reveal"></div>
+      <div class="overlap-image-1 reveal">
+        <img src="assets/fabric.png" alt="Premium tailoring fabrics">
+      </div>
       <div class="overlap-text-1 reveal-rotate">
         The House Cut<br>
         <span style="color: var(--gold); font-style: italic;">natural shoulders</span><br>
