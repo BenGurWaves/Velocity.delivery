@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dr. Laurie Greenberg, PhD — Transpersonal Psychologist in New York City. Soul-centered therapy, past-life regression, IFS, somatic experiencing, and guided imagery for deep transformation.">
+    <meta name="keywords" content="transpersonal psychologist, soul-centered therapy, past-life regression, IFS therapy, somatic experiencing, New York City therapist, Dr. Laurie Greenberg">
+    <title>Soul-Centered Therapy — Dr. Laurie Greenberg, PhD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        /*
+         * ═══════════════════════════════════════════════════════════════
+         *  VELOCITY ARCHITECT — SOUL-CENTERED THERAPY PREVIEW
+         *  Dr. Laurie Greenberg, PhD — Transpersonal Psychologist
+         * ═══════════════════════════════════════════════════════════════
+         *
+         *  Cinematic Reference:
+         *  1. Chanel J12 hero fade — Full-bleed hero with scroll-linked
+         *     opacity fade and massive serif overlay text
+         *  2. Prada narrative scroll — Immersive full-screen sections with
+         *     storytelling flow and elegant zoom/fade on scroll
+         *  3. Tiffany parallax depth — CSS/JS parallax layers creating
+         *     dimensional depth between hero and content
+         *  4. Parmigiani asymmetric reveals — Service details appear via
+         *     scroll-triggered asymmetric animations
+         *  5. Nicole Fuller whitespace — Massive architectural negative space
+         *     with restrained serif typography
+         *  6. Swarovski shimmer — Subtle CSS shimmer/glow animations on
+         *     accent elements creating premium sparkle
+         *
+         *  These create "stop-scrolling luxury" vs Wix template by:
+         *  - Eliminating all card grids, equal columns, centered text blocks
+         *  - Using cinematic full-bleed sections with 60%+ whitespace
+         *  - Asymmetric layouts that feel editorial, not template
+         *  - Buttery cubic-bezier transitions that feel expensive
+         *  - Layered parallax and depth that feel three-dimensional
+         *  - Atmospheric CSS gradients replacing generic stock photos
+         * ═══════════════════════════════════════════════════════════════
+         */
+
+        /* ─── RESET & TOKENS ─── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void: #0B0E1A;
+            --ether: #1A1F35;
+            --aureate: #C4944A;
+            --luminance: #E8DCC8;
+            --whisper: #8B8FA3;
+            --celestial: #6B5CA5;
+            --radiance: #F5EFE4;
+            --glass: rgba(11, 14, 26, 0.65);
+
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+
+            --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-silk: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            background: var(--void);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--luminance);
+            background: var(--void);
+            line-height: 1.7;
+            font-weight: 300;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ─── LUMINOUS ORB (floating ambient element) ─── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.12;
+        }
+        .orb--aureate {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--aureate), transparent 70%);
+            top: -200px; right: -200px;
+            animation: orbFloat 25s ease-in-out infinite alternate;
+        }
+        .orb--celestial {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--celestial), transparent 70%);
+            bottom: -150px; left: -150px;
+            animation: orbFloat 30s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, -30px) scale(1.1); }
+            100% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* ─── NAVIGATION ─── */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1.8rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.8s var(--ease-luxury), padding 0.6s var(--ease-luxury);
+        }
+        .nav.scrolled {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 4vw;
+            border-bottom: 1px solid rgba(196, 148, 74, 0.08);
+        }
+        .nav__logo {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--radiance);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .nav__logo span {
+            color: var(--aureate);
+            font-style: italic;
+            text-transform: none;
+            letter-spacing: 0.02em;
+        }
+        .nav__cta {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            border: 1px solid rgba(196, 148, 74, 0.35);
+            padding: 0.7rem 2rem;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.6s var(--ease-luxury);
+            position: relative;
+            overflow: hidden;
+        }
+        .nav__cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(196, 148, 74, 0.1), transparent);
+            transition: left 0.8s var(--ease-luxury);
+        }
+        .nav__cta:hover::before { left: 100%; }
+        .nav__cta:hover {
+            border-color: var(--aureate);
+            box-shadow: 0 0 30px rgba(196, 148, 74, 0.15);
+        }
+
+        /* ─── HERO — Chanel-style full-bleed cinematic ─── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 4vw 8vh;
+            overflow: hidden;
+        }
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            /* CSS placeholder: ethereal crystalline orbs in cosmic navy space */
+            background:
+                radial-gradient(ellipse 400px 350px at 70% 30%, rgba(196, 148, 74, 0.2), transparent),
+                radial-gradient(ellipse 300px 400px at 25% 65%, rgba(107, 92, 165, 0.15), transparent),
+                radial-gradient(ellipse 200px 200px at 55% 50%, rgba(196, 148, 74, 0.08), transparent),
+                radial-gradient(ellipse 150px 150px at 80% 70%, rgba(107, 92, 165, 0.1), transparent),
+                linear-gradient(170deg, var(--void) 0%, #0F1228 40%, var(--ether) 100%);
+        }
+        .hero__bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle 2px at 20% 20%, rgba(245, 239, 228, 0.3), transparent 3px),
+                radial-gradient(circle 1.5px at 60% 15%, rgba(196, 148, 74, 0.4), transparent 2px),
+                radial-gradient(circle 1px at 80% 40%, rgba(245, 239, 228, 0.25), transparent 2px),
+                radial-gradient(circle 2px at 35% 75%, rgba(196, 148, 74, 0.3), transparent 3px),
+                radial-gradient(circle 1px at 90% 80%, rgba(107, 92, 165, 0.35), transparent 2px),
+                radial-gradient(circle 1.5px at 15% 55%, rgba(245, 239, 228, 0.2), transparent 2px),
+                radial-gradient(circle 1px at 50% 90%, rgba(196, 148, 74, 0.25), transparent 2px),
+                radial-gradient(circle 2px at 75% 60%, rgba(245, 239, 228, 0.15), transparent 3px);
+            animation: starField 40s linear infinite;
+        }
+        @keyframes starField {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .hero__gradient-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 40%;
+            background: linear-gradient(to top, var(--void), transparent);
+            z-index: 1;
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        .hero__overline {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 1.2s var(--ease-luxury) 0.5s forwards;
+        }
+        .hero__title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6.5vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.08;
+            color: var(--radiance);
+            letter-spacing: -0.02em;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: revealUp 1.4s var(--ease-luxury) 0.8s forwards;
+        }
+        .hero__title em {
+            font-style: italic;
+            color: var(--aureate);
+        }
+        .hero__subtitle {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--whisper);
+            max-width: 520px;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 1.2s var(--ease-luxury) 1.2s forwards;
+        }
+
+        @keyframes revealUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero__scroll-indicator {
+            position: absolute;
+            bottom: 3vh;
+            right: 4vw;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+            animation: revealUp 1s var(--ease-luxury) 2s forwards;
+        }
+        .hero__scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--whisper);
+            writing-mode: vertical-rl;
+        }
+        .hero__scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--aureate), transparent);
+            animation: scrollPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* ─── PHILOSOPHY SECTION — Nicole Fuller architectural whitespace ─── */
+        .philosophy {
+            position: relative;
+            padding: 15vh 4vw 18vh;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 8vw;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .philosophy__label {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+        .philosophy__label::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            width: 2rem;
+            height: 1px;
+            background: var(--aureate);
+        }
+        .philosophy__heading {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--radiance);
+            letter-spacing: -0.01em;
+        }
+        .philosophy__heading em {
+            font-style: italic;
+            color: var(--aureate);
+        }
+        .philosophy__body {
+            padding-top: 2rem;
+        }
+        .philosophy__text {
+            font-size: 1rem;
+            color: var(--luminance);
+            line-height: 2;
+            margin-bottom: 2rem;
+            opacity: 0.85;
+        }
+        .philosophy__divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, var(--aureate), transparent);
+            margin: 2.5rem 0;
+        }
+        .philosophy__quote {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--aureate);
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* ─── IMAGE SECTION — CSS atmospheric placeholder ─── */
+        .atmosphere {
+            position: relative;
+            height: 70vh;
+            overflow: hidden;
+        }
+        .atmosphere__visual {
+            position: absolute;
+            inset: 0;
+            /* CSS placeholder: zen meditation stones with golden light */
+            background:
+                radial-gradient(ellipse 60% 50% at 40% 55%, rgba(196, 148, 74, 0.25), transparent),
+                radial-gradient(ellipse 30% 40% at 70% 40%, rgba(107, 92, 165, 0.12), transparent),
+                linear-gradient(135deg, var(--void) 0%, #111630 50%, var(--ether) 100%);
+        }
+        .atmosphere__visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, var(--void), transparent 30%, transparent 70%, var(--void));
+        }
+        .atmosphere__text {
+            position: absolute;
+            bottom: 10%;
+            right: 6vw;
+            text-align: right;
+            z-index: 2;
+        }
+        .atmosphere__text h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }
+        .atmosphere__text h3 em {
+            font-style: italic;
+            color: var(--aureate);
+        }
+
+        /* ─── SERVICES — Parmigiani asymmetric scroll reveals ─── */
+        .services {
+            padding: 15vh 4vw 12vh;
+            position: relative;
+        }
+        .services__header {
+            margin-bottom: 10vh;
+            max-width: 550px;
+        }
+        .services__label {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+        .services__label::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            width: 2rem;
+            height: 1px;
+            background: var(--aureate);
+        }
+        .services__title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.2;
+        }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: 0.4fr 1fr;
+            gap: 4vw;
+            padding: 5vh 0;
+            border-top: 1px solid rgba(139, 143, 163, 0.08);
+            align-items: start;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s var(--ease-luxury);
+        }
+        .service-row.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .service-row__number {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: rgba(196, 148, 74, 0.15);
+            line-height: 1;
+        }
+        .service-row__content {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4vw;
+            align-items: start;
+        }
+        .service-row__name {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+        .service-row__desc {
+            font-size: 0.92rem;
+            color: var(--whisper);
+            line-height: 1.9;
+        }
+
+        /* ─── IMMERSIVE BREAK — Prada-style full-screen section ─── */
+        .immersive {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .immersive__bg {
+            position: absolute;
+            inset: 0;
+            /* CSS placeholder: luminous golden neural/energy pathways in deep space */
+            background:
+                radial-gradient(ellipse 50% 60% at 50% 50%, rgba(196, 148, 74, 0.12), transparent),
+                radial-gradient(ellipse 25% 30% at 30% 40%, rgba(107, 92, 165, 0.1), transparent),
+                radial-gradient(ellipse 20% 25% at 75% 60%, rgba(196, 148, 74, 0.08), transparent),
+                linear-gradient(180deg, var(--void) 0%, #0D1025 40%, var(--void) 100%);
+        }
+        .immersive__bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(45deg, transparent 48%, rgba(196, 148, 74, 0.03) 49%, rgba(196, 148, 74, 0.03) 51%, transparent 52%),
+                linear-gradient(-30deg, transparent 48%, rgba(107, 92, 165, 0.02) 49%, rgba(107, 92, 165, 0.02) 51%, transparent 52%);
+            background-size: 100px 100px;
+            animation: meshDrift 60s linear infinite;
+        }
+        @keyframes meshDrift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        .immersive__content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 700px;
+            padding: 0 4vw;
+        }
+        .immersive__quote {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--radiance);
+            line-height: 1.35;
+            letter-spacing: -0.01em;
+            margin-bottom: 2.5rem;
+        }
+        .immersive__quote em {
+            color: var(--aureate);
+            font-style: italic;
+        }
+        .immersive__attribution {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--whisper);
+        }
+
+        /* ─── CREDENTIALS — Cartier museum-grade precision ─── */
+        .credentials {
+            padding: 14vh 4vw 10vh;
+            position: relative;
+        }
+        .credentials__grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 8vw;
+            align-items: start;
+        }
+        .credentials__main {}
+        .credentials__label {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+        .credentials__label::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            width: 2rem;
+            height: 1px;
+            background: var(--aureate);
+        }
+        .credentials__heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.2;
+            margin-bottom: 4rem;
+        }
+
+        .credential-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.8rem 0;
+            border-bottom: 1px solid rgba(139, 143, 163, 0.06);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.8s var(--ease-luxury);
+        }
+        .credential-item.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .credential-item__icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--aureate);
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+        .credential-item__text {
+            font-family: var(--font-display);
+            font-size: 1.08rem;
+            color: var(--luminance);
+            line-height: 1.6;
+        }
+
+        .credentials__aside {
+            padding-top: 3rem;
+        }
+        .credentials__aside-heading {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--radiance);
+            margin-bottom: 2rem;
+        }
+        .credentials__aside-text {
+            font-size: 0.95rem;
+            color: var(--whisper);
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+        .credentials__aside-cta {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            border: 1px solid rgba(196, 148, 74, 0.3);
+            padding: 1rem 2.5rem;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.6s var(--ease-luxury);
+            position: relative;
+            overflow: hidden;
+        }
+        .credentials__aside-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(196, 148, 74, 0.08), transparent);
+            transition: left 0.8s var(--ease-luxury);
+        }
+        .credentials__aside-cta:hover::before { left: 100%; }
+        .credentials__aside-cta:hover {
+            border-color: var(--aureate);
+            box-shadow: 0 0 30px rgba(196, 148, 74, 0.12);
+        }
+
+        /* ─── APPROACH — Full-bleed atmospheric + asymmetric text ─── */
+        .approach {
+            position: relative;
+            min-height: 80vh;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            overflow: hidden;
+        }
+        .approach__visual {
+            position: relative;
+            /* CSS placeholder: serene therapy space interior */
+            background:
+                radial-gradient(ellipse 70% 60% at 50% 50%, rgba(196, 148, 74, 0.15), transparent),
+                radial-gradient(ellipse 40% 50% at 30% 70%, rgba(107, 92, 165, 0.08), transparent),
+                linear-gradient(200deg, #0F1228 0%, var(--ether) 60%, var(--void) 100%);
+        }
+        .approach__visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, var(--void));
+        }
+        .approach__text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8vh 6vw 8vh 4vw;
+        }
+        .approach__label {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+        .approach__label::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            width: 2rem;
+            height: 1px;
+            background: var(--aureate);
+        }
+        .approach__heading {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.25;
+            margin-bottom: 2.5rem;
+        }
+        .approach__heading em {
+            font-style: italic;
+            color: var(--aureate);
+        }
+        .approach__desc {
+            font-size: 0.95rem;
+            color: var(--luminance);
+            line-height: 2;
+            opacity: 0.85;
+            margin-bottom: 1.5rem;
+        }
+
+        .approach__pillars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .pillar {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+        }
+        .pillar__marker {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: rgba(196, 148, 74, 0.3);
+            line-height: 1;
+            margin-top: 0.1rem;
+        }
+        .pillar__content {}
+        .pillar__name {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--radiance);
+            margin-bottom: 0.3rem;
+        }
+        .pillar__desc {
+            font-size: 0.85rem;
+            color: var(--whisper);
+            line-height: 1.7;
+        }
+
+        /* ─── CTA SECTION — Swarovski shimmer finale ─── */
+        .cta-section {
+            position: relative;
+            padding: 16vh 4vw 14vh;
+            text-align: center;
+            overflow: hidden;
+        }
+        .cta-section__bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(196, 148, 74, 0.08), transparent),
+                linear-gradient(180deg, var(--void) 0%, #0D1025 50%, var(--void) 100%);
+        }
+        .cta-section__content {
+            position: relative;
+            z-index: 2;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .cta-section__label {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 2rem;
+        }
+        .cta-section__heading {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .cta-section__heading em {
+            font-style: italic;
+            color: var(--aureate);
+        }
+        .cta-section__sub {
+            font-size: 1rem;
+            color: var(--whisper);
+            line-height: 1.9;
+            margin-bottom: 3.5rem;
+        }
+        .cta-section__btn {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--void);
+            background: linear-gradient(135deg, var(--aureate), #D4A85A);
+            padding: 1.2rem 3.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.6s var(--ease-luxury);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section__btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+            transform: rotate(45deg) translateX(-100%);
+            transition: transform 1s var(--ease-luxury);
+        }
+        .cta-section__btn:hover::after {
+            transform: rotate(45deg) translateX(100%);
+        }
+        .cta-section__btn:hover {
+            box-shadow: 0 8px 40px rgba(196, 148, 74, 0.3);
+            transform: translateY(-2px);
+        }
+        .cta-section__note {
+            margin-top: 2rem;
+            font-size: 0.78rem;
+            color: var(--whisper);
+            opacity: 0.6;
+        }
+
+        /* ─── CONTACT STRIP ─── */
+        .contact-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid rgba(139, 143, 163, 0.06);
+        }
+        .contact-strip__item {
+            padding: 5vh 4vw;
+            text-align: center;
+            border-right: 1px solid rgba(139, 143, 163, 0.06);
+            transition: background 0.6s var(--ease-luxury);
+        }
+        .contact-strip__item:last-child { border-right: none; }
+        .contact-strip__item:hover {
+            background: rgba(196, 148, 74, 0.03);
+        }
+        .contact-strip__label {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--whisper);
+            margin-bottom: 0.8rem;
+        }
+        .contact-strip__value {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--luminance);
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            padding: 4vh 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(139, 143, 163, 0.06);
+        }
+        .footer__copy {
+            font-size: 0.7rem;
+            color: var(--whisper);
+            opacity: 0.5;
+            letter-spacing: 0.05em;
+        }
+        .footer__velocity {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--whisper);
+            opacity: 0.3;
+            text-decoration: none;
+            transition: opacity 0.4s;
+        }
+        .footer__velocity:hover { opacity: 0.6; }
+
+        /* ─── MODAL ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 14, 26, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s var(--ease-luxury);
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal {
+            background: linear-gradient(145deg, var(--ether), var(--void));
+            border: 1px solid rgba(196, 148, 74, 0.12);
+            padding: 4rem;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(30px) scale(0.97);
+            transition: transform 0.6s var(--ease-luxury);
+            position: relative;
+        }
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+        .modal__close {
+            position: absolute;
+            top: 1.5rem; right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--whisper);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+        .modal__close:hover { color: var(--aureate); }
+        .modal__eyebrow {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--aureate);
+            margin-bottom: 1.5rem;
+        }
+        .modal__title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--radiance);
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+        .modal__text {
+            font-size: 0.9rem;
+            color: var(--whisper);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .modal__contact {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--luminance);
+            margin-bottom: 0.5rem;
+        }
+        .modal__email {
+            font-size: 0.85rem;
+            color: var(--aureate);
+            letter-spacing: 0.05em;
+        }
+        .modal__timer {
+            margin-top: 2rem;
+            font-size: 0.65rem;
+            color: var(--whisper);
+            opacity: 0.4;
+            letter-spacing: 0.1em;
+        }
+
+        /* ─── SCROLL REVEAL UTILITY ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s var(--ease-luxury);
+        }
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 1s var(--ease-luxury);
+        }
+        .reveal-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 1s var(--ease-luxury);
+        }
+        .reveal-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ─── RESPONSIVE — mobile-first, 900px breakpoint ─── */
+        @media (max-width: 900px) {
+            .philosophy {
+                grid-template-columns: 1fr;
+                gap: 4vh;
+                padding: 10vh 6vw 12vh;
+            }
+            .service-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .service-row__number {
+                font-size: 2.5rem;
+            }
+            .service-row__content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .credentials__grid {
+                grid-template-columns: 1fr;
+                gap: 5vh;
+            }
+            .approach {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            .approach__visual {
+                min-height: 40vh;
+            }
+            .approach__text {
+                padding: 6vh 6vw;
+            }
+            .contact-strip {
+                grid-template-columns: 1fr;
+            }
+            .contact-strip__item {
+                border-right: none;
+                border-bottom: 1px solid rgba(139, 143, 163, 0.06);
+            }
+            .hero__title {
+                font-size: clamp(2.2rem, 8vw, 3.5rem);
+            }
+            .hero {
+                padding: 0 6vw 10vh;
+            }
+            .nav__logo {
+                font-size: 0.9rem;
+            }
+            .nav__cta {
+                font-size: 0.6rem;
+                padding: 0.5rem 1.2rem;
+            }
+            .modal {
+                padding: 2.5rem 2rem;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .immersive__quote {
+                font-size: clamp(1.6rem, 5vw, 2.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient orbs -->
+    <div class="orb orb--aureate"></div>
+    <div class="orb orb--celestial"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav__logo">Soul-Centered <span>Therapy</span></div>
+        <button class="nav__cta" onclick="openModal()">Begin Your Journey</button>
+    </nav>
+
+    <!-- HERO — Chanel full-bleed cinematic -->
+    <section class="hero" id="hero">
+        <div class="hero__bg"></div>
+        <div class="hero__gradient-bottom"></div>
+        <div class="hero__content">
+            <p class="hero__overline">Dr. Laurie Greenberg, PhD — New York City</p>
+            <h1 class="hero__title">Where the Soul<br>Finds Its <em>Light</em></h1>
+            <p class="hero__subtitle">Transpersonal psychotherapy that honors your divine essence — integrating mind, body, and spirit for profound transformation.</p>
+        </div>
+        <div class="hero__scroll-indicator">
+            <span>Scroll</span>
+            <div class="hero__scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY — Nicole Fuller whitespace -->
+    <section class="philosophy" id="philosophy">
+        <div class="philosophy__left reveal-left">
+            <p class="philosophy__label">Philosophy</p>
+            <h2 class="philosophy__heading">Pure love, wisdom,<br>and clarity live at the<br>core of your <em>Being</em></h2>
+        </div>
+        <div class="philosophy__body reveal-right">
+            <p class="philosophy__text">You are a dynamic seed of Light, growing and developing on this Earth. At times you actively seek new experiences, deeper understanding, connection, and fulfillment. Along the way, you grow and change — and move forward.</p>
+            <div class="philosophy__divider"></div>
+            <p class="philosophy__quote">"Your true nature is Divine. I can guide you to connect with your own inner wisdom and higher guidance."</p>
+        </div>
+    </section>
+
+    <!-- ATMOSPHERIC VISUAL — full-bleed -->
+    <div class="atmosphere reveal">
+        <div class="atmosphere__visual"></div>
+        <div class="atmosphere__text">
+            <h3>Explore. <em>Heal.</em><br>Reclaim your<br>wholeness.</h3>
+        </div>
+    </div>
+
+    <!-- SERVICES — Parmigiani asymmetric reveals -->
+    <section class="services" id="services">
+        <div class="services__header reveal">
+            <p class="services__label">Modalities</p>
+            <h2 class="services__title">Pathways to Deeper Understanding</h2>
+        </div>
+
+        <div class="service-row">
+            <div class="service-row__number">01</div>
+            <div class="service-row__content">
+                <h3 class="service-row__name">Past-Life Regression &<br>Spiritual Exploration</h3>
+                <p class="service-row__desc">Journey through past lives, Life Between Lives (LBL) spiritual regression, and visionary guided imagery — uncovering soul-level patterns and your higher purpose.</p>
+            </div>
+        </div>
+
+        <div class="service-row">
+            <div class="service-row__number">02</div>
+            <div class="service-row__content">
+                <h3 class="service-row__name">Internal Family Systems<br>Therapy</h3>
+                <p class="service-row__desc">A compassionate, evidence-based approach to harmonizing the different parts of your inner world — releasing protective patterns and accessing your core Self.</p>
+            </div>
+        </div>
+
+        <div class="service-row">
+            <div class="service-row__number">03</div>
+            <div class="service-row__content">
+                <h3 class="service-row__name">Somatic Experiencing &<br>Gestalt Therapy</h3>
+                <p class="service-row__desc">Gentle, body-centered approaches to trauma healing and creative, experiential therapy. Release stored tension and reconnect with the wisdom of your body.</p>
+            </div>
+        </div>
+
+        <div class="service-row">
+            <div class="service-row__number">04</div>
+            <div class="service-row__content">
+                <h3 class="service-row__name">Hypnosis, Dreamwork &<br>Guided Imagery</h3>
+                <p class="service-row__desc">Access expanded states of consciousness through clinical hypnosis, experiential dreamwork, and carefully guided imagery — opening doors to deep healing and insight.</p>
+            </div>
+        </div>
+
+        <div class="service-row">
+            <div class="service-row__number">05</div>
+            <div class="service-row__content">
+                <h3 class="service-row__name">Relationship Counseling &<br>Couples Therapy</h3>
+                <p class="service-row__desc">Imago Relationship Therapy and integrative approaches for couples and partners — deepening authentic connection and transforming relational patterns.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMMERSIVE — Prada narrative scroll -->
+    <section class="immersive reveal" id="immersive">
+        <div class="immersive__bg"></div>
+        <div class="immersive__content">
+            <p class="immersive__quote">"Hidden within entanglement is a treasure — your own potential to grow in the process of finding your way to <em>freedom</em>"</p>
+            <p class="immersive__attribution">Dr. Laurie Greenberg, PhD</p>
+        </div>
+    </section>
+
+    <!-- CREDENTIALS — Cartier museum-grade -->
+    <section class="credentials" id="credentials">
+        <div class="credentials__grid">
+            <div class="credentials__main">
+                <p class="credentials__label reveal">Credentials</p>
+                <h2 class="credentials__heading reveal">Three Decades of<br>Scholarly Practice</h2>
+
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Ph.D. in Clinical Psychology</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Licensed Psychologist — New York State</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Qualified IFS (Internal Family Systems) Therapist</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Somatic Experiencing Practitioner</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Certified Gestalt Therapist</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Certified Imago Relationship Therapist</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">IBRT-Certified Past-Life Therapist, Level IV</p>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-item__icon"></div>
+                    <p class="credential-item__text">Certified in LBL Spiritual Regression</p>
+                </div>
+            </div>
+
+            <div class="credentials__aside reveal-right">
+                <h3 class="credentials__aside-heading">Complimentary Consultation</h3>
+                <p class="credentials__aside-text">Dr. Greenberg offers a free 10-minute telephone consultation to explore whether her approach resonates with your path. In-person sessions in Manhattan and secure online sessions available.</p>
+                <button class="credentials__aside-cta" onclick="openModal()">Request Consultation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPROACH — Full-bleed asymmetric -->
+    <section class="approach" id="approach">
+        <div class="approach__visual"></div>
+        <div class="approach__text reveal-right">
+            <p class="approach__label">Your Journey</p>
+            <h2 class="approach__heading">A Practice Built on<br><em>Compassion</em> and Depth</h2>
+            <p class="approach__desc">Dr. Greenberg's Soul-Centered approach weaves together the best of clinical psychology with the profound wisdom of transpersonal and spiritual traditions.</p>
+
+            <div class="approach__pillars">
+                <div class="pillar">
+                    <span class="pillar__marker">·</span>
+                    <div class="pillar__content">
+                        <p class="pillar__name">Explore</p>
+                        <p class="pillar__desc">Past lives, dreams, imagery, and your soul's deepest potential</p>
+                    </div>
+                </div>
+                <div class="pillar">
+                    <span class="pillar__marker">·</span>
+                    <div class="pillar__content">
+                        <p class="pillar__name">Heal</p>
+                        <p class="pillar__desc">Deep emotional injuries, relationships, and stored trauma</p>
+                    </div>
+                </div>
+                <div class="pillar">
+                    <span class="pillar__marker">·</span>
+                    <div class="pillar__content">
+                        <p class="pillar__name">Live</p>
+                        <p class="pillar__desc">The life which is truly yours — with clarity, power, and confidence</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA — Swarovski shimmer finale -->
+    <section class="cta-section" id="cta">
+        <div class="cta-section__bg"></div>
+        <div class="cta-section__content reveal">
+            <p class="cta-section__label">Take the First Step</p>
+            <h2 class="cta-section__heading">Your Path to <em>Wholeness</em><br>Begins Here</h2>
+            <p class="cta-section__sub">A complimentary 10-minute consultation to explore how soul-centered therapy can illuminate your journey forward.</p>
+            <button class="cta-section__btn" onclick="openModal()">Schedule Your Consultation</button>
+            <p class="cta-section__note">In-person · Manhattan · Online Sessions Available</p>
+        </div>
+    </section>
+
+    <!-- CONTACT STRIP -->
+    <div class="contact-strip">
+        <div class="contact-strip__item reveal">
+            <p class="contact-strip__label">Location</p>
+            <p class="contact-strip__value">138 West 25th Street<br>New York, NY 10001</p>
+        </div>
+        <div class="contact-strip__item reveal">
+            <p class="contact-strip__label">Telephone</p>
+            <p class="contact-strip__value">(212) 501-4647</p>
+        </div>
+        <div class="contact-strip__item reveal">
+            <p class="contact-strip__label">Correspondence</p>
+            <p class="contact-strip__value">DrLGreenberg@aol.com</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p class="footer__copy">© 2025 Dr. Laurie Greenberg, PhD — Soul-Centered Therapy. All rights reserved.</p>
+        <a href="https://velocity.calyvent.com" target="_blank" class="footer__velocity">Designed by Velocity</a>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal__close" onclick="closeModal()">✕</button>
+            <p class="modal__eyebrow">Complimentary Consultation</p>
+            <h3 class="modal__title">Begin Your Journey<br>Toward Wholeness</h3>
+            <p class="modal__text">Dr. Greenberg offers a free 10-minute telephone consultation. Reach out to explore how soul-centered therapy can support your transformation.</p>
+            <p class="modal__contact">(212) 501-4647</p>
+            <p class="modal__email">DrLGreenberg@aol.com</p>
+            <p class="modal__timer" id="modalTimer"></p>
+        </div>
+    </div>
+
+    <script>
+        /* ═══ SCROLL REVEALS — Tiffany IntersectionObserver ═══ */
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .service-row, .credential-item').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* ═══ NAV SCROLL STATE ═══ */
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 80) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        /* ═══ HERO PARALLAX — Tiffany depth ═══ */
+        const hero = document.getElementById('hero');
+        const heroBg = hero.querySelector('.hero__bg');
+        const heroContent = hero.querySelector('.hero__content');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const heroHeight = hero.offsetHeight;
+
+            if (scrollY < heroHeight) {
+                const progress = scrollY / heroHeight;
+                heroBg.style.transform = `translateY(${scrollY * 0.3}px)`;
+                heroContent.style.opacity = 1 - progress * 1.5;
+                heroContent.style.transform = `translateY(${scrollY * 0.15}px)`;
+            }
+        }, { passive: true });
+
+        /* ═══ MODAL ═══ */
+        let modalTimeout;
+
+        function openModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            let countdown = 5;
+            const timer = document.getElementById('modalTimer');
+            timer.textContent = `This window will close in ${countdown}s`;
+
+            modalTimeout = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    closeModal();
+                } else {
+                    timer.textContent = `This window will close in ${countdown}s`;
+                }
+            }, 1000);
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            clearInterval(modalTimeout);
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        /* ═══ STAGGERED CREDENTIAL REVEALS ═══ */
+        const credentialObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    const items = document.querySelectorAll('.credential-item');
+                    items.forEach((item, i) => {
+                        setTimeout(() => {
+                            item.classList.add('revealed');
+                        }, i * 120);
+                    });
+                    credentialObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const firstCredential = document.querySelector('.credential-item');
+        if (firstCredential) credentialObserver.observe(firstCredential);
+
+        /* ═══ SERVICE ROW STAGGER ═══ */
+        const serviceObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const rows = document.querySelectorAll('.service-row');
+                    rows.forEach((row, i) => {
+                        setTimeout(() => {
+                            row.classList.add('revealed');
+                        }, i * 150);
+                    });
+                    serviceObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.05 });
+
+        const firstService = document.querySelector('.service-row');
+        if (firstService) serviceObserver.observe(firstService);
+    </script>
+</body>
+</html>
