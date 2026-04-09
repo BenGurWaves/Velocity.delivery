@@ -3,806 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A. Caraceni Milano | Bespoke Tailoring Since 1946</title>
-    <meta name="description" content="Sartoria A. Caraceni Milano. Bespoke tailoring since 1946. Via Fatebenefratelli 16, Milan.">
+    <title>A. Caraceni | Milano</title>
+    <meta name="description" content="Sartoria A. Caraceni. Bespoke tailoring at Via Fatebenefratelli 16, Milano since 1946.">
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="./assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@300;400&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         /* 
-        CINEMATIC REFERENCES: 
-        - Chanel J12: Full-bleed cinematic hero with scroll fade + overlay text tracking
-        - Tiffany & Co.: Asymmetric layout with full-screen imagery, minimal text
-        - Cartier: Museum-grade typography hierarchy with precise tracking
-        - Prada: Full-screen immersive sections + generous whitespace
-        - Nicole Fuller: Massive white space + refined typography for quiet luxury
+        TRUE QUIET LUXURY PRINCIPLES:
+        - Restraint over ornamentation
+        - Negative space as design element
+        - Typography as the primary visual
+        - Subtle color palette extracted from actual brand
+        - Asymmetric balance
+        - No gimmicks, no parallax, no cursor effects
+        - Museum-quality presentation
         
-        UNIQUENESS ENGINE INVENTIONS:
-        1. Fabric weave parallax overlay - subtle pattern responds to scroll velocity
-        2. Golden thread cursor trail - cursor leaves faint gilt path
-        3. Scroll-progress lapel pin - fixed element moves like measuring tape
-        4. Quote fade-sequence - testimonials reveal with staggered opacity + letter-spacing
-        5. Measurement tape ruler - vertical progress styled like tailor's tape
+        A. CARACENI EXTRACTED PALETTE:
+        - Primary: #b59963 (brand gold from live site)
+        - Background: #faf9f7 (warm white, not stark)
+        - Text: #1a1a1a (soft black)
+        - Secondary: #8a8580 (warm gray)
+        - Accent: #e8e4de ( parchment)
         
-        This creates stop-scrolling luxury vs Wix template.
+        REFERENCES:
+        - The Row: Extreme restraint, typography-forward
+        - Loro Piana: Material texture focus
+        - Brunello Cucinelli: Warm neutrals, craftsmanship narrative
+        - Max Mara: Editorial layout, generous whitespace
         */
         
         :root {
+            --caraceni-gold: #b59963;
+            --caraceni-gold-rgb: 181, 153, 99;
+            --warm-white: #faf9f7;
+            --warm-white-rgb: 250, 249, 247;
             --ink: #1a1a1a;
             --ink-rgb: 26, 26, 26;
-            --parchment: #f5f2eb;
-            --parchment-rgb: 245, 242, 235;
-            --gilt: #c9a962;
-            --gilt-rgb: 201, 169, 98;
-            --warm-gray: #8a8178;
-            --milan-clay: #d4c5b5;
-            --display-font: 'Cormorant Garamond', Georgia, serif;
-            --body-font: 'Inter', system-ui, sans-serif;
-            --accent-font: 'Playfair Display', Georgia, serif;
-            font-display: swap;
-            --transition-slow: cubic-bezier(0.23, 1, 0.32, 1);
+            --warm-gray: #6b6660;
+            --parchment: #e8e4de;
+            --display: 'Cormorant Garamond', 'Times New Roman', serif;
+            --body: 'Inter', -apple-system, sans-serif;
+            --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
-        * {
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         
         html {
+            font-size: 16px;
             scroll-behavior: smooth;
         }
         
         body {
-            font-family: var(--body-font);
+            font-family: var(--body);
             font-weight: 300;
-            background: var(--parchment);
+            font-size: 0.9375rem;
+            line-height: 1.7;
             color: var(--ink);
-            line-height: 1.6;
-            overflow-x: hidden;
+            background: var(--warm-white);
+            letter-spacing: 0.01em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Golden thread cursor trail */
-        .cursor-trail {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--gilt);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s var(--transition-slow);
-            z-index: 9998;
+        /* Typography Scale - Museum Grade */
+        .display-xl {
+            font-family: var(--display);
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
         }
         
-        /* Fabric weave parallax overlay - DISABLED for performance */
-        /* .fabric-overlay { ... } */
+        .display-lg {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
         
-        /* Measurement tape ruler - DISABLED for performance */
-        /* .tape-ruler { ... } */
+        .display-md {
+            font-family: var(--display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.3;
+            font-style: italic;
+        }
         
-        /* Scroll-progress lapel pin - DISABLED for performance */
-        /* .lapel-pin { ... } */
+        .body-lg {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--warm-gray);
+        }
         
-        /* Navigation */
+        .label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--caraceni-gold);
+        }
+        
+        /* Navigation - Minimal */
         nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            padding: 1.5rem 3rem;
-            z-index: 50;
+            right: 0;
+            z-index: 100;
+            padding: 2.5rem 4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.5s var(--transition-slow), padding 0.3s var(--transition-slow);
+            mix-blend-mode: difference;
         }
         
-        nav.scrolled {
-            background: rgba(var(--parchment-rgb), 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 3rem;
+        nav a {
+            color: white;
+            text-decoration: none;
         }
         
-        .logo {
-            font-family: var(--display-font);
+        .nav-logo {
+            font-family: var(--display);
             font-size: 1.25rem;
             font-weight: 400;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--parchment);
-            text-decoration: none;
-            transition: color 0.5s var(--transition-slow);
+            letter-spacing: 0.15em;
         }
         
-        nav.scrolled .logo {
-            color: var(--ink);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            font-family: var(--body-font);
+        .nav-contact {
             font-size: 0.75rem;
-            font-weight: 400;
-            letter-spacing: 2px;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--parchment);
-            text-decoration: none;
-            position: relative;
-            transition: color 0.5s var(--transition-slow);
+            opacity: 0.8;
+            transition: opacity 0.3s var(--ease);
         }
         
-        nav.scrolled .nav-links a {
-            color: var(--ink);
+        .nav-contact:hover {
+            opacity: 1;
         }
         
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--gilt);
-            transition: width 0.4s var(--transition-slow);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Hero Section - Chanel J12 inspired */
+        /* Hero - Full Immersion */
         .hero {
-            height: 100vh;
-            width: 100%;
-            background: var(--ink);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+        
+        .hero-visual {
             position: relative;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
-        .hero-image {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .hero-visual img {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
-            opacity: 0.9;
+            object-fit: cover;
+            filter: grayscale(20%) contrast(1.05);
         }
         
-        .hero-image::before {
+        .hero-visual::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+            inset: 0;
+            background: linear-gradient(
+                to right,
+                rgba(var(--warm-white-rgb), 0.9) 0%,
+                rgba(var(--warm-white-rgb), 0.3) 30%,
+                transparent 60%
+            );
         }
         
         .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 8rem 6rem 4rem;
             position: relative;
-            z-index: 10;
-            text-align: center;
-            color: var(--parchment);
-            padding: 2rem;
+            z-index: 2;
+            margin-left: -15%;
         }
         
-        .hero-subtitle {
-            font-family: var(--body-font);
-            font-size: 0.7rem;
-            letter-spacing: 6px;
-            text-transform: uppercase;
+        .hero-label {
             margin-bottom: 2rem;
-            opacity: 0.8;
-            animation: fadeInUp 1.2s var(--transition-slow) forwards;
-            animation-delay: 0.3s;
-            opacity: 0;
         }
         
         .hero-title {
-            font-family: var(--display-font);
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 300;
-            letter-spacing: 12px;
-            line-height: 1.1;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 1.2s var(--transition-slow) forwards;
-            animation-delay: 0.6s;
-            opacity: 0;
+            margin-bottom: 2.5rem;
         }
         
-        .hero-tagline {
-            font-family: var(--accent-font);
-            font-size: 1.1rem;
-            font-style: italic;
-            font-weight: 400;
-            letter-spacing: 1px;
-            opacity: 0.7;
-            max-width: 500px;
-            margin: 0 auto 3rem;
-            animation: fadeInUp 1.2s var(--transition-slow) forwards;
-            animation-delay: 0.9s;
-            opacity: 0;
+        .hero-subtitle {
+            max-width: 26rem;
+            margin-bottom: 4rem;
         }
         
-        .hero-cta {
-            display: inline-block;
-            padding: 1rem 3rem;
-            border: 1px solid var(--gilt);
-            color: var(--gilt);
-            font-family: var(--body-font);
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: all 0.5s var(--transition-slow);
-            animation: fadeInUp 1.2s var(--transition-slow) forwards;
-            animation-delay: 1.2s;
-            opacity: 0;
-        }
-        
-        .hero-cta:hover {
-            background: var(--gilt);
-            color: var(--ink);
-        }
-        
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--parchment);
-            font-size: 0.65rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.5;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-        
-        /* Section Base */
-        section {
-            position: relative;
-            z-index: 5;
-        }
-        
-        /* Heritage Section - Tiffany asymmetric */
-        .heritage {
-            padding: 10rem 5%;
-            background: var(--parchment);
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 8rem;
-            align-items: center;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
-        .heritage-text {
-            padding-right: 2rem;
-        }
-        
-        .section-label {
-            font-family: var(--body-font);
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gilt);
-            margin-bottom: 2rem;
-        }
-        
-        .heritage h2 {
-            font-family: var(--display-font);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 300;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            margin-bottom: 2rem;
-        }
-        
-        .heritage p {
-            font-size: 1.05rem;
-            line-height: 1.8;
+        .hero-address {
+            font-size: 0.8125rem;
+            line-height: 2;
             color: var(--warm-gray);
-            margin-bottom: 1.5rem;
+            letter-spacing: 0.02em;
         }
         
-        .heritage-visual {
+        /* Quote Section - Floating */
+        .quote-section {
+            padding: 12rem 4rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .quote-block {
+            max-width: 50rem;
+            text-align: center;
             position: relative;
-            height: 600px;
-            background: linear-gradient(145deg, var(--milan-clay) 0%, var(--parchment) 100%);
+        }
+        
+        .quote-block::before {
+            content: '—';
+            display: block;
+            font-family: var(--display);
+            font-size: 3rem;
+            color: var(--caraceni-gold);
+            margin-bottom: 2rem;
+            opacity: 0.6;
+        }
+        
+        .quote-text {
+            font-family: var(--display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 300;
+            line-height: 1.4;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .quote-attribution {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--warm-gray);
+        }
+        
+        /* Heritage - Asymmetric Editorial */
+        .heritage {
+            display: grid;
+            grid-template-columns: 45% 55%;
+            min-height: 100vh;
+        }
+        
+        .heritage-image {
+            position: relative;
             overflow: hidden;
         }
         
-        .heritage-visual::before {
-            content: 'A.C';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--display-font);
-            font-size: 12rem;
-            font-weight: 300;
-            letter-spacing: 20px;
-            color: var(--ink);
-            opacity: 0.08;
+        .heritage-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
-        .year-badge {
-            position: absolute;
-            bottom: 3rem;
-            right: 3rem;
-            font-family: var(--display-font);
-            font-size: 5rem;
-            font-weight: 300;
-            color: var(--ink);
-            opacity: 0.15;
-            letter-spacing: 8px;
+        .heritage-content {
+            padding: 8rem 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--parchment);
         }
         
-        /* Quote Section - fade-sequence invention */
-        .testimonials {
-            padding: 12rem 5%;
-            background: var(--ink);
-            color: var(--parchment);
+        .heritage-label {
+            margin-bottom: 1.5rem;
+        }
+        
+        .heritage-title {
+            margin-bottom: 2rem;
+        }
+        
+        .heritage-text {
+            max-width: 32rem;
+        }
+        
+        .heritage-text p + p {
+            margin-top: 1.5rem;
+        }
+        
+        .heritage-year {
+            margin-top: 4rem;
+            font-family: var(--display);
+            font-size: 6rem;
+            font-weight: 300;
+            color: var(--caraceni-gold);
+            opacity: 0.3;
+            line-height: 1;
+        }
+        
+        /* Philosophy - Centered Text Block */
+        .philosophy {
+            padding: 16rem 4rem;
+            display: flex;
+            justify-content: center;
+            background: var(--warm-white);
+        }
+        
+        .philosophy-content {
+            max-width: 36rem;
             text-align: center;
         }
         
-        .testimonial-container {
-            max-width: 900px;
-            margin: 0 auto;
+        .philosophy-label {
+            margin-bottom: 3rem;
         }
         
-        .testimonial {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s var(--transition-slow), transform 0.8s var(--transition-slow), letter-spacing 0.8s var(--transition-slow);
+        .philosophy-title {
+            margin-bottom: 2.5rem;
         }
         
-        .testimonial.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .quote-mark {
-            font-family: var(--display-font);
-            font-size: 8rem;
-            color: var(--gilt);
-            opacity: 0.3;
-            line-height: 0.5;
-            margin-bottom: 2rem;
-        }
-        
-        .testimonial blockquote {
-            font-family: var(--accent-font);
-            font-size: clamp(1.5rem, 3vw, 2.25rem);
-            font-style: italic;
-            font-weight: 400;
-            line-height: 1.5;
-            margin-bottom: 2rem;
-            letter-spacing: 0;
-            transition: letter-spacing 0.8s var(--transition-slow);
-        }
-        
-        .testimonial.visible blockquote {
-            letter-spacing: 1px;
-        }
-        
-        .testimonial cite {
-            font-family: var(--body-font);
-            font-size: 0.8rem;
-            font-style: normal;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gilt);
-        }
-        
-        /* Craft Section */
+        /* Craft - Three Columns with Restraint */
         .craft {
-            padding: 10rem 5%;
-            background: var(--parchment);
+            padding: 8rem 4rem 12rem;
+            background: var(--warm-white);
+        }
+        
+        .craft-header {
+            text-align: center;
+            margin-bottom: 6rem;
         }
         
         .craft-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 4rem;
-            max-width: 1400px;
+            max-width: 72rem;
             margin: 0 auto;
         }
         
         .craft-item {
             text-align: center;
-            padding: 3rem 2rem;
-            border: 1px solid transparent;
-            transition: border-color 0.5s var(--transition-slow);
-        }
-        
-        .craft-item:hover {
-            border-color: var(--milan-clay);
+            padding: 2rem;
         }
         
         .craft-number {
-            font-family: var(--display-font);
-            font-size: 3rem;
-            font-weight: 300;
-            color: var(--gilt);
+            font-family: var(--display);
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--caraceni-gold);
+            letter-spacing: 0.1em;
             margin-bottom: 1.5rem;
-            opacity: 0.6;
         }
         
         .craft-item h3 {
-            font-family: var(--display-font);
+            font-family: var(--display);
             font-size: 1.25rem;
             font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
             margin-bottom: 1rem;
+            letter-spacing: 0.02em;
         }
         
         .craft-item p {
-            font-size: 0.95rem;
+            font-size: 0.875rem;
+            line-height: 1.8;
             color: var(--warm-gray);
-            line-height: 1.7;
         }
         
-        /* Atelier Section */
-        .atelier {
-            padding: 8rem 5%;
-            background: linear-gradient(to bottom, var(--parchment) 0%, var(--milan-clay) 100%);
+        /* Testimonials - Full Width Bands */
+        .testimonial-band {
+            padding: 6rem 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+        
+        .testimonial-band:nth-child(odd) {
+            background: var(--parchment);
+        }
+        
+        .testimonial-band:nth-child(even) {
+            background: var(--warm-white);
+        }
+        
+        .testimonial-content {
+            max-width: 44rem;
             text-align: center;
         }
         
-        .atelier-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .atelier h2 {
-            font-family: var(--display-font);
-            font-size: clamp(2rem, 4vw, 3rem);
+        .testimonial-quote {
+            font-family: var(--display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
             font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .atelier address {
-            font-family: var(--body-font);
-            font-size: 1rem;
-            font-style: normal;
-            line-height: 2;
-            color: var(--warm-gray);
+            font-style: italic;
+            line-height: 1.5;
             margin-bottom: 2rem;
         }
         
-        .atelier a {
-            color: var(--ink);
-            text-decoration: none;
-            border-bottom: 1px solid var(--gilt);
-            transition: color 0.3s var(--transition-slow);
+        .testimonial-author {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--caraceni-gold);
         }
         
-        .atelier a:hover {
-            color: var(--gilt);
-        }
-        
-        .cta-button {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 1.25rem 3.5rem;
+        /* Contact - Minimal */
+        .contact {
+            padding: 12rem 4rem;
+            display: flex;
+            justify-content: center;
             background: var(--ink);
-            color: var(--parchment);
-            font-family: var(--body-font);
-            font-size: 0.7rem;
-            letter-spacing: 3px;
+            color: var(--warm-white);
+        }
+        
+        .contact-content {
+            text-align: center;
+        }
+        
+        .contact-label {
+            color: var(--caraceni-gold);
+            margin-bottom: 2rem;
+        }
+        
+        .contact-title {
+            margin-bottom: 3rem;
+        }
+        
+        .contact-details {
+            font-size: 0.9375rem;
+            line-height: 2.2;
+            color: rgba(250, 249, 247, 0.7);
+            margin-bottom: 3rem;
+        }
+        
+        .contact-details a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid var(--caraceni-gold);
+            padding-bottom: 2px;
+            transition: color 0.3s var(--ease);
+        }
+        
+        .contact-details a:hover {
+            color: var(--caraceni-gold);
+        }
+        
+        .contact-cta {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            border: 1px solid var(--caraceni-gold);
+            color: var(--caraceni-gold);
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.5s var(--transition-slow);
+            transition: all 0.4s var(--ease);
         }
         
-        .cta-button:hover {
-            background: var(--gilt);
+        .contact-cta:hover {
+            background: var(--caraceni-gold);
             color: var(--ink);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(var(--ink-rgb), 0.2);
         }
         
         /* Footer */
         footer {
-            padding: 4rem 5%;
-            background: var(--ink);
-            color: var(--parchment);
+            padding: 4rem;
             text-align: center;
+            background: var(--ink);
+            border-top: 1px solid rgba(250, 249, 247, 0.1);
         }
         
         footer p {
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            opacity: 0.6;
+            font-size: 0.6875rem;
+            letter-spacing: 0.1em;
+            color: rgba(250, 249, 247, 0.4);
         }
         
-        /* Velocity Modal */
+        /* Modal - Velocity */
         #velocity-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(var(--ink-rgb), 0.92);
-            backdrop-filter: blur(16px);
+            inset: 0;
+            background: rgba(var(--ink-rgb), 0.95);
+            backdrop-filter: blur(20px);
             z-index: 9999;
             align-items: center;
             justify-content: center;
+            padding: 2rem;
         }
         
-        #velocity-modal > div {
-            background: var(--parchment);
-            color: var(--ink);
-            max-width: 520px;
-            padding: 3rem;
-            border: 1px solid rgba(var(--gilt-rgb), 0.18);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        #velocity-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--warm-white);
+            padding: 4rem;
+            max-width: 32rem;
             text-align: center;
         }
         
-        #velocity-modal h3 {
-            font-family: var(--display-font);
-            font-size: 1.15rem;
-            letter-spacing: 1.5px;
+        .modal-content h3 {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            font-weight: 400;
             margin-bottom: 1.5rem;
-            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         
-        #velocity-modal p {
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
+        .modal-content p {
+            font-size: 0.9375rem;
+            line-height: 1.7;
             color: var(--warm-gray);
+            margin-bottom: 2rem;
         }
         
-        #velocity-modal a {
+        .modal-content a {
             display: inline-block;
-            background: var(--gilt);
-            color: var(--ink);
             padding: 1rem 2.5rem;
-            border-radius: 4px;
+            background: var(--caraceni-gold);
+            color: var(--ink);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             text-decoration: none;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.3s var(--transition-slow);
+            transition: transform 0.3s var(--ease);
         }
         
-        #velocity-modal a:hover {
+        .modal-content a:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(var(--gilt-rgb), 0.3);
         }
         
         /* Responsive */
-        @media (max-width: 900px) {
-            nav {
-                padding: 1rem 5%;
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
             }
             
-            .nav-links {
-                display: none;
+            .hero-visual {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+            }
+            
+            .hero-visual::after {
+                background: rgba(var(--warm-white-rgb), 0.85);
+            }
+            
+            .hero-content {
+                margin-left: 0;
+                padding: 8rem 2rem;
+                position: relative;
+                z-index: 2;
             }
             
             .heritage {
                 grid-template-columns: 1fr;
-                gap: 4rem;
-                padding: 6rem 5%;
             }
             
-            .heritage-visual {
-                height: 400px;
-                order: -1;
+            .heritage-image {
+                height: 50vh;
+                order: 1;
+            }
+            
+            .heritage-content {
+                padding: 4rem 2rem;
+                order: 2;
             }
             
             .craft-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 3rem;
             }
             
-            .hero-title {
-                letter-spacing: 6px;
+            nav {
+                padding: 1.5rem 2rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .display-xl {
+                font-size: 2.5rem;
             }
             
+            .display-lg {
+                font-size: 1.75rem;
+            }
+            
+            .quote-text {
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Golden thread cursor trail elements -->
-    <div class="cursor-trail" id="cursorTrail"></div>
-    
-    <!-- Navigation -->
-    <nav id="navbar">
-        <a href="#" class="logo" onclick="openModal(); return false;">A. Caraceni</a>
-        <ul class="nav-links">
-            <li><a href="#heritage" onclick="openModal(); return false;">Heritage</a></li>
-            <li><a href="#craft" onclick="openModal(); return false;">Craft</a></li>
-            <li><a href="#atelier" onclick="openModal(); return false;">Atelier</a></li>
-            <li><a href="#" onclick="openModal(); return false;">Contact</a></li>
-        </ul>
+    <nav>
+        <a href="#" class="nav-logo" onclick="openModal(); return false;">A. Caraceni</a>
+        <a href="#" class="nav-contact" onclick="openModal(); return false;">Milano</a>
     </nav>
     
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-image"></div>
+        <div class="hero-visual">
+            <img src="./assets/atelier-interior.png" alt="A. Caraceni atelier interior">
+        </div>
         <div class="hero-content">
-            <p class="hero-subtitle">Sartoria Milanese</p>
-            <h1 class="hero-title">A. Caraceni</h1>
-            <p class="hero-tagline">"With one of our suits you could even fence"<br>— Augusto Caraceni</p>
-            <a href="#" class="hero-cta" onclick="openModal(); return false;">Discover Bespoke</a>
-        </div>
-        <div class="scroll-indicator">Scroll</div>
-    </section>
-    
-    <!-- Heritage Section -->
-    <section class="heritage" id="heritage">
-        <div class="heritage-text">
-            <p class="section-label">Since 1946</p>
-            <h2>Three Generations of Milanese Excellence</h2>
-            <p>Augusto Caraceni opened his atelier at Via Fatebenefratelli 16 in 1946, after returning from Paris where he had dressed the most prominent celebrities of the era. His son Mario carried the tradition forward, earning the prestigious Sant'Omobono prize.</p>
-            <p>Today, Massimiliano and Valentina—the fourth generation—continue the family legacy, maintaining the strict standards that have dressed Nobel laureates and fashion icons alike.</p>
-        </div>
-        <div class="heritage-visual">
-            <span class="year-badge">1946</span>
+            <p class="label hero-label">Sartoria Milano</p>
+            <h1 class="display-xl hero-title">A. Caraceni</h1>
+            <p class="display-md hero-subtitle">"Con un nostro vestito si può anche tirare di scherma"</p>
+            <address class="hero-address">
+                Via Fatebenefratelli, 16<br>
+                20121 Milano, Italia<br>
+                <span style="color: var(--caraceni-gold);">—</span><br>
+                Su misura dal 1946
+            </address>
         </div>
     </section>
     
-    <!-- Testimonials Section - with quote fade-sequence -->
-    <section class="testimonials">
-        <div class="testimonial-container">
-            <div class="testimonial" data-delay="0">
-                <div class="quote-mark">"</div>
-                <blockquote>To the Caraceni family, who have made me look elegant since I turned 18 with their skilful touch.</blockquote>
-                <cite>— Conte Filippo Perego</cite>
-            </div>
-            <div class="testimonial" data-delay="200">
-                <div class="quote-mark">"</div>
-                <blockquote>To Mario Caraceni, who contributed to my Nobel Prize outfit in 1975.</blockquote>
-                <cite>— Eugenio Montale, Nobel Laureate</cite>
-            </div>
-            <div class="testimonial" data-delay="400">
-                <div class="quote-mark">"</div>
-                <blockquote>Many many thanks for the most perfect suits in the world.</blockquote>
-                <cite>— Calvin Klein</cite>
-            </div>
+    <section class="quote-section">
+        <div class="quote-block">
+            <p class="quote-text">With one of our suits, you could even fence.</p>
+            <p class="quote-attribution">Augusto Caraceni, 1946</p>
         </div>
     </section>
     
-    <!-- Craft Section -->
-    <section class="craft" id="craft">
+    <section class="heritage">
+        <div class="heritage-image">
+            <img src="./assets/tailor-hands.png" alt="Master tailor at work">
+        </div>
+        <div class="heritage-content">
+            <p class="label heritage-label">Tre Generazioni</p>
+            <h2 class="display-lg heritage-title">Passion, Tradition,<br>Excellence</h2>
+            <div class="heritage-text body-lg">
+                <p>Augusto Caraceni opened his atelier at Via Fatebenefratelli 16 in 1946, after returning from Paris where he had dressed the most prominent celebrities of the era. His son Mario carried the tradition forward, earning the prestigious Sant'Omobono prize and dressing Eugenio Montale for his Nobel Prize ceremony in 1975.</p>
+                <p>Today, Massimiliano and Valentina — the fourth generation — continue the family legacy, maintaining the same standards that have dressed Nobel laureates and fashion icons alike.</p>
+            </div>
+            <p class="heritage-year">1946</p>
+        </div>
+    </section>
+    
+    <section class="philosophy">
+        <div class="philosophy-content">
+            <p class="label philosophy-label">Il Nostro Metodo</p>
+            <h2 class="display-lg philosophy-title">Nothing is left to chance.<br>Neither machines nor computers<br>are being used.</h2>
+            <p class="body-lg">This demands more effort and longer times, but the final result and the customer's satisfaction make us proud of our work.</p>
+        </div>
+    </section>
+    
+    <section class="craft">
+        <div class="craft-header">
+            <p class="label">Lavorazione</p>
+        </div>
         <div class="craft-grid">
             <div class="craft-item">
-                <div class="craft-number">01</div>
+                <p class="craft-number">01</p>
                 <h3>Hand-Stitched</h3>
-                <p>Every garment is crafted entirely by hand. No machines. No shortcuts. Just the patient work of master tailors using techniques passed down through generations.</p>
+                <p>Every garment is crafted entirely by hand using only artisanal tailoring instruments. Each suit is truly unique.</p>
             </div>
             <div class="craft-item">
-                <div class="craft-number">02</div>
+                <p class="craft-number">02</p>
                 <h3>Premium Fabrics</h3>
-                <p>We source only the finest British wools, Scottish cashmere, and Irish linens. Quality begins with the raw material and extends through every stitch.</p>
+                <p>Quality begins with fabric: wherever it comes from, it must always be the best. British wools, Scottish cashmere, Irish linens.</p>
             </div>
             <div class="craft-item">
-                <div class="craft-number">03</div>
+                <p class="craft-number">03</p>
                 <h3>Perfect Fit</h3>
-                <p>Multiple fittings ensure your garment follows your form precisely. Paper patterns are archived for subsequent commissions, ensuring consistency and evolution.</p>
+                <p>Multiple fittings ensure your garment follows your form precisely. Paper patterns are archived for subsequent commissions.</p>
             </div>
         </div>
     </section>
     
-    <!-- Atelier Section -->
-    <section class="atelier" id="atelier">
-        <div class="atelier-content">
-            <p class="section-label">Visit Us</p>
-            <h2>The Atelier</h2>
-            <address>
+    <section class="testimonial-band">
+        <div class="testimonial-content">
+            <p class="testimonial-quote">"To the Caraceni family, who have made me look elegant since I turned 18 with their skilful touch."</p>
+            <p class="testimonial-author">Conte Filippo Perego</p>
+        </div>
+    </section>
+    
+    <section class="testimonial-band">
+        <div class="testimonial-content">
+            <p class="testimonial-quote">"To Mario Caraceni, who contributed to my Nobel Prize outfit in 1975."</p>
+            <p class="testimonial-author">Eugenio Montale, Nobel Laureate</p>
+        </div>
+    </section>
+    
+    <section class="testimonial-band">
+        <div class="testimonial-content">
+            <p class="testimonial-quote">"Many many thanks for the most perfect suits in the world."</p>
+            <p class="testimonial-author">Calvin Klein</p>
+        </div>
+    </section>
+    
+    <section class="contact">
+        <div class="contact-content">
+            <p class="label contact-label">L'Atelier</p>
+            <h2 class="display-lg contact-title">Visit Us</h2>
+            <div class="contact-details">
                 Via Fatebenefratelli, 16<br>
-                20121 Milano, Italy<br>
+                20121 Milano MI, Italia<br>
                 <a href="tel:+39026551972" onclick="openModal(); return false;">+39 02 6551972</a><br>
                 <a href="mailto:info@a-caraceni.it" onclick="openModal(); return false;">info@a-caraceni.it</a>
-            </address>
-            <button class="cta-button" onclick="openModal()">Request an Appointment</button>
+            </div>
+            <a href="#" class="contact-cta" onclick="openModal(); return false;">Request an Appointment</a>
         </div>
     </section>
     
-    <!-- Footer -->
     <footer>
         <p>© 2025 Velocity by Calyvent. All rights reserved.</p>
     </footer>
     
-    <!-- Velocity Modal -->
     <div id="velocity-modal" onclick="closeModal(event)">
-        <div>
-            <h3>This is a Velocity Preview</h3>
+        <div class="modal-content">
+            <h3>This is a Preview</h3>
             <p>You are viewing a cinematic website mockup created by Velocity to demonstrate what A. Caraceni's digital presence could become. This is not the live website.</p>
             <a href="https://velocity.calyvent.com" target="_blank">Visit Velocity by Calyvent</a>
         </div>
     </div>
     
     <script>
-        // Simplified scroll handler - navbar only
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 100);
-        }, { passive: true });
-        
-        // Simplified cursor trail - CSS-based, no RAF loop
-        const cursorTrail = document.getElementById('cursorTrail');
-        let trailTimeout;
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorTrail.style.left = e.clientX + 'px';
-            cursorTrail.style.top = e.clientY + 'px';
-            cursorTrail.style.opacity = '0.6';
-            clearTimeout(trailTimeout);
-            trailTimeout = setTimeout(() => {
-                cursorTrail.style.opacity = '0';
-            }, 300);
-        }, { passive: true });
-        
-        // Quote fade-sequence (Intersection Observer)
-        const testimonials = document.querySelectorAll('.testimonial');
-        const observerOptions = {
-            threshold: 0.3,
-            rootMargin: '0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = parseInt(entry.target.dataset.delay) || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, delay);
-                }
-            });
-        }, observerOptions);
-        
-        testimonials.forEach(t => observer.observe(t));
-        
-        // Modal functions
         function openModal() {
-            const modal = document.getElementById('velocity-modal');
-            modal.style.display = 'flex';
+            document.getElementById('velocity-modal').classList.add('active');
             setTimeout(() => {
-                modal.style.display = 'none';
+                document.getElementById('velocity-modal').classList.remove('active');
             }, 5000);
         }
         
         function closeModal(e) {
             if (e.target.id === 'velocity-modal') {
-                e.target.style.display = 'none';
+                e.target.classList.remove('active');
             }
         }
     </script>
