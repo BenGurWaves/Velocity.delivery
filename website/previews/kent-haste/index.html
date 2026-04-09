@@ -345,36 +345,36 @@
       z-index: 0;
     }
     
-    /* Scene 3: Horizontal Scroll Moment */
+    /* Scene 3: The Craft Gallery */
     .scene-horizontal {
-      height: 250vh;
+      min-height: 100vh;
       position: relative;
       background: var(--charcoal);
+      padding: 15vh 0;
     }
     
     .horizontal-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
     
     .horizontal-track {
       display: flex;
-      gap: 5vw;
+      gap: 3vw;
       padding: 0 5vw;
-      will-change: transform;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     
     .horizontal-card {
       flex-shrink: 0;
-      width: 45vw;
-      height: 65vh;
+      width: 30vw;
+      height: 55vh;
       position: relative;
       overflow: hidden;
       border: 1px solid var(--smoke);
+      min-width: 350px;
     }
     
     .horizontal-card img {
@@ -404,26 +404,6 @@
       color: var(--parchment);
       opacity: 0.8;
       line-height: 1.7;
-    }
-    
-    .horizontal-indicator {
-      position: absolute;
-      bottom: 5%;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 1rem;
-    }
-    
-    .horizontal-dot {
-      width: 40px;
-      height: 2px;
-      background: var(--smoke);
-      transition: background 0.5s ease;
-    }
-    
-    .horizontal-dot.active {
-      background: var(--gold);
     }
     
     /* Scene 4: The Overlap — Chaos as art */
@@ -897,11 +877,6 @@
           </div>
         </div>
       </div>
-      <div class="horizontal-indicator">
-        <div class="horizontal-dot active"></div>
-        <div class="horizontal-dot"></div>
-        <div class="horizontal-dot"></div>
-      </div>
     </div>
   </section>
   
@@ -995,40 +970,6 @@
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = scrollTop / docHeight;
       progressBar.style.transform = `scaleX(${scrollPercent})`;
-    });
-    
-    // Horizontal scroll section
-    const sceneHorizontal = document.querySelector('.scene-horizontal');
-    const horizontalTrack = document.getElementById('horizontalTrack');
-    const dots = document.querySelectorAll('.horizontal-dot');
-    
-    window.addEventListener('scroll', () => {
-      const rect = sceneHorizontal.getBoundingClientRect();
-      const sectionHeight = sceneHorizontal.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate progress through section (0 to 1)
-      // Starts when section top reaches viewport bottom
-      // Ends when section bottom reaches viewport top
-      const scrollStart = rect.top + sectionHeight;
-      const scrollEnd = rect.bottom - viewportHeight;
-      
-      if (scrollStart > 0 && scrollEnd < sectionHeight + viewportHeight) {
-        const scrolled = sectionHeight - rect.top;
-        const totalScrollable = sectionHeight - viewportHeight;
-        const progress = Math.max(0, Math.min(scrolled / totalScrollable, 1));
-        
-        // Move track: 0 to -100vw to show all cards
-        const maxTranslate = horizontalTrack.scrollWidth - window.innerWidth + 100;
-        const translateX = progress * Math.min(maxTranslate * 0.5, 80);
-        horizontalTrack.style.transform = `translateX(-${translateX}vw)`;
-        
-        // Update dots based on progress
-        const activeIndex = Math.min(Math.floor(progress * 3), 2);
-        dots.forEach((dot, i) => {
-          dot.classList.toggle('active', i === activeIndex);
-        });
-      }
     });
     
     // Intersection Observer for reveals
