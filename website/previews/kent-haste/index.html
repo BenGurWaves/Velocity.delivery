@@ -199,12 +199,14 @@
       font-weight: 300;
       line-height: 0.85;
       text-align: center;
-      background: linear-gradient(180deg, var(--vellum) 0%, var(--gold) 50%, var(--vellum) 100%);
+      background-image: url('assets/atelier.png');
+      background-size: cover;
+      background-position: center;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      mix-blend-mode: screen;
       letter-spacing: -0.02em;
+      filter: brightness(1.2) contrast(1.1);
     }
     
     .hero-mask-text span {
@@ -215,7 +217,9 @@
       font-weight: 300;
       letter-spacing: 0.3em;
       margin-top: 0.5em;
-      background: var(--gold);
+      background-image: url('assets/atelier.png');
+      background-size: 150%;
+      background-position: center;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -438,13 +442,23 @@
     .overlap-image-1 {
       position: relative;
       width: 55%;
+      height: 60vh;
       z-index: 1;
       transform: translateX(-5%) rotate(-3deg);
+      background: linear-gradient(135deg, #1e4d2b 0%, #0f2817 50%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
     }
     
-    .overlap-image-1 img {
-      width: 100%;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    .overlap-image-1::after {
+      content: 'Bespoke Excellence';
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--gold);
+      font-style: italic;
+      opacity: 0.6;
     }
     
     .overlap-text-1 {
@@ -465,13 +479,23 @@
       top: 40%;
       right: 0;
       width: 50%;
+      height: 50vh;
       z-index: 2;
       transform: rotate(4deg) translateY(20%);
+      background: linear-gradient(45deg, #2d2d2d 0%, #1f1f1f 50%, #141414 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
     }
     
-    .overlap-image-2 img {
-      width: 100%;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    .overlap-image-2::after {
+      content: '50 Years of Craft';
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--vellum);
+      font-style: italic;
+      opacity: 0.5;
     }
     
     .overlap-quote {
@@ -855,18 +879,14 @@
   <!-- Scene 4: Overlap — Chaos as composition -->
   <section class="scene-overlap" id="mastery">
     <div class="overlap-container">
-      <div class="overlap-image-1 reveal">
-        <img src="assets/atelier.png" alt="The atelier">
-      </div>
+      <div class="overlap-image-1 reveal"></div>
       <div class="overlap-text-1 reveal-rotate">
         The House Cut<br>
         <span style="color: var(--gold); font-style: italic;">natural shoulders</span><br>
         graceful lines<br>
         <span style="color: var(--gold); font-style: italic;">soft construction</span>
       </div>
-      <div class="overlap-image-2 reveal-left">
-        <img src="assets/lapel.png" alt="Craftsmanship detail">
-      </div>
+      <div class="overlap-image-2 reveal-left"></div>
       <div class="overlap-quote reveal">
         "Terry Haste is in my opinion the best tailor in the world, and because he is on Sackville street rather than the adjacent Savile Row, it is about two thirds of the cost for bespoke."
         <span style="display: block; margin-top: 1rem; font-size: 0.7em; color: var(--gold-dim);">— Client testimonial</span>
@@ -999,7 +1019,7 @@
     }
     
     function closeModal() {
-      document.getElementById('modal').classList.remove('active');;
+      document.getElementById('modal').classList.remove('active');
       document.body.style.overflow = '';
     }
     
@@ -1028,8 +1048,8 @@
       if (overlapImage1 && overlapImage2) {
         const rect = overlapImage1.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
-          overlapImage1.style.transform = `translateX(-5%) rotate(-3deg) translateY(${scrolled * 0.03}px)`;
-          overlapImage2.style.transform = `rotate(4deg) translateY(${20 + scrolled * 0.02}%)`;
+          overlapImage1.style.transform = `translateX(-5%) rotate(-3deg) translateY(${scrolled * 0.02}px)`;
+          overlapImage2.style.transform = `rotate(4deg) translateY(${20 + scrolled * 0.015}%)`;
         }
       }
     });
