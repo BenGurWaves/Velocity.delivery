@@ -52,6 +52,17 @@ class Settings(BaseSettings):
     # Database
     database_url: str = "sqlite+aiosqlite:///./agency.db"
 
+    # Supabase
+    supabase_url: str = ""
+    supabase_anon_key: str = ""
+    supabase_service_role_key: str = ""
+
+    # Admin
+    admin_secret: str = ""
+
+    # Stripe (onboarding / client payments)
+    stripe_publishable_key: str = ""
+
     # General
     agency_name: str = "YourAgencyName"
     agency_domain: str = "youragency.com"
