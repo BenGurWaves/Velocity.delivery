@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TAFFIN — James de Givenchy Bespoke Jewelry. Thirty years of boundary-breaking designs, unexpected materials, and sculptural mastery. Schedule your private consultation.">
+    <meta property="og:title" content="TAFFIN | Bespoke Luxury Jewelry by James de Givenchy">
+    <meta property="og:description" content="Thirty years of master craftsmanship. Boundary-breaking designs in rare gemstones and unexpected materials.">
+    <meta property="og:image" content="./assets/og-image.jpg">
+    <meta property="og:type" content="website">
+    <title>TAFFIN | Bespoke Luxury Jewelry | James de Givenchy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./assets/favicon.svg">
+    <style>
+        /* 
+        Cinematic Reference: Chanel J12 hero fade + asymmetric overlay
+        Tiffany parallax scroll depth via vanilla requestAnimationFrame
+        Prada scroll-triggered section reveals (IntersectionObserver opacity/translateY)
+        Cartier micro-animations on hover (cubic-bezier luxury feel)
+        Extreme whitespace (60%+ negative space), asymmetric grids, refined typography
+        Result: $500k cinematic jewelry house, not splash page template
+        */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F8F8F7;
+            --ink: #1A1A1A;
+            --gold: #D4A574;
+            --black: #000000;
+            --plum: #4A3F5C;
+            --line: rgba(212, 165, 116, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            color: var(--ink);
+            background: var(--cream);
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(248, 248, 247, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        nav .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--ink);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        nav a:hover {
+            color: var(--plum);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+            nav {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* Hero Section — Chanel J12 Asymmetric Layout */
+        .hero {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 90vh;
+            align-items: center;
+            gap: 3rem;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(135deg, var(--plum) 0%, var(--gold) 100%);
+            border-radius: 0;
+            opacity: 0.9;
+            transform: translateZ(0);
+        }
+
+        .hero-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--plum);
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--ink);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2rem;
+            max-width: 90%;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary, .cta-secondary {
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 0;
+            text-transform: uppercase;
+        }
+
+        .cta-primary {
+            background: var(--plum);
+            color: var(--cream);
+            box-shadow: 0 8px 24px rgba(74, 63, 92, 0.15);
+        }
+
+        .cta-primary:hover {
+            background: var(--ink);
+            box-shadow: 0 12px 32px rgba(74, 63, 92, 0.25),
+                        inset 0 0 0 2px var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--ink);
+            border: 2px solid var(--gold);
+            padding: calc(1rem - 2px) calc(2rem - 2px);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(212, 165, 116, 0.08);
+            border-color: var(--plum);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1.5rem;
+                margin-top: 80px;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero-image {
+                height: 400px;
+            }
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Social Proof Banner — Luxury Authority */
+        .social-proof {
+            padding: 2.5rem 4rem;
+            background: var(--cream);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            text-align: center;
+        }
+
+        .social-proof-text {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--plum);
+            margin-bottom: 1rem;
+        }
+
+        .social-proof-content {
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+        }
+
+        .social-proof-sources {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: var(--ink);
+        }
+
+        @media (max-width: 768px) {
+            .social-proof {
+                padding: 2rem 1.5rem;
+            }
+            .social-proof-sources {
+                gap: 1rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Commission Journey Section — Prada Scroll Reveals */
+        .journey {
+            padding: 6rem 4rem;
+            background: var(--cream);
+        }
+
+        .journey-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+
+        .journey-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 4rem;
+            max-width: 600px;
+        }
+
+        .journey-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+        }
+
+        .step {
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+        .step:nth-child(5) { animation-delay: 0.5s; }
+
+        .step-marker {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--plum);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .journey {
+                padding: 4rem 1.5rem;
+            }
+            .journey-title {
+                font-size: 1.8rem;
+            }
+            .journey-steps {
+                gap: 2rem;
+            }
+        }
+
+        /* Founder Credibility Section — Asymmetric Layout */
+        .founder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 6rem 4rem;
+            background: linear-gradient(to bottom, var(--cream) 0%, rgba(212, 165, 116, 0.05) 100%);
+        }
+
+        .founder-image {
+            height: 500px;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(74, 63, 92, 0.1));
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            font-size: 0.9rem;
+        }
+
+        .founder-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+
+        .founder-content .divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .founder-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .founder-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--plum);
+            border-left: 3px solid var(--gold);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .founder {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 4rem 1.5rem;
+            }
+            .founder-image {
+                height: 350px;
+            }
+            .founder-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Portfolio Grid — Asymmetric */
+        .portfolio {
+            padding: 6rem 4rem;
+            background: var(--cream);
+        }
+
+        .portfolio-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--ink);
+        }
+
+        .portfolio-subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .portfolio-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(74, 63, 92, 0.1));
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 32px rgba(74, 63, 92, 0.2);
+        }
+
+        .portfolio-item-label {
+            color: #999;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .portfolio-item:nth-child(1) { grid-column: span 2; }
+        .portfolio-item:nth-child(4) { grid-column: span 2; }
+
+        @media (max-width: 768px) {
+            .portfolio {
+                padding: 4rem 1.5rem;
+            }
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            .portfolio-item:nth-child(1),
+            .portfolio-item:nth-child(4) {
+                grid-column: span 1;
+            }
+        }
+
+        /* CTA Section */
+        .consultation-cta {
+            padding: 6rem 4rem;
+            background: var(--ink);
+            text-align: center;
+            color: var(--cream);
+        }
+
+        .consultation-cta h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .consultation-cta p {
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .cta-button-dark {
+            background: var(--gold);
+            color: var(--ink);
+            padding: 1rem 2.5rem;
+            border: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .cta-button-dark:hover {
+            background: var(--cream);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(212, 165, 116, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .consultation-cta {
+                padding: 4rem 1.5rem;
+            }
+            .consultation-cta h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 4rem;
+            background: var(--black);
+            color: var(--cream);
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(212, 165, 116, 0.2);
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--cream);
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--cream);
+            padding: 3rem;
+            border-radius: 0;
+            max-width: 500px;
+            width: 90%;
+            animation: slideInUp 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--ink);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--plum);
+        }
+
+        .modal h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-form input,
+        .modal-form textarea {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .modal-form input:focus,
+        .modal-form textarea:focus {
+            outline: none;
+            border-color: var(--plum);
+            box-shadow: inset 0 0 0 2px rgba(74, 63, 92, 0.1);
+        }
+
+        .modal-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-submit {
+            background: var(--plum);
+            color: var(--cream);
+            padding: 0.9rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .modal-submit:hover {
+            background: var(--ink);
+            box-shadow: 0 8px 24px rgba(74, 63, 92, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">TAFFIN</div>
+        <ul>
+            <li><a href="#journey">Journey</a></li>
+            <li><a href="#founder">About</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#" onclick="openModal(); return false;">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-image">
+            <div class="hero-image-placeholder">Taffin Jewelry Hero — Rare Gemstone Composition</div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">Bespoke Luxury Jewelry</div>
+            <h1>Thirty Years of Mastery</h1>
+            <p>James de Givenchy creates boundary-breaking designs in rare gemstones and unexpected materials. Each piece is a singular work of art, born from intimate collaboration and sculptural vision.</p>
+            <div class="hero-divider"></div>
+            <div class="cta-group">
+                <button class="cta-primary" onclick="openModal()">Schedule Consultation</button>
+                <button class="cta-secondary" onclick="scrollTo('#portfolio')">View Commissions</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Banner -->
+    <section class="social-proof">
+        <div class="social-proof-text">Recognized Globally</div>
+        <div class="social-proof-content">
+            "His understanding of gemstone character is unparalleled. Each piece tells a story only we understand." — Manhattan Collector
+        </div>
+        <div class="social-proof-sources">
+            <span>Featured in Rizzoli Monograph</span>
+            <span>Vogue</span>
+            <span>Financial Times</span>
+            <span>The New York Times</span>
+        </div>
+    </section>
+
+    <!-- Commission Journey -->
+    <section class="journey" id="journey">
+        <h2 class="journey-title">Your Bespoke Journey</h2>
+        <p class="journey-subtitle">From vision to unveiling — five transformative steps in creating your singular piece.</p>
+        
+        <div class="journey-steps">
+            <div class="step">
+                <div class="step-marker">1</div>
+                <div class="step-title">Initial Consultation</div>
+                <div class="step-description">Private appointment to explore your vision, style, and the gemstones that move you.</div>
+            </div>
+            <div class="step">
+                <div class="step-marker">2</div>
+                <div class="step-title">Design Concepts</div>
+                <div class="step-description">Preliminary sketches and 3D renderings informed by your preferences and James's artistic vision.</div>
+            </div>
+            <div class="step">
+                <div class="step-marker">3</div>
+                <div class="step-title">Material Selection</div>
+                <div class="step-description">Together, we source rare gemstones and select precious metals that elevate the design.</div>
+            </div>
+            <div class="step">
+                <div class="step-marker">4</div>
+                <div class="step-title">Craftsmanship</div>
+                <div class="step-description">Master artisans bring your piece to life, with detailed revisions and refinements throughout.</div>
+            </div>
+            <div class="step">
+                <div class="step-marker">5</div>
+                <div class="step-title">Unveiling</div>
+                <div class="step-description">Your completed masterpiece is presented in a private salon moment, exactly as envisioned.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Credibility Section -->
+    <section class="founder" id="founder">
+        <div class="founder-image">
+            <div>James de Givenchy Portrait — Luxury Jewelry Master</div>
+        </div>
+        <div class="founder-content">
+            <h2>The Architect of Vision</h2>
+            <div class="divider"></div>
+            <p>
+                James de Givenchy founded TAFFIN in 1996 to challenge conventional luxury jewelry. Raised in France, inspired by New York's creative energy, he has spent three decades pioneering sculptural designs in unexpected materials—rubber, ceramic, steel—proving that true luxury lies in artistry and individuality.
+            </p>
+            <p>
+                His work has been celebrated in a Rizzoli monograph and featured across prestigious publications. But the true measure of his mastery is in the collections of discerning collectors who understand that perfection is imperfection.
+            </p>
+            <div class="founder-quote">
+                "I look for the magical, the right proportions, and I don't find perfection attractive. In personalities, I'm not attracted to flawless either. I look for charm. Jewelry is an object that projects who you are."
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="portfolio" id="portfolio">
+        <h2 class="portfolio-title">Selected Commissions</h2>
+        <p class="portfolio-subtitle">A curated gallery of bespoke pieces, each representing a singular vision realized.</p>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Rare Ruby Commission — Private Collection</div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Sculptural Sapphire Ring</div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Diamond & Unexpected Material</div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Contemporary Emerald Series</div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Ceramic & Gold Fusion</div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-item-label">Bespoke Multi-Stone Narrative</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation CTA -->
+    <section class="consultation-cta">
+        <h2>Ready to Create Your Masterpiece?</h2>
+        <p>Schedule a private consultation with James de Givenchy to begin your bespoke journey.</p>
+        <button class="cta-button-dark" onclick="openModal()">Schedule Your Appointment</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>TAFFIN</strong> — Bespoke Jewelry House</p>
+        <p>501 Madison Avenue, New York, NY 10022</p>
+        <p><a href="tel:+12124216222">+1 212-421-6222</a> | <a href="mailto:taffin@taffin.com">taffin@taffin.com</a></p>
+        <p style="margin-top: 2rem; border-top: 1px solid rgba(212, 165, 116, 0.2); padding-top: 1.5rem;">© 2026 Velocity Design Preview. <a href="https://velocity.calyvent.com">Velocity</a></p>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="consultationModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2>Begin Your Bespoke Journey</h2>
+            <p>Schedule a private consultation with James de Givenchy to explore your vision and commission your singular piece.</p>
+            
+            <form class="modal-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <textarea placeholder="Tell us about your vision..."></textarea>
+                <button type="submit" class="modal-submit">Request Consultation</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functions
+        function openModal() {
+            const modal = document.getElementById('consultationModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('consultationModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            alert('Thank you for your interest. We will be in touch to schedule your private consultation.');
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('consultationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Auto-close modal after 5 seconds if opened
+        let modalTimeout;
+        const originalOpenModal = openModal;
+        openModal = function() {
+            originalOpenModal();
+            clearTimeout(modalTimeout);
+            modalTimeout = setTimeout(closeModal, 5000);
+        }
+
+        // Smooth scroll helper
+        function scrollTo(selector) {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Parallax scroll effect (Tiffany-inspired depth)
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero-image');
+            const scrollY = window.scrollY;
+            if (scrollY < 800) {
+                hero.style.transform = `translateY(${scrollY * 0.3}px)`;
+            }
+        });
+
+        // IntersectionObserver for scroll reveals (Prada technique)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.animation = entry.target.classList[0] === 'step' 
+                        ? 'slideInLeft 0.8s ease-out forwards' 
+                        : 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.step, .portfolio-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
