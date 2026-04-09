@@ -664,31 +664,11 @@
     }
     
     .modal-body {
-      font-size: 0.8rem;
-      color: var(--parchment);
-      line-height: 2;
-      margin-bottom: 2.5rem;
-      letter-spacing: 0.03em;
-    }
-    
-    .modal-contact {
-      margin-bottom: 3rem;
-    }
-    
-    .modal-phone {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-    
-    .modal-address {
-      font-family: var(--font-accent);
-      font-style: italic;
       font-size: 0.85rem;
       color: var(--parchment);
-      opacity: 0.6;
+      line-height: 1.9;
+      margin-bottom: 3rem;
+      letter-spacing: 0.02em;
     }
     
     .modal-close {
@@ -946,18 +926,13 @@
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-content">
       <div class="modal-eyebrow">Concept Preview</div>
-      <h3>Velocity Design Study</h3>
+      <h3>Design Study</h3>
       <div class="modal-divider"></div>
       <p class="modal-body">
-        This is a demonstration of the Kent & Haste digital experience.<br><br>
-        No bookings can be made through this interface.<br>
-        To arrange an appointment, please contact the atelier directly.
+        This is a preview concept for demonstration purposes only.<br>
+        Not an official website.
       </p>
-      <div class="modal-contact">
-        <div class="modal-phone">+44 (0) 20 7734 1433</div>
-        <div class="modal-address">7 Sackville Street, London W1S 3DE</div>
-      </div>
-      <button class="cta-button" onclick="closeModal()">Return to Preview</button>
+      <button class="cta-button" onclick="closeModal()">Close</button>
     </div>
   </div>
   
@@ -1024,9 +999,13 @@
     });
     
     // Modal functions
+    let modalTimer;
     function openModal() {
       document.getElementById('modal').classList.add('active');
       document.body.style.overflow = 'hidden';
+      // Auto-close after 5 seconds
+      clearTimeout(modalTimer);
+      modalTimer = setTimeout(closeModal, 5000);
     }
     
     function closeModal() {
