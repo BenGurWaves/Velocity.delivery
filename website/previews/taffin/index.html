@@ -6,9 +6,9 @@
     <meta name="description" content="TAFFIN — James de Givenchy Bespoke Jewelry. Thirty years of boundary-breaking designs, unexpected materials, and sculptural mastery. Schedule your private consultation.">
     <meta property="og:title" content="TAFFIN | Bespoke Luxury Jewelry by James de Givenchy">
     <meta property="og:description" content="Thirty years of master craftsmanship. Boundary-breaking designs in rare gemstones and unexpected materials.">
-    <meta property="og:image" content="./assets/og-image.jpg">
+    <meta property="og:image" content="./assets/gemstone-closeup.png">
     <meta property="og:type" content="website">
-    <title>TAFFIN | Bespoke Luxury Jewelry | James de Givenchy</title>
+    <title>TAFFIN | Bespoke Luxury Jewelry | James de Givenchy (Preview by Velocity)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -121,8 +121,11 @@
             height: 500px;
             background: linear-gradient(135deg, var(--plum) 0%, var(--gold) 100%);
             border-radius: 0;
-            opacity: 0.9;
+            opacity: 1;
             transform: translateZ(0);
+            background-size: cover;
+            background-position: center;
+            background-image: url('./assets/gemstone-closeup.png');
         }
 
         .hero-image-placeholder {
@@ -135,6 +138,7 @@
             font-size: 0.9rem;
             text-align: center;
             padding: 2rem;
+            display: none;
         }
 
         .hero-content {
@@ -215,6 +219,21 @@
         .cta-secondary:hover {
             background: rgba(212, 165, 116, 0.08);
             border-color: var(--plum);
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 32px rgba(74, 63, 92, 0.2);
+        }
+
+        .portfolio-item-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -399,6 +418,9 @@
             justify-content: center;
             color: var(--ink);
             font-size: 0.9rem;
+            background-image: url('./assets/artisan-hands.png');
+            background-size: cover;
+            background-position: center;
         }
 
         .founder-content h2 {
@@ -484,22 +506,30 @@
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
+            background-size: cover;
+            background-position: center;
         }
 
-        .portfolio-item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 32px rgba(74, 63, 92, 0.2);
+        .portfolio-item:nth-child(1) { 
+            grid-column: span 2;
+            background-image: url('./assets/atelier-craftsmanship.png');
         }
-
-        .portfolio-item-label {
-            color: #999;
-            font-size: 0.9rem;
-            text-align: center;
-            z-index: 10;
+        .portfolio-item:nth-child(2) { 
+            background-image: url('./assets/salon-interior.png');
         }
-
-        .portfolio-item:nth-child(1) { grid-column: span 2; }
-        .portfolio-item:nth-child(4) { grid-column: span 2; }
+        .portfolio-item:nth-child(3) { 
+            background-image: url('./assets/gemstone-sourcing.png');
+        }
+        .portfolio-item:nth-child(4) { 
+            grid-column: span 2;
+            background-image: url('./assets/gemstone-closeup.png');
+        }
+        .portfolio-item:nth-child(5) {
+            background-image: url('./assets/artisan-hands.png');
+        }
+        .portfolio-item:nth-child(6) {
+            background-image: url('./assets/atelier-craftsmanship.png');
+        }
 
         @media (max-width: 768px) {
             .portfolio {
@@ -819,22 +849,22 @@
         
         <div class="portfolio-grid">
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Rare Ruby Commission — Private Collection</div>
+                <div class="portfolio-item-label">Luxury Jewelry Atelier</div>
             </div>
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Sculptural Sapphire Ring</div>
+                <div class="portfolio-item-label">Exclusive Salon Interior</div>
             </div>
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Diamond & Unexpected Material</div>
+                <div class="portfolio-item-label">Premium Stone Sourcing</div>
             </div>
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Contemporary Emerald Series</div>
+                <div class="portfolio-item-label">Rare Gemstone Details</div>
             </div>
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Ceramic & Gold Fusion</div>
+                <div class="portfolio-item-label">Master Artisan Hands</div>
             </div>
             <div class="portfolio-item">
-                <div class="portfolio-item-label">Bespoke Multi-Stone Narrative</div>
+                <div class="portfolio-item-label">Bespoke Craftsmanship</div>
             </div>
         </div>
     </section>
@@ -851,28 +881,62 @@
         <p><strong>TAFFIN</strong> — Bespoke Jewelry House</p>
         <p>501 Madison Avenue, New York, NY 10022</p>
         <p><a href="tel:+12124216222">+1 212-421-6222</a> | <a href="mailto:taffin@taffin.com">taffin@taffin.com</a></p>
-        <p style="margin-top: 2rem; border-top: 1px solid rgba(212, 165, 116, 0.2); padding-top: 1.5rem;">© 2026 Velocity Design Preview. <a href="https://velocity.calyvent.com">Velocity</a></p>
+        <p style="margin-top: 2rem; border-top: 1px solid rgba(212, 165, 116, 0.2); padding-top: 1.5rem;"><strong>Design Preview by <a href="https://velocity.calyvent.com">Velocity by Calyvent</a></strong> © 2026. This is a mockup created for presentation purposes only. Not an official TAFFIN website.</p>
     </footer>
 
-    <!-- Modal -->
+    <!-- Disclaimer Modal -->
+    <div class="modal" id="disclaimerModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" onclick="closeDisclaimer()">&times;</button>
+            <h2>Design Preview by Velocity</h2>
+            <p style="color: var(--plum); font-weight: 600; margin-bottom: 1rem;">⚡ This is a mockup, not a real website</p>
+            <p>This preview was created by <strong><a href="https://velocity.calyvent.com" style="color: var(--plum); text-decoration: underline;">Velocity by Calyvent</a></strong> to demonstrate design possibilities for TAFFIN luxury jewelry.</p>
+            <p style="margin-top: 1.5rem; color: #666; font-size: 0.9rem;"><strong>What to know:</strong></p>
+            <ul style="margin-left: 1.5rem; color: #666; line-height: 1.8; font-size: 0.9rem;">
+                <li>This is a design concept and mockup only</li>
+                <li>Contact forms and buttons are non-functional in this preview</li>
+                <li>This is not the official TAFFIN website</li>
+                <li>All design and assets © 2026 Velocity by Calyvent</li>
+            </ul>
+            <p style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: #666; font-size: 0.85rem;">Interested in a design like this? <a href="https://velocity.calyvent.com" style="color: var(--plum); text-decoration: underline;">Learn more about Velocity</a></p>
+            <button class="modal-submit" onclick="closeDisclaimer()" style="margin-top: 1.5rem; width: 100%;">Got it, let me explore</button>
+        </div>
+    </div>
+
+    <!-- Consultation Modal -->
     <div class="modal" id="consultationModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2>Begin Your Bespoke Journey</h2>
-            <p>Schedule a private consultation with James de Givenchy to explore your vision and commission your singular piece.</p>
-            
-            <form class="modal-form" onsubmit="submitForm(event)">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Email Address" required>
-                <input type="tel" placeholder="Phone Number" required>
-                <textarea placeholder="Tell us about your vision..."></textarea>
-                <button type="submit" class="modal-submit">Request Consultation</button>
+            <h2>Design Preview</h2>
+            <p style="color: var(--plum); margin-bottom: 1.5rem; font-size: 0.9rem;"><strong>ℹ️ This is a non-functional mockup by Velocity</strong></p>
+            <p>This consultation form is not functional—it's part of this design preview. To learn more about bringing this vision to life, visit <strong><a href="https://velocity.calyvent.com" style="color: var(--plum); text-decoration: underline;">Velocity by Calyvent</a></strong>.</p>
+            <form class="modal-form" onsubmit="submitPreviewForm(event)">
+                <input type="text" placeholder="Your Name" disabled style="opacity: 0.6;">
+                <input type="email" placeholder="Email Address" disabled style="opacity: 0.6;">
+                <input type="tel" placeholder="Phone Number" disabled style="opacity: 0.6;">
+                <textarea placeholder="Tell us about your vision..." disabled style="opacity: 0.6;"></textarea>
+                <p style="color: #999; font-size: 0.85rem; text-align: center;">Form disabled in preview • Design by Velocity</p>
+                <button type="button" class="modal-submit" onclick="closeModal()">Close</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Modal Functions
+        // Show disclaimer modal on page load
+        window.addEventListener('load', () => {
+            const disclaimerModal = document.getElementById('disclaimerModal');
+            disclaimerModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Disclaimer Modal Functions
+        function closeDisclaimer() {
+            const modal = document.getElementById('disclaimerModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Consultation Modal Functions
         function openModal() {
             const modal = document.getElementById('consultationModal');
             modal.classList.add('active');
@@ -885,26 +949,17 @@
             document.body.style.overflow = 'auto';
         }
 
-        function submitForm(e) {
+        function submitPreviewForm(e) {
             e.preventDefault();
-            alert('Thank you for your interest. We will be in touch to schedule your private consultation.');
+            alert('Thank you for your interest in this design preview. This is a mockup created by Velocity. Contact velocity.calyvent.com for more information.');
             closeModal();
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('consultationModal');
-            if (event.target === modal) {
+            const consultationModal = document.getElementById('consultationModal');
+            if (event.target === consultationModal) {
                 closeModal();
             }
-        }
-
-        // Auto-close modal after 5 seconds if opened
-        let modalTimeout;
-        const originalOpenModal = openModal;
-        openModal = function() {
-            originalOpenModal();
-            clearTimeout(modalTimeout);
-            modalTimeout = setTimeout(closeModal, 5000);
         }
 
         // Smooth scroll helper
