@@ -1,4 +1,1 @@
-/app        /dashboard.html           301
-/dashboard  /dashboard.html           301
-/login      /auth.html                301
-/signup     /auth.html?action=signup  301
+# Redirects — auth/dashboard routes removed
