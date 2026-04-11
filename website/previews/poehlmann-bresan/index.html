@@ -413,25 +413,14 @@
     
     .hero-visual {
       position: relative;
-      background: linear-gradient(145deg, var(--color-night-grey) 0%, var(--color-ink) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
     }
     
-    .hero-visual::before {
-      content: '';
-      position: absolute;
-      width: 150%;
-      height: 150%;
-      background: conic-gradient(from 0deg, transparent 0%, rgba(197, 160, 89, 0.03) 50%, transparent 100%);
-      animation: slowRotate 80s linear infinite;
-    }
-    
-    @keyframes slowRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(0.1) contrast(1.05) brightness(0.95);
     }
     
     .hero-watch {
@@ -556,18 +545,21 @@
     }
     
     .heritage-visual {
-      background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-night-grey) 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 6rem;
       position: relative;
+      overflow: hidden;
     }
     
-    .workshop-scene {
-      text-align: center;
-      color: var(--color-bone);
+    .heritage-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(0.15) contrast(1.02) brightness(0.9);
+    }
+    
+    .workshop-overlay {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
       z-index: 2;
     }
     
@@ -575,32 +567,35 @@
       font-size: 0.65rem;
       letter-spacing: 0.6em;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.75rem;
       color: var(--color-gold);
     }
     
     .atelier-title {
       font-family: 'Old Standard TT', serif;
-      font-size: 2.5rem;
+      font-size: 1.75rem;
       font-weight: 400;
       letter-spacing: 0.1em;
       line-height: 1.2;
+      color: var(--color-bone);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
     }
     
     .micro-screws {
       position: absolute;
-      bottom: 4rem;
-      right: 4rem;
+      bottom: 3rem;
+      right: 3rem;
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
+      z-index: 2;
     }
     
     .screw {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       background: var(--color-gold);
       border-radius: 50%;
-      box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+      box-shadow: 0 0 12px rgba(197, 160, 89, 0.4);
       animation: screwRotate 12s linear infinite;
     }
     
@@ -664,12 +659,30 @@
     /* Movement — Refined theater */
     .movement {
       min-height: 100vh;
-      background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-night-blue) 100%);
+      background: var(--color-ink);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       padding: 6rem;
+      overflow: hidden;
+    }
+    
+    .movement-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    .movement-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+      filter: sepia(0.2) contrast(1.1) brightness(0.6);
     }
     
     .movement-content {
@@ -791,11 +804,10 @@
     
     /* Product Section */
     .product {
-      min-height: 120vh;
+      min-height: 100vh;
       background: var(--color-bone);
       display: flex;
       align-items: center;
-      padding: var(--space-3xl) 0;
       position: relative;
     }
     
@@ -876,9 +888,8 @@
     }
     
     .product-visual {
-      width: 60%;
-      height: 90vh;
-      background: linear-gradient(145deg, var(--color-night-grey) 0%, var(--color-night-blue) 100%);
+      width: 55%;
+      min-height: 100vh;
       margin-right: 5vw;
       display: flex;
       align-items: center;
@@ -887,69 +898,11 @@
       overflow: hidden;
     }
     
-    .product-visual::before {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 180deg, transparent 0%, rgba(197, 160, 89, 0.02) 50%, transparent 100%);
-      animation: slowRotate 40s linear infinite reverse;
-    }
-    
-    .watch-showcase {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      color: var(--color-bone);
-    }
-    
-    .watch-case {
-      width: 300px;
-      height: 300px;
-      border: 2px solid rgba(197, 160, 89, 0.3);
-      border-radius: 50%;
-      margin: 0 auto var(--space-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background: radial-gradient(circle, rgba(249, 249, 246, 0.05) 0%, transparent 70%);
-    }
-    
-    .watch-case::before {
-      content: '';
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border: 1px solid rgba(138, 145, 153, 0.2);
-      border-radius: 50%;
-    }
-    
-    .watch-dial {
-      width: 260px;
-      height: 260px;
-      background: linear-gradient(145deg, var(--color-night-grey) 0%, var(--color-ink) 100%);
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .dial-brand {
-      font-family: 'Old Standard TT', serif;
-      font-size: var(--text-lg);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-xs);
-    }
-    
-    .dial-text {
-      font-size: var(--text-xs);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--color-gold);
+    .product-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(0.1) contrast(1.05) brightness(0.95);
     }
     
     /* Contact Section */
@@ -1191,21 +1144,15 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="hero-watch">
-        <div class="watch-brand">Pöhlmann-Bresan</div>
-        <div class="watch-model">Prestige</div>
-        <div class="watch-face">
-          <div class="watch-center-point"></div>
-        </div>
-        <div class="watch-specs">40mm · JU26-01 · Limited Edition</div>
-      </div>
+      <img src="./assets/hero-watch.png" alt="Pöhlmann-Bresan Prestige timepiece" loading="eager">
     </div>
   </section>
   
   <!-- Heritage Section -->
   <section class="heritage" id="heritage">
     <div class="heritage-visual">
-      <div class="workshop-scene">
+      <img src="./assets/atelier-workshop.png" alt="Pöhlmann-Bresan Dresden atelier" loading="lazy">
+      <div class="workshop-overlay">
         <div class="atelier-label">Dresden Atelier</div>
         <div class="atelier-title">Gostritzer Straße 10</div>
       </div>
@@ -1236,6 +1183,9 @@
   
   <!-- Movement Theater Section -->
   <section class="movement" id="movement">
+    <div class="movement-bg">
+      <img src="./assets/movement-macro.png" alt="JU26-01 movement detail" loading="lazy">
+    </div>
     <div class="movement-content">
       <span class="movement-label">Kaliber JU26-01</span>
       <h2 class="movement-title">The Movement Theater</h2>
@@ -1311,17 +1261,7 @@
       <button class="product-cta" onclick="openModal()">Inquire</button>
     </div>
     <div class="product-visual">
-      <div class="watch-showcase">
-        <div class="watch-case">
-          <div class="watch-dial">
-            <div class="dial-brand">Pöhlmann-Bresan</div>
-            <div class="dial-text">Prestige</div>
-          </div>
-        </div>
-        <p style="font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #8A9199; margin-top: 2rem;">
-          Night Grey & Night Blue
-        </p>
-      </div>
+      <img src="./assets/product-detail.png" alt="Pöhlmann-Bresan Prestige caseback detail" loading="lazy">
     </div>
   </section>
   
