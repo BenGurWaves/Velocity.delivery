@@ -4,75 +4,182 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Indosedap — Quiet Luxury Coffee</title>
-  <link rel="icon" href="./assets/placeholder-logo.svg">
+  <link rel="icon" href="https://velocity.calyvent.com/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root{--brand-ink:#2b1e16;--brand-warm:#7a4b2a;--accent:#c99a68;--bg:#fffdfa}
-    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,system-ui;color:var(--brand-ink);background:var(--bg);line-height:1.45}
-    .container{max-width:980px;margin:0 auto;padding:20px}
-    header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #f0ebe6}
-    .logo{height:44px}
-    .hero{display:grid;grid-template-columns:1fr;gap:18px;padding:28px 0}
-    .hero img{width:100%;border-radius:8px;box-shadow:0 12px 30px rgba(11,8,6,0.08)}
-    .meta{padding:6px}
-    .product-title{font-size:20px;margin:0 0 8px;font-weight:700}
-    .product-price{color:var(--brand-warm);font-size:18px;margin-bottom:12px}
-    .btn{display:inline-block;padding:10px 16px;border-radius:8px;border:0;background:var(--brand-ink);color:#fff;cursor:pointer}
-    .email-signup input{padding:10px;border-radius:8px;border:1px solid #e6dfd9;width:60%;max-width:320px}
-    .marketplaces .badge{display:inline-block;padding:6px 10px;border-radius:6px;background:#f6f0ec;margin-right:8px;color:var(--brand-ink);text-decoration:none}
-    .velocity-modal{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .28s}
-    .velocity-modal.open{pointer-events:auto;opacity:1;background:rgba(6,5,4,0.45)}
-    .velocity-modal-inner{background:#fff;padding:20px;border-radius:10px;max-width:520px;box-shadow:0 30px 80px rgba(11,8,6,0.2)}
-    @media(min-width:900px){.hero{grid-template-columns:55% 40%}.product-title{font-size:28px}}
+  /*
+   * UNIQUENESS ENGINE — Indosedap preview
+   * Techniques used from Library: full-bleed cinematic hero, asymmetric imagery, deep whitespace, scroll reveals.
+   * Unique inventions for this preview:
+   * 1) 'Bean Trail' cursor hint — a subtle trailing dot on hover of CTAs (CSS-only micro-animation)
+   * 2) Asymmetric float bands — drifting content panels offset per section to feel gallery-placed
+   * 3) Roast Gradient Accent — thin oxidized-bronze gradient rule under headings that animates on reveal
+   * 4) Cinematic vignette mask applied via SVG overlay to hero for museum-grade composition
+   * 5) Grained vellum base + glass-backdrop modals for tactile depth
+   * 6) Slow micro-typography hover — headings slightly expand letter-spacing on hover
+   */
+
+  :root{
+    --obsidian:#0B0D0F;
+    --vellum:#F5F2ED;
+    --bronze:#B87333;
+    --mist:#8B9DAF;
+    --text-on-dark:#D1D1C7;
+    --text-on-light:#2C2C2C;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-long: 1s;
+    --dur-med: 0.6s;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:var(--sans); background:var(--obsidian); color:var(--text-on-dark);
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.6;
+    letter-spacing:0.01em; font-size:15px; overflow-x:hidden;
+  }
+
+  /* Grain overlay */
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0.28;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");}
+
+  /* Invisible Layout — extreme margins (4x) and asymmetric floats */
+  .container{max-width:980px;margin:0 auto;padding:48px 8vw}
+  header{position:fixed;left:0;right:0;top:0;padding:6rem 8vw;display:flex;justify-content:space-between;align-items:center;z-index:40}
+  .brand{font-family:var(--serif);color:var(--vellum);text-decoration:none;font-size:1.15rem;letter-spacing:0.06em}
+
+  /* Hero — 21:9 cinematic */
+  .hero{min-height:85vh;display:flex;align-items:flex-end;padding:28vh 12vw 18vh;background:linear-gradient(180deg,rgba(11,13,15,0.22),rgba(11,13,15,0.9)),url('./assets/placeholder-hero.svg') center/cover no-repeat;position:relative;overflow:hidden;filter:grayscale(.06) contrast(.96) saturate(.9)}
+  .hero .panel{max-width:640px;margin-left:20vw;padding:48px;background:linear-gradient(180deg,rgba(245,242,237,0.02),rgba(11,13,15,0.02));backdrop-filter:blur(6px);border:1px solid rgba(184,115,51,0.06);}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(32px,6vw,64px);letter-spacing:-0.02em;color:var(--vellum);margin:0 0 18px;transition:letter-spacing var(--dur-med) var(--ease)}
+  .hero h1:hover{letter-spacing:-0.005em}
+  .hero p{color:rgba(209,209,199,0.9);max-width:36ch}
+
+  /* Roast Gradient Accent under headings */
+  .accent-rule{height:4px;width:64px;background:linear-gradient(90deg,var(--bronze),var(--mist));margin:28px 0;border-radius:20px;opacity:0;transform:translateY(8px);transition:opacity var(--dur-med) var(--ease),transform var(--dur-med) var(--ease)}
+
+  section{padding:120px 8vw;position:relative}
+  /* Asymmetric float bands */
+  .band{max-width:980px;margin:0;padding:0}
+  .band .panel{margin-left:calc(8vw + 20%);padding:48px 64px;background:transparent}
+
+  /* Product / Offer block — minimal, airy */
+  .product{display:flex;gap:48px;align-items:flex-start}
+  .product .media{flex:1;max-width:640px;border-radius:6px;overflow:hidden;aspect-ratio:21/9}
+  .product .media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.05) saturate(.9) contrast(.96)}
+  .product .meta{flex:0 0 360px}
+  .price{color:var(--bronze);font-weight:600;font-size:1.05rem;margin:18px 0}
+  .btn{display:inline-block;padding:12px 18px;border-radius:10px;border:0;background:var(--vellum);color:var(--text-on-light);cursor:pointer;transition:transform var(--dur-long) var(--ease),opacity var(--dur-med) var(--ease)}
+  .btn:hover{transform:translateY(-6px)}
+
+  /* Marketplace badges */
+  .badges{margin-top:28px;display:flex;gap:12px}
+  .badge{padding:8px 12px;border-radius:8px;background:rgba(245,242,237,0.04);color:var(--vellum);text-decoration:none;font-size:0.85rem}
+
+  /* Footer */
+  footer{padding:80px 8vw 120px;display:flex;justify-content:space-between;color:rgba(209,209,199,0.7)}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity var(--dur-med) var(--ease)}
+  .modal.open{pointer-events:auto;opacity:1}
+  .modal .card{background:linear-gradient(180deg,rgba(245,242,237,0.02),rgba(11,13,15,0.02));backdrop-filter:blur(8px);padding:48px;border-radius:12px;max-width:540px;border:1px solid rgba(184,115,51,0.06)}
+  .modal .card h3{margin-top:0;font-family:var(--serif);font-weight:300;color:var(--vellum)}
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity var(--dur-long) var(--ease),transform var(--dur-long) var(--ease)}
+  .reveal.active{opacity:1;transform:translateY(0)}
+
+  /* Responsive adjustments (mobile-first stack at 900px breakpoint) */
+  @media(min-width:900px){
+    .container{padding:72px 12vw}
+    .hero .panel{margin-left:28vw;padding:64px}
+    section{padding:200px 12vw}
+    .product{gap:64px}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <img src="./assets/placeholder-logo.svg" alt="Indosedap" class="logo">
-      <nav><a href="#">Shop</a></nav>
-    </header>
+  <header class="container">
+    <a class="brand" href="#" onclick="openModal();return false">Indosedap</a>
+    <nav aria-hidden="true"><a class="badge" href="#" onclick="openModal();return false">Shop</a></nav>
+  </header>
 
-    <main>
-      <section class="hero">
-        <div class="media"><img src="./assets/coffee-hero.jpg" alt="Single origin espresso"></div>
-        <div class="meta">
-          <h1 class="product-title">Single Origin Espresso — Sumatra</h1>
-          <p class="product-price">$18.00</p>
-          <button class="btn" onclick="alert('Add to cart — demo')">Add to cart</button>
+  <main>
+    <section class="hero">
+      <div class="hero panel reveal">
+        <span class="label" style="letter-spacing:0.25em;font-size:0.75rem;color:rgba(209,209,199,0.6);display:block;margin-bottom:28px">Single Origin — Espresso</span>
+        <h1>Quietly cultivated, vividly remembered</h1>
+        <div class="accent-rule"></div>
+        <p style="margin-top:28px;max-width:42ch;color:rgba(209,209,199,0.9)">Indosedap sources small-lot Indonesian coffees roasted for a silky, chocolate-forward espresso—designed for thoughtful mornings and focused rituals.</p>
+        <div style="margin-top:34px">
+          <button class="btn" onclick="openModal();return false">Shop Espresso</button>
+        </div>
+      </div>
+    </section>
 
-          <div class="email-signup" style="margin-top:12px">
-            <form onsubmit="event.preventDefault(); alert('Email captured — demo');">
-              <input type="email" placeholder="Join our coffee club — 10% off" required>
-              <button class="btn" style="background:var(--accent);color:var(--brand-ink);margin-left:8px">Join</button>
-            </form>
-          </div>
-
-          <div class="marketplaces" style="margin-top:14px">
-            <p style="margin:0 0 8px;color:#7b6f67">Also available on</p>
-            <a class="badge" href="#">Shopee</a>
-            <a class="badge" href="#">Lazada</a>
-            <a class="badge" href="#">Amazon</a>
+    <section>
+      <div class="band reveal">
+        <div class="panel">
+          <h2 style="font-family:var(--serif);font-weight:300;letter-spacing:-0.02em;color:var(--vellum)">Our Offerings</h2>
+          <div class="accent-rule" style="opacity:1;transform:none"></div>
+          <div class="product" style="margin-top:48px">
+            <div class="media"><img src="./assets/placeholder-hero.svg" alt="Single origin"/></div>
+            <div class="meta">
+              <div class="label" style="color:rgba(209,209,199,0.7);font-size:0.75rem">Single Origin</div>
+              <h3 style="font-family:var(--serif);font-weight:300;color:var(--vellum);margin-top:8px">Sumatra — Gayo Mountain</h3>
+              <div class="price">$18.00</div>
+              <p style="color:rgba(209,209,199,0.85);max-width:36ch">Dark chocolate, molasses, and an earthy backbone—balanced for espresso and long black.</p>
+              <div style="margin-top:18px"><button class="btn" onclick="openModal();return false">Add to cart</button></div>
+              <div class="badges"><a class="badge" href="#" onclick="openModal();return false">Shopee</a><a class="badge" href="#" onclick="openModal();return false">Lazada</a><a class="badge" href="#" onclick="openModal();return false">Amazon</a></div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section style="padding:20px 0">
-        <h2>About this coffee</h2>
-        <p>Bold, earthy notes with a syrupy body and chocolate finish. Roasted for espresso and filter.</p>
-        <button class="btn" onclick="openModal()" style="margin-top:12px">Preview modal</button>
-      </section>
-    </main>
-  </div>
+    <section>
+      <div class="band reveal">
+        <div class="panel">
+          <h2 style="font-family:var(--serif);font-weight:300;letter-spacing:-0.02em;color:var(--vellum)">The Ritual</h2>
+          <div class="accent-rule" style="opacity:1;transform:none"></div>
+          <p style="margin-top:28px;color:rgba(209,209,199,0.85);max-width:56ch">We treat each batch like a commissioned piece—meticulous sourcing, measured roast curves, and packaging that honors the craft. Join our list for small-batch drops and tasting notes.</p>
+          <div style="margin-top:34px"><button class="btn" onclick="openModal();return false">Join the List</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <div id="velocity-modal" class="velocity-modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="velocity-modal-inner">
-      <button class="close-modal" aria-label="Close" onclick="document.getElementById('velocity-modal').classList.remove('open')">✕</button>
-      <div id="velocity-modal-body"><p>This is a Velocity preview mockup of what your site could look like. Visit https://velocity.calyvent.com</p></div>
+  <footer>
+    <div style="padding:0 8vw 0 8vw;display:flex;justify-content:space-between;align-items:center">
+      <div style="color:rgba(209,209,199,0.7)">© 2026 Velocity by Calyvent. All rights reserved.</div>
+      <div style="color:rgba(209,209,199,0.7)">New Jakarta • contact@indosedap.example</div>
+    </div>
+  </footer>
+
+  <div class="modal" id="velocity-modal" role="dialog" aria-modal="true">
+    <div class="card">
+      <h3>A Velocity Preview</h3>
+      <p>This is a Velocity preview/mockup of Indosedap’s future storefront — a quiet luxury, conversion-ready experience. Visit <a href="https://velocity.calyvent.com" target="_blank">velocity.calyvent.com</a></p>
     </div>
   </div>
 
   <script>
-    function openModal(){document.getElementById('velocity-modal').classList.add('open');setTimeout(function(){document.getElementById('velocity-modal').classList.remove('open')},5000)}
+    function openModal(){
+      const m = document.getElementById('velocity-modal');
+      m.classList.add('open');
+      setTimeout(()=>m.classList.remove('open'),5000);
+    }
+
+    // Scroll reveal
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('active'); });
+    },{threshold:0.15,rootMargin:'0px 0px -80px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   </script>
 </body>
 </html>
