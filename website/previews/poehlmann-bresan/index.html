@@ -833,14 +833,13 @@
     </div>
   </div>
 
-  <!-- Libraries -->
+  <!-- Libraries — GSAP + ScrollTrigger only, no Lenis (it breaks pin) -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
   <script>
     /* ═══════════════════════════════════════════════════
-       PRELOADER — always works, no library dependency
+       PRELOADER
        ═══════════════════════════════════════════════════ */
     setTimeout(function() {
       document.getElementById('preloader').classList.add('done');
@@ -848,7 +847,7 @@
 
 
     /* ═══════════════════════════════════════════════════
-       MODAL — always works
+       MODAL
        ═══════════════════════════════════════════════════ */
     var modalTimeout;
     function openModal() {
@@ -871,26 +870,20 @@
 
 
     /* ═══════════════════════════════════════════════════
-       ENHANCED EXPERIENCE — only if GSAP + Lenis load
+       ENHANCED EXPERIENCE — GSAP + ScrollTrigger
        ═══════════════════════════════════════════════════ */
-    if (typeof gsap !== 'undefined' && typeof Lenis !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
 
-      // Smooth scroll
-      var lenis = new Lenis({
-        duration: 1.2,
-        easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-        smoothWheel: true
-      });
       gsap.registerPlugin(ScrollTrigger);
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(function(t) { lenis.raf(t * 1000); });
-      gsap.ticker.lagSmoothing(0);
+
+      // Smooth scroll via CSS
+      document.documentElement.style.scrollBehavior = 'smooth';
 
       // Nav behavior
       var lastScroll = 0;
       var navHidden = false;
-      lenis.on('scroll', function(e) {
-        var s = e.scroll;
+      window.addEventListener('scroll', function() {
+        var s = window.scrollY;
         document.getElementById('nav').classList.toggle('scrolled', s > 60);
         if (s > 300) {
           var delta = s - lastScroll;
@@ -901,7 +894,7 @@
           navHidden = false;
         }
         lastScroll = s;
-      });
+      }, { passive: true });
 
       // Hero parallax
       gsap.to('#heroImg', {
