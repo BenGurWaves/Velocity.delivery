@@ -92,6 +92,16 @@ body::before {
   z-index: 9998;
 }
 
+/* Dark overlay for image-backed sections */
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 10, 10, 0.6);
+  z-index: 1;
+}
+
+img { filter: sepia(0.2) contrast(1.1) brightness(0.8); }
+
 /* ═══════════════════════════════════
    PRELOADER
    ═══════════════════════════════════ */
@@ -196,9 +206,11 @@ nav {
   justify-content: flex-end;
   padding: 0 0 15vh 15vw;
   position: relative;
-  background: radial-gradient(ellipse at 30% 40%, #1e1a14 0%, var(--bg-deep) 60%);
+  background: url('assets/dark-piano-atmosphere.png') center/cover no-repeat;
   overflow: hidden;
 }
+
+.hero > * { position: relative; z-index: 2; }
 
 /* Resonance Pulse — Uniqueness #1 */
 .hero::before {
@@ -332,7 +344,7 @@ nav {
 }
 
 .music-image {
-  background: linear-gradient(135deg, #1a1510 0%, #0a0908 50%, #1a1714 100%);
+  background: url('assets/sound-wave-gold-abstract.png') center/cover no-repeat;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -481,6 +493,8 @@ nav {
   height: 280px;
   flex-shrink: 0;
   background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-deep) 100%);
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -533,7 +547,7 @@ nav {
   display: flex;
   align-items: center;
   position: relative;
-  background: radial-gradient(circle at 70% 50%, #1e1a14 0%, var(--bg-deep) 60%);
+  background: url('assets/dawn-window-studio.png') center/cover no-repeat;
 }
 
 .artist-content {
@@ -597,8 +611,14 @@ nav {
   text-align: center;
   padding: 80px 15vw;
   position: relative;
-  background: var(--bg-deep);
+  background: url('assets/frequency-horizon-landscape.png') center/cover no-repeat;
 }
+
+.cta-section .overlay {
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.cta-section > * { position: relative; z-index: 2; }
 
 .cta-title {
   font-family: 'Fraunces', serif;
@@ -867,6 +887,7 @@ footer {
 
 <!-- HERO -->
 <section class="hero">
+  <div class="overlay"></div>
   <div class="score-fragment" aria-hidden="true">&#9835;</div>
   <div class="score-fragment" aria-hidden="true">&#9839;</div>
   <div class="score-fragment" aria-hidden="true">&#9833;</div>
@@ -904,7 +925,7 @@ footer {
 <!-- ALBUMS -->
 <section class="albums">
   <div class="album-row reveal">
-    <div class="album-card-visual"><span>VI</span></div>
+    <div class="album-card-visual" style="background-image:url('assets/concert-hall-empty-silence.png')"><span>VI</span></div>
     <div class="album-card-info">
       <h3>The Six Views</h3>
       <div class="album-meta">2025 &mdash; Debut Album</div>
@@ -912,7 +933,7 @@ footer {
     </div>
   </div>
   <div class="album-row reveal">
-    <div class="album-card-visual"><span>&#9834;</span></div>
+    <div class="album-card-visual" style="background-image:url('assets/sheet-music-scattered-dark.png')"><span>&#9834;</span></div>
     <div class="album-card-info">
       <h3>Original Compositions</h3>
       <div class="album-meta">Ongoing &mdash; Singles</div>
@@ -921,8 +942,14 @@ footer {
   </div>
 </section>
 
+<!-- VISUAL BREAK -->
+<section style="height:60vh;background:url('assets/strings-vibration-macro.png') center/cover no-repeat;position:relative;">
+  <div class="overlay" style="background:rgba(10,10,10,0.4)"></div>
+</section>
+
 <!-- THE ARTIST -->
 <section class="artist">
+  <div class="overlay"></div>
   <div class="artist-content">
     <span class="section-label reveal">The Artist</span>
     <div class="artist-stat reveal">
@@ -946,6 +973,7 @@ footer {
 
 <!-- CTA -->
 <section class="cta-section">
+  <div class="overlay"></div>
   <h2 class="cta-title reveal">Hear the<br>Frequency</h2>
   <p class="cta-sub reveal">Every track is a wave shaped to find the place that's been quietly breaking. This is for you.</p>
   <button class="cta-button reveal" onclick="openModal()">Enter the Archive</button>
