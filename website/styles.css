@@ -1,8 +1,7 @@
 /* ─────────────────────────────────────────────
-   VELOCITY v16 — Expensive by design.
-   One word owns the viewport. Nothing is safe.
+   VELOCITY v17 — Digital Atelier for Heritage Maisons.
+   Obsidian, Patina, and Malachite. Crafted, not coded.
 ───────────────────────────────────────────── */
-
 
 :root {
   --bg:      #0D0C09;
@@ -11,6 +10,7 @@
   --brass:   #C49C7B;
   --dim:     #565250;
   --muted:   #252320;
+  --malachite: #1B4D3E;  /* Deep Malachite — the British Racing Green of luxury */
   --border:  rgba(222,200,181,.07);
   --border2: rgba(222,200,181,.13);
 
@@ -557,7 +557,6 @@ button { font-family:inherit; background:none; border:none; cursor:none }
 }
 .process-left { padding-top:.2rem }
 .process-steps { display:flex; flex-direction:column; gap:clamp(3rem,5vw,5.5rem) }
-.process-step {}
 .process-num {
   font-size:.56rem; letter-spacing:.14em;
   color:var(--brass); font-weight:400;
