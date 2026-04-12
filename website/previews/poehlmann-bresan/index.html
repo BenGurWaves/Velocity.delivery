@@ -216,12 +216,12 @@
        ════════════════════════════════════════════ */
 
     .quote-section {
-      padding: 20vh 12vw;
+      padding: 24vh 14vw;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: 70vh;
+      min-height: 80vh;
     }
 
     .quote-text {
@@ -241,7 +241,7 @@
 
     .full-image {
       width: 100%;
-      height: 88vh;
+      height: 95vh;
       position: relative;
       overflow: hidden;
     }
@@ -833,9 +833,10 @@
     </div>
   </div>
 
-  <!-- Libraries — GSAP + ScrollTrigger only, no Lenis (it breaks pin) -->
+  <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
   <script>
     /* ═══════════════════════════════════════════════════
@@ -876,25 +877,38 @@
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // Smooth scroll via CSS
-      document.documentElement.style.scrollBehavior = 'smooth';
+      // Lenis + ScrollTrigger — proper integration with normalizeScroll
+      if (typeof Lenis !== 'undefined') {
+        var lenis = new Lenis({
+          duration: 1.6,
+          easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+          smoothWheel: true,
+          syncTouch: true
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(function(time) { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+        // This is the key — normalizeScroll stabilizes pin positions with external scroll libs
+        ScrollTrigger.normalizeScroll(true);
+      }
 
       // Nav behavior
       var lastScroll = 0;
       var navHidden = false;
-      window.addEventListener('scroll', function() {
-        var s = window.scrollY;
-        document.getElementById('nav').classList.toggle('scrolled', s > 60);
-        if (s > 300) {
-          var delta = s - lastScroll;
-          if (delta > 3 && !navHidden) { document.getElementById('nav').classList.add('hidden'); navHidden = true; }
-          if (delta < -3 && navHidden) { document.getElementById('nav').classList.remove('hidden'); navHidden = false; }
-        } else {
-          document.getElementById('nav').classList.remove('hidden');
-          navHidden = false;
+      ScrollTrigger.create({
+        onUpdate: function(self) {
+          var s = self.scroll();
+          document.getElementById('nav').classList.toggle('scrolled', s > 60);
+          if (s > 300) {
+            var delta = self.direction;
+            if (delta === 1 && !navHidden) { document.getElementById('nav').classList.add('hidden'); navHidden = true; }
+            if (delta === -1 && navHidden) { document.getElementById('nav').classList.remove('hidden'); navHidden = false; }
+          } else {
+            document.getElementById('nav').classList.remove('hidden');
+            navHidden = false;
+          }
         }
-        lastScroll = s;
-      }, { passive: true });
+      });
 
       // Hero parallax
       gsap.to('#heroImg', {
@@ -918,7 +932,7 @@
           trigger: '#watchSection',
           pin: true,
           start: 'top top',
-          end: '+=5000',
+          end: '+=6000',
           scrub: 1,
           anticipatePin: 1
         }
@@ -927,22 +941,23 @@
       watchTimeline
         .fromTo('#watchImg',
           { scale: 1, filter: 'saturate(0.55) contrast(1.1) brightness(0.5)' },
-          { scale: 2.4, filter: 'saturate(0.8) contrast(1.05) brightness(0.78)', transformOrigin: '52% 44%', duration: 8, ease: 'none' }
+          { scale: 2.6, filter: 'saturate(0.82) contrast(1.05) brightness(0.8)', transformOrigin: '52% 44%', duration: 10, ease: 'none' }
         )
-        .fromTo('#wt1', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 1)
-        .to('#wt1', { opacity: 0, y: -4, duration: 0.3 }, 2.5)
-        .fromTo('#wt2', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 4)
-        .to('#wt2', { opacity: 0, y: -4, duration: 0.3 }, 5.8);
+        // Text 1: appear ~10%, gone by ~30%. Breathing space until 50%.
+        .fromTo('#wt1', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 1)
+        .to('#wt1', { opacity: 0, y: -4, duration: 0.4 }, 2.8)
+        // Text 2: appear ~50%, gone by ~68%. Stillness for 32% of scroll.
+        .fromTo('#wt2', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 5)
+        .to('#wt2', { opacity: 0, y: -4, duration: 0.4 }, 6.8);
 
-      // Quote sections — gentle fade on scroll
+      // Quote sections — cinematic slow reveal
       document.querySelectorAll('.quote-text').forEach(function(q) {
-        gsap.from(q, {
-          opacity: 0.3,
-          y: 20,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: q, start: 'top 75%' }
-        });
+        gsap.fromTo(q,
+          { opacity: 0, y: 30, filter: 'blur(3px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.4, ease: 'power2.out',
+            scrollTrigger: { trigger: q, start: 'top 72%' }
+          }
+        );
       });
 
       // Specs stagger
