@@ -157,7 +157,7 @@ button{background:none;border:none;cursor:pointer}
 <div class="overlay" id="overlay">
   <div class="modal">
     <h2 class="modal-title">New Lead</h2>
-    <label class="mlabel">Client Email *</label>
+    <label class="mlabel">Client Email</label>
     <input class="minput" type="email" id="mEmail" placeholder="client@company.com">
     <label class="mlabel">Client Name</label>
     <input class="minput" type="text" id="mName" placeholder="Full name (optional)">
@@ -207,7 +207,7 @@ function renderStats(){
 }
 
 function renderLeads(){
-  let fl=LEADS.filter(l=>!FILTER||l.status===FILTER);
+  let fl=LEADS.filter(l=>FILTER ? l.status===FILTER : l.status!=='declined');
   if(SORT==='created_at')fl.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   else fl.sort((a,b)=>{if(!a.due_date&&!b.due_date)return 0;if(!a.due_date)return 1;if(!b.due_date)return-1;return new Date(a.due_date)-new Date(b.due_date);});
   if(!fl.length){document.getElementById('leads').innerHTML='<div class="empty">No leads found.</div>';return;}
@@ -292,7 +292,7 @@ async function aupd(token,patch){await fetch('/api/leads/admin-update',{method:'
 document.getElementById('btnNew').onclick=()=>document.getElementById('overlay').classList.add('open');
 document.getElementById('mCancel').onclick=()=>{document.getElementById('overlay').classList.remove('open');document.getElementById('mResult').classList.remove('show');document.getElementById('mEmail').value='';document.getElementById('mName').value='';};
 document.getElementById('mSubmit').onclick=async()=>{
-  const email=document.getElementById('mEmail').value.trim();if(!email)return;
+  const email=document.getElementById('mEmail').value.trim();
   const btn=document.getElementById('mSubmit');btn.disabled=true;btn.textContent='Generating…';
   const r=await fetch('/api/leads/create',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({client_email:email,client_name:document.getElementById('mName').value.trim()})});
   const d=await r.json();btn.disabled=false;btn.textContent='Generate Link →';

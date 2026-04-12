@@ -1,4 +1,2 @@
-/onboard/*    /_onboard.html    200
-/dashboard/*  /_dashboard.html  200
-/admin/*      /admin/index.html 200
-/admin        /admin/index.html 200
+/admin/*  /admin/index.html  200
+/admin    /admin/index.html  200
