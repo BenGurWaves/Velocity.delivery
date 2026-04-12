@@ -77,6 +77,12 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
 .phase{display:none;animation:fadeIn .4s var(--ease)}
 .phase.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sign-in gate */
+.signin-box{max-width:420px}
+.signin-note{font-size:.72rem;color:var(--dim);line-height:1.8;margin-top:.75rem;max-width:40ch}
+.btn-signin{font-size:.7rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s,color .3s;border:none;cursor:pointer;margin-top:.5rem}
+.btn-signin:hover{background:var(--brass)}.btn-signin:disabled{opacity:.35;pointer-events:none}
 </style>
 </head>
 <body>
@@ -85,17 +91,34 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
   <a href="/" class="nav-brand">Velocity<em>.</em></a>
   <span class="nav-step" id="navStep">Project Brief</span>
 </nav>
-<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 <div class="wrap" id="wrap">
   <div class="state" id="stateLoading"><p style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)">Loading&hellip;</p></div>
   <div class="state" id="stateNotFound" style="display:none"><h2>Link not found.</h2><p>This onboarding link is invalid or has expired. Contact <a href="mailto:hello@calyvent.com" style="color:var(--brass)">hello@calyvent.com</a>.</p></div>
   <div class="state" id="stateLocked" style="display:none"><h2>Submission locked.</h2><p>The 24-hour editing window has passed. Your brief is read-only. <a href="#" id="dashLinkLocked" style="color:var(--brass)">View your dashboard &rarr;</a></p></div>
 
   <div id="formWrap" style="display:none">
+    <!-- Phase 0: Sign In -->
+    <div class="phase active" id="phase0">
+      <div class="phase-hdr signin-box">
+        <span class="phase-label">Welcome</span>
+        <h1 class="phase-title">Let&rsquo;s get<br>started.</h1>
+        <p class="phase-sub">Enter the email address you gave us. We&rsquo;ll use it to keep your brief and dashboard linked to you.</p>
+      </div>
+      <div class="signin-box">
+        <div class="field">
+          <label class="field-label" for="signinEmail">Your Email <span class="req">*</span></label>
+          <input type="email" id="signinEmail" placeholder="you@company.com" autocomplete="email">
+          <div class="field-error" id="err-signinEmail">Please enter a valid email address</div>
+        </div>
+        <button class="btn-signin" id="signinBtn">Continue &rarr;</button>
+      </div>
+    </div>
+
     <!-- Phase 1 -->
-    <div class="phase active" id="phase1">
+    <div class="phase" id="phase1">
       <div class="phase-hdr">
-        <span class="phase-label">Phase 01 / 04</span>
+        <span class="phase-label">Phase 01 / 05</span>
         <h1 class="phase-title">Identity &amp;<br>Your Business</h1>
         <p class="phase-sub">Tell us who you are and what you do. This is the foundation everything else is built on.</p>
       </div>
@@ -116,7 +139,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
     <!-- Phase 2 -->
     <div class="phase" id="phase2">
       <div class="phase-hdr">
-        <span class="phase-label">Phase 02 / 04</span>
+        <span class="phase-label">Phase 02 / 05</span>
         <h1 class="phase-title">Strategic<br>Vision</h1>
         <p class="phase-sub">Show us what you love. Show us what you hate. Both are equally useful.</p>
       </div>
@@ -129,7 +152,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
     <!-- Phase 3 -->
     <div class="phase" id="phase3">
       <div class="phase-hdr">
-        <span class="phase-label">Phase 03 / 04</span>
+        <span class="phase-label">Phase 03 / 05</span>
         <h1 class="phase-title">Visual<br>DNA</h1>
         <p class="phase-sub">Your palette, your type, your feel. Hex codes, color names, or plain descriptions &mdash; whatever helps.</p>
       </div>
@@ -151,7 +174,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
     <!-- Phase 4 -->
     <div class="phase" id="phase4">
       <div class="phase-hdr">
-        <span class="phase-label">Phase 04 / 04</span>
+        <span class="phase-label">Phase 04 / 05</span>
         <h1 class="phase-title">Logistics &amp;<br>Assets</h1>
         <p class="phase-sub">The practical details. Leave blank wherever you don&rsquo;t have something yet &mdash; we&rsquo;ll follow up.</p>
       </div>
@@ -178,6 +201,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
 
 <script>
 let TOKEN = '';
+let VERIFIED_EMAIL = '';
 (function(){ const p = location.pathname.split('/').filter(Boolean); TOKEN = p[1] || ''; })();
 
 function show(id){ document.getElementById(id).style.display='' }
@@ -193,14 +217,54 @@ async function init() {
   } catch { hide('stateLoading'); show('stateNotFound'); return; }
   hide('stateLoading');
   if (lead.is_locked) { document.getElementById('dashLinkLocked').href='/dashboard/'+TOKEN; show('stateLocked'); return; }
-  if (lead.submitted_at) prefill(lead.full_data || {});
-  setupSocials((lead.full_data&&lead.full_data.phase1&&lead.full_data.phase1.socials)||[]);
-  setupUrlBlocks('inspirationList','addInspiration',true,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.inspiration)||[]);
-  setupUrlBlocks('antiList','addAnti',false,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.anti_inspiration)||[]);
-  document.getElementById('startingPoint').addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
-  document.getElementById('dueDate').min = new Date(Date.now()+48*3600000).toISOString().split('T')[0];
-  bindNav();
+  // Show sign-in gate first
   show('formWrap');
+  // Pre-fill email if already on lead
+  if (lead.client_email) {
+    document.getElementById('signinEmail').value = lead.client_email;
+  }
+  // Setup signin button
+  document.getElementById('signinBtn').onclick = async function() {
+    const emailVal = document.getElementById('signinEmail').value.trim().toLowerCase();
+    if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      document.getElementById('err-signinEmail').classList.add('show'); return;
+    }
+    document.getElementById('err-signinEmail').classList.remove('show');
+    const btn = document.getElementById('signinBtn');
+    btn.disabled = true; btn.textContent = 'Verifying\u2026';
+    // If lead has a pre-set email, verify it matches
+    if (lead.client_email && lead.client_email.toLowerCase() !== emailVal) {
+      btn.disabled = false; btn.textContent = 'Continue \u2192';
+      document.getElementById('err-signinEmail').textContent = 'This email does not match your invitation.';
+      document.getElementById('err-signinEmail').classList.add('show');
+      return;
+    }
+    // Save email to lead if not set
+    if (!lead.client_email) {
+      await fetch('/api/leads/' + TOKEN, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ client_email: emailVal })
+      });
+    }
+    VERIFIED_EMAIL = emailVal;
+    // Now setup the rest of the form
+    if (lead.submitted_at) prefill(lead.full_data || {});
+    setupSocials((lead.full_data&&lead.full_data.phase1&&lead.full_data.phase1.socials)||[]);
+    setupUrlBlocks('inspirationList','addInspiration',true,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.inspiration)||[]);
+    setupUrlBlocks('antiList','addAnti',false,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.anti_inspiration)||[]);
+    document.getElementById('startingPoint').addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
+    document.getElementById('dueDate').min = new Date(Date.now()+48*3600000).toISOString().split('T')[0];
+    bindNav();
+    // Pre-fill email in phase 1
+    document.getElementById('email').value = VERIFIED_EMAIL;
+    goTo(1);
+    btn.disabled = false; btn.textContent = 'Continue \u2192';
+  };
+  // Allow enter key on email field
+  document.getElementById('signinEmail').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('signinBtn').click();
+  });
 }
 
 function prefill(d) {
@@ -243,13 +307,13 @@ function addUrlBlock(listId,url='',notes='',req=false) {
   list.appendChild(b);
 }
 
-let cur=1;
+let cur=0;
 function goTo(n){
   document.getElementById('phase'+cur).classList.remove('active');
   cur=n;
   document.getElementById('phase'+n).classList.add('active');
-  document.getElementById('progressFill').style.width=(n/4*100)+'%';
-  document.getElementById('navStep').textContent='Phase 0'+n+' / 04';
+  document.getElementById('progressFill').style.width=(n/5*100)+'%';
+  document.getElementById('navStep').textContent = n===0 ? 'Welcome' : 'Phase 0'+n+' / 05';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function showErr(id,v){const el=document.getElementById('err-'+id);if(el)el.classList.toggle('show',v);}
