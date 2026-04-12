@@ -251,6 +251,7 @@ function hide(id){const el=document.getElementById(id);if(el)el.style.display='n
 function fmt(c){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100)}
 function cdwn(anchor){const d=new Date(anchor).getTime()+86400000,n=Date.now(),diff=d-n;if(diff<=0)return null;return{h:Math.floor(diff/3600000),m:Math.floor(diff%3600000/60000),s:Math.floor(diff%60000/1000),diff};}
 
+function ensureUrl(v){if(!v)return '';v=v.trim();if(v&&!/^https?:\/\//.test(v))v='https://'+v;return v;}
 async function init(){
   if(!TOKEN){hide('loadWrap');show('errWrap');return;}
   const justPaid=new URLSearchParams(location.search).get('paid')==='1';
@@ -323,7 +324,7 @@ function renderDash(lead,justPaid=false){
     const banner=document.getElementById('msgBanner');
     const exp=new Date(lead.admin_comment.created_at).getTime()+86400000;
     const hoursLeft=Math.max(0,Math.floor((exp-Date.now())/3600000));
-    banner.innerHTML=`<div class="msg-banner"><div style="font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:.6rem">Message from The Velocity Team</div><div class="msg-text">${esc(lead.admin_comment.text)}</div>${lead.admin_comment.link?`<a href="${esc(lead.admin_comment.link)}" class="msg-link" target="_blank" rel="noopener noreferrer">View Link ↗</a>`:''}${hoursLeft>0?`<div class="msg-exp">This message expires in ${hoursLeft}h</div>`:''}</div>`;
+    banner.innerHTML=`<div class="msg-banner"><div style="font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:.6rem">Message from The Velocity Team</div><div class="msg-text">${esc(lead.admin_comment.text)}</div>${lead.admin_comment.link?`<a href="${esc(ensureUrl(lead.admin_comment.link))}" class="msg-link" target="_blank" rel="noopener noreferrer">View Link ↗</a>`:''}${hoursLeft>0?`<div class="msg-exp">This message expires in ${hoursLeft}h</div>`:''}</div>`;
     show('msgBanner');
   }
 
@@ -404,7 +405,7 @@ function renderDash(lead,justPaid=false){
   } else { briefEl.style.display='none'; }
 }
 
-function siteBlock(link){
+function siteBlock(link){link=ensureUrl(link);
   return `<div class="site-link-block"><div><div class="site-link-label">Your Website</div><div class="site-link-url">${esc(link)}</div></div><a href="${esc(link)}" class="site-link-cta" target="_blank" rel="noopener noreferrer">Open Site ↗</a></div>`;
 }
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}

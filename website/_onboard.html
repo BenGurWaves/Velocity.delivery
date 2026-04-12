@@ -196,6 +196,35 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
       <div class="field"><label class="check-row"><input type="checkbox" id="agreeTerms"><span>I have read and understand the above. I know my submission may be declined, and that my brief locks in 24 hours.</span></label><div class="field-error" id="err-agreeTerms" style="margin-top:.5rem">You must agree to continue</div></div>
       <div class="nav-btns"><button class="btn-back" id="back4">&larr; Back</button><button class="btn-next" id="next4">Continue &rarr;</button></div>
     </div>
+
+    <!-- Phase 5 -->
+    <div class="phase" id="phase5">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 05 / 05</span>
+        <h1 class="phase-title">Final<br>Details</h1>
+        <p class="phase-sub">Almost done. A few last things before we get to work.</p>
+      </div>
+      <div class="field">
+        <label class="field-label">Domain</label>
+        <p style="font-size:.75rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">Will you be providing your own domain, or would you like us to register one?</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <label class="check-row"><input type="radio" name="domainChoice" id="domainClient" value="client_provides" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>I have a domain &mdash; I&rsquo;ll connect it myself</span></label>
+          <label class="check-row"><input type="radio" name="domainChoice" id="domainVelocity" value="velocity_provides" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>Register a domain for me (&sim;$20/yr, more if the domain costs more)</span></label>
+        </div>
+      </div>
+      <div class="field" id="domainNameField" style="display:none">
+        <label class="field-label" for="domainName">Preferred Domain</label>
+        <input type="text" id="domainName" placeholder="e.g. yourbrand.com &mdash; we&rsquo;ll confirm availability">
+      </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label" for="additionalNotes">Additional Notes</label>
+        <textarea id="additionalNotes" rows="5" placeholder="Anything else we should know. Leave blank if you&rsquo;ve covered everything."></textarea>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" id="back5">&larr; Back</button>
+        <button class="btn-submit" id="submitBtn">Submit Brief</button>
+      </div>
+    </div>
   </div>
 </div>
 
