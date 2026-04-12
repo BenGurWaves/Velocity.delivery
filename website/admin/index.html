@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Velocity</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0C09;--bg2:#121109;--sand:#DEC8B5;--brass:#C49C7B;--dim:#565250;--muted:#252320;--border:rgba(222,200,181,.07);--bord2:rgba(222,200,181,.13);--ease:cubic-bezier(0.16,1,0.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--sand);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:inherit}
+button{background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--brass);outline-offset:3px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;pointer-events:none;z-index:9000;animation:gr .5s steps(2) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,-2%)}50%{transform:translate(2%,1%)}75%{transform:translate(-1%,3%)}}
+/* Auth gate */
+.auth-gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.auth-box{width:100%;max-width:340px}
+.auth-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2.4rem;letter-spacing:-.04em;color:var(--sand);margin-bottom:.4rem}
+.auth-sub{font-size:.72rem;color:var(--dim);margin-bottom:2.5rem;letter-spacing:.04em}
+.auth-label{display:block;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem}
+.auth-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-size:.9rem;padding:.55rem 0;outline:none;transition:border-color .3s}
+.auth-input:focus{border-color:var(--brass)}
+.auth-btn{font-size:.7rem;letter-spacing:.1em;color:var(--bg);background:var(--sand);padding:.7rem 2rem;transition:background .3s;margin-top:1.25rem;border:none;cursor:pointer}
+.auth-btn:hover{background:var(--brass)}
+.auth-err{font-size:.62rem;color:#c08080;margin-top:.75rem;display:none}
+.auth-err.show{display:block}
+/* App shell */
+.nav{position:fixed;inset:0 0 auto;height:60px;padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;background:rgba(13,12,9,.95);border-bottom:1px solid var(--border);z-index:100}
+.nav-brand{font-family:'Instrument Serif',Georgia,serif;font-size:1rem}
+.nav-brand em{font-style:normal;color:var(--brass)}
+.nav-tag{font-family:Inter,sans-serif;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-left:.75rem}
+.nav-right{display:flex;align-items:center;gap:1.25rem}
+.btn-new{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--brass);padding:.38rem .95rem;border:none;cursor:pointer;transition:background .3s}
+.btn-new:hover{background:var(--sand)}
+.btn-logout{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .3s}
+.btn-logout:hover{color:var(--sand)}
+.main{padding:72px 1.75rem 3rem;max-width:1100px;margin:0 auto}
+/* Stats */
+.stats{display:flex;flex-wrap:wrap;gap:1rem;margin:1.75rem 0 2rem}
+.stat{border:1px solid var(--border);padding:.85rem 1.1rem;flex:1;min-width:100px}
+.stat-val{font-family:'Instrument Serif',Georgia,serif;font-size:1.9rem;letter-spacing:-.04em}
+.stat-key{font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:.15rem}
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.tlabel{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
+.fbtn{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid transparent;padding:.28rem .7rem;transition:all .2s;background:transparent;cursor:pointer}
+.fbtn:hover,.fbtn.active{border-color:var(--bord2);color:var(--sand)}
+.fbtn.active{color:var(--brass);border-color:var(--brass)}
+/* Lead cards */
+.leads{display:flex;flex-direction:column;gap:.65rem}
+.card{border:1px solid var(--border);transition:border-color .2s}
+.card:hover{border-color:var(--bord2)}
+.card.upgrade{border-left:2px solid var(--brass)}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.1rem 1.4rem;cursor:pointer;flex-wrap:wrap}
+.card-name{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.1rem;letter-spacing:-.02em}
+.card-email{font-size:.62rem;color:var(--dim);margin-top:.1rem}
+.card-meta{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.badge{display:inline-flex;align-items:center;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;padding:.22rem .6rem;border:1px solid;white-space:nowrap}
+.bp{color:var(--dim);border-color:var(--bord2)}.ba{color:#8fc98f;border-color:rgba(143,201,143,.3)}
+.bi{color:var(--brass);border-color:var(--bord2)}.bd{color:#c08080;border-color:rgba(192,128,128,.3)}
+.bc,.bpaid{color:#8fc98f;border-color:rgba(143,201,143,.3)}.bu{color:var(--brass);border-color:var(--bord2)}
+.bl{color:var(--dim);border-color:var(--border)}
+.cdue{font-size:.56rem;color:var(--sand)}.cdue.urgent{color:#c08080}
+/* Detail panel */
+.card-detail{display:none;border-top:1px solid var(--border);padding:1.4rem;background:rgba(255,255,255,.01)}
+.card-detail.open{display:block}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:640px){.dg{grid-template-columns:1fr}}
+.dsec{margin-bottom:1.5rem}
+.dlabel{font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:.65rem}
+.drow{display:flex;gap:.65rem;margin-bottom:.45rem;font-size:.72rem;line-height:1.6}
+.dkey{color:var(--dim);min-width:110px;flex-shrink:0}
+.dval{color:var(--sand);word-break:break-word}
+.dlong{font-size:.72rem;color:var(--sand);line-height:1.7;background:var(--bg2);padding:.7rem;border:1px solid var(--border);white-space:pre-wrap;word-break:break-word}
+/* Controls */
+.controls{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:.75rem;display:flex;flex-wrap:wrap;gap:1.25rem;align-items:flex-end}
+.cg{display:flex;flex-direction:column;gap:.35rem}
+.clabel{font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.cinput{background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-size:.82rem;padding:.38rem 0;outline:none;width:130px;transition:border-color .3s}
+.cinput:focus{border-color:var(--brass)}
+.cselect{background:var(--bg2);border:1px solid var(--bord2);color:var(--sand);font-size:.72rem;padding:.32rem .55rem;outline:none;cursor:pointer;transition:border-color .3s}
+.cselect:focus{border-color:var(--brass)}
+.cbtn{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--sand);padding:.42rem 1rem;transition:background .3s;border:none;cursor:pointer;align-self:flex-end}
+.cbtn:hover{background:var(--brass)}.cbtn:disabled{opacity:.3;pointer-events:none}
+.clink{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);border:1px solid var(--bord2);padding:.38rem .85rem;background:transparent;cursor:pointer;transition:border-color .3s}
+.clink:hover{border-color:var(--brass);color:var(--sand)}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(13,12,9,.9);display:none;align-items:center;justify-content:center;z-index:500;padding:2rem}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--bord2);padding:2.25rem;max-width:400px;width:100%}
+.modal-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.7rem;letter-spacing:-.03em;margin-bottom:1.6rem}
+.mlabel{display:block;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}
+.minput{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-size:.85rem;padding:.48rem 0;outline:none;transition:border-color .3s;margin-bottom:1.2rem}
+.minput:focus{border-color:var(--brass)}
+.mbtns{display:flex;gap:1rem;margin-top:1.75rem;align-items:center}
+.msubmit{font-size:.62rem;letter-spacing:.1em;color:var(--bg);background:var(--sand);padding:.58rem 1.4rem;transition:background .3s;border:none;cursor:pointer}
+.msubmit:hover{background:var(--brass)}.msubmit:disabled{opacity:.3;pointer-events:none}
+.mcancel{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);transition:color .3s}
+.mcancel:hover{color:var(--sand)}
+.mresult{margin-top:1.2rem;padding:.9rem;background:rgba(196,156,123,.07);border:1px solid var(--bord2);display:none}
+.mresult.show{display:block}
+.murl{font-size:.68rem;color:var(--brass);word-break:break-all;margin-top:.35rem}
+/* Toast */
+.toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--bg2);border:1px solid var(--bord2);padding:.65rem 1.1rem;font-size:.68rem;letter-spacing:.06em;z-index:9999;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.empty{text-align:center;padding:4rem 2rem;color:var(--dim);font-size:.75rem;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <h1 class="auth-title">Velocity.</h1>
+    <p class="auth-sub">Admin access only.</p>
+    <label class="auth-label" for="secretInput">Access Key</label>
+    <input class="auth-input" type="password" id="secretInput" placeholder="Enter admin key" autocomplete="current-password">
+    <br><button class="auth-btn" id="authBtn">Enter →</button>
+    <div class="auth-err" id="authErr">Incorrect key. Try again.</div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <nav class="nav">
+    <span class="nav-brand">Velocity<em>.</em><span class="nav-tag">Admin</span></span>
+    <div class="nav-right">
+      <button class="btn-new" id="btnNew">+ New Lead</button>
+      <button class="btn-logout" id="btnLogout">Sign Out</button>
+    </div>
+  </nav>
+  <main class="main">
+    <div class="stats" id="statsRow"></div>
+    <div class="toolbar">
+      <span class="tlabel">Filter</span>
+      <button class="fbtn active" data-filter="">All</button>
+      <button class="fbtn" data-filter="pending">Pending</button>
+      <button class="fbtn" data-filter="accepted">Accepted</button>
+      <button class="fbtn" data-filter="in_progress">In Progress</button>
+      <button class="fbtn" data-filter="declined">Declined</button>
+      <button class="fbtn" data-filter="completed">Completed</button>
+      <span style="margin-left:auto;display:flex;gap:.65rem;align-items:center">
+        <span class="tlabel">Sort</span>
+        <button class="fbtn active" id="sDue">By Deadline</button>
+        <button class="fbtn" id="sNew">Newest</button>
+      </span>
+    </div>
+    <div class="leads" id="leads"><div class="empty">Loading…</div></div>
+  </main>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 class="modal-title">New Lead</h2>
+    <label class="mlabel">Client Email *</label>
+    <input class="minput" type="email" id="mEmail" placeholder="client@company.com">
+    <label class="mlabel">Client Name</label>
+    <input class="minput" type="text" id="mName" placeholder="Full name (optional)">
+    <div class="mbtns">
+      <button class="msubmit" id="mSubmit">Generate Link →</button>
+      <button class="mcancel" id="mCancel">Cancel</button>
+    </div>
+    <div class="mresult" id="mResult">
+      <div style="font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Onboarding Link</div>
+      <div class="murl" id="mUrl"></div>
+      <button class="clink" style="margin-top:.7rem" id="mCopy">Copy Link</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SL={pending:'Pending',accepted:'Accepted',in_progress:'In Progress',declined:'Declined',completed:'Completed'};
+const SB={pending:'bp',accepted:'ba',in_progress:'bi',declined:'bd',completed:'bc'};
+let SEC='',LEADS=[],FILTER='',SORT='due_date';
+
+document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};
+document.getElementById('authBtn').onclick=async()=>{
+  const s=document.getElementById('secretInput').value.trim();if(!s)return;
+  const r=await fetch('/api/leads/list',{headers:{'X-Admin-Secret':s}});
+  if(r.status===401){document.getElementById('authErr').classList.add('show');return;}
+  SEC=s;sessionStorage.setItem('v_admin',s);
+  document.getElementById('authGate').style.display='none';
+  document.getElementById('app').style.display='';
+  LEADS=await r.json();renderStats();renderLeads();
+};
+document.getElementById('btnLogout').onclick=()=>{sessionStorage.removeItem('v_admin');location.reload();};
+const saved=sessionStorage.getItem('v_admin');
+if(saved){document.getElementById('secretInput').value=saved;document.getElementById('authBtn').click();}
+
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');FILTER=b.dataset.filter;renderLeads();});
+document.getElementById('sDue').onclick=()=>{SORT='due_date';document.getElementById('sDue').classList.add('active');document.getElementById('sNew').classList.remove('active');renderLeads();};
+document.getElementById('sNew').onclick=()=>{SORT='created_at';document.getElementById('sNew').classList.add('active');document.getElementById('sDue').classList.remove('active');renderLeads();};
+
+async function reload(){const r=await fetch('/api/leads/list?sort='+SORT+(FILTER?'&status='+FILTER:''),{headers:{'X-Admin-Secret':SEC}});LEADS=await r.json();renderStats();renderLeads();}
+
+function renderStats(){
+  const c={total:LEADS.length,pending:0,accepted:0,in_progress:0,paid:0};
+  LEADS.forEach(l=>{if(l.status==='pending')c.pending++;if(l.status==='accepted')c.accepted++;if(l.status==='in_progress')c.in_progress++;if(l.is_paid)c.paid++;});
+  document.getElementById('statsRow').innerHTML=Object.entries(c).map(([k,v])=>`<div class="stat"><div class="stat-val">${v}</div><div class="stat-key">${k.replace('_',' ')}</div></div>`).join('');
+}
+
+function renderLeads(){
+  let fl=LEADS.filter(l=>!FILTER||l.status===FILTER);
+  if(SORT==='created_at')fl.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  else fl.sort((a,b)=>{if(!a.due_date&&!b.due_date)return 0;if(!a.due_date)return 1;if(!b.due_date)return-1;return new Date(a.due_date)-new Date(b.due_date);});
+  if(!fl.length){document.getElementById('leads').innerHTML='<div class="empty">No leads found.</div>';return;}
+  document.getElementById('leads').innerHTML=fl.map(l=>buildCard(l)).join('');
+  fl.forEach(l=>{
+    const card=document.getElementById('c-'+l.id);
+    card.querySelector('.card-hdr').onclick=()=>document.getElementById('d-'+l.id).classList.toggle('open');
+    const qi=card.querySelector('.qi'),sq=card.querySelector('.sq');
+    if(sq)sq.onclick=async()=>{const amt=Math.round(parseFloat(qi.value)*100);if(isNaN(amt))return;sq.disabled=true;await aupd(l.token,{quote_amount:amt});toast('Quote saved');sq.disabled=false;await reload();};
+    const ss=card.querySelector('.ss');
+    if(ss)ss.onchange=async()=>{await aupd(l.token,{status:ss.value});toast('Status updated');await reload();};
+    card.querySelectorAll('.clink').forEach(btn=>{
+      btn.onclick=e=>{e.stopPropagation();const txt=btn.dataset.copy;navigator.clipboard.writeText(txt);toast('Link copied');};
+    });
+  });
+}
+
+function buildCard(l){
+  const p1=(l.full_data&&l.full_data.phase1)||{},p2=(l.full_data&&l.full_data.phase2)||{},p3=(l.full_data&&l.full_data.phase3)||{},p4=(l.full_data&&l.full_data.phase4)||{};
+  const name=l.client_name||p1.full_name||'Unnamed',email=l.client_email||p1.email||'—';
+  const urgent=l.due_date&&(new Date(l.due_date)-Date.now()<7*86400000);
+  const insp=(p2.inspiration||[]).filter(i=>i.url).map(i=>`<div class="drow"><span class="dkey">${i.url}</span><span class="dval">${i.notes||'—'}</span></div>`).join('');
+  const anti=(p2.anti_inspiration||[]).filter(i=>i.url).map(i=>`<div class="drow"><span class="dkey">${i.url}</span><span class="dval">${i.notes||'—'}</span></div>`).join('');
+  const base=location.origin;
+  return `<div class="card ${l.upgrade_permission?'upgrade':''}" id="c-${l.id}">
+  <div class="card-hdr">
+    <div><div class="card-name">${name}</div><div class="card-email">${email}</div></div>
+    <div class="card-meta">
+      ${l.upgrade_permission?'<span class="badge bu">↑ Upgrade OK</span>':''}
+      <span class="badge ${SB[l.status]||'bp'}">${SL[l.status]||l.status}</span>
+      ${l.is_paid?'<span class="badge bpaid">Paid</span>':''}
+      ${l.is_locked?'<span class="badge bl">Locked</span>':''}
+      ${l.due_date?`<span class="cdue ${urgent?'urgent':''}">${new Date(l.due_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`:''}
+    </div>
+  </div>
+  <div class="card-detail" id="d-${l.id}">
+    ${l.submitted_at?`<div class="dg">
+      <div>
+        <div class="dsec"><div class="dlabel">Identity</div>
+          ${p1.company_name?`<div class="drow"><span class="dkey">Company</span><span class="dval">${p1.company_name}</span></div>`:''}
+          ${p1.phone?`<div class="drow"><span class="dkey">Phone</span><span class="dval">${p1.phone}</span></div>`:''}
+          ${l.due_date?`<div class="drow"><span class="dkey">Deadline</span><span class="dval ${urgent?'urgent':''}">${new Date(l.due_date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})}</span></div>`:''}
+          <div class="drow"><span class="dkey">Submitted</span><span class="dval">${new Date(l.submitted_at).toLocaleString()}</span></div>
+        </div>
+        ${p1.context?`<div class="dsec"><div class="dlabel">Business Context</div><div class="dlong">${p1.context}</div></div>`:''}
+        ${p2.target_customer?`<div class="dsec"><div class="dlabel">Ideal Customer</div><div class="dlong">${p2.target_customer}</div></div>`:''}
+      </div>
+      <div>
+        ${p3.color_background||p3.fonts?`<div class="dsec"><div class="dlabel">Visual DNA</div>
+          ${p3.color_background?`<div class="drow"><span class="dkey">Background</span><span class="dval">${p3.color_background}</span></div>`:''}
+          ${p3.color_secondary?`<div class="drow"><span class="dkey">Secondary</span><span class="dval">${p3.color_secondary}</span></div>`:''}
+          ${p3.color_accent?`<div class="drow"><span class="dkey">Accent</span><span class="dval">${p3.color_accent}</span></div>`:''}
+          ${p3.fonts?`<div class="drow"><span class="dkey">Typography</span><span class="dval">${p3.fonts}</span></div>`:''}
+        </div>`:''}
+        ${insp?`<div class="dsec"><div class="dlabel">Inspiration</div>${insp}</div>`:''}
+        ${anti?`<div class="dsec"><div class="dlabel">Anti-Inspiration</div>${anti}</div>`:''}
+        ${p4.assets_links?`<div class="dsec"><div class="dlabel">Assets</div><div class="dlong">${p4.assets_links}</div></div>`:''}
+        ${p4.mottos?`<div class="dsec"><div class="dlabel">Copy / Mottos</div><div class="dlong">${p4.mottos}</div></div>`:''}
+      </div>
+    </div>`:'<p style="font-size:.75rem;color:var(--dim);margin-bottom:1rem">Brief not yet submitted.</p>'}
+    <div class="controls" onclick="event.stopPropagation()">
+      <div class="cg"><span class="clabel">Quote (USD)</span><input class="cinput qi" type="number" min="0" step="1" placeholder="e.g. 2500" value="${l.quote_amount?(l.quote_amount/100).toFixed(2):''}"></div>
+      <button class="cbtn sq">Save Quote</button>
+      <div class="cg"><span class="clabel">Status</span>
+        <select class="cselect ss">
+          <option value="pending" ${l.status==='pending'?'selected':''}>Pending</option>
+          <option value="accepted" ${l.status==='accepted'?'selected':''}>Accepted</option>
+          <option value="in_progress" ${l.status==='in_progress'?'selected':''}>In Progress</option>
+          <option value="declined" ${l.status==='declined'?'selected':''}>Declined</option>
+          <option value="completed" ${l.status==='completed'?'selected':''}>Completed</option>
+        </select>
+      </div>
+      <button class="clink" data-copy="${base}/onboard/${l.token}">Copy Onboard Link</button>
+      <button class="clink" data-copy="${base}/dashboard/${l.token}">Copy Dashboard Link</button>
+    </div>
+  </div>
+</div>`;
+}
+
+async function aupd(token,patch){await fetch('/api/leads/admin-update',{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({token,...patch})});}
+
+document.getElementById('btnNew').onclick=()=>document.getElementById('overlay').classList.add('open');
+document.getElementById('mCancel').onclick=()=>{document.getElementById('overlay').classList.remove('open');document.getElementById('mResult').classList.remove('show');document.getElementById('mEmail').value='';document.getElementById('mName').value='';};
+document.getElementById('mSubmit').onclick=async()=>{
+  const email=document.getElementById('mEmail').value.trim();if(!email)return;
+  const btn=document.getElementById('mSubmit');btn.disabled=true;btn.textContent='Generating…';
+  const r=await fetch('/api/leads/create',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({client_email:email,client_name:document.getElementById('mName').value.trim()})});
+  const d=await r.json();btn.disabled=false;btn.textContent='Generate Link →';
+  if(d.onboard_url){document.getElementById('mUrl').textContent=d.onboard_url;document.getElementById('mResult').classList.add('show');document.getElementById('mCopy').onclick=()=>{navigator.clipboard.writeText(d.onboard_url);toast('Copied');};await reload();}
+};
+
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+</script>
+</body>
+</html>

@@ -1,1 +1,3 @@
-# Redirects — auth/dashboard routes removed
+/onboard/*    /onboard.html     200
+/dashboard/*  /dashboard.html   200
+/admin        /admin/index.html 200
