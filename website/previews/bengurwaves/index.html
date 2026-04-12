@@ -1042,57 +1042,68 @@ footer {
   </div>
 </div>
 
-<!-- LENIS SMOOTH SCROLL -->
-<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
 <script>
-// ── Lenis Smooth Scroll ──────────────────────────
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true
-});
+// ── Lenis Smooth Scroll (inline fallback) ────────
+let lenis;
+try {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
+  script.onload = () => {
+    lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    initScrollFeatures();
+  };
+  script.onerror = () => { initScrollFeatures(); };
+  document.head.appendChild(script);
+} catch(e) { /* scroll gracefully degrades */ }
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-// ── Preloader ────────────────────────────────────
-window.addEventListener('load', () => {
+// ── Preloader (always fires) ─────────────────────
+setTimeout(() => {
+  document.getElementById('preloader').classList.add('done');
   setTimeout(() => {
-    document.getElementById('preloader').classList.add('done');
-    // Animate hero elements in sequence
+    const eyebrow = document.getElementById('heroEyebrow');
+    const title = document.getElementById('heroTitle');
+    const tagline = document.getElementById('heroTagline');
+    const ease = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
+    eyebrow.style.transition = ease;
+    eyebrow.style.opacity = '1';
+    eyebrow.style.transform = 'translateY(0)';
     setTimeout(() => {
-      const eyebrow = document.getElementById('heroEyebrow');
-      const title = document.getElementById('heroTitle');
-      const tagline = document.getElementById('heroTagline');
-      eyebrow.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
-      eyebrow.style.opacity = '1';
-      eyebrow.style.transform = 'translateY(0)';
-      setTimeout(() => {
-        title.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
-        title.style.opacity = '1';
-        title.style.transform = 'translateY(0)';
-      }, 150);
-      setTimeout(() => {
-        tagline.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
-        tagline.style.opacity = '1';
-        tagline.style.transform = 'translateY(0)';
-      }, 300);
-    }, 400);
-  }, 2400);
-});
+      title.style.transition = ease;
+      title.style.opacity = '1';
+      title.style.transform = 'translateY(0)';
+    }, 150);
+    setTimeout(() => {
+      tagline.style.transition = ease;
+      tagline.style.opacity = '1';
+      tagline.style.transform = 'translateY(0)';
+    }, 300);
+  }, 400);
+}, 2400);
 
-// ── Scroll Indicator ─────────────────────────────
-let scrollIndicatorHidden = false;
-lenis.on('scroll', ({ scroll }) => {
-  if (!scrollIndicatorHidden && scroll > 100) {
-    document.getElementById('scrollIndicator').classList.add('hidden');
-    scrollIndicatorHidden = true;
+// ── Scroll-dependent features ────────────────────
+function initScrollFeatures() {
+  if (lenis) {
+    let scrollIndicatorHidden = false;
+    lenis.on('scroll', ({ scroll }) => {
+      if (!scrollIndicatorHidden && scroll > 100) {
+        document.getElementById('scrollIndicator').classList.add('hidden');
+        scrollIndicatorHidden = true;
+      }
+    });
+  } else {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        document.getElementById('scrollIndicator').classList.add('hidden');
+      }
+    }, { once: true });
   }
-});
+}
 
 // ── Scroll Reveal (IntersectionObserver) ─────────
 const reveals = document.querySelectorAll('.reveal');
@@ -1123,13 +1134,20 @@ clipReveals.forEach(el => clipObserver.observe(el));
 // ── Subtle Parallax ──────────────────────────────
 const parallaxEls = document.querySelectorAll('[data-speed]');
 
-lenis.on('scroll', ({ scroll }) => {
+function updateParallax(scroll) {
   parallaxEls.forEach(el => {
     const speed = parseFloat(el.dataset.speed);
     const offset = scroll * (1 - speed);
     el.style.transform = `translateY(${offset}px)`;
   });
-});
+}
+
+// Attach parallax to lenis or native scroll
+if (lenis) {
+  lenis.on('scroll', ({ scroll }) => updateParallax(scroll));
+} else {
+  window.addEventListener('scroll', () => updateParallax(window.scrollY));
+}
 
 // ── Custom Cursor ────────────────────────────────
 const cursor = document.getElementById('cursor');
