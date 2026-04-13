@@ -880,7 +880,7 @@
       // Lenis + ScrollTrigger — proper integration with normalizeScroll
       if (typeof Lenis !== 'undefined') {
         var lenis = new Lenis({
-          duration: 1.6,
+          duration: 2.4,
           easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
           smoothWheel: true,
           syncTouch: true
@@ -933,7 +933,7 @@
           pin: true,
           start: 'top top',
           end: '+=6000',
-          scrub: 1,
+          scrub: 1.5,
           anticipatePin: 1
         }
       });
@@ -943,18 +943,18 @@
           { scale: 1, filter: 'saturate(0.55) contrast(1.1) brightness(0.5)' },
           { scale: 2.6, filter: 'saturate(0.82) contrast(1.05) brightness(0.8)', transformOrigin: '52% 44%', duration: 10, ease: 'none' }
         )
-        // Text 1: appear ~10%, gone by ~30%. Breathing space until 50%.
-        .fromTo('#wt1', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 1)
-        .to('#wt1', { opacity: 0, y: -4, duration: 0.4 }, 2.8)
-        // Text 2: appear ~50%, gone by ~68%. Stillness for 32% of scroll.
-        .fromTo('#wt2', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 5)
-        .to('#wt2', { opacity: 0, y: -4, duration: 0.4 }, 6.8);
+        // Text 1: slow appear, long hold, gentle fade
+        .fromTo('#wt1', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1)
+        .to('#wt1', { opacity: 0, y: -4, duration: 0.6 }, 3)
+        // Text 2: slow appear, long hold, gentle fade. Last 30% is stillness.
+        .fromTo('#wt2', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 5)
+        .to('#wt2', { opacity: 0, y: -4, duration: 0.6 }, 7);
 
       // Quote sections — cinematic slow reveal
       document.querySelectorAll('.quote-text').forEach(function(q) {
         gsap.fromTo(q,
           { opacity: 0, y: 30, filter: 'blur(3px)' },
-          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.4, ease: 'power2.out',
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power2.out',
             scrollTrigger: { trigger: q, start: 'top 72%' }
           }
         );
@@ -965,8 +965,8 @@
         gsap.from(sp, {
           opacity: 0,
           y: 10,
-          duration: 0.8,
-          delay: i * 0.08,
+          duration: 1.2,
+          delay: i * 0.12,
           ease: 'power3.out',
           scrollTrigger: { trigger: '.specs', start: 'top 78%' }
         });
@@ -978,8 +978,8 @@
         gsap.from(el, {
           opacity: 0,
           y: 10,
-          duration: 0.7,
-          delay: i * 0.05,
+          duration: 1,
+          delay: i * 0.08,
           ease: 'power2.out',
           scrollTrigger: { trigger: '.product-info', start: 'top 70%' }
         });
@@ -991,8 +991,8 @@
         gsap.from(el, {
           opacity: 0,
           y: 8,
-          duration: 0.8,
-          delay: i * 0.1,
+          duration: 1.2,
+          delay: i * 0.15,
           ease: 'power2.out',
           scrollTrigger: { trigger: '.finale', start: 'top 65%' }
         });
