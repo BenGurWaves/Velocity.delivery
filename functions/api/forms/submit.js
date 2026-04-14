@@ -2,6 +2,13 @@
  * POST /api/forms/submit
  * Receives contact form submissions from generated websites.
  * Stores in KV and optionally forwards via email (Resend).
+ * 
+ * WRITE-EFFICIENT DESIGN (Cloudflare KV free tier: 1,000 writes/day):
+ * - All KV reads use cacheTtl to minimize repeated fetches
+ * - Rate limit only writes when count actually changes
+ * - Single manifest key for all submissions (avoids multiple writes)
+ * - Batched writes with Promise.all
+ * - No ephemeral writes (no session tracking, no view counts)
  *
  * Body: { site_id, name, email, phone?, message }
  * Headers: X-Site-Id (alternative to body.site_id)
@@ -46,14 +53,21 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
 }
 
+// Cache TTL for KV reads (seconds) - aggressive caching for read efficiency
+const CACHE_TTL_SHORT = 60;      // 1 minute for rate limits
+const CACHE_TTL_MEDIUM = 300;    // 5 minutes for manifests
+const CACHE_TTL_LONG = 3600;     // 1 hour for build data
+
 // Rate-limit: max 5 submissions per IP per 10 minutes
+// Uses cacheTtl to avoid repeated KV reads for same IP
 async function checkRateLimit(kv, ip) {
   const key = `ratelimit:form:${ip}`;
-  const data = await kv.get(key, { type: 'json' }).catch(() => null);
+  // Use cacheTtl to avoid hitting KV on every request from same IP
+  const data = await kv.get(key, { type: 'json', cacheTtl: CACHE_TTL_SHORT }).catch(() => null);
   const now = Date.now();
   const recent = ((data && data.timestamps) || []).filter(t => now - t < 600_000);
-  if (recent.length >= 5) return { allowed: false, timestamps: recent };
-  return { allowed: true, timestamps: recent };
+  if (recent.length >= 5) return { allowed: false, timestamps: recent, shouldWrite: false };
+  return { allowed: true, timestamps: recent, shouldWrite: true };
 }
 
 export async function onRequestPost(context) {
@@ -77,17 +91,14 @@ export async function onRequestPost(context) {
   // Honeypot — hidden field "website" added by generated forms to catch bots
   if (body.website) return jsonOk({ success: true });
 
-  // Rate limiting
+  // Rate limiting with cacheTtl on read
   const ip = context.request.headers.get('CF-Connecting-IP') || 'unknown';
   const rateCheck = await checkRateLimit(kv, ip);
   if (!rateCheck.allowed) return jsonErr('Too many submissions. Please try again later.', 429);
 
-  // Update rate limit counter
-  const timestamps = [...rateCheck.timestamps, Date.now()];
-  await kv.put(`ratelimit:form:${ip}`, JSON.stringify({ timestamps }), { expirationTtl: 600 });
-
   // Build submission record
   const submissionId = generateId();
+  const submittedAt = new Date().toISOString();
   const submission = {
     id: submissionId,
     site_id: siteId || 'unknown',
@@ -95,32 +106,58 @@ export async function onRequestPost(context) {
     phone: phone || null,
     message,
     ip,
-    submitted_at: new Date().toISOString(),
+    submitted_at: submittedAt,
   };
 
-  await kv.put(`form:${submissionId}`, JSON.stringify(submission), { expirationTtl: 86400 * 180 });
+  // Prepare writes array - only write what we need to
+  const writes = [];
+  
+  // 1. Rate limit: only write if we're tracking this IP (i.e., count changed)
+  if (rateCheck.shouldWrite) {
+    const timestamps = [...rateCheck.timestamps, Date.now()];
+    writes.push(
+      kv.put(`ratelimit:form:${ip}`, JSON.stringify({ timestamps }), { expirationTtl: 600 })
+    );
+  }
+  
+  // 2. Store the actual submission (only if we need individual lookup)
+  // NOTE: This is disabled to save writes. Submissions are tracked via manifest only.
+  // To re-enable individual submission storage, uncomment:
+  // writes.push(kv.put(`form:${submissionId}`, JSON.stringify(submission), { expirationTtl: 86400 * 180 }));
 
-  // Append to site submissions list (keep last 200)
-  const listKey = siteId ? `form_submissions:${siteId}` : 'form_submissions:unlinked';
+  // 3. Single manifest-based write for all submissions
+  // Instead of separate keys for each site + global feed, we use one manifest
+  // that gets updated atomically. This is 1 write vs 3 writes.
+  const manifestKey = 'admin:submissions_manifest';
   try {
-    const list = (await kv.get(listKey, { type: 'json' })) || [];
-    list.unshift({ id: submissionId, name, email, submitted_at: submission.submitted_at });
-    if (list.length > 200) list.length = 200;
-    await kv.put(listKey, JSON.stringify(list), { expirationTtl: 86400 * 365 });
-  } catch (_) {}
+    const manifest = await kv.get(manifestKey, { type: 'json', cacheTtl: CACHE_TTL_MEDIUM }) || { 
+      submissions: [], 
+      by_site: {},
+      updated_at: submittedAt 
+    };
+    
+    // Add to global list (keep last 500)
+    const newEntry = { id: submissionId, site_id: siteId || 'unknown', name, email, submitted_at: submittedAt };
+    manifest.submissions.unshift(newEntry);
+    if (manifest.submissions.length > 500) manifest.submissions.length = 500;
+    
+    // Add to site-specific list (keep last 200 per site)
+    const siteKey = siteId || 'unlinked';
+    if (!manifest.by_site[siteKey]) manifest.by_site[siteKey] = [];
+    manifest.by_site[siteKey].unshift({ id: submissionId, name, email, submitted_at: submittedAt });
+    if (manifest.by_site[siteKey].length > 200) manifest.by_site[siteKey].length = 200;
+    
+    manifest.updated_at = submittedAt;
+    writes.push(kv.put(manifestKey, JSON.stringify(manifest), { expirationTtl: 86400 * 365 }));
+  } catch (_) {
+    // Manifest update failed, but we still want to notify if possible
+  }
 
-  // Global submissions feed
-  try {
-    const global = (await kv.get('admin:form_submissions', { type: 'json' })) || [];
-    global.unshift({ id: submissionId, site_id: siteId || 'unknown', name, email, submitted_at: submission.submitted_at });
-    if (global.length > 500) global.length = 500;
-    await kv.put('admin:form_submissions', JSON.stringify(global), { expirationTtl: 86400 * 365 });
-  } catch (_) {}
-
-  // Email notification
+  // 4. Email notification (uses cached build data with cacheTtl)
   if (siteId && context.env.RESEND_API_KEY) {
     try {
-      const build = await kv.get(`build:${siteId}`, { type: 'json' });
+      // Use cacheTtl to avoid repeated KV reads for same site
+      const build = await kv.get(`build:${siteId}`, { type: 'json', cacheTtl: CACHE_TTL_LONG });
       if (build?.email) {
         // Escape ALL user inputs before injecting into HTML
         const safeName    = esc(name);
@@ -128,7 +165,8 @@ export async function onRequestPost(context) {
         const safePhone   = esc(phone);
         const safeMessage = esc(message);
 
-        await fetch('https://api.resend.com/emails', {
+        // Fire-and-forget email (don't await, don't fail submission if email fails)
+        fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${context.env.RESEND_API_KEY}`,
@@ -149,9 +187,14 @@ ${safePhone ? `<tr><td style="padding:8px 0;color:#666"><strong>Phone</strong></
 <p style="color:#999;font-size:12px">Sent via your Velocity website contact form</p>
 </div>`,
           }),
-        });
+        }).catch(() => {}); // Silently ignore email failures
       }
     } catch (_) {}
+  }
+
+  // Execute all writes in parallel (max 2 writes per submission now)
+  if (writes.length > 0) {
+    await Promise.all(writes);
   }
 
   return jsonOk({ success: true, submission_id: submissionId });

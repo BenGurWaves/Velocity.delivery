@@ -47,7 +47,7 @@ class Lead(Base, UUIDMixin, TimestampMixin):
         Enum(LeadStatus), default=LeadStatus.DISCOVERED
     )
     score: Mapped[float | None] = mapped_column(Float, nullable=True)  # 0-100 quality score
-    outreach_count: Mapped[int] = mapped_column(Integer, default=0)
+    outreach_count: Mapped[int | None] = mapped_column(Integer, default=0)
     last_outreach_at: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     # Preferred channel

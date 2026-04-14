@@ -21,7 +21,8 @@ export async function onRequestGet(context) {
     return new Response('Not found', { status: 404 });
   }
 
-  const html = await kv.get(`preview:${projectId}`);
+  // Use cacheTtl to avoid repeated KV reads for same preview (cached for 5 minutes)
+  const html = await kv.get(`preview:${projectId}`, { cacheTtl: 300 });
   if (!html) {
     return new Response('Preview not found', { status: 404 });
   }

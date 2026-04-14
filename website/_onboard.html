@@ -341,10 +341,12 @@ async function init() {
     }
     VERIFIED_EMAIL = emailVal;
     try {
-      if (lead.submitted_at) prefill(lead.full_data || {});
-      setupSocials((lead.full_data&&lead.full_data.phase1&&lead.full_data.phase1.socials)||[]);
-      setupUrlBlocks('inspirationList','addInspiration',true,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.inspiration)||[]);
-      setupUrlBlocks('antiList','addAnti',false,(lead.full_data&&lead.full_data.phase2&&lead.full_data.phase2.anti_inspiration)||[]);
+      // Safely handle null/undefined full_data
+      const fullData = lead.full_data || {};
+      if (lead.submitted_at) prefill(fullData);
+      setupSocials((fullData.phase1 && fullData.phase1.socials) || []);
+      setupUrlBlocks('inspirationList','addInspiration',true,(fullData.phase2 && fullData.phase2.inspiration) || []);
+      setupUrlBlocks('antiList','addAnti',false,(fullData.phase2 && fullData.phase2.anti_inspiration) || []);
       document.getElementById('startingPoint').addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
       document.querySelectorAll('input[name="domainChoice"]').forEach(r=>r.addEventListener('change',function(){
         const show = this.value==='velocity_provides'||this.value==='client_has_needs_setup';
@@ -384,7 +386,8 @@ async function init() {
 }
 
 function prefill(d) {
-  const p1=d.phase1||{},p2=d.phase2||{},p3=d.phase3||{},p4=d.phase4||{};
+  if (!d || typeof d !== 'object') return;
+  const p1=d.phase1||{},p2=d.phase2||{},p3=d.phase3||{},p4=d.phase4||{},p5=d.phase5||{};
   sv('fullName',p1.full_name);sv('companyName',p1.company_name);
   sv('email',p1.personal_email||p1.email);sv('phone',p1.personal_phone||p1.phone);
   sv('businessEmail',p1.business_email);sv('businessPhone',p1.business_phone);
@@ -400,7 +403,6 @@ function prefill(d) {
   sv('mottos',p4.mottos);sv('copyright',p4.copyright);sv('assetsLinks',p4.assets_links);sv('existingUrl',p4.existing_url);
   if(p4.starting_point){document.getElementById('startingPoint').value=p4.starting_point;if(p4.starting_point==='existing')document.getElementById('existingUrlField').style.display='';}
   if(p4.due_date)document.getElementById('dueDate').value=p4.due_date;
-  const p5=d.phase5||{};
   if(p5.additional_notes)document.getElementById('additionalNotes').value=p5.additional_notes;
 }
 function sv(id,val){ if(val){const el=document.getElementById(id);if(el)el.value=val;} }
