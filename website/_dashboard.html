@@ -25,19 +25,34 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 .nav-right{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 
 /* Auth gate */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px var(--px) 4rem}
-.auth-box{max-width:400px;width:100%}
-.auth-eyebrow{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:1rem;display:block}
-.auth-title{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(2.2rem,5vw,3.5rem);letter-spacing:-.04em;line-height:1.05;color:var(--sand);margin-bottom:.75rem}
-.auth-sub{font-size:.82rem;color:var(--dim);line-height:1.8;margin-bottom:2.5rem;max-width:36ch}
-.auth-field-label{display:block;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem}
-.auth-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-family:"Inter",sans-serif;font-size:.9rem;font-weight:300;padding:.6rem 0;outline:none;transition:border-color .3s}
+.auth-wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:var(--bg)}
+@media(max-width:700px){.auth-wrap{grid-template-columns:1fr}}
+.auth-left{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(2rem,5vw,4rem);position:relative;overflow:hidden}
+.auth-left::after{content:"";position:absolute;bottom:-20%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(196,156,123,.07) 0%,transparent 70%);pointer-events:none}
+@media(max-width:700px){.auth-left{display:none}}
+.auth-left-brand{font-family:"Instrument Serif",Georgia,serif;font-size:1.1rem;color:var(--sand)}
+.auth-left-brand em{font-style:normal;color:var(--brass)}
+.auth-left-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3rem 0}
+.auth-left-label{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:1.25rem;display:block}
+.auth-left-title{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(2rem,3.5vw,3.5rem);letter-spacing:-.04em;line-height:1;color:var(--sand);margin-bottom:1.5rem}
+.auth-left-steps{display:flex;flex-direction:column;gap:.6rem}
+.auth-step{display:flex;align-items:flex-start;gap:.75rem;font-size:.72rem;color:var(--dim);line-height:1.6}
+.auth-step-dot{width:5px;height:5px;border-radius:50%;background:var(--brass);flex-shrink:0;margin-top:.45rem}
+.auth-left-foot{font-size:.58rem;color:var(--dim);letter-spacing:.06em;line-height:1.7}
+.auth-right{display:flex;align-items:center;justify-content:center;padding:clamp(2rem,6vw,5rem)}
+.auth-box{max-width:360px;width:100%}
+.auth-eyebrow{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:2rem;display:flex;align-items:center;gap:.6rem}
+.auth-eyebrow::before{content:"";display:block;width:20px;height:1px;background:var(--bord2);flex-shrink:0}
+.auth-title{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:-.04em;line-height:1.05;color:var(--sand);margin-bottom:.6rem}
+.auth-sub{font-size:.75rem;color:var(--dim);line-height:1.85;margin-bottom:2rem;max-width:32ch}
+.auth-field-label{display:block;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem}
+.auth-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-family:"Inter",sans-serif;font-size:.88rem;font-weight:300;padding:.6rem 0;outline:none;transition:border-color .3s}
 .auth-input:focus{border-color:var(--brass)}
-::placeholder{color:var(--dim);opacity:.5}
-.auth-btn{font-size:.7rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s;border:none;cursor:pointer;margin-top:1.5rem}
+::placeholder{color:var(--dim);opacity:.45}
+.auth-btn{font-size:.68rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.72rem 1.75rem;transition:background .3s;border:none;cursor:pointer;margin-top:1.5rem;display:block;width:100%}
 .auth-btn:hover{background:var(--brass)}
 .auth-btn:disabled{opacity:.35;pointer-events:none}
-.auth-err{font-size:.62rem;color:#e07070;margin-top:.75rem;display:none;letter-spacing:.04em}
+.auth-err{font-size:.6rem;color:#e07070;margin-top:.75rem;display:none;letter-spacing:.04em}
 .auth-err.show{display:block}
 
 /* Main dashboard */
@@ -165,14 +180,32 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 
 <!-- Auth gate -->
 <div id="authWrap" class="auth-wrap" style="display:none">
-  <div class="auth-box">
-    <span class="auth-eyebrow">Your Project</span>
-    <h1 class="auth-title">Welcome<br>back.</h1>
-    <p class="auth-sub">Enter the email address linked to this project to view your dashboard.</p>
-    <label class="auth-field-label" for="authEmail">Email Address</label>
-    <input class="auth-input" type="email" id="authEmail" placeholder="you@company.com" autocomplete="email">
-    <div class="auth-err" id="authErr">That email doesn’t match this project. Please try again.</div>
-    <button class="auth-btn" id="authBtn">View Dashboard →</button>
+  <!-- Left panel — context -->
+  <div class="auth-left">
+    <div class="auth-left-brand">Velocity<em>.</em></div>
+    <div class="auth-left-body">
+      <span class="auth-left-label">Project Portal</span>
+      <h2 class="auth-left-title">Your project<br>lives here.</h2>
+      <div class="auth-left-steps">
+        <div class="auth-step"><div class="auth-step-dot"></div><span>Track your project status in real time</span></div>
+        <div class="auth-step"><div class="auth-step-dot"></div><span>Review and confirm your quote</span></div>
+        <div class="auth-step"><div class="auth-step-dot"></div><span>Edit your brief within the 24-hour window</span></div>
+        <div class="auth-step"><div class="auth-step-dot"></div><span>Access your finished site when it’s live</span></div>
+      </div>
+    </div>
+    <div class="auth-left-foot">Velocity by Calyvent &mdash; bespoke design &amp; engineering.</div>
+  </div>
+  <!-- Right panel — form -->
+  <div class="auth-right">
+    <div class="auth-box">
+      <span class="auth-eyebrow">Secure Access</span>
+      <h1 class="auth-title">Sign in to<br>your dashboard.</h1>
+      <p class="auth-sub">Enter the email address you used when submitting your brief.</p>
+      <label class="auth-field-label" for="authEmail">Email Address</label>
+      <input class="auth-input" type="email" id="authEmail" placeholder="you@company.com" autocomplete="email">
+      <div class="auth-err" id="authErr">That email doesn’t match this project. Please check and try again.</div>
+      <button class="auth-btn" id="authBtn">Access Dashboard →</button>
+    </div>
   </div>
 </div>
 

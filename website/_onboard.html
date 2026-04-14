@@ -83,6 +83,18 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
 .signin-note{font-size:.72rem;color:var(--dim);line-height:1.8;margin-top:.75rem;max-width:40ch}
 .btn-signin{font-size:.7rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s,color .3s;border:none;cursor:pointer;margin-top:.5rem}
 .btn-signin:hover{background:var(--brass)}.btn-signin:disabled{opacity:.35;pointer-events:none}
+
+/* Submission success state */
+.success-screen{display:none;min-height:70vh;flex-direction:column;align-items:flex-start;justify-content:center;padding:0;animation:fadeIn .5s var(--ease)}
+.success-screen.show{display:flex}
+.success-rule{width:40px;height:1px;background:var(--brass);margin-bottom:2.5rem}
+.success-eyebrow{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:1.25rem;display:block}
+.success-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2.5rem,6vw,5.5rem);letter-spacing:-.045em;line-height:.95;color:var(--sand);margin-bottom:1.5rem}
+.success-title em{font-style:italic;color:var(--brass)}
+.success-body{font-size:.82rem;color:var(--dim);line-height:1.9;max-width:40ch;margin-bottom:2.5rem}
+.success-cta{font-size:.68rem;letter-spacing:.1em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s;border:none;cursor:pointer;display:inline-block;text-decoration:none}
+.success-cta:hover{background:var(--brass)}
+.success-note{font-size:.6rem;color:var(--dim);letter-spacing:.06em;margin-top:1.25rem;line-height:1.7}
 </style>
 </head>
 <body>
@@ -93,6 +105,16 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
 </nav>
 <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 <div class="wrap" id="wrap">
+  <!-- Success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-rule"></div>
+    <span class="success-eyebrow">Brief Received</span>
+    <h1 class="success-title">You&rsquo;re<br>all <em>set.</em></h1>
+    <p class="success-body">Your brief has been submitted. We&rsquo;ll review everything and get back to you within 24 hours with a custom quote and next steps.</p>
+    <a id="dashboardCta" href="#" class="success-cta">View your project dashboard &rarr;</a>
+    <p class="success-note">You can edit your brief for the next 24 hours from your dashboard.</p>
+  </div>
+
   <div class="state" id="stateLoading"><p style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)">Loading&hellip;</p></div>
   <div class="state" id="stateNotFound" style="display:none"><h2>Link not found.</h2><p>This onboarding link is invalid or has expired. Contact <a href="mailto:hello@calyvent.com" style="color:var(--brass)">hello@calyvent.com</a>.</p></div>
   <div class="state" id="stateLocked" style="display:none"><h2>Submission locked.</h2><p>The 24-hour editing window has passed. Your brief is read-only. <a href="#" id="dashLinkLocked" style="color:var(--brass)">View your dashboard &rarr;</a></p></div>
@@ -434,7 +456,15 @@ async function submit(){
   try{
     const r=await fetch('/api/leads/'+TOKEN,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({full_data:data,submitted_at:new Date().toISOString(),due_date:data.phase4.due_date||null,client_name:data.phase1.full_name,client_email:data.phase1.email,upgrade_permission:data.phase3.upgrade_permission,domain_choice:domChoice||null,domain_name:domName||null})});
     if(!r.ok){const e=await r.json();btn.disabled=false;btn.textContent='Submit Brief';alert(e.error||'Error. Please try again.');return;}
-    location.href='/dashboard/'+TOKEN;
+    // Show success screen
+    document.getElementById('formWrap').style.display='none';
+    const successEl=document.getElementById('successScreen');
+    successEl.classList.add('show');
+    document.getElementById('dashboardCta').href='/dashboard/'+TOKEN;
+    document.getElementById('progressFill').style.width='100%';
+    document.getElementById('navStep').textContent='Brief Submitted';
+    // Auto-redirect after 5s
+    setTimeout(()=>{location.href='/dashboard/'+TOKEN;},5000);
   }catch{btn.disabled=false;btn.textContent='Submit Brief';alert('Network error. Please try again.');}
 }
 init();
