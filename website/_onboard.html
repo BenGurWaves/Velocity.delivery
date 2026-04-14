@@ -344,10 +344,12 @@ async function init() {
       // Safely handle null/undefined full_data
       const fullData = lead.full_data || {};
       if (lead.submitted_at) prefill(fullData);
-      setupSocials((fullData.phase1 && fullData.phase1.socials) || []);
-      setupUrlBlocks('inspirationList','addInspiration',true,(fullData.phase2 && fullData.phase2.inspiration) || []);
-      setupUrlBlocks('antiList','addAnti',false,(fullData.phase2 && fullData.phase2.anti_inspiration) || []);
-      document.getElementById('startingPoint').addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
+      // Only setup dynamic form elements if they exist in this form version
+      if (document.getElementById('socialsList')) setupSocials((fullData.phase1 && fullData.phase1.socials) || []);
+      if (document.getElementById('inspirationList')) setupUrlBlocks('inspirationList','addInspiration',true,(fullData.phase2 && fullData.phase2.inspiration) || []);
+      if (document.getElementById('antiList')) setupUrlBlocks('antiList','addAnti',false,(fullData.phase2 && fullData.phase2.anti_inspiration) || []);
+      const startingPointEl = document.getElementById('startingPoint');
+      if (startingPointEl) startingPointEl.addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
       document.querySelectorAll('input[name="domainChoice"]').forEach(r=>r.addEventListener('change',function(){
         const show = this.value==='velocity_provides'||this.value==='client_has_needs_setup';
         document.getElementById('domainNameField').style.display=show?'':'none';
