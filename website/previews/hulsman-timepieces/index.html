@@ -61,6 +61,92 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Slow scroll for timeless effect */
+        html.lenis {
+            height: auto;
+        }
+        
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+        
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        /* ============================================
+           LOADER — ELEGANT INTRO
+           ============================================ */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black-deep);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            font-family: var(--serif);
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: 0.15em;
+            color: var(--white);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: loaderFadeIn 0.6s ease forwards;
+        }
+
+        .loader-line {
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            animation: loaderLine 2s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .loader-text {
+            font-size: 9px;
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--white-muted);
+            margin-top: 30px;
+            opacity: 0;
+            animation: loaderFadeIn 0.6s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes loaderFadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes loaderLine {
+            0% { width: 0; }
+            100% { width: 120px; }
+        }
+
         /* ============================================
            LUXURY GRAIN & ATMOSPHERE
            ============================================ */
@@ -567,7 +653,7 @@
         }
 
         /* ============================================
-           MODAL
+           ELEGANT PREVIEW MODAL
            ============================================ */
         .modal-overlay {
             position: fixed;
@@ -575,18 +661,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5,5,5,0.95);
+            background: rgba(5,5,5,0.98);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
         }
 
         .modal-overlay.active {
             display: flex;
-            animation: modalFade 0.5s ease forwards;
+            animation: modalFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes modalFade {
@@ -595,63 +681,85 @@
 
         .modal-content {
             text-align: center;
-            padding: 60px;
-            max-width: 500px;
+            padding: 80px 60px;
+            max-width: 600px;
+            border: 1px solid rgba(201, 169, 98, 0.15);
+            background: rgba(10, 10, 10, 0.5);
         }
 
-        .modal-icon {
-            width: 60px;
-            height: 60px;
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            font-family: var(--serif);
-            font-size: 24px;
-            font-style: italic;
+        .modal-pretitle {
+            font-size: 10px;
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
             color: var(--gold);
+            margin-bottom: 30px;
         }
 
         .modal-title {
             font-family: var(--serif);
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 300;
             font-style: italic;
             color: var(--white);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            line-height: 1.1;
         }
 
         .modal-text {
             font-size: 14px;
             font-weight: 300;
-            line-height: 1.8;
+            line-height: 2;
             color: var(--white-muted);
-            margin-bottom: 30px;
+            margin-bottom: 50px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .modal-text a {
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-        .modal-close {
+        .modal-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
             font-size: 11px;
             font-weight: 300;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--white);
+            color: var(--black);
+            background: var(--gold);
+            text-decoration: none;
+            padding: 20px 50px;
+            transition: all 0.4s ease;
+            margin-bottom: 25px;
+        }
+
+        .modal-cta:hover {
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .modal-close {
+            font-size: 10px;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--white-muted);
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px 40px;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         .modal-close:hover {
-            background: var(--white);
-            color: var(--black);
+            color: var(--white);
+        }
+
+        .modal-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+            opacity: 0.5;
         }
 
         /* ============================================
@@ -723,6 +831,13 @@
     </style>
 </head>
 <body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">Hulsman</div>
+        <div class="loader-line"></div>
+        <div class="loader-text">Loading Experience</div>
+    </div>
+
     <!-- Cinematic vignette overlay -->
     <div class="vignette"></div>
 
@@ -846,55 +961,117 @@
         </div>
     </footer>
 
-    <!-- Modal -->
+    <!-- Elegant Preview Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <div class="modal-icon">V</div>
-            <h2 class="modal-title">Velocity Preview</h2>
-            <p class="modal-text">This is a conceptual preview showcasing how Hulsman Timepieces could elevate their digital presence. <br><br>Visit <a href="https://velocity.calyvent.com" target="_blank">velocity.calyvent.com</a> to learn more about our approach.</p>
-            <button class="modal-close" id="modalClose">Continue</button>
+            <p class="modal-pretitle">Concept Preview</p>
+            <div class="modal-divider"></div>
+            <h2 class="modal-title">Experience the<br>Full Website</h2>
+            <p class="modal-text">This is a preview of the Hulsman Timepieces digital experience. For the complete website with full functionality, visit our concept studio.</p>
+            <a href="https://velocity.calyvent.com" class="modal-cta" target="_blank">Visit velocity.calyvent.com</a>
+            <button class="modal-close" id="modalClose">Continue Exploring Preview</button>
         </div>
     </div>
 
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
     <script>
+        // ============================================
+        // LENIS SMOOTH SCROLL — TIMELESS EFFECT
+        // ============================================
+        
+        const lenis = new Lenis({
+            duration: 2.5, // Slow, luxurious scroll
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 0.6, // Slower wheel scrolling
+            touchMultiplier: 1.2,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Connect Lenis to GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // ============================================
+        // LOADER — ELEGANT INTRO (Max 3 seconds)
+        // ============================================
+        
+        const loader = document.getElementById('loader');
+        let loaderComplete = false;
+
+        function hideLoader() {
+            if (loaderComplete) return;
+            loaderComplete = true;
+            loader.classList.add('hidden');
+            document.body.style.overflow = '';
+            
+            // Start hero animation after loader
+            initHeroAnimation();
+        }
+
+        // Hide loader after max 3 seconds
+        setTimeout(hideLoader, 2500);
+
+        // Also hide when page fully loaded (if sooner)
+        window.addEventListener('load', () => {
+            setTimeout(hideLoader, 500);
+        });
+
+        // Prevent scrolling during load
+        document.body.style.overflow = 'hidden';
+
         // ============================================
         // GSAP ANIMATIONS - WORLD-CLASS LUXURY
         // ============================================
         
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero entrance animation
-        const heroTl = gsap.timeline({ delay: 0.3 });
-        
-        heroTl
-            .from('.hero-bg', {
-                scale: 1.2,
-                filter: 'brightness(0.3)',
-                duration: 1.8,
-                ease: 'power2.out'
-            })
-            .to('.hero-pretitle', {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'power3.out'
-            }, '-=1')
-            .to('.hero-title', {
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-                ease: 'power3.out'
-            }, '-=0.8')
-            .to('.hero-subtitle', {
-                opacity: 1,
-                duration: 1,
-                ease: 'power2.out'
-            }, '-=0.6')
-            .to('.hero-scroll', {
-                opacity: 1,
-                duration: 0.8,
-                ease: 'power2.out'
-            }, '-=0.4');
+        function initHeroAnimation() {
+            const heroTl = gsap.timeline({ delay: 0.2 });
+            
+            heroTl
+                .from('.hero-bg', {
+                    scale: 1.2,
+                    filter: 'brightness(0.3)',
+                    duration: 1.8,
+                    ease: 'power2.out'
+                })
+                .to('.hero-pretitle', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power3.out'
+                }, '-=1')
+                .to('.hero-title', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power3.out'
+                }, '-=0.8')
+                .to('.hero-subtitle', {
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'power2.out'
+                }, '-=0.6')
+                .to('.hero-scroll', {
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                }, '-=0.4');
+        }
 
         // Hero parallax on scroll
         gsap.to('.hero-bg', {
@@ -925,11 +1102,9 @@
         let lastScroll = 0;
         const nav = document.getElementById('nav');
         
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > window.innerHeight * 0.8) {
-                if (currentScroll > lastScroll) {
+        lenis.on('scroll', ({ scroll }) => {
+            if (scroll > window.innerHeight * 0.8) {
+                if (scroll > lastScroll) {
                     nav.classList.add('hidden');
                 } else {
                     nav.classList.remove('hidden');
@@ -937,9 +1112,8 @@
             } else {
                 nav.classList.remove('hidden');
             }
-            
-            lastScroll = currentScroll;
-        }, { passive: true });
+            lastScroll = scroll;
+        });
 
         // Menu overlay functionality
         const menuTrigger = document.getElementById('menuTrigger');
@@ -948,18 +1122,18 @@
 
         menuTrigger.addEventListener('click', () => {
             menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            lenis.stop();
         });
 
         menuClose.addEventListener('click', () => {
             menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+            lenis.start();
         });
 
         menuOverlay.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 menuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                lenis.start();
             });
         });
 
@@ -1009,23 +1183,25 @@
             }
         });
 
-        // Modal functionality
+        // ============================================
+        // ELEGANT PREVIEW MODAL — ALL BUTTONS
+        // ============================================
+        
         const modalOverlay = document.getElementById('modalOverlay');
         const modalClose = document.getElementById('modalClose');
+        let modalOpen = false;
 
         function openModal() {
+            if (modalOpen) return;
+            modalOpen = true;
             modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Auto-close after 6 seconds
-            setTimeout(() => {
-                closeModal();
-            }, 6000);
+            lenis.stop();
         }
 
         function closeModal() {
+            modalOpen = false;
             modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+            lenis.start();
         }
 
         modalClose.addEventListener('click', closeModal);
@@ -1033,36 +1209,72 @@
             if (e.target === modalOverlay) closeModal();
         });
 
+        // Intercept ALL button clicks to show modal
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+            
+            // Check if clicked element is a button or has button-like behavior
+            const isButton = target.tagName === 'BUTTON' || 
+                           target.tagName === 'A' || 
+                           target.closest('button') || 
+                           target.closest('a');
+            
+            // Exclude specific elements that should work normally
+            const isModalCTA = target.classList.contains('modal-cta') || 
+                              target.closest('.modal-cta');
+            const isMenuClose = target.id === 'menuClose' || 
+                               target.classList.contains('menu-close');
+            const isModalClose = target.id === 'modalClose';
+            const isExternalLink = target.tagName === 'A' && 
+                                  target.getAttribute('target') === '_blank';
+            
+            if (isButton && !isModalCTA && !isMenuClose && !isModalClose && !isExternalLink) {
+                // Check if it's an anchor link (allow smooth scroll)
+                const href = target.getAttribute('href') || 
+                           target.closest('a')?.getAttribute('href');
+                
+                if (href && href.startsWith('#') && href !== '#') {
+                    // Allow anchor links to work normally
+                    return;
+                }
+                
+                e.preventDefault();
+                e.stopPropagation();
+                openModal();
+            }
+        });
+
         // Escape key handler
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
                 menuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                lenis.start();
             }
         });
 
-        // Smooth scroll for anchor links
+        // Smooth scroll for anchor links using Lenis
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(href);
                 if (target) {
-                    gsap.to(window, {
-                        duration: 1.2,
-                        scrollTo: { y: target, offsetY: 50 },
-                        ease: 'power3.inOut'
+                    lenis.scrollTo(target, {
+                        offset: 50,
+                        duration: 2.5
                     });
                 }
             });
         });
 
-        // Initial load animation for hero elements
+        // Initial load animation setup
         gsap.set('.hero-pretitle', { opacity: 0, y: 20 });
         gsap.set('.hero-title', { opacity: 0, y: 40 });
         gsap.set('.hero-subtitle', { opacity: 0 });
         gsap.set('.hero-scroll', { opacity: 0 });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
 </body>
 </html>
