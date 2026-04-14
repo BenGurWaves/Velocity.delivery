@@ -983,7 +983,7 @@
         lenis.on('scroll', ScrollTrigger.update);
 
         // ============================================
-        // LOADER - ELEGANT 1.5s FADE OUT
+        // LOADER - SIMPLE & RELIABLE
         // ============================================
         const loader = document.getElementById('loader');
         const loaderProgress = document.getElementById('loaderProgress');
@@ -992,42 +992,26 @@
         const scrollIndicator = document.getElementById('scrollIndicator');
         const nav = document.getElementById('nav');
 
-        let loadedCount = 0;
-        const totalImages = 4;
+        // Animate progress bar
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 2;
+            loaderProgress.style.width = progress + '%';
+            if (progress >= 100) clearInterval(progressInterval);
+        }, 30);
 
-        function updateProgress() {
-            loadedCount++;
-            const pct = (loadedCount / totalImages) * 100;
-            loaderProgress.style.width = pct + '%';
-            
-            if (loadedCount >= totalImages) {
-                setTimeout(hideLoader, 600);
-            }
-        }
-
-        function hideLoader() {
+        // Hide loader after 2.5 seconds
+        setTimeout(() => {
             loader.classList.add('fade-out');
             
+            // Reveal content after loader fades
             setTimeout(() => {
                 heroImg.classList.add('loaded');
                 heroContent.classList.add('visible');
                 scrollIndicator.classList.add('visible');
                 nav.classList.add('visible');
             }, 800);
-        }
-
-        // Max 3.5 seconds
-        setTimeout(hideLoader, 3500);
-
-        // Track images
-        document.querySelectorAll('img').forEach(img => {
-            if (img.complete) {
-                updateProgress();
-            } else {
-                img.addEventListener('load', updateProgress);
-                img.addEventListener('error', updateProgress);
-            }
-        });
+        }, 2500);
 
         // ============================================
         // NAVIGATION
