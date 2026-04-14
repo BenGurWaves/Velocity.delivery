@@ -482,19 +482,18 @@ function v5(){
   return ok;
 }
 function bindNav(){
-  document.getElementById('next1').onclick=()=>{if(v1())goTo(2);};
-  document.getElementById('next2').onclick=()=>{if(v2())goTo(3);};
-  document.getElementById('next3').onclick=()=>{if(v3())goTo(4);};
-  document.getElementById('next4').onclick=()=>goTo(5);
-  document.getElementById('next5').onclick=()=>{if(v5())goTo(6);};
-  document.getElementById('back2').onclick=()=>goTo(1);
-  document.getElementById('back3').onclick=()=>goTo(2);
-  document.getElementById('back4').onclick=()=>goTo(3);
-  document.getElementById('back5').onclick=()=>goTo(4);
-  document.getElementById('back6').onclick=()=>goTo(5);
-  document.getElementById('next5').onclick=()=>{if(v5())goTo(6);};
-  document.getElementById('back6').onclick=()=>goTo(5);
-  document.getElementById('submitBtn').onclick=submit;
+  const bind = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+  bind('next1', ()=>{if(v1())goTo(2);});
+  bind('next2', ()=>{if(v2())goTo(3);});
+  bind('next3', ()=>{if(v3())goTo(4);});
+  bind('next4', ()=>goTo(5));
+  bind('next5', ()=>{if(v5())goTo(6);});
+  bind('back2', ()=>goTo(1));
+  bind('back3', ()=>goTo(2));
+  bind('back4', ()=>goTo(3));
+  bind('back5', ()=>goTo(4));
+  bind('back6', ()=>goTo(5));
+  bind('submitBtn', submit);
 }
 function collect(){
   const socials=[...document.querySelectorAll('#socialsList .social-row input')].map(i=>i.value.trim()).filter(Boolean);
