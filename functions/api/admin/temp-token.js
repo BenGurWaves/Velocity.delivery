@@ -4,7 +4,7 @@
  * Used by the admin panel to open client briefs without putting the permanent
  * secret in a URL query param (which would appear in logs and browser history).
  */
-import { checkAdminAuth, rateLimit, secureJson, secureErr, secureOptions } from '../../../_lib/security.js';
+import { checkAdminAuth, rateLimit, secureJson, secureErr, secureOptions } from '../../_lib/security.js';
 
 export async function onRequestOptions() { return secureOptions(); }
 
