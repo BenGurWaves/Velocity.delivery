@@ -1,2 +1,3 @@
 /admin/*  /admin/index.html  200
 /admin    /admin/index.html  200
+/audits/:prospect  /audits/:prospect.html  200
