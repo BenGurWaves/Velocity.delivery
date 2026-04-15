@@ -31,6 +31,165 @@ interface LighthouseData {
   };
   audits: Record<string, Audit>;
 }
+type SummarySeverity = 'good' | 'warn' | 'bad';
+
+interface SummaryFinding {
+  title: string;
+  detail: string;
+  severity: SummarySeverity;
+}
+
+const formatDuration = (value: number | null | undefined): string => {
+  if (value === null || value === undefined) return 'unknown';
+  if (value >= 1000) return `${(value / 1000).toFixed(1)}s`;
+  return `${Math.round(value)}ms`;
+};
+
+const buildPlainLanguageSummary = (data: LighthouseData) => {
+  const performance = data.categories.performance?.score ?? null;
+  const accessibility = data.categories.accessibility?.score ?? null;
+  const bestPractices = data.categories['best-practices']?.score ?? null;
+  const seo = data.categories.seo?.score ?? null;
+
+  const fcp = data.audits['first-contentful-paint']?.numericValue ?? null;
+  const lcp = data.audits['largest-contentful-paint']?.numericValue ?? null;
+  const tbt = data.audits['total-blocking-time']?.numericValue ?? null;
+  const cls = data.audits['cumulative-layout-shift']?.numericValue ?? null;
+
+  const findings: SummaryFinding[] = [];
+  const actions: string[] = [];
+
+  if (lcp !== null && lcp > 4000) {
+    findings.push({
+      title: 'Main content appears too late',
+      detail: `The key visual/content shows around ${formatDuration(lcp)}, which is much slower than users expect on mobile.`,
+      severity: 'bad',
+    });
+    actions.push('Prioritize the hero image/video: compress media, preload it, and avoid heavy effects before first paint.');
+  } else if (lcp !== null && lcp > 2500) {
+    findings.push({
+      title: 'Hero section loads slower than ideal',
+      detail: `Largest content appears around ${formatDuration(lcp)}, which may still feel sluggish for first-time visitors.`,
+      severity: 'warn',
+    });
+    actions.push('Trim initial media and prioritize above-the-fold assets.');
+  }
+
+  if (cls !== null && cls > 0.25) {
+    findings.push({
+      title: 'Layout shifts are visibly disruptive',
+      detail: `Page elements move during load (CLS ${cls.toFixed(3)}), which can cause missed taps and reduce trust.`,
+      severity: 'bad',
+    });
+    actions.push('Reserve space for images/fonts/buttons so layout stays stable while loading.');
+  } else if (cls !== null && cls > 0.1) {
+    findings.push({
+      title: 'Some visual jumping during load',
+      detail: `Layout stability is weaker than recommended (CLS ${cls.toFixed(3)}).`,
+      severity: 'warn',
+    });
+    actions.push('Define fixed dimensions for key elements to reduce movement while assets load.');
+  }
+
+  if (performance !== null && performance < 0.5) {
+    findings.push({
+      title: 'Overall speed is in a high-risk zone',
+      detail: `Performance score is ${Math.round(performance * 100)}/100; this usually increases bounce before users engage with products.`,
+      severity: 'bad',
+    });
+    actions.push('Reduce JavaScript and third-party scripts loaded on first view.');
+  } else if (performance !== null && performance < 0.75) {
+    findings.push({
+      title: 'Overall speed needs improvement',
+      detail: `Performance score is ${Math.round(performance * 100)}/100; users may notice delay on weaker mobile connections.`,
+      severity: 'warn',
+    });
+    actions.push('Improve first-load performance by delaying non-critical scripts.');
+  }
+
+  if (fcp !== null && fcp > 1800) {
+    findings.push({
+      title: 'First visual response is delayed',
+      detail: `Users wait about ${formatDuration(fcp)} before meaningful content appears.`,
+      severity: 'warn',
+    });
+    actions.push('Inline critical CSS and preload key fonts to show meaningful content faster.');
+  }
+
+  if (tbt !== null && tbt > 300) {
+    findings.push({
+      title: 'Interactions may feel laggy',
+      detail: `Main-thread blocking is around ${formatDuration(tbt)}, which can delay taps and scrolling.`,
+      severity: 'warn',
+    });
+    actions.push('Split or defer heavy script bundles so interaction is responsive sooner.');
+  }
+
+  if (bestPractices !== null && bestPractices < 0.9) {
+    findings.push({
+      title: 'Technical trust signals can improve',
+      detail: `Best Practices score is ${Math.round(bestPractices * 100)}/100, indicating implementation issues that can impact reliability perception.`,
+      severity: 'warn',
+    });
+  }
+
+  if (accessibility !== null && accessibility < 0.9) {
+    findings.push({
+      title: 'Accessibility needs attention',
+      detail: `Accessibility score is ${Math.round(accessibility * 100)}/100; some users may face friction navigating or reading content.`,
+      severity: 'warn',
+    });
+    actions.push('Fix contrast, labels, and semantic structure to improve usability for all visitors.');
+  }
+
+  if (seo !== null && seo < 0.9) {
+    findings.push({
+      title: 'Search visibility has technical gaps',
+      detail: `SEO score is ${Math.round(seo * 100)}/100, which can reduce discoverability.`,
+      severity: 'warn',
+    });
+  }
+
+  if (findings.length === 0) {
+    findings.push({
+      title: 'No major risk flags in this snapshot',
+      detail: 'Core metrics are generally healthy, with only minor tuning opportunities.',
+      severity: 'good',
+    });
+  }
+
+  const uniqueActions = Array.from(new Set(actions)).slice(0, 4);
+
+  return {
+    findings: findings.slice(0, 5),
+    actions: uniqueActions,
+    businessImpact:
+      performance !== null && performance < 0.7
+        ? 'Likely impact: a meaningful share of mobile visitors leave before fully experiencing the product story.'
+        : 'Likely impact: moderate friction during first visit, but stronger engagement potential after targeted optimizations.',
+  };
+};
+
+const severityStyles: Record<SummarySeverity, { dot: string; text: string; bg: string; border: string }> = {
+  good: {
+    dot: 'bg-emerald-500',
+    text: 'text-emerald-300',
+    bg: 'bg-emerald-500/5',
+    border: 'border-emerald-500/25',
+  },
+  warn: {
+    dot: 'bg-amber-500',
+    text: 'text-amber-300',
+    bg: 'bg-amber-500/5',
+    border: 'border-amber-500/25',
+  },
+  bad: {
+    dot: 'bg-rose-500',
+    text: 'text-rose-300',
+    bg: 'bg-rose-500/5',
+    border: 'border-rose-500/25',
+  },
+};
 
 const getScoreColor = (score: number | null, displayMode: string): string => {
   if (score === null) return 'text-gray-500';
@@ -290,6 +449,7 @@ export default function AuditClient({ prospect }: { prospect: string }) {
       minute: '2-digit',
     });
   };
+  const summary = buildPlainLanguageSummary(data);
 
   return (
     <div className="min-h-screen bg-atelier-black">
@@ -336,6 +496,58 @@ export default function AuditClient({ prospect }: { prospect: string }) {
 
       {/* Summary Cards */}
       <div className="max-w-6xl mx-auto px-6 py-12">
+        <section className="mb-12 border border-atelier-dark rounded-lg bg-atelier-dark/20 p-6 md:p-8">
+          <div className="mb-5">
+            <p className="font-sans text-xs uppercase tracking-widest text-atelier-cream-muted mb-2">
+              Plain-language executive summary
+            </p>
+            <h2 className="font-serif text-2xl text-atelier-cream mb-3">
+              What this means for a non-technical stakeholder
+            </h2>
+            <p className="text-sm md:text-base text-atelier-cream/90 font-sans leading-relaxed">
+              {summary.businessImpact}
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 mb-6">
+            {summary.findings.map((finding, idx) => {
+              const style = severityStyles[finding.severity];
+              return (
+                <div
+                  key={`${finding.title}-${idx}`}
+                  className={`border rounded-md p-4 ${style.border} ${style.bg}`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`w-2.5 h-2.5 rounded-full ${style.dot}`} />
+                    <p className={`font-serif text-base ${style.text}`}>{finding.title}</p>
+                  </div>
+                  <p className="text-sm text-atelier-cream/85 font-sans leading-relaxed">
+                    {finding.detail}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {summary.actions.length > 0 && (
+            <div>
+              <h3 className="font-sans text-xs uppercase tracking-widest text-atelier-cream-muted mb-3">
+                Highest-priority next steps
+              </h3>
+              <ul className="space-y-2">
+                {summary.actions.map((action, idx) => (
+                  <li
+                    key={`${action}-${idx}`}
+                    className="flex items-start gap-3 text-sm font-sans text-atelier-cream/90"
+                  >
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-atelier-orange flex-shrink-0" />
+                    <span>{action}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {data.categories.performance && (
             <div className="border border-atelier-dark rounded-lg p-6 bg-atelier-dark/20">
