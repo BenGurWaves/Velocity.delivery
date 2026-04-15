@@ -4,561 +4,445 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Velocity — Digital Ateliers for Heritage Maisons</title>
-  <meta name="description" content="Digital ateliers for Jewelers, Horologers, and Tailors. We craft digital presence with the same patience as a bespoke suit and the same mechanical precision as a tourbillon movement.">
+  <meta name="description" content="Digital ateliers for Jewelers, Horologers, and Tailors. Bespoke digital presence crafted with the patience of Haute Horlogerie.">
   <meta property="og:title" content="Velocity — Digital Ateliers for Heritage Maisons">
-  <meta property="og:description" content="Digital ateliers for Jewelers, Horologers, and Tailors. We craft digital presence with the same patience as a bespoke suit and the same mechanical precision as a tourbillon movement.">
-  <meta property="og:url" content="https://velocity.calyvent.com">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://velocity.calyvent.com/work-calyvent.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Velocity">
-  <meta property="og:locale" content="en_US">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Velocity — Digital Ateliers for Luxury Maisons">
-  <meta name="twitter:description" content="Bespoke digital presence for jewellers, watchmakers, and tailors. No templates. Every commission treated as a unique artifact.">
+  <meta property="og:description" content="We craft digital presence with the same patience as a bespoke suit.">
   <link rel="canonical" href="https://velocity.calyvent.com/">
-  <link rel="alternate" href="https://velocity.delivery/" hreflang="x-default">
-  <link rel="alternate" href="https://velocity.calyvent.com/" hreflang="en">
-  <link rel="alternate" href="https://velocity.delivery/" hreflang="en">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=17">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://velocity.calyvent.com/#business",
-        "name": "Velocity Digital Atelier",
-        "url": "https://velocity.calyvent.com",
-        "sameAs": ["https://velocity.delivery"],
-        "logo": "https://velocity.calyvent.com/favicon.svg",
-        "description": "Digital ateliers for heritage Maisons—Jewelers, Horologers, and Tailors. Bespoke digital presence crafted with the patience of Haute Horlogerie.",
-        "email": "atelier@calyvent.com",
-        "areaServed": "Worldwide",
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Digital Atelier Services",
-          "itemListElement": [
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bespoke Digital Presence" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Heritage Brand Storytelling" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Private Client Portals" } }
-          ]
-        }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://velocity.calyvent.com/#website",
-        "url": "https://velocity.calyvent.com",
-        "publisher": { "@id": "https://velocity.calyvent.com/#business" }
-      }
-    ]
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What kind of businesses does Velocity design websites for?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Velocity specialises in bespoke website design for luxury brands — jewellers, watchmakers, tailors, haute couture maisons, fine dining, private members clubs, and heritage businesses. Every project is built from scratch with no templates."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I get a website from Velocity?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Contact us by email at atelier@calyvent.com. We review all enquiries personally and respond within 24 hours. Projects are accepted on a selective basis to ensure every client receives our full attention."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How long does a custom luxury website take to build?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Landing pages are delivered within 48 to 72 hours. Full bespoke websites typically take two to four weeks depending on scope. Rush timelines are available subject to availability."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do you use templates?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Every Velocity website is designed and built from scratch. We do not use WordPress, Squarespace, Shopify themes, or any pre-built templates. Every line of code is written specifically for your brand."
-        }
-      }
-    ]
-  }
-  </script>
+  <link rel="stylesheet" href="/styles.css?v=31">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Velocity Digital Atelier","url":"https://velocity.calyvent.com","email":"atelier@calyvent.com"}</script>
 </head>
 <body>
 
 <div class="grain"></div>
-<div class="cursor" id="cursor" style="display:none"></div>
-<div class="cdot" id="cdot" style="display:none"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- Preloader -->
-<div class="pl" id="pl">
-  <span class="pl-word">Velocity<em>.</em></span>
-  <div class="pl-progress"><div id="pl-bar"></div></div>
+<div class="preloader" id="preloader">
+  <span class="pl-brand">Velocity<em>.</em></span>
+  <div class="pl-line"><div class="pl-line-inner" id="plLine"></div></div>
 </div>
 
-<!-- Nav -->
-<nav class="nav" id="nav">
-  <a href="/" class="nav-brand">Velocity<em>.</em></a>
-  <div class="nav-links">
-    <a href="#work">Studies</a>
-    <a href="#studio">Atelier</a>
-    <a href="mailto:atelier@calyvent.com">Concierge</a>
-  </div>
-</nav>
-
-<!-- ══════════════════════════════════
-     HERO
-══════════════════════════════════ -->
-<section class="hero">
-  <h1 class="hero-name" id="heroName">Velocity<em>.</em></h1>
-  <div class="hero-foot">
-    <p class="hero-sub">Digital Ateliers for the Exceptional<br><span>We craft digital presence with the same patience as a bespoke suit and the same mechanical precision as a tourbillon movement. For the Maisons where heritage meets modernity—Jewelers, Horologers, and Tailors who understand that true luxury lives in the details most rush past.</span></p>
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      <span>Scroll</span>
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-sticky" id="heroSticky">
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+    <div class="hero-level1" id="heroL1">
+      <h1 class="hero-title" id="heroTitle">Velocity.</h1>
+      <p class="hero-sub">Digital Ateliers for Heritage Maisons</p>
     </div>
+    <div class="hero-level2" id="heroL2">
+      <span class="hero-phrase" data-final-x="50" data-final-y="30" data-start-x="8" data-start-y="15" style="font-size:clamp(1.5rem,3.5vw,3.2rem)">We build</span>
+      <span class="hero-phrase" data-final-x="50" data-final-y="39" data-start-x="82" data-start-y="70" style="font-size:clamp(2rem,5vw,4.8rem);color:var(--brass);font-style:italic">digital ateliers</span>
+      <span class="hero-phrase" data-final-x="50" data-final-y="48" data-start-x="20" data-start-y="80" style="font-size:clamp(1.5rem,3.5vw,3.2rem)">for heritage brands —</span>
+      <span class="hero-phrase" data-final-x="50" data-final-y="58" data-start-x="75" data-start-y="20" style="font-size:clamp(1rem,2vw,1.6rem);color:var(--dim)">ensuring your presence is as considered as</span>
+      <span class="hero-phrase" data-final-x="50" data-final-y="66" data-start-x="15" data-start-y="55" style="font-size:clamp(1.5rem,3.5vw,3.2rem)">a Patek Philippe</span>
+      <span class="hero-phrase" data-final-x="50" data-final-y="74" data-start-x="85" data-start-y="45" style="font-size:clamp(2rem,5vw,4.8rem);color:var(--brass);font-style:italic">caseback.</span>
+    </div>
+    <div class="hero-portal" id="heroPortal"></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     INTRO
-══════════════════════════════════ -->
-<section class="intro" id="intro">
-  <p class="intro-text">
-    I build digital ateliers for heritage brands—ensuring your online presence is as considered as the inside of a Patek Philippe caseback.
-  </p>
-</section>
-
-<!-- ══════════════════════════════════
-     WORK — Maison Studies
-══════════════════════════════════ -->
-<section class="work" id="work">
-  <div class="work-hdr">
-    <span class="label">Archival Studies</span>
-  </div>
-
-  <div class="work-list" id="workList">
-    <a href="https://thread.calyvent.com" target="_blank" rel="noopener noreferrer" class="wl-item"
-       data-img="/work-thread.jpg" data-url="thread.calyvent.com">
-      <span class="wl-num">01</span>
-      <span class="wl-name">Thread</span>
-      <span class="wl-type">Brand Infrastructure</span>
-      <span class="wl-year">2026</span>
-      <span class="wl-arrow">↗</span>
-    </a>
-    <div class="wl-sep"></div>
-    <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer" class="wl-item"
-       data-img="/work-calyvent.jpg" data-url="calyvent.com">
-      <span class="wl-num">02</span>
-      <span class="wl-name">Calyvent</span>
-      <span class="wl-type">Brand Identity</span>
-      <span class="wl-year">2025</span>
-      <span class="wl-arrow">↗</span>
-    </a>
-    <div class="wl-sep"></div>
-    <a href="https://vault.calyvent.com" target="_blank" rel="noopener noreferrer" class="wl-item"
-       data-img="/work-vault.jpg" data-url="vault.calyvent.com">
-      <span class="wl-num">03</span>
-      <span class="wl-name">The Vault</span>
-      <span class="wl-type">E-Commerce</span>
-      <span class="wl-year">2026</span>
-      <span class="wl-arrow">↗</span>
-    </a>
-  </div>
-
-  <!-- Hover preview — real browser chrome -->
-  <div class="work-preview" id="workPreview">
-    <div class="wp-browser">
-      <div class="wp-chrome">
-        <div class="wp-dots">
-          <div class="wp-dot"></div>
-          <div class="wp-dot"></div>
-          <div class="wp-dot"></div>
+<!-- ═══ CONVICTION ═══ -->
+<section class="conviction" id="conviction">
+  <div class="conviction-wrap" id="convictionWrap">
+    <div class="conviction-inner">
+      <div class="conviction-grid">
+        <div>
+          <p class="conviction-label">The Conviction</p>
+          <h2 class="conviction-heading">Every pixel is a <em>decision.</em> Every transition, a <em>feeling.</em></h2>
         </div>
-        <div class="wp-address" id="wpAddress">calyvent.com</div>
-      </div>
-      <div class="wp-progress-track">
-        <div class="wp-progress-bar" id="wpBar"></div>
-      </div>
-      <div class="wp-viewport">
-        <div class="wp-skeleton" id="wpSkeleton">
-          <div class="wp-sk-row"></div>
-          <div class="wp-sk-row"></div>
-          <div class="wp-sk-row"></div>
-          <div class="wp-sk-row"></div>
-          <div class="wp-sk-row"></div>
-        </div>
-        <img class="wp-screenshot" id="wpShot" src="" alt="" draggable="false">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     THE THREE PILLARS OF CRAFT
-══════════════════════════════════ -->
-<section class="process">
-  <div class="process-grid">
-    <div class="process-left">
-      <span class="label">The Philosophy</span>
-    </div>
-    <div class="process-steps">
-      <div class="process-step">
-        <span class="process-num">01</span>
-        <h3>The Fitting</h3>
-        <p>Before a single line of code is written, we study your provenance. We translate your savoir-faire into digital ritual—ensuring the visitor feels the weight of platinum or the whisper of silk through the screen.</p>
-      </div>
-      <div class="process-step">
-        <span class="process-num">02</span>
-        <h3>The Bench</h3>
-        <p>No templates. No frameworks. Every interaction is hand-tooled. Custom cursors that glide like a watch hand; product pages that unfold like leather-bound portfolios. We measure load times in the patience of Haute Horlogerie, not Silicon Valley metrics.</p>
-      </div>
-      <div class="process-step">
-        <span class="process-num">03</span>
-        <h3>The Salon</h3>
-        <p>Launched, but never finished. Like a master tailor maintaining a client's wardrobe, we steward your digital presence as it evolves—ensuring your website ages with the grace of patina, not the urgency of trends.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     STUDIO
-══════════════════════════════════ -->
-<section class="studio" id="studio">
-  <div class="studio-grid">
-    <div class="studio-left">
-      <span class="label">The Atelier</span>
-    </div>
-    <div class="studio-right">
-      <p class="studio-para">
-        Velocity is a digital atelier by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a>. We serve Maisons—Jewelers, Horologers, and Tailors—who understand that heritage cannot be templated.
-      </p>
-      <p class="studio-para">
-        Every commission is approached as a unique artifact. We study your provenance, curate your narrative, and craft digital experiences that carry the same weight as your physical creations. No frameworks. No shortcuts. Only considered craftsmanship.
-      </p>
-      <div class="studio-facts">
-        <div class="sf">
-          <b>Commission</b>
-          <span>Bespoke by design</span>
-        </div>
-        <div class="sf">
-          <b>Heritage</b>
-          <span>Curated with provenance</span>
-        </div>
-        <div class="sf">
-          <b>Patina</b>
-          <span>Built to age gracefully</span>
+        <div class="conviction-right">
+          <div class="conviction-stat"><span class="conviction-stat-num" data-count="0">0</span><span class="conviction-stat-label">Templates used — ever</span></div>
+          <div class="conviction-divider"></div>
+          <div class="conviction-stat"><span class="conviction-stat-num" data-count="48">0</span><span class="conviction-stat-label">Hour response guarantee</span></div>
+          <div class="conviction-divider"></div>
+          <div class="conviction-stat"><span class="conviction-stat-num" data-count="100">0</span><span class="conviction-stat-label">Percent hand-coded</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     SERVICES — For the Maison
-══════════════════════════════════ -->
-<section class="services">
-  <div class="svc-list">
-    <div class="svc-item">
-      <span class="svc-n">01</span>
-      <div class="svc-body">
-        <h3>For the Horologer</h3>
-        <p>Product storytelling that captures fire, scintillation, and complications. Private client portals for high-touch commissions managed with absolute discretion. Every click feels like winding a crown.</p>
-      </div>
-    </div>
-    <div class="svc-item">
-      <span class="svc-n">02</span>
-      <div class="svc-body">
-        <h3>For the Bespoke Tailor</h3>
-        <p>Appointment rituals that mirror the Savile Row experience. Fabric visualization that conveys texture and drape through tactility and motion. Your clients feel the cloth before they order.</p>
-      </div>
-    </div>
-    <div class="svc-item">
-      <span class="svc-n">03</span>
-      <div class="svc-body">
-        <h3>For the Parfumeur</h3>
-        <p>Olfactory storytelling through motion and sound. Sample request journeys that feel like receiving a physical gift. We translate notes and accords into visual poetry.</p>
-      </div>
-    </div>
-    <div class="svc-item">
-      <span class="svc-n">04</span>
-      <div class="svc-body">
-        <h3>Maison Studies</h3>
-        <p>Archival explorations for heritage brands in spaces we seek to serve. Each study demonstrates curatorial precision, tactile consideration, and the patience of true craft.</p>
-      </div>
-    </div>
-  </div>
-  <div class="svc-footer">
-    <p>We accept a limited number of commissions per quarter. <em>Response within 48 hours.</em></p>
-    <a href="mailto:atelier@calyvent.com" class="svc-cta">Begin a Commission →</a>
+<!-- ═══ PHILOSOPHY ═══ -->
+<section class="philosophy" id="philosophy">
+  <div class="philosophy-header"><span class="label">The Philosophy</span></div>
+  <div class="philosophy-track" id="philTrack">
+    <div class="phil-card"><div class="card-shine"></div><span class="phil-num">01 — Discovery</span><div><h3 class="phil-title">The Fitting</h3><p class="phil-desc">Before a single line of code is written, we study your provenance. We translate your savoir-faire into digital ritual — ensuring the visitor feels the weight of platinum or the whisper of silk.</p></div></div>
+    <div class="phil-sep"></div>
+    <div class="phil-counter">II</div>
+    <div class="phil-card"><div class="card-shine"></div><span class="phil-num">02 — Craft</span><div><h3 class="phil-title">The Bench</h3><p class="phil-desc">No templates. No frameworks. Every interaction is hand-tooled. Custom cursors that glide like a watch hand; product pages that unfold like leather-bound portfolios.</p></div></div>
+    <div class="phil-sep"></div>
+    <div class="phil-counter">III</div>
+    <div class="phil-card"><div class="card-shine"></div><span class="phil-num">03 — Stewardship</span><div><h3 class="phil-title">The Salon</h3><p class="phil-desc">Launched, but never finished. Like a master tailor maintaining a client's wardrobe, we steward your digital presence — ensuring it ages with the grace of patina, not the urgency of trends.</p></div></div>
+    <div class="phil-sep"></div>
+    <div class="phil-counter">IV</div>
+    <div class="phil-card"><div class="card-shine"></div><span class="phil-num">04 — Legacy</span><div><h3 class="phil-title">The Archive</h3><p class="phil-desc">Every commission enters our archive — a living record of digital craftsmanship. Your project becomes part of a lineage, informed by every Maison before it and shaping every one after.</p></div></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     CTA — The Invitation
-══════════════════════════════════ -->
-<section class="cta">
-  <p class="cta-label">Request a Private Consultation</p>
-  <p class="cta-sub">We accept a limited number of commissions per quarter to ensure the integrity of the craft. Share your provenance, and we shall respond within 48 hours.</p>
-  <a href="mailto:atelier@calyvent.com" class="cta-email">atelier@calyvent.com</a>
+<!-- ═══ ATELIER ═══ -->
+<section class="atelier" id="atelier">
+  <div class="atelier-bg" id="atelierBg">Atelier</div>
+  <div class="atelier-grid">
+    <div class="atelier-left">
+      <span class="atelier-label">The Atelier</span>
+      <h2 class="atelier-heading" id="atelierHeading">Where heritage meets <em>precision.</em></h2>
+      <div class="atelier-line" id="atelierLine"></div>
+    </div>
+    <div class="atelier-right">
+      <p class="atelier-para">Velocity is a digital atelier by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a>. We serve Maisons — Jewelers, Horologers, and Tailors — who understand that heritage cannot be templated.</p>
+      <p class="atelier-para">Every commission is approached as a unique artifact. We study your provenance, curate your narrative, and craft digital experiences that carry the same weight as your physical creations.</p>
+      <div class="atelier-facts">
+        <div class="sf"><b>Commission</b><span>Bespoke by design</span></div>
+        <div class="sf"><b>Heritage</b><span>Curated with provenance</span></div>
+        <div class="sf"><b>Patina</b><span>Built to age gracefully</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Footer -->
-<footer class="footer">
-  <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a> — digital ateliers for heritage Maisons.</span>
-  <div class="ft-links">
-    <a href="/terms.html">Terms</a>
-    <a href="/privacy.html">Privacy</a>
+<!-- ═══ MAISON ═══ -->
+<section class="maison" id="maison">
+  <div class="maison-sticky" id="maisonSticky">
+    <span class="label maison-label">For the Maison</span>
+    <div class="maison-item" id="m1t"><span class="maison-num">01</span><h3 class="maison-title">For the Horologer</h3></div>
+    <div class="maison-item" id="m1d"><p class="maison-desc">Product storytelling that captures fire, scintillation, and complications. Private client portals for high-touch commissions. Every click feels like winding a crown.</p></div>
+    <div class="maison-item" id="m2t"><span class="maison-num">02</span><h3 class="maison-title">For the Bespoke Tailor</h3></div>
+    <div class="maison-item" id="m2d"><p class="maison-desc">Appointment rituals that mirror the Savile Row experience. Fabric visualization that conveys texture and drape through tactility and motion.</p></div>
+    <div class="maison-item" id="m3t"><span class="maison-num">03</span><h3 class="maison-title">For the Parfumeur</h3></div>
+    <div class="maison-item" id="m3d"><p class="maison-desc">Olfactory storytelling through motion and sound. Sample request journeys that feel like receiving a physical gift.</p></div>
+    <div class="maison-item" id="m4t"><span class="maison-num">04</span><h3 class="maison-title">Maison Studies</h3></div>
+    <div class="maison-item" id="m4d"><p class="maison-desc">Archival explorations for heritage brands. Each study demonstrates curatorial precision and the patience of true craft.</p></div>
+    <div class="maison-cta" id="maisonCTA">
+      <p class="maison-cta-eye">Request a Private Consultation</p>
+      <p class="maison-cta-head">Heritage deserves more than templates.</p>
+      <p class="maison-cta-sub">We accept a limited number of commissions per quarter. Share your provenance, and we shall respond within 48 hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer-exp" id="footerExp">
+  <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
+    <a href="mailto:atelier@calyvent.com" class="footer-email" id="footerEmail">atelier@calyvent.com</a>
+    <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-coords" id="footerCoords"></span>
+    <div class="footer-meta">
+      <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+    </div>
   </div>
 </footer>
 
-<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha384-O55L/6rhHr9CFvrxqv5luxOCcmVaBmETbZbJDP+Do8T0pztTACsFBD/IXCNkj7DV" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
-/* ── Lenis init happens inside boot() after defer scripts have loaded ── */
 
-/* ── Preloader — cinematic trickle, minimum 2.6s ── */
+/* ═══ PRELOADER ═══ */
 (function(){
-  let p = 0;
-  const bar   = document.getElementById('pl-bar');
-  const pl    = document.getElementById('pl');
-  const START = Date.now();
-  const MIN   = 1600;
-
-  const tick = setInterval(()=>{
-    const inc = p < 40
-      ? Math.random() * 7 + 3       // fast burst early
-      : p < 75
-        ? Math.random() * 3 + 1     // slowing down
-        : p < 90
-          ? Math.random() * 1.2 + 0.3 // crawl
-          : Math.random() * 0.4 + 0.05; // agony
-    p = Math.min(p + inc, 96);
-    bar.style.width = p + '%';
-  }, 90);
-
-  function onLoaded() {
-    clearInterval(tick);
-    const wait = Math.max(0, MIN - (Date.now() - START));
-    setTimeout(() => {
-      p = 100; bar.style.width = '100%';
-      setTimeout(() => { pl.classList.add('out'); boot(); }, 500);
-    }, wait);
+  const pl=document.getElementById('preloader'),brand=pl.querySelector('.pl-brand'),line=document.getElementById('plLine');
+  function go(){
+    setTimeout(()=>{brand.style.transition='opacity .5s,transform .5s';brand.style.opacity='1';brand.style.transform='translateY(0)'},80);
+    setTimeout(()=>{const l=pl.querySelector('.pl-line');l.style.transition='opacity .3s';l.style.opacity='1';line.style.transition='width .8s cubic-bezier(.16,1,.3,1)';line.style.width='100%'},350);
+    setTimeout(()=>{gsap.to(pl,{clipPath:'inset(0 0 100% 0)',duration:1,ease:'expo.inOut',onComplete:()=>{pl.classList.add('is-done');boot()}})},1300);
   }
-  if (document.readyState === 'complete') {
-    onLoaded();
-  } else {
-    window.addEventListener('load', onLoaded);
-  }
+  if(document.readyState==='complete')go();else window.addEventListener('load',go);
 })();
 
-/* ── Boot animations ── */
 function boot(){
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis=new Lenis({duration:2.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true,smoothTouch:false});
+  lenis.on('scroll',ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
 
-  /* Lenis smooth scroll — init here, after defer scripts are loaded */
-  if (typeof gsap !== 'undefined') {
-    gsap.registerPlugin(typeof ScrollTrigger !== 'undefined' ? ScrollTrigger : {});
-    if (typeof Lenis !== 'undefined') {
-      const lenis = new Lenis({
-        duration: 2.6,
-        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        smoothTouch: false,
-      });
-      gsap.ticker.add(time => lenis.raf(time * 1000));
-      gsap.ticker.lagSmoothing(0);
+  gsap.to('#scrollProgress',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:true}});
+
+  /* ═══ HERO ═══ */
+  const heroTitle=document.getElementById('heroTitle');
+  const text=heroTitle.textContent.replace('.','');
+  heroTitle.innerHTML=text.split('').map((c,i)=>`<span class="char">${c}</span>`).join('')+'<span class="dot">.</span>';
+  const chars=heroTitle.querySelectorAll('.char'),dot=heroTitle.querySelector('.dot');
+
+  gsap.from(chars,{opacity:0,y:100,rotateX:-80,scale:.6,transformOrigin:'50% 100%',duration:1.5,ease:'expo.out',stagger:{each:.035},delay:.15});
+  gsap.from(dot,{opacity:0,scale:0,rotation:-360,duration:1.2,ease:'back.out(2)',delay:.15+text.length*.035+.1});
+  gsap.from('.hero-sub',{opacity:0,y:25,duration:1.3,ease:'expo.out',delay:.8});
+
+  const heroTL=gsap.timeline({scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1.5}});
+  /* Level 1: fly past */
+  heroTL.to('#heroL1',{scale:14,opacity:0,duration:.35,ease:'power2.in'},0);
+  chars.forEach((c,i)=>{heroTL.to(c,{x:(i-text.length/2)*50,y:(i%2?-1:1)*30,duration:.28},0)});
+  heroTL.to(dot,{rotation:1440,scale:5,duration:.35},0);
+  /* Level 2: phrases converge */
+  heroTL.to('#heroL2',{opacity:1,duration:.08},0.28);
+  document.querySelectorAll('.hero-phrase').forEach((p,i)=>{
+    const fx=+p.dataset.finalX,fy=+p.dataset.finalY,sx=+p.dataset.startX,sy=+p.dataset.startY;
+    gsap.set(p,{left:sx+'%',top:sy+'%',xPercent:-50,yPercent:-50,scale:.2,opacity:0,filter:'blur(8px)'});
+    heroTL.to(p,{left:fx+'%',top:fy+'%',scale:1,opacity:1,filter:'blur(0px)',duration:.18,ease:'expo.out'},0.30+i*.03);
+  });
+  /* Level 2: fly past */
+  heroTL.to('#heroL2',{scale:12,opacity:0,duration:.20,ease:'power2.in'},0.68);
+  /* Portal */
+  heroTL.fromTo('#heroPortal',{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(85% at 50% 50%)',duration:.18,ease:'power2.inOut'},0.82);
+
+  /* ═══ CONVICTION — pinned at center, zoom in→hold→zoom out ═══ */
+  const convWrap=document.getElementById('convictionWrap');
+  /* Starts at 88% with rounded corners (set in CSS) */
+  const convTL=gsap.timeline({scrollTrigger:{
+    trigger:'#conviction',start:'center center',end:'+=250%',pin:true,scrub:1.5
+  }});
+  convTL.to(convWrap,{scale:1,borderRadius:'0px',duration:.2,ease:'power2.inOut'},0);
+  /* Counters animate during middle */
+  document.querySelectorAll('.conviction-stat-num').forEach(el=>{
+    const target=parseInt(el.dataset.count);
+    convTL.to(el,{innerText:target,snap:{innerText:1},duration:.35,ease:'power2.out'},0.25);
+  });
+  convTL.from('.conviction-heading',{opacity:0,y:40,duration:.15,ease:'expo.out'},0.05);
+  /* Zoom back out */
+  convTL.to(convWrap,{scale:.88,borderRadius:'20px',duration:.2,ease:'power2.inOut'},0.75);
+
+  /* ═══ PHILOSOPHY — horizontal scroll, slower ═══ */
+  ScrollTrigger.matchMedia({
+    '(min-width:769px)':function(){
+      const track=document.getElementById('philTrack');
+      if(!track)return;
+      const total=track.scrollWidth-window.innerWidth+120;
+      /* 1.8x scroll distance = slower pace */
+      gsap.to(track,{x:-total,ease:'none',scrollTrigger:{
+        trigger:'.philosophy',start:'top top',end:()=>'+='+(total*1.8),
+        pin:true,scrub:2,anticipatePin:1,invalidateOnRefresh:true
+      }});
+      /* Stagger card entrance */
+      gsap.from('.phil-card',{opacity:0,y:80,scale:.88,duration:1.2,ease:'expo.out',stagger:.25,scrollTrigger:{trigger:'.philosophy',start:'top 60%'}});
+      /* Separators fade in */
+      gsap.from('.phil-sep',{opacity:0,scaleY:0,duration:1,ease:'expo.out',stagger:.2,scrollTrigger:{trigger:'.philosophy',start:'top 50%'}});
+    },
+    '(max-width:768px)':function(){
+      gsap.from('.phil-card',{scrollTrigger:{trigger:'.philosophy',start:'top 80%'},opacity:0,y:40,duration:1,ease:'expo.out',stagger:.15});
     }
+  });
+
+  /* 3D Tilt on cards */
+  document.querySelectorAll('.phil-card').forEach(card=>{
+    const shine=card.querySelector('.card-shine');
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(800px) rotateX(${-y*20}deg) rotateY(${x*20}deg) scale(1.04)`;
+      card.style.transition='transform .1s ease-out';
+      if(shine)shine.style.background=`radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%,rgba(196,156,123,.12),transparent 50%)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='perspective(800px) rotateX(0) rotateY(0) scale(1)';card.style.transition='transform .6s cubic-bezier(.16,1,.3,1)'});
+  });
+
+  /* ═══ ATELIER — typewriter heading with following cursor ═══ */
+  const atelierH=document.getElementById('atelierHeading');
+  if(atelierH){
+    const html=atelierH.innerHTML;
+    let result='',inTag=false,tagBuf='';
+    for(let i=0;i<html.length;i++){
+      const c=html[i];
+      if(c==='<'){inTag=true;tagBuf='<';continue}
+      if(inTag){tagBuf+=c;if(c==='>'){inTag=false;result+=tagBuf;tagBuf=''}continue}
+      if(c===' '){result+=' ';continue}
+      result+=`<span class="tc">${c}</span>`;
+    }
+    atelierH.style.position='relative';
+    atelierH.innerHTML=result;
+    const cursorEl=document.createElement('span');
+    cursorEl.className='atelier-cursor';
+    atelierH.appendChild(cursorEl);
+    const tcChars=atelierH.querySelectorAll('.tc');
+
+    /* Typewriter timeline — triggers only when heading is IN VIEW */
+    const typeTL=gsap.timeline({scrollTrigger:{
+      trigger:'#atelierHeading',start:'top 80%',end:'top 35%',scrub:true,
+      onUpdate:function(self){
+        /* Position cursor after last visible char */
+        const p=self.progress;
+        const idx=Math.min(Math.floor(p*tcChars.length),tcChars.length-1);
+        if(p>0.01&&idx>=0){
+          const ch=tcChars[idx];
+          const cr=ch.getBoundingClientRect();
+          const pr=atelierH.getBoundingClientRect();
+          cursorEl.style.left=(cr.right-pr.left)+'px';
+          cursorEl.style.top=(cr.top-pr.top)+'px';
+          cursorEl.style.height=cr.height+'px';
+          cursorEl.style.opacity='1';
+        }
+        if(p>=0.99)cursorEl.style.opacity='1';
+      }
+    }});
+    tcChars.forEach((c,i)=>{typeTL.to(c,{opacity:1,duration:0.01},i*(1/tcChars.length))});
   }
 
-  /* Letter stagger on hero name */
-  const heroEl = document.getElementById('heroName');
-  if (!heroEl) return;
-  const heroText = heroEl.textContent.replace('.', '').trim();
-  heroEl.innerHTML = heroText.split('').map(l => `<span class="letter">${l}</span>`).join('') + '<em>.</em>';
+  /* Bg text parallax + split */
+  const bgText=document.getElementById('atelierBg');
+  gsap.to(bgText,{y:-180,ease:'none',scrollTrigger:{trigger:'.atelier',start:'top bottom',end:'bottom top',scrub:true}});
+  const bgChars=bgText.textContent.split('');
+  bgText.innerHTML=bgChars.map(c=>`<span style="display:inline-block">${c}</span>`).join('');
+  bgText.querySelectorAll('span').forEach((s,i)=>{gsap.to(s,{y:(i%2?-1:1)*(20+i*8),x:(i-3)*15,opacity:0,ease:'none',scrollTrigger:{trigger:'.atelier',start:'40% bottom',end:'bottom top',scrub:true}})});
 
-  gsap.from('#heroName .letter', {
-    opacity: 0, y: 80, rotateX: -35,
-    transformOrigin: '50% 0%',
-    duration: 1.5, ease: 'expo.out',
-    stagger: 0.055, delay: 0.1
-  });
-  gsap.from('#heroName em', {
-    opacity: 0, scale: 0.4,
-    duration: 1.2, ease: 'expo.out',
-    delay: 0.1 + 8 * 0.055 + 0.05
-  });
-  gsap.from('.hero-foot', {
-    opacity: 0, y: 24,
-    duration: 1.4, ease: 'expo.out', delay: 0.65
-  });
+  gsap.to('#atelierLine',{width:'clamp(40px,8vw,100px)',duration:1.5,ease:'expo.out',scrollTrigger:{trigger:'.atelier',start:'top 60%'}});
+  gsap.from('.atelier-para',{scrollTrigger:{trigger:'.atelier-right',start:'top 72%'},opacity:0,y:35,duration:1.2,ease:'expo.out',stagger:.12});
+  gsap.from('.sf',{scrollTrigger:{trigger:'.atelier-facts',start:'top 85%'},opacity:0,y:25,duration:1,ease:'expo.out',stagger:.08});
 
-  /* Intro clip reveal */
-  gsap.from('.intro-text', {
-    scrollTrigger: { trigger: '.intro', start: 'top 72%' },
-    clipPath: 'inset(0 0 100% 0)',
-    duration: 1.6, ease: 'expo.out'
-  });
+  /* ═══ MAISON — flying through space, scale PAST you ═══ */
+  const MT=gsap.timeline({scrollTrigger:{trigger:'#maison',start:'top top',end:'bottom top',scrub:1.5}});
 
-  /* Work */
-  gsap.from('.wl-sep', {
-    scrollTrigger: { trigger: '.work-list', start: 'top 82%' },
-    scaleX: 0, transformOrigin: 'left',
-    duration: 1.4, ease: 'expo.out', stagger: 0.1
-  });
-  gsap.from('.wl-item', {
-    scrollTrigger: { trigger: '.work-list', start: 'top 80%' },
-    opacity: 0, y: 40,
-    duration: 1.1, ease: 'expo.out', stagger: 0.12
-  });
+  /* All items start far away (tiny, from different positions) */
+  gsap.set('#m1t',{left:'-30%',top:'20%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m1d',{left:'130%',top:'75%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m2t',{left:'140%',top:'30%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m2d',{left:'-40%',top:'65%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m3t',{left:'50%',top:'-40%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m3d',{left:'50%',top:'140%',xPercent:-50,yPercent:-50,opacity:0,scale:.05});
+  gsap.set('#m4t',{left:'50%',top:'50%',xPercent:-50,yPercent:-50,opacity:0,scale:.02});
+  gsap.set('#m4d',{left:'50%',top:'65%',xPercent:-50,yPercent:-50,opacity:0,scale:.02});
 
-  /* Process */
-  gsap.from('.process-step', {
-    scrollTrigger: { trigger: '.process', start: 'top 75%' },
-    opacity: 0, y: 32, duration: 1.1, ease: 'expo.out', stagger: 0.18
-  });
+  function flyItem(tl,tId,dId,tStart,tFrom,dFrom){
+    const dur=.18;
+    /* Fly IN from far → center */
+    tl.to(tId,{left:'45%',top:'38%',scale:1,opacity:1,duration:dur*.5,ease:'power2.out'},tStart);
+    tl.to(dId,{left:'55%',top:'60%',scale:1,opacity:1,duration:dur*.5,ease:'power2.out'},tStart+.02);
+    /* Hold briefly */
+    /* Fly PAST — scale UP to 20x (behind the viewer) */
+    tl.to(tId,{scale:20,duration:dur*.5,ease:'power2.in'},tStart+dur*.6);
+    tl.to(dId,{scale:15,duration:dur*.5,ease:'power2.in'},tStart+dur*.6+.01);
+    /* Opacity drops only when already huge */
+    tl.to(tId,{opacity:0,duration:.02},tStart+dur*.9);
+    tl.to(dId,{opacity:0,duration:.02},tStart+dur*.9+.01);
+  }
 
-  /* Studio */
-  gsap.from(['.studio-para', '.sf'], {
-    scrollTrigger: { trigger: '.studio', start: 'top 75%' },
-    opacity: 0, y: 30, duration: 1.1, ease: 'expo.out', stagger: 0.1
-  });
+  flyItem(MT,'#m1t','#m1d',0.00);
+  flyItem(MT,'#m2t','#m2d',0.20);
+  flyItem(MT,'#m3t','#m3d',0.40);
 
-  /* Services */
-  gsap.from('.svc-item', {
-    scrollTrigger: { trigger: '.services', start: 'top 80%' },
-    opacity: 0, y: 20, duration: 1, ease: 'expo.out', stagger: 0.09
-  });
-  gsap.from('.svc-footer', {
-    scrollTrigger: { trigger: '.svc-footer', start: 'top 90%' },
-    opacity: 0, y: 20, duration: 1, ease: 'expo.out'
-  });
+  /* Item 4 — CRASHES from dead center */
+  MT.to('#m4t',{scale:1,opacity:1,duration:.08,ease:'back.out(2)'},0.60);
+  MT.to('#m4d',{scale:1,opacity:1,top:'62%',duration:.06,ease:'power2.out'},0.64);
+  /* Hold longer */
+  MT.to('#m4t',{scale:25,duration:.07,ease:'power2.in'},0.74);
+  MT.to('#m4d',{scale:18,duration:.07,ease:'power2.in'},0.75);
+  MT.to('#m4t',{opacity:0,duration:.02},0.79);
+  MT.to('#m4d',{opacity:0,duration:.02},0.80);
 
-  /* CTA */
-  gsap.from('.cta-label', {
-    scrollTrigger: { trigger: '.cta', start: 'top 80%' },
-    opacity: 0, y: 16, duration: 1, ease: 'expo.out'
-  });
-  gsap.from('.cta-email', {
-    scrollTrigger: { trigger: '.cta', start: 'top 78%' },
-    clipPath: 'inset(0 0 100% 0)',
-    y: 40, duration: 1.8, ease: 'expo.out', delay: 0.15
-  });
+  /* SHAKE */
+  const shake=[{x:10,y:-6},{x:-8,y:7},{x:7,y:-5},{x:-9,y:4},{x:6,y:-7},{x:-5,y:6},{x:4,y:-3},{x:-3,y:3},{x:2,y:-1},{x:0,y:0}];
+  let sp=0.80;
+  shake.forEach(f=>{MT.to('#maisonSticky',{x:f.x,y:f.y,duration:.008},sp);sp+=.008});
+
+  /* CTA emerges */
+  MT.to('#maisonCTA',{opacity:1,duration:.06,ease:'power2.out'},0.90);
+  MT.from('.maison-cta-eye',{y:30,opacity:0,duration:.04},0.90);
+  MT.from('.maison-cta-head',{y:50,opacity:0,duration:.04},0.92);
+  MT.from('.maison-cta-sub',{y:30,opacity:0,duration:.04},0.94);
+
+  /* ═══ FOOTER ═══ */
+  const ftEmail=document.getElementById('footerEmail');
+  if(ftEmail){
+    const t=ftEmail.textContent;
+    ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
+    gsap.from('.footer-email .char',{scrollTrigger:{trigger:'.footer-exp',start:'top 70%'},opacity:0,y:50,rotateZ:10,duration:1.4,ease:'expo.out',stagger:.015});
+  }
+  gsap.from('.footer-tagline',{scrollTrigger:{trigger:'.footer-exp',start:'top 65%'},opacity:0,y:20,duration:1,ease:'expo.out',delay:.2});
+
+  const coordsEl=document.getElementById('footerCoords');
+  if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
+
+  /* Particle text */
+  (function(){
+    const cv=document.getElementById('footerParticles');if(!cv)return;
+    const ctx=cv.getContext('2d');let w,h,particles=[],formed=false;
+    function resize(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight;initP()}
+    function initP(){
+      particles=[];
+      const off=document.createElement('canvas');off.width=w;off.height=h;
+      const oc=off.getContext('2d');
+      const fs=Math.min(w*.13,160);
+      oc.font=`400 ${fs}px 'Instrument Serif',serif`;
+      oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
+      oc.fillText('Velocity.',w/2,h*.30);
+      const d=oc.getImageData(0,0,w,h).data;
+      const gap=Math.max(3,Math.round(w/380));
+      for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
+        const i=(y*w+x)*4;
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
+      }}
+    }
+    resize();window.addEventListener('resize',resize);
+
+    /* Track mouse globally */
+    let mouseX=-1e3,mouseY=-1e3;
+    document.addEventListener('mousemove',e=>{
+      const r=cv.getBoundingClientRect();
+      mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
+    });
+
+    ScrollTrigger.create({trigger:'.footer-exp',start:'top 80%',onEnter:()=>{formed=true},onLeaveBack:()=>{formed=false}});
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        if(formed){
+          const dx=mouseX-p.x,dy=mouseY-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){const f=(120-dist)/120;p.vx-=(dx/dist)*f*5;p.vy-=(dy/dist)*f*5}
+          p.vx+=(p.tx-p.x)*.04;p.vy+=(p.ty-p.y)*.04;
+        }else{
+          p.vx+=(p.tx-p.x)*.003;p.vy+=(p.ty-p.y)*.003;
+          p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
+        }
+        p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
+        ctx.fillRect(p.x,p.y,p.sz,p.sz);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 }
 
-/* ── Work hover preview — real screenshots with 2.3s browser loading ── */
+/* ═══ CURSOR ═══ */
 (function(){
-  const items    = document.querySelectorAll('.wl-item');
-  const preview  = document.getElementById('workPreview');
-  const address  = document.getElementById('wpAddress');
-  const bar      = document.getElementById('wpBar');
-  const skeleton = document.getElementById('wpSkeleton');
-  const shot     = document.getElementById('wpShot');
-  let mx = 0, my = 0, active = false, revealTimer = null;
-
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-  items.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      // Reset
-      clearTimeout(revealTimer);
-      bar.style.transition = 'none';
-      bar.style.width = '0%';
-      shot.style.opacity = '0';
-      skeleton.style.opacity = '1';
-      address.textContent = item.dataset.url || '';
-
-      // Preload image
-      shot.src = item.dataset.img || '';
-
-      // Show card
-      preview.classList.add('show');
-      active = true;
-
-      // Kick off progress bar next frame
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          bar.style.transition = 'width 2.3s cubic-bezier(0.4,0,0.2,1)';
-          bar.style.width = '100%';
-        });
-      });
-
-      // Reveal screenshot + start slow scroll after 2.3s
-      revealTimer = setTimeout(() => {
-        skeleton.style.opacity = '0';
-        shot.style.opacity = '1';
-        shot.classList.remove('scrolling');
-        void shot.offsetWidth; // force reflow to restart animation
-        shot.classList.add('scrolling');
-      }, 2300);
-    });
-
-    item.addEventListener('mouseleave', () => {
-      preview.classList.remove('show');
-      active = false;
-      clearTimeout(revealTimer);
-      // Reset state after fade-out completes
-      setTimeout(() => {
-        if (!active) {
-          bar.style.transition = 'none';
-          bar.style.width = '0%';
-          shot.style.opacity = '0';
-          shot.classList.remove('scrolling');
-          skeleton.style.opacity = '1';
-        }
-      }, 400);
-    });
+  if(window.matchMedia('(pointer:coarse)').matches)return;
+  const g=document.getElementById('cursorGlow'),r=document.getElementById('cursorRing'),d=document.getElementById('cursorDot');
+  if(!r||!d||!g)return;
+  let mx=-200,my=-200,rx=-200,ry=-200,gx=-200,gy=-200,tx=-200,ty=-200,mag=false;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!mag){tx=mx;ty=my}});
+  document.querySelectorAll('a,button,.phil-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{r.classList.add('is-active');mag=true});
+    el.addEventListener('mouseleave',()=>{r.classList.remove('is-active');mag=false;tx=mx;ty=my});
+    el.addEventListener('mousemove',()=>{if(!mag)return;const b=el.getBoundingClientRect();tx=mx+((b.left+b.width/2)-mx)*.2;ty=my+((b.top+b.height/2)-my)*.2});
   });
-
-  (function loop(){
-    if (active) {
-      preview.style.transform = `translate(${mx + 28}px,${my - 110}px)`;
-    }
-    requestAnimationFrame(loop);
-  })();
+  (function l(){rx+=(tx-rx)*.07;ry+=(ty-ry)*.07;gx+=(mx-gx)*.05;gy+=(my-gy)*.05;r.style.transform=`translate(${rx-20}px,${ry-20}px)`;d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;g.style.transform=`translate(${gx-250}px,${gy-250}px)`;requestAnimationFrame(l)})();
 })();
 
-/* ── Custom cursor ── */
+/* ═══ HERO CANVAS ═══ */
 (function(){
-  if (window.matchMedia('(pointer:coarse)').matches) return;
-  const c = document.getElementById('cursor'), d = document.getElementById('cdot');
-  c.style.display = ''; d.style.display = '';
-  let mx = -200, my = -200, cx = -200, cy = -200;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  (function loop(){
-    cx += (mx - cx) * 0.1; cy += (my - cy) * 0.1;
-    c.style.transform = `translate(${cx - 18}px,${cy - 18}px)`;
-    d.style.transform = `translate(${mx - 3}px,${my - 3}px)`;
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a,button').forEach(el => {
-    el.addEventListener('mouseenter', () => c.classList.add('hover'));
-    el.addEventListener('mouseleave', () => c.classList.remove('hover'));
-  });
+  const cv=document.getElementById('heroCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');let w,h,mx=.5,my=.5;
+  function rs(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight}
+  rs();window.addEventListener('resize',rs);
+  document.addEventListener('mousemove',e=>{mx=e.clientX/window.innerWidth;my=e.clientY/window.innerHeight});
+  const C=[];for(let i=0;i<14;i++)C.push({y:Math.random(),a:.03+Math.random()*.06,f:.3+Math.random()*.5,s:.0002+Math.random()*.0003,p:Math.random()*6.28,t:.3+Math.random()*.8,o:.02+Math.random()*.035,c:i%3===0?'196,156,123':i%3===1?'222,200,181':'27,77,62'});
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    const bx=(.3+Math.sin(t*.0002)*.15+(mx-.5)*.1)*w,by=(.4+Math.cos(t*.00025)*.1+(my-.5)*.08)*h;
+    const g=ctx.createRadialGradient(bx,by,0,bx,by,w*.4);g.addColorStop(0,'rgba(196,156,123,.04)');g.addColorStop(1,'rgba(196,156,123,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    C.forEach(c=>{ctx.beginPath();ctx.strokeStyle=`rgba(${c.c},${c.o})`;ctx.lineWidth=c.t;const b=c.y*h,mi=(my-.5)*20;for(let x=0;x<=w;x+=3){const p=x/w,y=b+Math.sin(p*c.f*6.28+t*c.s+c.p)*c.a*h+Math.sin(p*1.5+t*c.s*.7)*c.a*h*.4+mi*Math.sin(p*3.14);if(!x)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()});
+    requestAnimationFrame(draw);
+  }requestAnimationFrame(draw);
 })();
-
-/* ── Nav scroll ── */
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('s', scrollY > 60);
-}, { passive: true });
 </script>
 </body>
 </html>
