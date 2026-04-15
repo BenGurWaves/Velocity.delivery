@@ -1,5 +1,5 @@
 name = "velocitydelivery"
-pages_build_output_dir = "website"
+pages_build_output_dir = "website/dist"
 
 [[kv_namespaces]]
 binding = "DATA"
