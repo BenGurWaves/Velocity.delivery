@@ -8,26 +8,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=15">
+  <link rel="stylesheet" href="/styles.css?v=31">
   <style>
     .legal {
       padding: clamp(8rem,14vw,12rem) var(--px) clamp(5rem,10vw,8rem);
       max-width: 720px;
+      margin: 0 auto;
     }
     .legal-eyebrow {
-      font-size: .58rem;
-      letter-spacing: .2em;
+      font-size: .52rem;
+      letter-spacing: .24em;
       text-transform: uppercase;
       color: var(--brass);
       display: block;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
     .legal h1 {
-      font-family: 'Instrument Serif', Georgia, serif;
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: 400;
-      font-size: clamp(2.2rem, 5vw, 4.5rem);
       letter-spacing: -.04em;
-      line-height: 1;
+      line-height: 1.05;
       color: var(--sand);
       margin-bottom: 1rem;
     }
@@ -41,36 +42,39 @@
       border-bottom: 1px solid var(--border);
     }
     .legal h2 {
-      font-family: 'Instrument Serif', Georgia, serif;
+      font-family: var(--serif);
       font-weight: 400;
-      font-size: clamp(1rem, 1.6vw, 1.4rem);
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
       letter-spacing: -.02em;
       color: var(--sand);
-      margin: 2.5rem 0 .75rem;
+      margin: 3rem 0 1rem;
     }
     .legal p, .legal li {
-      font-size: clamp(.82rem, 1vw, .92rem);
+      font-size: clamp(.85rem, 1vw, .95rem);
       font-weight: 300;
       color: var(--dim);
-      line-height: 1.85;
+      line-height: 2;
     }
     .legal ul {
-      padding-left: 1.25rem;
-      margin: .5rem 0;
+      padding-left: 1.5rem;
+      margin: .75rem 0 2rem;
       display: flex;
       flex-direction: column;
-      gap: .35rem;
+      gap: .5rem;
+    }
+    .legal p {
+      margin-bottom: 1.5rem;
     }
     .legal strong { color: var(--sand); font-weight: 400 }
     .legal a {
       color: var(--sand);
       border-bottom: 1px solid var(--border2);
       padding-bottom: 1px;
-      transition: border-color .25s;
+      transition: border-color .3s;
     }
     .legal a:hover { border-color: var(--brass) }
     .legal-foot {
-      margin-top: 3rem;
+      margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid var(--border);
       font-size: .62rem;
@@ -82,16 +86,13 @@
 <body>
 
 <div class="grain"></div>
-<div class="cursor" id="cursor"></div>
-<div class="cdot" id="cdot"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
-<nav class="nav s" id="nav">
-  <a href="/" class="nav-brand">Velocity<em>.</em></a>
-  <div class="nav-links">
-    <a href="/#work">Work</a>
-    <a href="/#studio">Studio</a>
-    <a href="mailto:hello@calyvent.com">Contact</a>
-  </div>
+<nav style="padding: var(--px); position: absolute; top:0; left:0; width: 100%; z-index: 10;">
+  <a href="/" style="font-family: var(--serif); font-size: clamp(1.5rem,3.5vw,2rem); color: var(--sand); letter-spacing:-.02em;">Velocity<em style="font-style:normal; color:var(--brass);">.</em></a>
 </nav>
 
 <div class="legal">
@@ -153,7 +154,7 @@
   </ul>
 
   <h2>9. Your Rights</h2>
-  <p>You have the right to access, correct, delete, or request portability of your personal data. To exercise any of these rights, contact us at <a href="mailto:hello@calyvent.com">hello@calyvent.com</a>. We will respond within 30 days.</p>
+  <p>You have the right to access, correct, delete, or request portability of your personal data. To exercise any of these rights, contact us at <a href="mailto:atelier@calyvent.com">atelier@calyvent.com</a>. We will respond within 30 days.</p>
 
   <h2>10. Children's Privacy</h2>
   <p>Our services are not directed to individuals under the age of 18. We do not knowingly collect personal information from children.</p>
@@ -162,36 +163,116 @@
   <p>We may update this Privacy Policy from time to time. Material changes will be communicated via email or through a notice on our website. Your continued use of the service after changes are posted constitutes acceptance of the updated policy.</p>
 
   <h2>12. Contact</h2>
-  <p>For privacy-related questions or requests, contact us at <a href="mailto:hello@calyvent.com">hello@calyvent.com</a>.</p>
+  <p>For privacy-related questions or requests, contact us at <a href="mailto:atelier@calyvent.com">atelier@calyvent.com</a>.</p>
 
   <p class="legal-foot">Velocity is a trade name of Calyvent. &copy; 2026 Calyvent. All rights reserved.</p>
 </div>
 
-<footer class="footer">
-  <span>&copy; 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
-  <div class="ft-links">
-    <a href="/terms.html">Terms</a>
-    <a href="/privacy.html">Privacy</a>
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer-exp" id="footerExp">
+  <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
+    <a href="mailto:atelier@calyvent.com" class="footer-email" id="footerEmail">atelier@calyvent.com</a>
+    <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-coords" id="footerCoords"></span>
+    <div class="footer-meta">
+      <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+    </div>
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
-(function(){
-  var cur = document.getElementById('cursor');
-  var dot = document.getElementById('cdot');
-  if(!cur) return;
-  var mx=0,my=0,cx=0,cy=0;
-  document.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; });
-  (function loop(){
-    cx += (mx-cx)*.12; cy += (my-cy)*.12;
-    cur.style.transform='translate('+(cx-18)+'px,'+(cy-18)+'px)';
-    dot.style.transform='translate('+(mx-2)+'px,'+(my-2)+'px)';
-    requestAnimationFrame(loop);
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis=new Lenis({duration:2.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true,smoothTouch:false});
+  lenis.on('scroll',ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.to('#scrollProgress',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:true}});
+
+  /* ═══ FOOTER ═══ */
+  const ftEmail=document.getElementById('footerEmail');
+  if(ftEmail){
+    const t=ftEmail.textContent;
+    ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
+    gsap.from('.footer-email .char',{scrollTrigger:{trigger:'.footer-exp',start:'top 70%'},opacity:0,y:50,rotateZ:10,duration:1.4,ease:'expo.out',stagger:.015});
+  }
+  gsap.from('.footer-tagline',{scrollTrigger:{trigger:'.footer-exp',start:'top 65%'},opacity:0,y:20,duration:1,ease:'expo.out',delay:.2});
+
+  const coordsEl=document.getElementById('footerCoords');
+  if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
+
+  /* Particle text */
+  (function(){
+    const cv=document.getElementById('footerParticles');if(!cv)return;
+    const ctx=cv.getContext('2d');let w,h,particles=[],formed=false;
+    function resize(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight;initP()}
+    function initP(){
+      particles=[];
+      const off=document.createElement('canvas');off.width=w;off.height=h;
+      const oc=off.getContext('2d');
+      const fs=Math.min(w*.13,160);
+      oc.font=`400 ${fs}px 'Instrument Serif',serif`;
+      oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
+      oc.fillText('Velocity.',w/2,h*.30);
+      const d=oc.getImageData(0,0,w,h).data;
+      const gap=Math.max(3,Math.round(w/380));
+      for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
+        const i=(y*w+x)*4;
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
+      }}
+    }
+    resize();window.addEventListener('resize',resize);
+
+    /* Track mouse globally */
+    let mouseX=-1e3,mouseY=-1e3;
+    document.addEventListener('mousemove',e=>{
+      const r=cv.getBoundingClientRect();
+      mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
+    });
+
+    ScrollTrigger.create({trigger:'.footer-exp',start:'top 80%',onEnter:()=>{formed=true},onLeaveBack:()=>{formed=false}});
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        if(formed){
+          const dx=mouseX-p.x,dy=mouseY-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){const f=(120-dist)/120;p.vx-=(dx/dist)*f*5;p.vy-=(dy/dist)*f*5}
+          p.vx+=(p.tx-p.x)*.04;p.vy+=(p.ty-p.y)*.04;
+        }else{
+          p.vx+=(p.tx-p.x)*.003;p.vy+=(p.ty-p.y)*.003;
+          p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
+        }
+        p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
+        ctx.fillRect(p.x,p.y,p.sz,p.sz);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
   })();
-  document.querySelectorAll('a').forEach(function(el){
-    el.addEventListener('mouseenter',function(){ cur.classList.add('hover') });
-    el.addEventListener('mouseleave',function(){ cur.classList.remove('hover') });
+
+/* ═══ CURSOR ═══ */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches)return;
+  const g=document.getElementById('cursorGlow'),r=document.getElementById('cursorRing'),d=document.getElementById('cursorDot');
+  if(!r||!d||!g)return;
+  let mx=-200,my=-200,rx=-200,ry=-200,gx=-200,gy=-200,tx=-200,ty=-200,mag=false;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!mag){tx=mx;ty=my}});
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{r.classList.add('is-active');mag=true});
+    el.addEventListener('mouseleave',()=>{r.classList.remove('is-active');mag=false;tx=mx;ty=my});
+    el.addEventListener('mousemove',()=>{if(!mag)return;const b=el.getBoundingClientRect();tx=mx+((b.left+b.width/2)-mx)*.2;ty=my+((b.top+b.height/2)-my)*.2});
   });
+  (function l(){rx+=(tx-rx)*.07;ry+=(ty-ry)*.07;gx+=(mx-gx)*.05;gy+=(my-gy)*.05;r.style.transform=`translate(${rx-20}px,${ry-20}px)`;d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;g.style.transform=`translate(${gx-250}px,${gy-250}px)`;requestAnimationFrame(l)})();
 })();
 </script>
 </body>
