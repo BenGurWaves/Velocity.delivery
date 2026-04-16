@@ -3,172 +3,161 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Velocity — The Prismatic Corridor</title>
+  <title>Velocity — The Kinetic Numeral</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css?v=31">
   <style>
-    body, html { margin:0; padding:0; background:#000; overflow:hidden; color:var(--sand); font-family:var(--sans); -webkit-font-smoothing:antialiased; height:100vh; display:flex; align-items:center; justify-content:center; }
+    body, html { margin:0; padding:0; background:#0D0C09; overflow:hidden; color:var(--sand); font-family:var(--sans); -webkit-font-smoothing:antialiased; height:100vh; display:flex; align-items:center; justify-content:center; }
     
-    .atelier-vault { position:fixed; inset:0; z-index:1; opacity:0; pointer-events:none; }
-    #vignette { position:fixed; inset:0; z-index:10; pointer-events:none; background:radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 120%); }
+    .atelier-grid { position:fixed; inset:0; z-index:1; opacity:0.1; pointer-events:none; }
     
-    #corridorCanvas { position:absolute; inset:0; z-index:5; width:100%; height:100%; will-change: filter, opacity; }
+    #kineticCanvas { position:absolute; inset:0; z-index:10; width:100%; height:100%; transition: opacity 2s ease; }
     
-    .peace-container { position:relative; z-index:20; pointer-events:none; display:flex; flex-direction:column; align-items:center; opacity:0; }
-    .atelier-core { width:1px; height:80px; background:var(--brass); margin-bottom:3rem; box-shadow:0 0 30px rgba(196,156,123,0.4); animation: breathe 4s ease-in-out infinite; }
-    @keyframes breathe { 0%, 100% { opacity: 0.3; height: 60px; } 50% { opacity: 1; height: 100px; } }
-    .peace-title { font-family:var(--serif); font-size:clamp(1.5rem, 3vw, 2.5rem); font-style:italic; font-weight:400; color:var(--sand); text-align:center; }
+    .interface-layer { position:relative; z-index:20; pointer-events:none; display:flex; flex-direction:column; align-items:center; }
+    .status-msg { font-family:var(--sans); text-transform:uppercase; letter-spacing:1.2em; font-size:0.55rem; color:rgba(222,200,181,0.4); margin-top:20vh; opacity:0; }
     
-    .status-tag { position:fixed; bottom:4vh; left:50%; transform:translateX(-50%); font-family:var(--sans); text-transform:uppercase; letter-spacing:1.2em; font-size:0.5rem; color:rgba(222,200,181,0.25); z-index:10; }
-
-    .shimmer-exit { position:fixed; inset:0; z-index:1000; background:var(--sand); opacity:0; pointer-events:none; }
+    .final-shimmer { position:fixed; inset:0; z-index:1000; background:var(--sand); opacity:0; pointer-events:none; }
   </style>
 </head>
 <body>
 
-<canvas class="atelier-vault" id="gridCanvas"></canvas>
-<div id="vignette"></div>
-<canvas id="corridorCanvas"></canvas>
-<div class="shimmer-exit" id="shimmer"></div>
+<canvas class="atelier-grid" id="gridCanvas"></canvas>
+<canvas id="kineticCanvas"></canvas>
+<div class="final-shimmer" id="shimmer"></div>
 
-<div class="peace-container" id="peace">
-  <div class="atelier-core"></div>
-  <h2 class="peace-title">Returning to the Primary Source</h2>
+<div class="interface-layer">
+  <span class="status-msg" id="sMsg">Returning to Primary Source</span>
 </div>
-
-<span class="status-tag">Cinematic Atelier Handover</span>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
 <script>
 window.addEventListener('load', () => {
-  const cCanvas = document.getElementById('corridorCanvas'), cCtx = cCanvas.getContext('2d');
+  const canvas = document.getElementById('kineticCanvas'), ctx = canvas.getContext('2d');
   const gCanvas = document.getElementById('gridCanvas'), gCtx = gCanvas.getContext('2d');
   let w, h;
   
   function rs() { 
-    w = cCanvas.width = gCanvas.width = window.innerWidth; 
-    h = cCanvas.height = gCanvas.height = window.innerHeight; 
+    w = canvas.width = gCanvas.width = window.innerWidth; 
+    h = canvas.height = gCanvas.height = window.innerHeight; 
     drawGrid();
   }
   window.addEventListener('resize', rs); rs();
 
-  // 1. Background Grid (The Vault)
   function drawGrid() {
     gCtx.clearRect(0,0,w,h);
-    gCtx.strokeStyle = 'rgba(222,200,181,0.15)';
+    gCtx.strokeStyle = 'rgba(196,156,123,0.3)';
     gCtx.lineWidth = 0.5;
     const step = 80;
     for(let x=0; x<w; x+=step) { gCtx.beginPath(); gCtx.moveTo(x,0); gCtx.lineTo(x,h); gCtx.stroke(); }
     for(let y=0; y<h; y+=step) { gCtx.beginPath(); gCtx.moveTo(0,y); gCtx.lineTo(w,y); gCtx.stroke(); }
   }
 
-  // 2. Glass Corridor Engine
-  const slabs = [];
-  const numSlabs = 12;
-  function initSlabs() {
-    for(let i=0; i<numSlabs; i++) {
-      slabs.push({
-        z: (i / numSlabs) * 4000,
-        x: (Math.random() - 0.5) * 1200,
-        y: (Math.random() - 0.5) * 800,
-        w: 400 + Math.random() * 400,
-        h: 600 + Math.random() * 600,
-        rot: Math.random() * 0.2
-      });
-    }
-  }
-  initSlabs();
-
-  let speed = 45;
-  let focusBlur = 0;
-
-  function render() {
-    cCtx.clearRect(0,0,w,h);
-    cCanvas.style.filter = `blur(${focusBlur}px)`;
+  // Kinetic Typography Logic
+  let count = 5;
+  let shearX = 0;
+  let stretchX = 1;
+  let textAlpha = 0;
+  let trails = [];
+  
+  function drawNumeral() {
+    ctx.clearRect(0, 0, w, h);
     
-    // Draw the background grid slightly visible
-    cCtx.globalAlpha = 0.1;
-    cCtx.drawImage(gCanvas, 0, 0);
-    cCtx.globalAlpha = 1;
-
-    const perspective = 700;
-    const centerX = w / 2;
-    const centerY = h / 2;
-
-    slabs.sort((a,b) => b.z - a.z); // Depth sorting
-
-    slabs.forEach(s => {
-      s.z -= speed;
-      if (s.z <= 0) s.z = 4000;
-
-      const f = perspective / s.z;
-      const x = centerX + s.x * f;
-      const y = centerY + s.y * f;
-      const sw = s.w * f;
-      const sh = s.h * f;
-
-      if (x + sw < 0 || x > w || y + sh < 0 || y > h) return;
-
-      const alpha = Math.min(1, (4000 - s.z) / 1000);
-      
-      // Glass Refraction (Simple implementation: displacement of background)
-      cCtx.save();
-      cCtx.translate(x + sw/2, y + sh/2);
-      cCtx.rotate(s.rot);
-      
-      // Draw Smoked Glass Body
-      cCtx.fillStyle = `rgba(30, 30, 30, ${alpha * 0.4})`;
-      cCtx.fillRect(-sw/2, -sh/2, sw, sh);
-      
-      // Architectural Highlights (Brass edges)
-      cCtx.strokeStyle = `rgba(196, 156, 123, ${alpha * 0.25})`;
-      cCtx.lineWidth = 1;
-      cCtx.strokeRect(-sw/2, -sh/2, sw, sh);
-      
-      // God-Rays (Volumetric leak)
-      const grad = cCtx.createLinearGradient(-sw/2, -sh/2, sw/2, sh/2);
-      grad.addColorStop(0, `rgba(196, 156, 123, ${alpha * 0.08})`);
-      grad.addColorStop(1, 'transparent');
-      cCtx.fillStyle = grad;
-      cCtx.fillRect(-sw/2, -sh/2, sw, sh);
-      
-      cCtx.restore();
+    ctx.font = `italic 400 ${Math.min(w, h) * 0.8}px "Instrument Serif"`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Trail handling
+    trails.push({ shear: shearX, stretch: stretchX, alpha: textAlpha });
+    if(trails.length > 15) trails.shift();
+    
+    ctx.globalCompositeOperation = 'lighter';
+    
+    trails.forEach((t, i) => {
+      ctx.save();
+      ctx.translate(w/2, h/2);
+      ctx.transform(t.stretch, 0, t.shear, 1, 0, 0);
+      ctx.globalAlpha = t.alpha * (i/trails.length) * 0.2;
+      ctx.fillStyle = '#C49C7B';
+      ctx.fillText(count, 0, 0);
+      ctx.restore();
     });
 
-    requestAnimationFrame(render);
-  }
-  render();
+    // Primary Numeral
+    ctx.save();
+    ctx.translate(w/2, h/2);
+    ctx.transform(stretchX, 0, shearX, 1, 0, 0);
+    ctx.globalAlpha = textAlpha;
+    ctx.fillStyle = '#DEC8B5';
+    ctx.fillText(count, 0, 0);
+    ctx.restore();
 
-  // 3. THE CINEMATIC TIMELINE
+    requestAnimationFrame(drawNumeral);
+  }
+  drawNumeral();
+
+  // THE MASTERPIECE TIMELINE
   const tl = gsap.timeline();
   
-  // 3.1 Velocity Phase (0-3s)
-  tl.to({}, { duration: 2.8 });
+  // Fade in sequence
+  tl.to({a:0}, { a:1, duration: 2, onUpdate: function() { textAlpha = this.targets()[0].a; }, ease: 'power2.inOut' });
+  tl.to('#sMsg', { opacity: 1, y: -20, duration: 2, ease: 'expo.out' }, 0.5);
 
-  // 3.2 THE FOCUS PULL (2.8s - 3.5s)
-  tl.to({s:45, b:0}, {
-    s: 0,
-    b: 60,
-    duration: 1.2,
+  // The Kinetic Countdown
+  const numbers = [5, 4, 3, 2, 1];
+  numbers.forEach((num, i) => {
+    // Each count triggers a shear/liquidation
+    tl.to({}, { 
+      duration: 1, 
+      onStart: () => {
+        // Liquidation Animation
+        gsap.fromTo({sX: 0, str: 1}, { 
+          sX: 2, 
+          str: 2.5,
+          duration: 0.4, 
+          onUpdate: function() { 
+            shearX = this.targets()[0].sX; 
+            stretchX = this.targets()[0].str;
+          },
+          ease: 'expo.in',
+          onComplete: () => {
+            count = num;
+            gsap.to({sX: 2, str: 2.5}, { 
+              sX: 0, 
+              str: 1,
+              duration: 0.6,
+              onUpdate: function() { 
+                shearX = this.targets()[0].sX; 
+                stretchX = this.targets()[0].str;
+              },
+              ease: 'expo.out'
+            });
+          }
+        });
+      }
+    });
+  });
+
+  // Final Dispersion
+  tl.to({a:1, sX: 0, str: 1}, { 
+    a:0, 
+    sX: 5, 
+    str: 10, 
+    duration: 1.5, 
     onUpdate: function() { 
-      speed = this.targets()[0].s;
-      focusBlur = this.targets()[0].b;
-    },
-    ease: 'power2.out'
-  }, 2.8);
-
-  // 3.3 PEACE REVEAL
-  tl.to('#peace', { opacity: 1, y: -30, duration: 2, ease: 'expo.out' }, 3.5);
-
-  // 3.4 FINAL SHIMMER & REDIRECT
-  tl.to('#shimmer', { opacity: 1, duration: 1.2, delay: 1.2, ease: 'power2.inOut' });
-  tl.to('body', { opacity: 0, duration: 0.1 }, 6.5);
+      textAlpha = this.targets()[0].a;
+      shearX = this.targets()[0].sX;
+      stretchX = this.targets()[0].str;
+    }, 
+    ease: 'expo.in' 
+  });
+  
+  tl.to('#shimmer', { opacity: 1, duration: 1.2, ease: 'power2.inOut' }, '-=0.5');
   tl.add(() => {
     window.location.href = 'https://velocity.calyvent.com';
-  }, 6.7);
+  }, '+=0.2');
 });
 </script>
 </body>
