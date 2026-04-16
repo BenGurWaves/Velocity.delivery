@@ -16,9 +16,14 @@
     
     .contextual-framing { position:fixed; inset:4vh 6vw; display:flex; flex-direction:column; justify-content:space-between; z-index:10; pointer-events:none; }
     .framing-header { display:flex; justify-content:space-between; font-family:var(--sans); text-transform:uppercase; letter-spacing:0.8em; font-size:0.55rem; color:var(--brass); opacity:0; }
-    .framing-footer { display:flex; flex-direction:column; align-items:flex-start; gap:0.5rem; opacity:0; }
+    
+    .data-stream { position:fixed; top:20vh; right:6vw; font-family:var(--sans); font-size:0.45rem; color:rgba(196,156,123,0.3); text-align:right; display:flex; flex-direction:column; gap:2px; opacity:0; }
+
+    .framing-footer { display:flex; justify-content:space-between; align-items:flex-end; opacity:0; }
+    .footer-left { display:flex; flex-direction:column; align-items:flex-start; gap:0.5rem; }
     .status-pill { padding:4px 12px; background:rgba(196,156,123,0.1); border:1px solid rgba(196,156,123,0.2); font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--brass); }
     .framing-msg { font-family:var(--serif); font-size:clamp(1.2rem, 2vw, 2rem); font-style:italic; color:var(--sand); }
+    .extraction-perc { font-family:var(--serif); font-size:4rem; color:rgba(222,200,181,0.05); line-height:1; }
 
     .magnetic-implosion { position:fixed; inset:0; z-index:1000; background:var(--sand); opacity:0; pointer-events:none; }
   </style>
@@ -35,9 +40,14 @@
     <span>Prototype Env — 0.2.1-B</span>
   </div>
   
+  <div class="data-stream" id="dStream"></div>
+  
   <div class="framing-footer" id="fFooter">
-    <div class="status-pill">Active Extraction</div>
-    <h2 class="framing-msg">Handing over to primary digital salon...</h2>
+    <div class="footer-left">
+      <div class="status-pill">Active Extraction</div>
+      <h2 class="framing-msg">Handing over to primary digital salon...</h2>
+    </div>
+    <div class="extraction-perc" id="ePerc">00%</div>
   </div>
 </div>
 
@@ -76,6 +86,7 @@ window.addEventListener('load', () => {
       points.push({
         x: Math.random() * w, 
         y: Math.random() * h,
+        lx: Math.random() * w, ly: Math.random() * h, // ghost trail
         tx: w/2, ty: h/2, // target x, y
         size: Math.random() * 2 + 1,
         alpha: Math.random() * 0.5 + 0.1
@@ -107,24 +118,38 @@ window.addEventListener('load', () => {
   updateTargets();
 
   function render() {
-    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(13, 12, 9, 0.15)';
+    ctx.fillRect(0,0,w,h);
     ctx.strokeStyle = '#DEC8B5';
     ctx.lineWidth = 1;
 
+    // Update real-time log
+    if (Math.random() > 0.8) {
+      const log = document.getElementById('dStream');
+      const entry = document.createElement('div');
+      entry.innerText = `X:${(Math.random()*1000).toFixed(2)} Y:${(Math.random()*1000).toFixed(2)} Z:${Math.random().toFixed(4)} A:${Math.random().toFixed(2)}`;
+      log.prepend(entry);
+      if (log.children.length > 15) log.lastChild.remove();
+    }
+
     for(let i=0; i<numPoints; i++) {
       const p = points[i];
+      p.lx = p.x; p.ly = p.y;
       p.x += (p.tx - p.x) * 0.15;
       p.y += (p.ty - p.y) * 0.15;
       
       ctx.globalAlpha = p.alpha;
-      ctx.strokeRect(p.x, p.y, p.size, p.size);
+      ctx.beginPath();
+      ctx.moveTo(p.lx, p.ly);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
       
       // Draw lines between some points to create the "Wireframe Assemblage" feel
-      if(i % 20 === 0 && i < numPoints - 20) {
+      if(i % 25 === 0 && i < numPoints - 25) {
         ctx.beginPath();
-        ctx.globalAlpha = 0.05;
+        ctx.globalAlpha = 0.05 * p.alpha;
         ctx.moveTo(p.x, p.y);
-        ctx.lineTo(points[i+20].x, points[i+20].y);
+        ctx.lineTo(points[i+25].x, points[i+25].y);
         ctx.stroke();
       }
     }
@@ -134,7 +159,7 @@ window.addEventListener('load', () => {
 
   // 3. Experience Timeline
   const tl = gsap.timeline();
-  tl.to(['#fHeader', '#fFooter'], { opacity: 1, duration: 1.5, stagger: 0.3, ease: 'power2.inOut' }, 0.5);
+  tl.to(['#fHeader', '#fFooter', '#dStream'], { opacity: 1, duration: 1.5, stagger: 0.2, ease: 'power2.inOut' }, 0.5);
 
   // Countdown sync
   const timing = [5, 4, 3, 2, 1, 0];
@@ -144,6 +169,10 @@ window.addEventListener('load', () => {
       onStart: () => { 
         count = val; 
         updateTargets(); 
+        // Update percentage display
+        const p = Math.floor(((5-val)/5) * 100);
+        document.getElementById('ePerc').innerText = `${p < 10 ? '0' : ''}${p}%`;
+        
         // Rapid jiggle on change
         gsap.to(points, { 
           alpha: 1, 
