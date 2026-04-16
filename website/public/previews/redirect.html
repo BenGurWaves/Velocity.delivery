@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Velocity — The Hyperleap</title>
+  <title>Velocity — The Prismatic Monolith</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -11,134 +11,153 @@
   <style>
     body, html { margin:0; padding:0; background:#000; overflow:hidden; color:var(--sand); font-family:var(--sans); -webkit-font-smoothing:antialiased; height:100vh; display:flex; align-items:center; justify-content:center; }
     
-    .void-grain { position:fixed; inset:0; z-index:100; pointer-events:none; opacity:0.04; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .obsidian-vault { position:fixed; inset:0; z-index:1; opacity:0.15; pointer-events:none; }
     
-    #warpCanvas { position:absolute; inset:0; z-index:1; width:100%; height:100%; }
+    #monolithCanvas { position:absolute; inset:0; z-index:5; width:100%; height:100%; cursor:none; }
     
-    .peace-layer { position:relative; z-index:10; pointer-events:none; display:flex; flex-direction:column; align-items:center; opacity:0; }
-    .atelier-core { width:1px; height:60px; background:var(--brass); margin-bottom:2rem; animation: breathe 3s ease-in-out infinite; }
-    @keyframes breathe { 0%, 100% { opacity: 0.4; height: 50px; } 50% { opacity: 1; height: 70px; } }
-    .peace-title { font-family:var(--serif); font-size:clamp(1.5rem, 3vw, 2.8rem); font-style:italic; font-weight:400; color:var(--sand); text-align:center; }
+    .interface-overlay { position:relative; z-index:10; pointer-events:none; text-align:center; }
+    .monolith-tag { font-family:var(--sans); text-transform:uppercase; letter-spacing:1.5em; font-size:0.55rem; color:var(--brass); margin-bottom:4rem; display:block; opacity:0; }
     
-    .status-tag { position:fixed; top:4vh; left:50%; transform:translateX(-50%); font-family:var(--sans); text-transform:uppercase; letter-spacing:1em; font-size:0.5rem; color:rgba(222,200,181,0.3); z-index:10; }
+    .status-wrap { position:fixed; bottom:8vh; width:250px; text-align:center; opacity:0; }
+    .status-title { font-family:var(--serif); font-size:clamp(1.5rem, 3vw, 2.8rem); font-style:italic; font-weight:400; color:var(--sand); margin-bottom:1.5rem; }
+    .status-progress { width:100%; height:1px; background:rgba(222,200,181,0.1); position:relative; overflow:hidden; }
+    .status-bar { position:absolute; top:0; left:0; width:0%; height:100%; background:var(--brass); }
 
-    .fade-out { position:fixed; inset:0; z-index:1000; background:#000; opacity:0; pointer-events:none; }
+    .flare-reveal { position:fixed; inset:0; z-index:1000; background:var(--sand); opacity:0; pointer-events:none; filter:blur(100px); }
   </style>
 </head>
 <body>
 
-<div class="void-grain"></div>
-<div class="fade-out" id="fade"></div>
-<span class="status-tag">Hyperleap engaged</span>
-<canvas id="warpCanvas"></canvas>
+<canvas class="obsidian-vault" id="gridCanvas"></canvas>
+<canvas id="monolithCanvas"></canvas>
+<div class="flare-reveal" id="flare"></div>
 
-<div class="peace-layer" id="peace">
-  <div class="atelier-core"></div>
-  <h2 class="peace-title">Digital Atelier Ready</h2>
+<div class="interface-overlay">
+  <span class="monolith-tag" id="mTag">Architectural Distillation — v2.0</span>
+  <div class="status-wrap" id="sWrap">
+    <h2 class="status-title">Securing Atelier Source</h2>
+    <div class="status-progress"><div class="status-bar" id="sBar"></div></div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
 <script>
 window.addEventListener('load', () => {
-  const canvas = document.getElementById('warpCanvas'), ctx = canvas.getContext('2d');
+  const mCanvas = document.getElementById('monolithCanvas'), mCtx = mCanvas.getContext('2d');
+  const gCanvas = document.getElementById('gridCanvas'), gCtx = gCanvas.getContext('2d');
   let w, h;
-  function rs() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  
+  function rs() { 
+    w = mCanvas.width = gCanvas.width = window.innerWidth; 
+    h = mCanvas.height = gCanvas.height = window.innerHeight; 
+    drawGrid(); 
+  }
   window.addEventListener('resize', rs); rs();
 
-  // 3D Particles & Fragments
-  const particles = [];
-  const numParticles = 400;
-  function initParticles() {
-    for(let i=0; i<numParticles; i++) {
-      particles.push({
-        x: (Math.random() - 0.5) * 2000,
-        y: (Math.random() - 0.5) * 2000,
-        z: Math.random() * 2000,
-        oZ: Math.random() * 2000, // original Z
-        size: Math.random() * 2 + 0.5,
-        type: Math.random() > 0.8 ? 'fragment' : 'streak'
-      });
-    }
+  // 1. Background Grid (The Obsidian Vault)
+  function drawGrid() {
+    gCtx.clearRect(0,0,w,h);
+    gCtx.strokeStyle = 'rgba(222,200,181,0.2)';
+    gCtx.lineWidth = 0.5;
+    const step = 60;
+    for(let x=0; x<w; x+=step) { gCtx.beginPath(); gCtx.moveTo(x,0); gCtx.lineTo(x,h); gCtx.stroke(); }
+    for(let y=0; y<h; y+=step) { gCtx.beginPath(); gCtx.moveTo(0,y); gCtx.lineTo(w,y); gCtx.stroke(); }
   }
-  initParticles();
 
-  let globalSpeed = 60; // Hyperleap speed
-  let speedFactor = 1;
+  // 2. Monolith Parameters
+  const vertices = [
+    {x:-1, y:-2, z:-0.2}, {x:1, y:-2, z:-0.2}, {x:1, y:2, z:-0.2}, {x:-1, y:2, z:-0.2},
+    {x:-1, y:-2, z:0.2}, {x:1, y:-2, z:0.2}, {x:1, y:2, z:0.2}, {x:-1, y:2, z:0.2}
+  ];
+  const faces = [
+    [0,1,2,3], [4,5,6,7], [0,4,7,3], [1,5,6,2], [0,1,5,4], [3,2,6,7]
+  ];
 
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.lineCap = 'round';
+  let rotationY = 0, rotationX = 0;
+  let prismScale = 120;
+  let refractionAmount = 0.5;
+
+  function project(p) {
+    const sY = Math.sin(rotationY), cY = Math.cos(rotationY);
+    const sX = Math.sin(rotationX), cX = Math.cos(rotationX);
     
-    const perspective = 500;
-    const centerX = w / 2;
-    const centerY = h / 2;
+    // Y Rotation
+    let x = p.x * cY - p.z * sY;
+    let z = p.x * sY + p.z * cY;
+    // X Rotation
+    let y = p.y * cX - z * sX;
+    let zFinal = p.y * sX + z * cX;
 
-    for(let i=0; i<numParticles; i++) {
-      const p = particles[i];
-      p.z -= globalSpeed * speedFactor;
-      
-      if(p.z <= 0) {
-        p.z = 2000;
-        p.x = (Math.random() - 0.5) * 2000;
-        p.y = (Math.random() - 0.5) * 2000;
-      }
-
-      const f = perspective / p.z;
-      const x = centerX + p.x * f;
-      const y = centerY + p.y * f;
-
-      if(x < 0 || x > w || y < 0 || y > h) continue;
-
-      const alpha = Math.min(1, (2000 - p.z) / 1000);
-      
-      if(p.type === 'streak' && speedFactor > 0.1) {
-        // High speed streak
-        const prevZ = p.z + (globalSpeed * speedFactor * 4);
-        const pf = perspective / prevZ;
-        const px = centerX + p.x * pf;
-        const py = centerY + p.y * pf;
-        
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(196,156,123,${alpha * 0.4})`;
-        ctx.lineWidth = 1;
-        ctx.moveTo(x, y);
-        ctx.lineTo(px, py);
-        ctx.stroke();
-      } else {
-        // Geometric fragment
-        ctx.fillStyle = `rgba(222,200,181,${alpha * 0.6})`;
-        const s = p.size * f;
-        ctx.fillRect(x, y, s, s);
-      }
-    }
-    requestAnimationFrame(draw);
+    const scale = prismScale;
+    return { x: w/2 + x * scale, y: h/2 + y * scale, z: zFinal };
   }
-  draw();
 
-  // Cinematic Timeline
+  function render() {
+    mCtx.clearRect(0,0,w,h);
+    rotationY += 0.008; rotationX += 0.003;
+
+    // 2.1 Draw Refractive Body
+    const projected = vertices.map(project);
+    
+    faces.forEach((f, idx) => {
+      mCtx.beginPath();
+      mCtx.moveTo(projected[f[0]].x, projected[f[0]].y);
+      for(let i=1; i<4; i++) mCtx.lineTo(projected[f[i]].x, projected[f[i]].y);
+      mCtx.closePath();
+      
+      // Calculate depth (average Z)
+      const avgZ = f.reduce((sum, v) => sum + projected[v].z, 0) / 4;
+      
+      // Refraction logic: Fill with background grid displaced
+      mCtx.save();
+      mCtx.clip();
+      
+      // Simulated Refraction (Sample Grid)
+      const offX = avgZ * 40 * refractionAmount;
+      const offY = avgZ * 20 * refractionAmount;
+      mCtx.globalAlpha = 0.8;
+      mCtx.drawImage(gCanvas, offX, offY, w, h, 0, 0, w, h);
+      
+      // Internal Liquid Core (Volumetric Gas)
+      const time = Date.now() * 0.002;
+      const grad = mCtx.createRadialGradient(w/2, h/2, 0, w/2, h/2, 200);
+      grad.addColorStop(0, `rgba(196,156,123, ${0.1 + Math.sin(time)*0.05})`);
+      grad.addColorStop(1, 'transparent');
+      mCtx.fillStyle = grad;
+      mCtx.globalCompositeOperation = 'lighter';
+      mCtx.fill();
+      
+      mCtx.restore();
+
+      // Surface Etchings (Blueprint Lines)
+      mCtx.strokeStyle = 'rgba(222,200,181, 0.4)';
+      mCtx.lineWidth = 0.5;
+      mCtx.stroke();
+      
+      // Edge Highlight (Chromatic Aberration feel)
+      mCtx.strokeStyle = 'rgba(196,156,123, 0.2)';
+      mCtx.lineWidth = 2;
+      mCtx.stroke();
+    });
+
+    requestAnimationFrame(render);
+  }
+  render();
+
+  // 3. Cinematic Experience Timeline
   const tl = gsap.timeline();
+  tl.to('#mTag', { opacity: 0.5, y: -20, duration: 2, ease: 'expo.out' }, 0.5);
+  tl.to('#sWrap', { opacity: 1, duration: 2, ease: 'power2.inOut' }, 1);
+  tl.to('#sBar', { width: '100%', duration: 5, ease: 'none' }, 1);
   
-  // 1. Peak Speed Duration (0-2.5s)
-  tl.to({}, { duration: 2.5 });
-
-  // 2. The Abrupt Brake (2.5s - 3s)
-  tl.to({v:1}, { 
-    v:0, 
-    duration: 0.8, 
-    onUpdate: function() { speedFactor = this.targets()[0].v; },
-    ease: 'expo.out'
-  }, 2.8);
-
-  // 3. Peace Sequence (3s - 5s)
-  tl.to(canvas, { opacity: 0, duration: 1.5 }, 3.5);
-  tl.to('#peace', { opacity: 1, y: -20, duration: 1.5, ease: 'expo.out' }, 3.5);
-
-  // 4. Final Handoff
-  tl.to('#fade', { opacity: 1, duration: 1 }, 5.5);
+  // Acceleration phase
+  tl.to({v:120}, { v:2000, duration: 1.5, onUpdate: function() { prismScale = this.targets()[0].v; refractionAmount = 2; }, ease: 'power4.in' }, 5.5);
+  tl.to('#flare', { opacity: 1, duration: 0.8, ease: 'power2.in' }, 6.2);
+  
   tl.add(() => {
     window.location.href = 'https://velocity.calyvent.com';
-  }, 6.5);
+  }, 7);
 });
 </script>
 </body>
