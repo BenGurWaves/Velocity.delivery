@@ -70,10 +70,18 @@ window.addEventListener('load', () => {
     ctx.globalCompositeOperation = 'screen';
 
     // We draw multiple layers to create the "Liquid Mass" look
-    for (let layer = 0; layer < 3; layer++) {
+    for (let layer = 0; layer < 4; layer++) {
       ctx.beginPath();
-      ctx.lineWidth = (3 - layer) * 4;
-      ctx.strokeStyle = layer === 0 ? 'rgba(196,156,123,0.3)' : (layer === 1 ? 'rgba(222,200,181,0.15)' : 'rgba(255,255,255,0.05)');
+      // Layer 3 is the 'Shadow' for depth
+      if (layer === 3) {
+        ctx.lineWidth = 15;
+        ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+        ctx.filter = 'blur(20px)';
+      } else {
+        ctx.lineWidth = (3 - layer) * 4;
+        ctx.strokeStyle = layer === 0 ? 'rgba(196,156,123,0.3)' : (layer === 1 ? 'rgba(222,200,181,0.15)' : 'rgba(255,255,255,0.05)');
+        ctx.filter = 'none';
+      }
       
       for (let i = 0; i < segments; i++) {
         const p = i / segments;
@@ -83,7 +91,9 @@ window.addEventListener('load', () => {
         const mouseTug = Math.exp(-Math.pow(x - mouse.x, 2) / 20000) * (mouse.y - centerY) * 0.8;
         const wave = Math.sin(time + i * 0.05) * (150 * (1 - stability)) + mouseTug;
         
-        const y = centerY + wave * Math.sin(time * 0.5 + p * 2);
+        // Shadow offset
+        const yOffset = (layer === 3) ? 100 : 0;
+        const y = centerY + wave * Math.sin(time * 0.5 + p * 2) + yOffset;
         
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
