@@ -79,7 +79,14 @@ window.addEventListener('load', () => {
       ctx.save();
       ctx.translate(w/2, h/2);
       ctx.transform(t.stretch, 0, t.shear, 1, 0, 0);
-      ctx.globalAlpha = t.alpha * (i/trails.length) * 0.2;
+      ctx.globalAlpha = t.alpha * (i/trails.length) * 0.15;
+      
+      // Chromatic split on trails
+      ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
+      ctx.fillText(count, t.shear * 5, 0);
+      ctx.fillStyle = 'rgba(100, 255, 255, 0.5)';
+      ctx.fillText(count, -t.shear * 5, 0);
+      
       ctx.fillStyle = '#C49C7B';
       ctx.fillText(count, 0, 0);
       ctx.restore();
@@ -90,6 +97,16 @@ window.addEventListener('load', () => {
     ctx.translate(w/2, h/2);
     ctx.transform(stretchX, 0, shearX, 1, 0, 0);
     ctx.globalAlpha = textAlpha;
+    
+    // Chromatic split on primary
+    if (Math.abs(shearX) > 0.1) {
+      ctx.globalCompositeOperation = 'screen';
+      ctx.fillStyle = 'rgba(255, 100, 100, 0.3)';
+      ctx.fillText(count, shearX * 10, 0);
+      ctx.fillStyle = 'rgba(100, 255, 255, 0.3)';
+      ctx.fillText(count, -shearX * 10, 0);
+    }
+    
     ctx.fillStyle = '#DEC8B5';
     ctx.fillText(count, 0, 0);
     ctx.restore();
