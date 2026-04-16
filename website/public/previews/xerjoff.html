@@ -3,282 +3,302 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XERJOFF — Structural Monolith</title>
-  <link rel="stylesheet" href="/styles.css?v=31">
+  <title>XERJOFF — The Symphony of Scent</title>
   <style>
-    body, html { margin: 0; padding: 0; background: #000; overflow-x: hidden; color: #fff; font-family: 'Helvetica Neue', sans-serif; cursor: none; }
+    :root { --brass: #C49C7B; --gold: #D4AF37; --obsidian: #0D0C09; --paper: #F5F5F5; --dim: rgba(245, 245, 245, 0.4); }
+    body, html { margin: 0; padding: 0; background: #000; overflow-x: hidden; color: var(--paper); font-family: 'Inter', sans-serif; cursor: none; -webkit-font-smoothing: antialiased; }
     
     /* Preloader */
     #jl-preloader { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:9999; display:flex; align-items:center; justify-content:center; }
-    .jl-logo-wrap { width: 200px; overflow: hidden; position: relative; }
+    .jl-logo-wrap { width: 180px; overflow: hidden; position: relative; }
     .jl-logo-wrap svg { width: 100%; height: auto; opacity:0; transform: translateY(20px); filter: invert(1); }
 
     /* Scroll Prompt */
-    .scroll-prompt { position: fixed; bottom: 3vh; left: 50%; transform: translateX(-50%); z-index: 10; font-family: monospace; text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.7rem; opacity: 0; transition: opacity 0.5s; }
-    .scroll-line { width: 1px; height: 50px; background: rgba(255,255,255,0.3); margin: 10px auto 0; position: relative; overflow: hidden; }
-    .scroll-line::after { content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 100%; background: #fff; animation: scrollLine 2s infinite; }
-    @keyframes scrollLine { 0% { top: -100%; } 100% { top: 100%; } }
+    .scroll-prompt { position: fixed; bottom: 4vh; left: 50%; transform: translateX(-50%); z-index: 20; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.4em; font-size: 0.65rem; opacity: 0; pointer-events: none; }
+    .scroll-line { width: 1px; height: 60px; background: rgba(255,255,255,0.15); margin: 15px auto 0; position: relative; overflow: hidden; }
+    .scroll-line::after { content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 100%; background: var(--brass); animation: scrollLine 2.2s cubic-bezier(0.76, 0, 0.24, 1) infinite; }
+    @keyframes scrollLine { 0% { top: -100%; } 50% { top: 0%; } 100% { top: 100%; } }
 
-    /* Hero Section */
-    .hero-proxy { height: 400vh; }
+    /* Cursor */
+    .c-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; z-index: 10001; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); }
+    .c-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.25); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), height 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.4s, background 0.4s; transform: translate(-50%, -50%); }
+    .c-ring.is-active { width: 90px; height: 90px; border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.03); }
+
+    /* Hero Matrix */
+    .hero-proxy { height: 450vh; }
     .z-wrap { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-    .monolith {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 28vw;
-      font-weight: 400;
-      letter-spacing: -0.5vw;
-      display: flex;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(212, 175, 55, 0.4);
-      position: relative;
-      will-change: transform;
-    }
-    .char { display: block; opacity: 0; }
-    .monolith.is-active { -webkit-text-stroke: 0px; color: #fff; text-shadow: 0 0 40px rgba(255,215,0,0.3); filter: url(#liquidFilter); }
+    .monolith { font-family: 'Times New Roman', serif; font-size: 28vw; font-weight: 400; letter-spacing: -0.5vw; color: transparent; -webkit-text-stroke: 1px rgba(212, 175, 55, 0.3); will-change: transform; pointer-events: none; }
+    .char { display: inline-block; opacity: 0; transform: translateZ(-200px); }
+    .monolith.is-active { -webkit-text-stroke: 0px; color: #fff; text-shadow: 0 0 50px rgba(255,215,0,0.25); filter: url(#liquidFilter); }
     #stringCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; }
 
-    /* Content Transition */
-    .content-flow { position: relative; z-index: 10; background: #000; margin-top: -100vh; } 
+    /* Atmosphere Typography */
+    .atm-text { position: absolute; font-family: 'Times New Roman', serif; font-size: 20vw; color: rgba(255,255,255,0.03); white-space: nowrap; pointer-events: none; z-index: 1; text-transform: uppercase; font-style: italic; letter-spacing: -0.05em; will-change: transform; }
 
-    /* Section Styles */
-    .section-wrap { padding: 30vh 5vw; min-height: 100vh; display: flex; align-items: center; position: relative; }
-    .s-label { font-family: monospace; text-transform: uppercase; color: var(--brass); letter-spacing: 0.2em; font-size: 0.7rem; margin-bottom: 2rem; display: block; }
+    /* Content Matrix */
+    .content-matrix { position: relative; z-index: 10; background: transparent; padding-bottom: 20vh; }
     
-    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; align-items: center; max-width: 1400px; margin: 0 auto; }
-    .f-img-frame { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #111; border: 1px solid rgba(255,255,255,0.05); }
-    .f-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transition: filter 1.2s cubic-bezier(0.23, 1, 0.32, 1); }
-    .f-img-frame:hover .f-img { filter: grayscale(0) contrast(1); }
+    .windowSection { min-height: 120vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 5vw; }
+    .floatingWindow { position: relative; width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 8vw; align-items: center; }
+    .windowFrame { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #111; box-shadow: 0 50px 100px rgba(0,0,0,0.5); transform: perspective(1000px); }
+    .windowImg { width: 100%; height: 120%; object-fit: cover; position: absolute; top: -10%; left: 0; filter: contrast(1.1) brightness(0.9); }
     
-    .f-text h2 { font-family: 'Times New Roman', serif; font-size: clamp(3rem, 6vw, 5rem); font-weight: 400; margin: 0 0 2rem; line-height: 1; color: var(--paper); }
-    .f-text p { font-size: 1.2rem; line-height: 1.8; color: var(--dim); max-width: 450px; margin-bottom: 4rem; }
+    .windowText { position: relative; z-index: 5; }
+    .windowLabel { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.7rem; color: var(--gold); margin-bottom: 2.5rem; display: block; }
+    .windowTitle { font-family: 'Times New Roman', serif; font-size: clamp(3rem, 7vw, 6rem); margin: 0 0 2.5rem; line-height: 0.95; font-weight: 400; }
+    .windowDesc { font-size: 1.15rem; line-height: 1.8; color: var(--dim); max-width: 450px; font-weight: 300; }
 
-    /* Experience CTA */
-    .experience-btn { display: inline-block; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); padding: 1.4rem 3.5rem; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.75rem; background: transparent; transition: all 0.4s; position: relative; overflow: hidden; z-index: 1; }
-    .experience-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: #fff; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1); z-index: -1; }
-    .experience-btn:hover { color: #000; }
-    .experience-btn:hover::before { left: 0; }
+    /* Experience Action */
+    .expAction { display: inline-block; margin-top: 4rem; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.15); padding: 1.5rem 4rem; text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.7rem; position: relative; overflow: hidden; transition: color 0.4s; }
+    .expAction::after { content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%; background:#fff; z-index:-1; transition: left 0.5s cubic-bezier(0.76, 0, 0.24, 1); }
+    .expAction:hover { color: #000; border-color: #fff; }
+    .expAction:hover::after { left: 0; }
 
-    /* Official Footer */
-    .footer-exp { margin-top: 20vh; position: relative; background: #000; }
+    /* Original Velocity Footer Integration */
+    .footer-exp { position: relative; width: 100%; background: #000; min-height: 100vh; padding-top: 10vh; z-index: 20; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer-particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 60%; pointer-events: none; }
+    .footer-content { position: relative; z-index: 10; text-align: center; padding-top: 25vh; }
+    .footer-email { font-family: 'Times New Roman', serif; font-size: clamp(2rem, 5vw, 4rem); color: var(--paper); text-decoration: none; display: block; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+    .footer-tagline { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.4em; color: var(--dim); font-style: normal; }
+    .footer-bottom { position: absolute; bottom: 4vh; width: 100%; padding: 0 5vw; box-sizing: border-box; display: flex; justify-content: space-between; align-items: flex-end; font-family: 'Inter', sans-serif; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--dim); }
+    .footer-links a { color: var(--dim); text-decoration: none; margin-left: 2rem; transition: color 0.3s; }
+    .footer-links a:hover { color: #fff; }
 
-    /* Custom Cursor */
-    .c-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; z-index: 10001; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); }
-    .c-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); transform: translate(-50%, -50%); }
-    .c-ring.is-active { width: 80px; height: 80px; border-color: #fff; background: rgba(255,255,255,0.05); }
-
-    /* Takeover */
+    /* Structural Prototype Takeover */
     .takeover { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; color: #000; z-index: 20000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .t-head { font-size: 5vw; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 3vh; }
+    .t-count { font-family: monospace; font-size: 15vw; line-height: 1; -webkit-text-stroke: 2px #000; color: transparent; }
+
+    svg.filters { position: absolute; width:0; height:0; pointer-events: none; }
   </style>
 </head>
 <body>
 
-  <svg width="0" height="0" style="position:absolute;">
-    <filter id="liquidFilter">
-      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise" id="turb" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </svg>
+<svg class="filters">
+  <filter id="liquidFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise" id="turb" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
-  <div class="c-dot" id="cDot"></div>
-  <div class="c-ring" id="cRing"></div>
+<div class="c-dot" id="cDot"></div>
+<div class="c-ring" id="cRing"></div>
 
-  <div id="jl-preloader">
-    <div class="jl-logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 160 28" id="jl-svg">
-        <g fill="white">
-          <path d="M90.1873 14.0749V13.9988C90.1873 6.6526 95.8271 0.5 103.805 0.5C111.784 0.5 117.348 6.57886 117.348 13.9251V13.9988C117.348 21.3474 111.708 27.5 103.73 27.5C95.7515 27.5 90.1873 21.4211 90.1873 14.0749ZM112.561 14.0749V14.0012C112.561 8.92929 108.886 4.71465 103.73 4.71465C98.5737 4.71465 94.9743 8.85555 94.9743 13.9274V14.0012C94.9743 19.073 98.6471 23.2877 103.805 23.2877C108.964 23.2877 112.563 19.1468 112.563 14.0749H112.561Z" />
-          <path d="M0.371405 0.947041L9.46084 13.7765L0 27.053H5.23177L12.0959 17.1696L18.9233 27.053H24.3041L14.8791 13.7016L23.9327 0.947041H18.7009L12.2082 10.3073L5.7522 0.947041H0.371405Z" />
-          <path d="M69.2609 27.0507L69.2625 27.053L69.2648 27.0507H69.2609Z" />
-          <path d="M61.385 15.8838L69.2609 27.0507H63.884L56.0639 15.9368H52.3315V11.8351H58.4665C61.7312 11.8351 63.8083 10.5585 63.8083 8.51682V8.45921C63.8083 6.30234 61.8046 5.12252 58.4276 5.12482H49.4703V0.94474H58.799C62.0637 0.94474 68.4463 2.73752 68.4463 8.28408V8.36012C68.4371 12.5241 65.1266 15.0819 61.385 15.8838Z" />
-          <path d="M70.175 23.2116L73.1806 20.1169C74.7029 22.0571 76.2229 23.1747 78.4124 23.1747C80.8609 23.1747 82.5299 21.534 82.5299 18.066V0.947041H87.2046V18.1766C87.2046 21.2714 86.3128 23.5849 84.7927 25.115C83.2727 26.6451 81.0833 27.4263 78.4857 27.4263C74.4782 27.4263 71.8807 25.562 70.175 23.2116Z" />
-          <path d="M120.344 0.947041V27.053H124.909V15.9391H136.184V11.8374H124.909V5.05108H138.889V0.947041H120.344Z" />
-          <path d="M141.455 27.053V0.947041H159.998V5.05108H146.017V11.8374H157.292V15.9391H146.017V27.053H141.455Z" />
-          <path d="M46.3408 0.947041H27.7958V27.0553H46.3408V22.9512H32.3604V15.9391H44.4723V11.8374H32.3604V5.05108H46.3408V0.947041Z" />
-        </g>
-      </svg>
+<div id="jl-preloader">
+  <div class="jl-logo-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 160 28" id="jl-svg">
+      <path fill="white" d="M90.1873 14.0749V13.9988C90.1873 6.6526 95.8271 0.5 103.805 0.5C111.784 0.5 117.348 6.57886 117.348 13.9251V13.9988C117.348 21.3474 111.708 27.5 103.73 27.5C95.7515 27.5 90.1873 21.4211 90.1873 14.0749ZM112.561 14.0749V14.0012C112.561 8.92929 108.886 4.71465 103.73 4.71465C98.5737 4.71465 94.9743 8.85555 94.9743 13.9274V14.0012C94.9743 19.073 98.6471 23.2877 103.805 23.2877C108.964 23.2877 112.563 19.1468 112.563 14.0749H112.561Z" />
+      <path fill="white" d="M0.371405 0.947041L9.46084 13.7765L0 27.053H5.23177L12.0959 17.1696L18.9233 27.053H24.3041L14.8791 13.7016L23.9327 0.947041H18.7009L12.2082 10.3073L5.7522 0.947041H0.371405Z" />
+      <path fill="white" d="M69.2609 27.0507L69.2625 27.053L69.2648 27.0507H69.2609Z" />
+      <path fill="white" d="M61.385 15.8838L69.2609 27.0507H63.884L56.0639 15.9368H52.3315V11.8351H58.4665C61.7312 11.8351 63.8083 10.5585 63.8083 8.51682V8.45921C63.8083 6.30234 61.8046 5.12252 58.4276 5.12482H49.4703V0.94474H58.799C62.0637 0.94474 68.4463 2.73752 68.4463 8.28408V8.36012C68.4371 12.5241 65.1266 15.0819 61.385 15.8838Z" />
+      <path fill="white" d="M70.175 23.2116L73.1806 20.1169C74.7029 22.0571 76.2229 23.1747 78.4124 23.1747C80.8609 23.1747 82.5299 21.534 82.5299 18.066V0.947041H87.2046V18.1766C87.2046 21.2714 86.3128 23.5849 84.7927 25.115C83.2727 26.6451 81.0833 27.4263 78.4857 27.4263C74.4782 27.4263 71.8807 25.562 70.175 23.2116Z" />
+      <path fill="white" d="M120.344 0.947041V27.053H124.909V15.9391H136.184V11.8374H124.909V5.05108H138.889V0.947041H120.344Z" />
+      <path fill="white" d="M141.455 27.053V0.947041H159.998V5.05108H146.017V11.8374H157.292V15.9391H146.017V27.053H141.455Z" />
+      <path fill="white" d="M46.3408 0.947041H27.7958V27.0553H46.3408V22.9512H32.3604V15.9391H44.4723V11.8374H32.3604V5.05108H46.3408V0.947041Z" />
+    </svg>
+  </div>
+</div>
+
+<div class="scroll-prompt" id="scrollPrompt">
+  Scroll
+  <div class="scroll-line"></div>
+</div>
+
+<div class="hero-proxy"></div>
+<canvas id="stringCanvas"></canvas>
+<div class="z-wrap" id="zWrap">
+  <div class="monolith" id="monolith">
+    <span class="char">X</span><span class="char">E</span><span class="char">R</span><span class="char">J</span>
+    <span class="char" id="targetO">O</span>
+    <span class="char">F</span><span class="char">F</span>
+  </div>
+</div>
+
+<div class="content-matrix" id="contentMatrix">
+  
+  <div class="atm-text" style="top: 20vh; left: -10vw;" id="atm1">Provenance</div>
+  <div class="atm-text" style="top: 150vh; right: -5vw;" id="atm2">Savoir-Faire</div>
+
+  <section class="windowSection">
+    <div class="floatingWindow">
+      <div class="windowFrame" id="wf1">
+        <img src="/images/xerjoff/gibeonDeskMob1.jpg" class="windowImg" alt="Xerjoff Gibeon">
+      </div>
+      <div class="windowText">
+        <span class="windowLabel">01 — Origin</span>
+        <h2 class="windowTitle">A matter of<br><em>Time.</em></h2>
+        <p class="windowDesc">The Gibeon collection represents the cosmic collision between celestial artifacts and the patience of Italian craftsmanship. A scent that has travelled across light-years to reach the skin.</p>
+        <a href="#" class="expAction acquire-essence">Explore Artefact</a>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="scroll-prompt" id="scrollPrompt">
-    Scroll
-    <div class="scroll-line"></div>
-  </div>
-
-  <div class="hero-proxy"></div>
-  <canvas id="stringCanvas"></canvas>
-  <div class="z-wrap" id="zWrap">
-    <div class="monolith" id="monolith">
-      <span class="char">X</span><span class="char">E</span><span class="char">R</span><span class="char">J</span>
-      <span class="char" id="targetO">O</span>
-      <span class="char">F</span><span class="char">F</span>
+  <section class="windowSection">
+    <div class="floatingWindow" style="grid-template-columns: 1fr 1.2fr; direction: rtl;">
+      <div class="windowFrame" id="wf2" style="direction: ltr;">
+        <img src="/images/xerjoff/xjBlockErbaPuraMob.jpg" class="windowImg" alt="Xerjoff Erba Pura">
+      </div>
+      <div class="windowText" style="direction: ltr;">
+        <span class="windowLabel">02 — Craft</span>
+        <h2 class="windowTitle">Liquid<br><em>Scintillation.</em></h2>
+        <p class="windowDesc">Every interaction is calibrated. The digital weight must match the mechanical density of the gilded cap. Silk and Stone, balanced in absolute harmony.</p>
+        <a href="#" class="expAction acquire-essence">Acquire Essence</a>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="content-flow" id="contentFlow">
-    <section class="section-wrap">
-      <div class="feature-grid">
-        <div class="f-img-frame">
-          <img src="/images/xerjoff/gibeonDeskMob1.jpg" class="f-img" alt="Xerjoff Artifact">
-        </div>
-        <div class="f-text">
-          <span class="s-label">Section 01 — Provenance</span>
-          <h2>A symphony of<br><em>rare elements.</em></h2>
-          <p>Where physical craftsmanship meets olfactory art. Every artifact is a culmination of centuries of Italian heritage.</p>
-          <a href="#" class="experience-btn acquire-essence">Explore Realm</a>
-        </div>
+  <footer class="footer-exp" id="footerExp">
+    <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+    <div class="footer-orbit" style="top:25%;left:50%"><div class="footer-orbit-dot"></div></div>
+    <div class="footer-content">
+      <a href="#" class="footer-email" id="footerEmail"></a>
+      <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-coords" id="footerCoords"></span>
+      <div class="footer-meta">
+        <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+        <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
       </div>
-    </section>
+    </div>
+  </footer>
 
-    <section class="section-wrap" style="background: #050505;">
-      <div class="feature-grid" style="direction: rtl;">
-        <div class="f-img-frame" style="direction: ltr;">
-          <img src="/images/xerjoff/xjBlockErbaPuraMob.jpg" class="f-img" alt="Xerjoff Artifact">
-        </div>
-        <div class="f-text" style="direction: ltr;">
-          <span class="s-label">Section 02 — Craft</span>
-          <h2>The absolute weight<br>of <em>prestige.</em></h2>
-          <p>No compromises. No templates. Every interaction is hand-tooled to convey the weight of platinum and the whisper of silk.</p>
-          <a href="#" class="experience-btn acquire-essence">Acquire Essence</a>
-        </div>
-      </div>
-    </section>
+</div>
 
-    <footer class="footer-exp" id="footerExp">
-      <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
-      <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
-      <div class="footer-content">
-        <a href="#" class="footer-email" id="footerEmail"></a>
-        <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
-      </div>
-      <div class="footer-bottom">
-        <span class="footer-coords" id="footerCoords"></span>
-        <div class="footer-meta">
-          <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
-          <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
-        </div>
-      </div>
-    </footer>
-  </div>
+<div class="takeover" id="takeover">
+  <div style="font-family:monospace; text-transform:uppercase; color:red; margin-bottom: 2rem;">Structural Interruption</div>
+  <div class="t-head">This is a<br>Structural Prototype.</div>
+  <div class="t-count" id="countdown">5</div>
+</div>
 
-  <div class="takeover" id="takeover">
-    <div class="t-meta">System Interruption</div>
-    <div style="font-size: 5vw; font-weight: 900; line-height: 1; margin: 0 0 2rem; position: relative;">This is a<br>Structural Prototype.</div>
-    <div id="countdown" style="font-family: monospace; font-size: 15vw; font-weight: 900; -webkit-text-stroke: 2px #000; color: transparent;">5</div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  gsap.registerPlugin(ScrollTrigger);
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      gsap.registerPlugin(ScrollTrigger);
+  // Preloader Logic
+  const tlLoad = gsap.timeline({
+    onComplete: () => {
+      gsap.set('#jl-preloader', { display: 'none' });
+      gsap.to('#scrollPrompt', { opacity: 1, duration: 1.5, ease: 'power2.out' });
+      initExperience();
+    }
+  });
+  tlLoad.to('#jl-svg', { opacity: 1, y: 0, duration: 1.5, ease: 'expo.out' })
+        .to('#jl-preloader', { opacity: 0, duration: 0.8, ease: 'power2.inOut' });
 
-      // Preloader
-      const tlLoad = gsap.timeline({
-        onComplete: () => {
-          gsap.set('#jl-preloader', { display: 'none' });
-          gsap.to('#scrollPrompt', { opacity: 1, duration: 1 });
-          initSite();
-        }
-      });
-      tlLoad.to('#jl-svg', { opacity: 1, y: 0, duration: 1, ease: 'expo.out' })
-            .to('#jl-preloader', { opacity: 0, duration: 0.8 });
+  function initExperience() {
+    const lenis = new Lenis({ duration: 1.8, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
 
-      function initSite() {
-        const lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => lenis.raf(time * 1000));
-
-        // Cursor
-        const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
-        let mx=0, my=0, cx=0, cy=0, rx=0, ry=0;
-        document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-        gsap.ticker.add(() => {
-          cx += (mx-cx)*0.2; cy += (my-cy)*0.2;
-          rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
-          cDot.style.left=cx+'px'; cDot.style.top=cy+'px';
-          cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
-        });
-
-        document.querySelectorAll('a, .f-img-frame').forEach(el => {
-          el.addEventListener('mouseenter', () => cRing.classList.add('is-active'));
-          el.addEventListener('mouseleave', () => cRing.classList.remove('is-active'));
-        });
-
-        // String Physics
-        const cv = document.getElementById('stringCanvas'), ctx = cv.getContext('2d');
-        let w, h, targetY, currentY = 0, velY = 0;
-        const resize = () => { w = cv.width = window.innerWidth; h = cv.height = window.innerHeight; targetY = currentY = h/2; };
-        window.addEventListener('resize', resize); resize();
-        gsap.ticker.add(() => {
-          ctx.clearRect(0,0,w,h);
-          if (Math.abs(mx - w/2) < w*0.2 && Math.abs(my - h/2) < 100) targetY = my; else targetY = h/2;
-          velY += (targetY - currentY) * 0.05; velY *= 0.85; currentY += velY;
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY, w, h/2); ctx.strokeStyle = '#fff'; ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY + velY*4, w, h/2); ctx.strokeStyle = 'rgba(212,175,55,0.4)'; ctx.stroke();
-        });
-
-        // Z-Axis
-        const mono = document.getElementById('monolith'), chars = document.querySelectorAll('.char'), oChar = document.getElementById('targetO');
-        gsap.fromTo(chars, { opacity:0, z:-500, rotationX:45 }, { opacity:1, z:0, rotationX:0, duration:1.5, stagger:0.1, ease:'expo.out' });
-
-        const updateO = () => {
-          const r = oChar.getBoundingClientRect(), wr = mono.getBoundingClientRect();
-          gsap.set(mono, { transformOrigin: `${(r.left - wr.left) + r.width/2}px ${(r.top - wr.top) + r.height/2}px` });
-        };
-        setTimeout(updateO, 500);
-
-        const heroTl = gsap.timeline({ scrollTrigger: { trigger: '.hero-proxy', start: 'top top', end: 'bottom bottom', scrub: 1 } });
-        heroTl.to('#scrollPrompt', { opacity: 0, duration: 0.1 }, 0);
-        heroTl.to('#stringCanvas', { opacity: 0, duration: 0.2 }, 0);
-        heroTl.to(mono, { onStart: () => mono.classList.add('is-active'), onReverseComplete: () => mono.classList.remove('is-active') }, 0.1);
-        heroTl.to('#turb', { attr: { baseFrequency: '0.001 0.005' }, duration: 0.8 }, 0);
-        heroTl.to(mono, { scale: 180, opacity: 0, ease: 'power2.in' }, 0.4);
-        heroTl.to('#zWrap', { autoAlpha: 0, duration: 0 }, 1);
-
-        // Footer Particles
-        (function(){
-          const fcv=document.getElementById('footerParticles'); if(!fcv)return;
-          const fctx=fcv.getContext('2d'); let fw, fh, particles=[], formed=false;
-          const frs=()=>{fw=fcv.width=fcv.offsetWidth; fh=fcv.height=fcv.offsetHeight; finit()};
-          const finit=()=>{
-            particles=[]; const off=document.createElement('canvas'); off.width=fw; off.height=fh;
-            const octx=off.getContext('2d'); octx.font=`400 ${Math.min(fw*.13,160)}px 'Instrument Serif',serif`;
-            octx.fillStyle='#fff'; octx.textAlign='center'; octx.textBaseline='middle'; octx.fillText('Velocity.', fw/2, fh*.3);
-            const data=octx.getImageData(0,0,fw,fh).data; const gap=Math.max(3, Math.round(fw/380));
-            for(let y=0; y<fh; y+=gap){ for(let x=0; x<fw; x+=gap){ if(data[((y*fw+x)*4)+3]>128){
-              particles.push({tx:x, ty:y, x:Math.random()*fw, y:Math.random()*fh, vx:0, vy:0, sz:0.8+Math.random()*1.2});
-            }}}
-          };
-          frs(); window.addEventListener('resize', frs);
-          ScrollTrigger.create({ trigger: '#footerExp', start: 'top 80%', onEnter: () => formed=true, onLeaveBack: () => formed=false });
-          const fdraw=()=>{
-            fctx.clearRect(0,0,fw,fh);
-            particles.forEach(p=>{
-              if(formed){ p.vx+=(p.tx-p.x)*0.04; p.vy+=(p.ty-p.y)*0.04; }
-              else { p.vx+=(p.tx-p.x)*0.003; p.vy+=(p.ty-p.y)*0.003; p.vx+=Math.sin(Date.now()*0.001+p.tx)*0.1; }
-              p.vx*=0.88; p.vy*=0.88; p.x+=p.vx; p.y+=p.vy;
-              fctx.fillStyle='rgba(212,175,55,0.6)'; fctx.fillRect(p.x, p.y, p.sz, p.sz);
-            });
-            requestAnimationFrame(fdraw);
-          }; fdraw();
-        })();
-
-        const em='atelier@calyvent.com'; const fEm=document.getElementById('footerEmail');
-        if(fEm){ fEm.href='mailto:'+em; fEm.innerHTML=em.split('').map(c=>`<span style="display:inline-block">${c}</span>`).join(''); }
-        const fCo=document.getElementById('footerCoords'); if(fCo){ setInterval(()=>{ const d=new Date(); fCo.innerHTML=`40°42'N 74°00'W — ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}:${d.getSeconds().toString().padStart(2,'0')}`; },1000); }
-
-        document.querySelectorAll('.acquire-essence').forEach(btn => {
-          btn.addEventListener('click', e => {
-            e.preventDefault(); document.getElementById('takeover').style.display='flex';
-            let t=5; document.getElementById('countdown').innerText=t;
-            const i=setInterval(()=>{ t--; document.getElementById('countdown').innerText=t; if(t<=0){ clearInterval(i); window.location.href='https://velocity.calyvent.com'; } },1000);
-          });
-        });
-      }
+    // Custom Cursor
+    const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
+    let mx=window.innerWidth/2, my=window.innerHeight/2, cx=mx, cy=my, rx=mx, ry=my;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+    gsap.ticker.add(() => {
+      cx += (mx-cx)*0.2; cy += (my-cy)*0.2;
+      rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+      cDot.style.left=cx+'px'; cDot.style.top=cy+'px';
+      cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
     });
-  </script>
+    document.querySelectorAll('a, button, .windowFrame').forEach(el => {
+      el.addEventListener('mouseenter', () => cRing.classList.add('is-active'));
+      el.addEventListener('mouseleave', () => cRing.classList.remove('is-active'));
+    });
+
+    // Liquid String
+    const cv = document.getElementById('stringCanvas'), ctx = cv.getContext('2d');
+    let w, h, targetY, currentY = 0, velY = 0;
+    const rs = () => { w = cv.width = window.innerWidth; h = cv.height = window.innerHeight; targetY = currentY = h/2; };
+    window.addEventListener('resize', rs); rs();
+    gsap.ticker.add(() => {
+      ctx.clearRect(0,0,w,h);
+      if (Math.abs(mx - w/2) < w*0.2 && Math.abs(my - h/2) < 120) targetY = my; else targetY = h/2;
+      velY += (targetY - currentY) * 0.05; velY *= 0.85; currentY += velY;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY, w, h/2); ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY + velY*4, w, h/2); ctx.strokeStyle = 'rgba(196,156,123,0.4)'; ctx.stroke();
+    });
+
+    // Z-Axis Zoom
+    const mono = document.getElementById('monolith'), chars = document.querySelectorAll('.char'), oChar = document.getElementById('targetO');
+    gsap.fromTo(chars, { opacity:0, z:-400, rotationX:40 }, { opacity:1, z:0, rotationX:0, duration:1.8, stagger:0.08, ease:'expo.out' });
+    const updateO = () => {
+      const r = oChar.getBoundingClientRect(), wr = mono.getBoundingClientRect();
+      gsap.set(mono, { transformOrigin: `${(r.left - wr.left) + r.width/2}px ${(r.top - wr.top) + r.height/2}px` });
+    };
+    setTimeout(updateO, 100);
+
+    const heroTl = gsap.timeline({ scrollTrigger: { trigger: '.hero-proxy', start: 'top top', end: 'bottom bottom', scrub: 1 } });
+    heroTl.to('#scrollPrompt', { opacity: 0, duration: 0.1 }, 0);
+    heroTl.to('#stringCanvas', { opacity: 0, duration: 0.2 }, 0);
+    heroTl.to(mono, { onStart: () => mono.classList.add('is-active'), onReverseComplete: () => mono.classList.remove('is-active') }, 0.15);
+    heroTl.to('#turb', { attr: { baseFrequency: '0.001 0.005' }, duration: 0.8 }, 0);
+    heroTl.to(mono, { scale: 180, opacity: 0, ease: 'power2.in' }, 0.4);
+    heroTl.to('#zWrap', { autoAlpha: 0, duration: 0 }, 1);
+
+    // Parallax Windows and Atmospheric Text
+    gsap.to('#atm1', { x: -200, scrollTrigger: { trigger: '.hero-proxy', start: 'top top', end: 'bottom top', scrub: 1 } });
+    gsap.to('#atm2', { x: 200, scrollTrigger: { trigger: '#wf2', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+
+    document.querySelectorAll('.windowFrame').forEach((wf, i) => {
+      gsap.from(wf, { y: 150, opacity: 0, duration: 1.5, ease: 'expo.out', scrollTrigger: { trigger: wf, start: 'top 95%' } });
+      const img = wf.querySelector('.windowImg');
+      gsap.to(img, { yPercent: 15, ease: 'none', scrollTrigger: { trigger: wf, start: 'top bottom', end: 'bottom top', scrub: true } });
+      
+      wf.addEventListener('mousemove', e => {
+        const r = wf.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-0.5, y=(e.clientY-r.top)/r.height-0.5;
+        gsap.to(wf, { rotateY: x*10, rotateX: -y*10, duration: 0.5 });
+      });
+      wf.addEventListener('mouseleave', () => gsap.to(wf, { rotateY: 0, rotateX: 0, duration: 1 }));
+    });
+
+    // Velocity Signature Particles
+    (function(){
+      const fcv=document.getElementById('footerParticles'); if(!fcv)return;
+      const fctx=fcv.getContext('2d'); let fw, fh, particles=[], formed=false;
+      const frs=()=>{fw=fcv.width=fcv.offsetWidth; fh=fcv.height=fcv.offsetHeight; finit()};
+      const finit=()=>{
+        particles=[]; const off=document.createElement('canvas'); off.width=fw; off.height=fh;
+        const octx=off.getContext('2d'); octx.font=`400 ${Math.min(fw*.13,160)}px 'Times New Roman', serif`;
+        octx.fillStyle='#fff'; octx.textAlign='center'; octx.textBaseline='middle'; octx.fillText('Velocity.', fw/2, fh*.3);
+        const data=octx.getImageData(0,0,fw,fh).data; const gap=Math.max(4, Math.round(fw/400));
+        for(let y=0; y<fh; y+=gap){ for(let x=0; x<fw; x+=gap){ if(data[((y*fw+x)*4)+3]>128){
+          particles.push({tx:x, ty:y, x:Math.random()*fw, y:Math.random()*fh, vx:0, vy:0, sz:0.7+Math.random()*1.2});
+        }}}
+      };
+      frs(); window.addEventListener('resize', frs);
+      ScrollTrigger.create({ trigger: '#footerExp', start: 'top 80%', onEnter: () => formed=true, onLeaveBack: () => formed=false });
+      const fdraw=()=>{
+        fctx.clearRect(0,0,fw,fh);
+        particles.forEach(p=>{
+          if(formed){ p.vx+=(p.tx-p.x)*0.045; p.vy+=(p.ty-p.y)*0.045; }
+          else { p.vx+=(p.tx-p.x)*0.003; p.vy+=(p.ty-p.y)*0.003; p.vx+=Math.sin(Date.now()*0.001+p.tx)*0.1; }
+          p.vx*=0.88; p.vy*=0.88; p.x+=p.vx; p.y+=p.vy;
+          fctx.fillStyle='rgba(196,156,123,0.55)'; fctx.fillRect(p.x, p.y, p.sz, p.sz);
+        });
+        requestAnimationFrame(fdraw);
+      }; fdraw();
+    })();
+
+    // Utils
+    const em='atelier@calyvent.com'; const fEm=document.getElementById('footerEmail');
+    if(fEm){ fEm.href='mailto:'+em; fEm.innerHTML=em.split('').map(c=>`<span>${c}</span>`).join(''); }
+    const fCo=document.getElementById('footerCoords'); if(fCo){ setInterval(()=>{ const d=new Date(); fCo.innerHTML=`40°42'N 74°00'W — ${d.getUTCHours().toString().padStart(2,'0')}:${d.getUTCMinutes().toString().padStart(2,'0')}:${d.getUTCSeconds().toString().padStart(2,'0')} UTC`; },1000); }
+
+    document.querySelectorAll('.acquire-essence').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault(); document.getElementById('takeover').style.display='flex';
+        let t=5; document.getElementById('countdown').innerText=t;
+        const i=setInterval(()=>{ t--; document.getElementById('countdown').innerText=t; if(t<=0){ clearInterval(i); window.location.href='https://velocity.calyvent.com'; } },1000);
+      });
+    });
+  }
+});
+</script>
 </body>
 </html>
