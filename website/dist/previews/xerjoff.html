@@ -188,10 +188,16 @@ function boot(){
       time+=0.015; cx.clearRect(0,0,cw,ch); cx.fillStyle='#0D0C09'; cx.fillRect(0,0,cw,ch);
       cx.font=`italic 400 ${cw*0.22}px 'Instrument Serif',serif`; cx.textAlign='center'; cx.textBaseline='middle';
       const grad=cx.createLinearGradient(0,0,cw,ch); grad.addColorStop(0,'#DEC8B5'); grad.addColorStop(1,'#C49C7B'); cx.fillStyle=grad;
-      // Multi-layer liquid text
-      for(let i=0;i<6;i++){
-        cx.globalAlpha=0.15/(i+1);
-        const ox=Math.sin(time+i)*25,oy=Math.cos(time+i)*15;
+      
+      // Chromatic Flare
+      cx.shadowBlur = 15; cx.shadowColor = 'rgba(196,156,123,0.4)';
+      
+      for(let i=0;i<8;i++){
+        cx.globalAlpha=0.12/(i+1);
+        const ox=Math.sin(time+i*0.5)*35,oy=Math.cos(time+i*0.5)*20;
+        cx.strokeStyle = i % 2 === 0 ? '#DEC8B5' : '#C49C7B';
+        cx.lineWidth = 1;
+        cx.strokeText('ORIGIN',cw/2+ox,ch/2+oy);
         cx.fillText('ORIGIN',cw/2+ox,ch/2+oy);
       }
       cx.globalAlpha=1; cx.fillText('ORIGIN',cw/2,ch/2);
