@@ -3,17 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XERJOFF — Structural Prototype</title>
+  <title>XERJOFF — The Symphony Prototype</title>
   <style>
     body, html { margin: 0; padding: 0; background: #000; overflow-x: hidden; color: #fff; font-family: 'Helvetica Neue', sans-serif; cursor: none; }
     
-    /* Scroll Proxy */
-    .scroll-proxy { height: 600vh; }
+    /* Preloader */
+    #jl-preloader { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:9999; display:flex; align-items:center; justify-content:center; }
+    .jl-logo-wrap { width: 250px; overflow: hidden; position: relative; }
+    .jl-logo-wrap svg { width: 100%; height: auto; opacity:0; transform: translateY(20px); filter: invert(1); } /* Make it white */
     
-    /* Fixed Z Container */
+    /* System Containers */
+    #smooth-wrapper { width: 100%; overflow: hidden; }
+    #smooth-content { will-change: transform; }
+
+    /* The Z-Axis Hero */
+    .hero-proxy { height: 400vh; }
     .z-wrap { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-    
-    /* Typography */
     .monolith {
       font-family: 'Times New Roman', Times, serif;
       font-size: 28vw;
@@ -21,276 +26,387 @@
       letter-spacing: -0.5vw;
       display: flex;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+      -webkit-text-stroke: 1px rgba(212, 175, 55, 0.4);
       position: relative;
       will-change: transform;
     }
     .char { display: block; opacity: 0; }
-    .monolith.is-active { -webkit-text-stroke: 0px; color: #fff; text-shadow: 0 0 40px rgba(255,255,255,0.4); filter: url(#liquidFilter); }
-
-    /* Canvas String */
+    .monolith.is-active { -webkit-text-stroke: 0px; color: #fff; text-shadow: 0 0 40px rgba(255,215,0,0.3); filter: url(#liquidFilter); }
     #stringCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; opacity: 1; transition: opacity 1s; }
 
-    /* Void Particles */
-    .void-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2vw; padding: 10vw; box-sizing: border-box; pointer-events: none; perspective: 1000px; }
-    .vp { font-family: 'Helvetica Neue', sans-serif; font-size: clamp(1rem, 2vw, 2.5rem); text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.6); opacity: 0; transform: translateZ(-200px); will-change: transform; transition: color 0.3s; }
-    .vp.hoverable { pointer-events: auto; }
-    .vp:hover { color: #fff; text-shadow: 0 0 10px #fff; }
+    /* Hidden Hero Background */
+    .hero-bg-reveal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 3; opacity: 0; pointer-events: none; }
+    .hbg-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
 
-    /* Acquire CTA */
-    .acquire { position: fixed; bottom: 8vh; left: 50%; transform: translateX(-50%); z-index: 20; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.3); padding: 1.2rem 3rem; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; background: transparent; backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: background 0.4s, color 0.4s, border-color 0.4s; }
-    .acquire:hover { background: #fff; color: #000; border-color: #fff; }
+    /* The Sections that follow */
+    .content-flow { position: relative; z-index: 10; background: #000; margin-top: 400vh; }
 
-    /* Custom Cursor */
-    .c-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; z-index: 9999; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); }
-    .c-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 9998; pointer-events: none; mix-blend-mode: difference; transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s; transform: translate(-50%, -50%); }
+    /* Horizontal Gallery */
+    .h-gallery { height: 100vh; display: flex; align-items: center; padding: 0 10vw; background: #000; overflow: hidden; position: relative; }
+    .h-track { display: flex; gap: 10vw; width: max-content; }
+    .h-card { width: 40vw; min-width: 400px; max-width: 600px; height: 75vh; position: relative; overflow: hidden; }
+    /* Portrait image padding via blurred background */
+    .h-card-bg { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; background-size: cover; background-position: center; filter: blur(40px) brightness(0.5); z-index: 1; }
+    .h-card-img { position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain; }
+    .h-meta { position: absolute; bottom: 10%; left: -5vw; z-index: 3; }
+    .h-meta-title { font-family: 'Times New Roman', serif; font-size: clamp(3rem, 5vw, 6rem); margin: 0; color: #fff; line-height: 1; -webkit-text-stroke: 1px rgba(0,0,0,0.5); text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+    .h-meta-sub { font-family: 'Helvetica Neue', sans-serif; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(212, 175, 55, 1); font-size: 0.9rem; margin-top: 1rem; }
+
+    /* Vertical Editorial Parallax */
+    .v-ed { padding: 25vh 0; display: flex; flex-direction: column; gap: 30vh; background: #050505; position: relative; overflow: hidden; }
+    .v-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; max-width: 1400px; margin: 0 auto; gap: 10vw; padding: 0 5vw; }
+    .v-grid:nth-child(even) { grid-template-columns: 1fr 1fr; direction: rtl; }
+    .v-grid:nth-child(even) > * { direction: ltr; }
+    
+    .v-img-wrap { width: 100%; height: 80vh; overflow: hidden; position: relative; }
+    .v-img { width: 100%; height: 120%; object-fit: cover; position: absolute; top: -10%; left: 0; }
+    .v-text h2 { font-family: 'Times New Roman', serif; font-size: clamp(2.5rem, 4vw, 5rem); font-weight: normal; margin-bottom: 2rem; color: #fff; }
+    .v-text p { font-family: 'Helvetica Neue', sans-serif; font-size: 1.1rem; line-height: 1.8; color: #aaa; margin-bottom: 3rem; max-width: 450px; }
+    .gold-line { width: 50px; height: 1px; background: rgba(212, 175, 55, 0.6); margin-bottom: 2rem; display: block; }
+
+    /* CTA Footer */
+    .cta-footer { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .cta-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.3); z-index: 1; }
+    .cta-content { position: relative; z-index: 5; }
+    .acquire { display: inline-block; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.4); padding: 1.2rem 4rem; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); transition: all 0.4s ease; cursor: none; }
+    .acquire:hover { background: #fff; color: #000; border-color: #fff; transform: scale(1.05); }
+
+    /* Modals & Cursor */
+    .c-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; z-index: 10001; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); }
+    .c-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s; transform: translate(-50%, -50%); }
     .c-ring.hover { width: 80px; height: 80px; border-color: #fff; background: rgba(255,255,255,0.1); backdrop-filter: invert(1); }
 
-    /* Modal Takeover */
-    .takeover { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; color: #000; z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 5vw; box-sizing: border-box; overflow: hidden; }
+    .takeover { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; color: #000; z-index: 20000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 5vw; box-sizing: border-box; overflow: hidden; }
     .t-noise { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; pointer-events: none; background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E'); opacity: 0.15; animation: noise 0.2s infinite steps(2); }
     @keyframes noise { 0% { transform: translate(0,0) } 25% { transform: translate(-1%,1%) } 50% { transform: translate(1%,-1%) } 75% { transform: translate(-2%,-2%) } 100% { transform: translate(1%,1%) } }
-    
     .t-meta { font-family: monospace; text-transform: uppercase; color: #ff0000; letter-spacing: 0.2em; font-size: 1rem; margin-bottom: 2rem; position: relative; z-index: 2; }
     .t-head { font-size: clamp(3rem, 8vw, 10rem); font-weight: 900; line-height: 0.85; text-transform: uppercase; margin: 0 0 3rem; letter-spacing: -0.04em; position: relative; z-index: 2; }
-    .t-countdown { font-family: monospace; font-size: clamp(6rem, 15vw, 20rem); font-weight: bold; color: #000; text-stroke: 2px #000; -webkit-text-stroke: 2px #000; color: transparent; position: relative; z-index: 2; margin-bottom: 2rem; }
-    .t-btn { background: #000; color: #fff; padding: 1.5rem 4rem; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; position: relative; z-index: 2; transition: transform 0.3s; cursor: none; }
-    .t-btn:hover { transform: scale(1.05); }
-
-    svg.filters { width: 0; height: 0; position: absolute; }
+    .t-countdown { font-family: monospace; font-size: clamp(6rem, 15vw, 20rem); font-weight: bold; color: transparent; -webkit-text-stroke: 2px #000; position: relative; z-index: 2; margin-bottom: 2rem; }
   </style>
 </head>
 <body>
 
-<!-- SVG Filters -->
-<svg class="filters">
-  <filter id="liquidFilter">
-    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise" id="turb" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
-  </filter>
-</svg>
+  <!-- SVG Filters -->
+  <svg width="0" height="0" style="position:absolute;">
+    <filter id="liquidFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise" id="turb" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
 
-<div class="c-dot" id="cDot"></div>
-<div class="c-ring" id="cRing"></div>
+  <div class="c-dot" id="cDot"></div>
+  <div class="c-ring" id="cRing"></div>
 
-<canvas id="stringCanvas"></canvas>
-
-<div class="z-wrap">
-  <div class="monolith" id="monolith">
-    <span class="char">X</span>
-    <span class="char">E</span>
-    <span class="char">R</span>
-    <span class="char">J</span>
-    <span class="char" id="targetO">O</span>
-    <span class="char">F</span>
-    <span class="char">F</span>
+  <!-- Preloader -->
+  <div id="jl-preloader">
+    <div class="jl-logo-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 160 28" id="jl-svg">
+        <g>
+          <path fill="black" d="M90.1873 14.0749V13.9988C90.1873 6.6526 95.8271 0.5 103.805 0.5C111.784 0.5 117.348 6.57886 117.348 13.9251V13.9988C117.348 21.3474 111.708 27.5 103.73 27.5C95.7515 27.5 90.1873 21.4211 90.1873 14.0749ZM112.561 14.0749V14.0012C112.561 8.92929 108.886 4.71465 103.73 4.71465C98.5737 4.71465 94.9743 8.85555 94.9743 13.9274V14.0012C94.9743 19.073 98.6471 23.2877 103.805 23.2877C108.964 23.2877 112.563 19.1468 112.563 14.0749H112.561Z" />
+          <path fill="black" d="M0.371405 0.947041L9.46084 13.7765L0 27.053H5.23177L12.0959 17.1696L18.9233 27.053H24.3041L14.8791 13.7016L23.9327 0.947041H18.7009L12.2082 10.3073L5.7522 0.947041H0.371405Z" />
+          <path fill="black" d="M69.2609 27.0507L69.2625 27.053L69.2648 27.0507H69.2609Z" />
+          <path fill="black" d="M61.385 15.8838L69.2609 27.0507H63.884L56.0639 15.9368H52.3315V11.8351H58.4665C61.7312 11.8351 63.8083 10.5585 63.8083 8.51682V8.45921C63.8083 6.30234 61.8046 5.12252 58.4276 5.12482H49.4703V0.94474H58.799C62.0637 0.94474 68.4463 2.73752 68.4463 8.28408V8.36012C68.4371 12.5241 65.1266 15.0819 61.385 15.8838Z" />
+          <path fill="black" d="M70.175 23.2116L73.1806 20.1169C74.7029 22.0571 76.2229 23.1747 78.4124 23.1747C80.8609 23.1747 82.5299 21.534 82.5299 18.066V0.947041H87.2046V18.1766C87.2046 21.2714 86.3128 23.5849 84.7927 25.115C83.2727 26.6451 81.0833 27.4263 78.4857 27.4263C74.4782 27.4263 71.8807 25.562 70.175 23.2116Z" />
+          <path fill="black" d="M120.344 0.947041V27.053H124.909V15.9391H136.184V11.8374H124.909V5.05108H138.889V0.947041H120.344Z" />
+          <path fill="black" d="M141.455 27.053V0.947041H159.998V5.05108H146.017V11.8374H157.292V15.9391H146.017V27.053H141.455Z" />
+          <path fill="black" d="M46.3408 0.947041H27.7958V27.0553H46.3408V22.9512H32.3604V15.9391H44.4723V11.8374H32.3604V5.05108H46.3408V0.947041Z" />
+        </g>
+      </svg>
+    </div>
   </div>
-</div>
 
-<div class="void-layer" id="voidLayer">
-  <span class="vp hoverable">Bergamot</span>
-  <span class="vp">Iris</span>
-  <span class="vp hoverable">Oud</span>
-  <span class="vp">Cardamom</span>
-  <span class="vp hoverable">Vanilla</span>
-  <span class="vp">Bulgarian Rose</span>
-  <span class="vp hoverable">Sandalwood</span>
-  <span class="vp">Amber</span>
-</div>
+  <!-- FIXED Z-AXIS HERO -->
+  <!-- Note: This stays absolutely fixed but completely hides once scrolled past 400vh -->
+  <div class="hero-proxy"></div>
+  <div class="hero-bg-reveal" id="heroBg">
+    <img src="/images/xerjoff/gibeonDeskMob1.jpg" class="hbg-img" alt="Xerjoff Background" id="hbgScale" />
+  </div>
+  <canvas id="stringCanvas"></canvas>
+  <div class="z-wrap" id="zWrap">
+    <div class="monolith" id="monolith">
+      <span class="char">X</span><span class="char">E</span><span class="char">R</span><span class="char">J</span>
+      <span class="char" id="targetO">O</span>
+      <span class="char">F</span><span class="char">F</span>
+    </div>
+  </div>
 
-<a href="#" class="acquire" id="acquireBtn">Acquire the Essence</a>
+  <!-- CONTENT -->
+  <div class="content-flow">
+    
+    <!-- Horizon Gallery -->
+    <section class="h-gallery">
+      <div class="h-track" id="hTrack">
+        
+        <div class="h-card">
+          <div class="h-card-bg" style="background-image: url('/images/xerjoff/xjBlockErbaPuraMob.jpg');"></div>
+          <img src="/images/xerjoff/xjBlockErbaPuraMob.jpg" class="h-card-img" />
+          <div class="h-meta">
+            <h3 class="h-meta-title">Erba Pura</h3>
+            <div class="h-meta-sub">V-Collection</div>
+          </div>
+        </div>
 
-<div class="scroll-proxy"></div>
+        <div class="h-card">
+          <div class="h-card-bg" style="background-image: url('/images/xerjoff/xjBlockNaxosMob.jpg');"></div>
+          <img src="/images/xerjoff/xjBlockNaxosMob.jpg" class="h-card-img" />
+          <div class="h-meta">
+            <h3 class="h-meta-title">Naxos</h3>
+            <div class="h-meta-sub">1861 Collection</div>
+          </div>
+        </div>
 
-<!-- Brutalist Modal -->
-<div class="takeover" id="takeover">
-  <div class="t-noise"></div>
-  <div class="t-meta">System Interruption</div>
-  <h1 class="t-head">This is a<br>Prototype.</h1>
-  <div class="t-countdown" id="countdown">5</div>
-  <a href="https://velocity.calyvent.com" class="t-btn" id="exitBtn">Exit Architecture</a>
-</div>
+        <div class="h-card">
+          <div class="h-card-bg" style="background-image: url('/images/xerjoff/slideTimelessSet-Mob.jpg');"></div>
+          <img src="/images/xerjoff/slideTimelessSet-Mob.jpg" class="h-card-img" style="object-fit:cover;" />
+          <div class="h-meta" style="bottom: 10%;">
+            <h3 class="h-meta-title">Timeless Set</h3>
+            <div class="h-meta-sub">Exclusive Edition</div>
+          </div>
+        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+      </div>
+    </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+    <!-- Editorial Vertical -->
+    <section class="v-ed">
+      <div class="v-grid">
+        <div class="v-img-wrap"><img src="/images/xerjoff/springSelectionMob.jpg" class="v-img parallax-img" /></div>
+        <div class="v-text">
+          <span class="gold-line"></span>
+          <h2>The Spring<br>Selection</h2>
+          <p>A highly curated olfactory journey through the awakening of nature. Experience the crisp citrus and blooming hearts of our most coveted seasonal artifacts.</p>
+        </div>
+      </div>
+      
+      <div class="v-grid">
+        <div class="v-img-wrap"><img src="/images/xerjoff/slideTempioDacquaMob.jpg" class="v-img parallax-img" /></div>
+        <div class="v-text">
+          <span class="gold-line"></span>
+          <h2>Temple of<br>Water</h2>
+          <p>Fluid, timeless, eternal. The Tempio D'Acqua release embodies the absolute purity of the elements, suspended perfectly within the glass.</p>
+        </div>
+      </div>
+    </section>
 
-  gsap.registerPlugin(ScrollTrigger);
+    <!-- CTA Footer -->
+    <footer class="cta-footer">
+      <img src="/images/xerjoff/discoveryMobHome2.jpg" class="cta-bg parallax-img" />
+      <div class="cta-content">
+        <a href="#" class="acquire">Acquire the Essence</a>
+      </div>
+    </footer>
 
-  // Smooth Scroll
-  const lenis = new Lenis({ duration: 2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
+  </div>
 
-  // Cursor
-  const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
-  let mx=window.innerWidth/2, my=window.innerHeight/2;
-  let cx=mx, cy=my, rx=mx, ry=my;
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-  gsap.ticker.add(()=>{
-    cx += (mx-cx)*0.2; cy += (my-cy)*0.2;
-    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
-    cDot.style.left=cx+'px'; cDot.style.top=cy+'px';
-    cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
-  });
+  <!-- Brutalist Modal -->
+  <div class="takeover" id="takeover">
+    <div class="t-noise"></div>
+    <div class="t-meta">System Interruption</div>
+    <h1 class="t-head">This is an<br>Architectural Prototype.</h1>
+    <div class="t-countdown" id="countdown">5</div>
+  </div>
 
-  document.querySelectorAll('a, .hoverable').forEach(el => {
-    el.addEventListener('mouseenter', () => cRing.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cRing.classList.remove('hover'));
-  });
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
-  // Modals
-  const tTakeover = document.getElementById('takeover');
-  let countdownActive = false;
-  document.querySelectorAll('a').forEach(btn => {
-    if(btn.id==='exitBtn') return;
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      tTakeover.style.display = 'flex';
-      let ticks = 5;
-      const cnt = document.getElementById('countdown');
-      cnt.innerText = ticks;
-      const int = setInterval(()=>{
-        ticks--;
-        cnt.innerText = ticks;
-        if(ticks<=0) {
-          clearInterval(int);
-          window.location.href = 'https://velocity.calyvent.com';
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- Preloader Sequence ---
+      const tlLoad = gsap.timeline({
+        onComplete: () => {
+          gsap.set('#jl-preloader', { display: 'none' });
+          initSite();
         }
-      }, 1000);
+      });
+      tlLoad.to('#jl-svg', { opacity: 1, y: 0, duration: 1.5, ease: 'expo.out' })
+            .to('#jl-svg', { scale: 1.1, filter: 'invert(1) blur(10px)', opacity: 0, duration: 1, ease: 'power2.in', delay: 0.5 })
+            .to('#jl-preloader', { opacity: 0, duration: 0.5 }, "-=0.2");
+
+      function initSite() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Smooth Scroll ---
+        const lenis = new Lenis({ duration: 1.8, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+
+        // --- Custom Cursor ---
+        const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
+        let mx=window.innerWidth/2, my=window.innerHeight/2;
+        let cx=mx, cy=my, rx=mx, ry=my;
+        document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+        gsap.ticker.add(()=>{
+          cx += (mx-cx)*0.2; cy += (my-cy)*0.2;
+          rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+          cDot.style.left=cx+'px'; cDot.style.top=cy+'px';
+          cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
+        });
+
+        document.querySelectorAll('a, .h-card').forEach(el => {
+          el.addEventListener('mouseenter', () => cRing.classList.add('hover'));
+          el.addEventListener('mouseleave', () => cRing.classList.remove('hover'));
+        });
+
+        // --- Canvas Liquid Physics ---
+        const cv = document.getElementById('stringCanvas');
+        const ctx = cv.getContext('2d');
+        let w, h;
+        let targetY = 0, currentY = 0, velY = 0;
+        
+        function resize() {
+          w = cv.width = window.innerWidth;
+          h = cv.height = window.innerHeight;
+          targetY = currentY = h/2;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+        
+        gsap.ticker.add(()=>{
+          ctx.clearRect(0,0,w,h);
+          if (Math.abs(mx - w/2) < w*0.3 && Math.abs(my - h/2) < 150) targetY = my; else targetY = h/2;
+          velY += (targetY - currentY) * 0.05;
+          velY *= 0.85; 
+          currentY += velY;
+
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY + velY*5 + Math.sin(Date.now()*.002)*10, w, h/2);
+          ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)'; ctx.stroke();
+
+          ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY - velY*5 + Math.sin(Date.now()*.0025)*10, w, h/2);
+          ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)'; ctx.stroke();
+
+          ctx.beginPath(); ctx.moveTo(0, h/2); ctx.quadraticCurveTo(w/2, currentY, w, h/2);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'; ctx.stroke();
+        });
+
+        // --- Z-Axis Scroll Sequence ---
+        const mono = document.getElementById('monolith');
+        const oChar = document.getElementById('targetO');
+        const chars = document.querySelectorAll('.char');
+        
+        gsap.fromTo(chars, {opacity:0, z:-500, rotationX: 45}, {opacity:1, z:0, rotationX:0, duration:2, stagger:0.1, ease:'expo.out'});
+
+        function updateOrigin() {
+          const rect = oChar.getBoundingClientRect();
+          const wrapRect = mono.getBoundingClientRect();
+          const ox = (rect.left - wrapRect.left) + rect.width/2;
+          const oy = (rect.top - wrapRect.top) + rect.height/2;
+          gsap.set(mono, { transformOrigin: `${ox}px ${oy}px` });
+        }
+        setTimeout(updateOrigin, 100);
+        window.addEventListener('resize', updateOrigin);
+
+        // Hero Proxy Scroll Timeline
+        const heroTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.hero-proxy',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1
+          }
+        });
+
+        heroTl.to('#stringCanvas', { opacity: 0, duration: 0.1 }, 0);
+        heroTl.to(mono, { 
+          duration: 0.1, 
+          onStart: ()=> mono.classList.add('is-active'),
+          onReverseComplete: ()=> mono.classList.remove('is-active')
+        }, 0.1);
+        
+        const turb = document.getElementById('turb');
+        heroTl.to(turb, { attr: { baseFrequency: '0.001 0.005' }, duration: 0.9 }, 0);
+        
+        // Massive Zoom through O
+        heroTl.to(mono, { scale: 150, opacity: 0, duration: 0.6, ease: 'power2.in' }, 0.4);
+        
+        // Reveal Hero Background while scaling
+        heroTl.to('#heroBg', { opacity: 1, duration: 0.3 }, 0.6);
+        heroTl.fromTo('#hbgScale', { scale: 1.2 }, { scale: 1, duration: 1, ease: 'none' }, 0.4);
+
+        // Hide Z-Wrap fixed completely so it doesn't block content below
+        heroTl.to('#zWrap, #heroBg', { autoAlpha: 0, duration: 0 }, 1.0);
+
+        // --- Horizontal Gallery ---
+        const hTrack = document.getElementById('hTrack');
+        // Total track scroll distance
+        let getScrollAmount = () => -(hTrack.scrollWidth - window.innerWidth + window.innerWidth * 0.2);
+
+        gsap.to(hTrack, {
+          x: getScrollAmount,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".h-gallery",
+            start: "top top",
+            end: () => `+=${hTrack.scrollWidth}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            anticipatePin: 1
+          }
+        });
+
+        // Gallery Card Hover Tilt
+        document.querySelectorAll('.h-card').forEach(card=>{
+          card.addEventListener('mousemove',e=>{
+            const r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+            gsap.to(card.querySelector('.h-card-img'), { x: x*20, y: y*20, scale: 1.05, duration: 0.5, ease: 'power2.out' });
+          });
+          card.addEventListener('mouseleave',()=>{
+            gsap.to(card.querySelector('.h-card-img'), { x: 0, y: 0, scale: 1, duration: 1, ease: 'expo.out' });
+          });
+        });
+
+        // --- Vertical Parallax ---
+        document.querySelectorAll('.v-grid').forEach(grid => {
+          const img = grid.querySelector('.parallax-img');
+          gsap.to(img, {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+              trigger: grid,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          });
+        });
+
+        // Footer Parallax
+        gsap.fromTo('.cta-bg', { yPercent: -20 }, {
+          yPercent: 20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: '.cta-footer',
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
+        });
+
+        // --- Modals ---
+        const tTakeover = document.getElementById('takeover');
+        document.querySelectorAll('.acquire').forEach(btn => {
+          btn.addEventListener('click', e => {
+            e.preventDefault();
+            tTakeover.style.display = 'flex';
+            let ticks = 5;
+            const cnt = document.getElementById('countdown');
+            cnt.innerText = ticks;
+            const int = setInterval(()=>{
+              ticks--;
+              cnt.innerText = ticks;
+              if(ticks<=0) {
+                clearInterval(int);
+                window.location.href = 'https://velocity.calyvent.com';
+              }
+            }, 1000);
+          });
+        });
+      }
     });
-  });
-
-  // Canvas String
-  const cv = document.getElementById('stringCanvas');
-  const ctx = cv.getContext('2d');
-  let w, h;
-  let line = { y: 0, c: 0 };
-  
-  function resize() {
-    w = cv.width = window.innerWidth;
-    h = cv.height = window.innerHeight;
-    line.y = h/2;
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  let targetY = h/2, currentY = h/2, velY = 0;
-  
-  function draw() {
-    ctx.clearRect(0,0,w,h);
-    
-    // Physics for string interacting with cursor
-    if (Math.abs(mx - w/2) < w*0.3 && Math.abs(my - line.y) < 100) {
-      targetY = my;
-    } else {
-      targetY = h/2;
-    }
-    
-    velY += (targetY - currentY) * 0.05;
-    velY *= 0.85; // friction
-    currentY += velY;
-
-    // Draw chromatic line
-    ctx.lineWidth = 1;
-    
-    // Deep Gold split
-    ctx.beginPath();
-    ctx.moveTo(0, h/2);
-    ctx.quadraticCurveTo(w/2, currentY + velY*5 + Math.sin(Date.now()*.002)*10, w, h/2);
-    ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
-    ctx.stroke();
-
-    // Bright Gold split
-    ctx.beginPath();
-    ctx.moveTo(0, h/2);
-    ctx.quadraticCurveTo(w/2, currentY - velY*5 + Math.sin(Date.now()*.0025)*10, w, h/2);
-    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
-    ctx.stroke();
-
-    // Core bright
-    ctx.beginPath();
-    ctx.moveTo(0, h/2);
-    ctx.quadraticCurveTo(w/2, currentY, w, h/2);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.stroke();
-
-    requestAnimationFrame(draw);
-  }
-  draw();
-
-  // GSAP Z-Axis Logic
-  const mono = document.getElementById('monolith');
-  const oChar = document.getElementById('targetO');
-  const chars = document.querySelectorAll('.char');
-  
-  // Initial spawn
-  gsap.fromTo(chars, {opacity:0, z:-500, rotationX: 45}, {opacity:1, z:0, rotationX:0, duration:2, stagger:0.1, ease:'expo.out', delay:0.5});
-
-  // Calculate transform origin for 'O' once loaded
-  setTimeout(()=>{
-    const rect = oChar.getBoundingClientRect();
-    const wrapRect = mono.getBoundingClientRect();
-    const ox = (rect.left - wrapRect.left) + rect.width/2;
-    const oy = (rect.top - wrapRect.top) + rect.height/2;
-    gsap.set(mono, { transformOrigin: `${ox}px ${oy}px` });
-  }, 100);
-
-  window.addEventListener('resize', ()=>{
-    const rect = oChar.getBoundingClientRect();
-    const wrapRect = mono.getBoundingClientRect();
-    const ox = (rect.left - wrapRect.left) + rect.width/2;
-    const oy = (rect.top - wrapRect.top) + rect.height/2;
-    gsap.set(mono, { transformOrigin: `${ox}px ${oy}px` });
-  });
-
-  // The main scroll timeline
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.scroll-proxy',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1
-    }
-  });
-
-  // Phase 1: Solidify and liquid displacement
-  tl.to(cv, { opacity: 0, duration: 0.2 }, 0);
-  tl.to(mono, { 
-    duration: 0.1, 
-    onStart: ()=> mono.classList.add('is-active'),
-    onReverseComplete: ()=> mono.classList.remove('is-active')
-  }, 0.1);
-
-  // Animate SVG frequency for liquid effect
-  const turb = document.getElementById('turb');
-  tl.to(turb, { attr: { baseFrequency: '0.001 0.005' }, duration: 0.9 }, 0);
-
-  // Zoom massively through the 'O'
-  tl.to(mono, { scale: 120, opacity: 0, duration: 0.6, ease: 'power2.in' }, 0.4);
-
-  // Phase 3: The Void Particles explode in
-  tl.fromTo('.vp', { z: -800, opacity: 0 }, { z: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'back.out(1.5)' }, 0.6);
-  
-  // Parallax float for particles
-  const vpEls = document.querySelectorAll('.vp');
-  document.addEventListener('mousemove', e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 40;
-    const y = (e.clientY / window.innerHeight - 0.5) * 40;
-    vpEls.forEach((vp, i) => {
-      const spd = (i%3)+1;
-      gsap.to(vp, { x: -x*spd, y: -y*spd, duration: 1 });
-    });
-  });
-
-  // Acquire CTA fades in
-  tl.to('#acquireBtn', { opacity: 1, pointerEvents: 'auto', duration: 0.2 }, 0.9);
-
-});
-</script>
+  </script>
 </body>
 </html>
