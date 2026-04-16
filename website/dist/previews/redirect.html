@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Velocity — The Geometric Sigil</title>
+  <title>Velocity — The Prismatic Pulse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -18,7 +18,8 @@
     .metadata-line { display:flex; justify-content:space-between; font-family:var(--sans); text-transform:uppercase; letter-spacing:1.2em; font-size:0.45rem; color:var(--brass); opacity:0.4; animation: glitch 4s steps(1) infinite; }
     @keyframes glitch { 0%, 95% { opacity: 0.4; } 96% { opacity: 0.8; transform: translateX(2px); } 97% { opacity: 0.2; } 98% { opacity: 0.4; transform: translateX(0); } }
     
-    .status-sidebar { position:fixed; top:50%; right:4vw; transform:translateY(-50%) rotate(90deg); font-family:var(--sans); font-size:0.5rem; letter-spacing:0.5em; text-transform:uppercase; color:var(--brass); opacity:0; white-space:nowrap; }
+    .progress-bar-container { position:fixed; bottom:8vh; left:50%; transform:translateX(-50%); width:200px; height:2px; background:rgba(196,156,123,0.1); z-index:15; overflow:hidden; opacity:0; }
+    #archiveProgress { width:0%; height:100%; background:var(--brass); box-shadow:0 0 15px rgba(196,156,123,0.5); }
 
     .shimmer-handoff { position:fixed; inset:0; z-index:1000; background:var(--sand); opacity:0; pointer-events:none; }
   </style>
@@ -27,20 +28,21 @@
 
 <canvas id="bgCanvas"></canvas>
 <canvas id="sigilCanvas"></canvas>
+<div class="progress-bar-container" id="pBar">
+  <div id="archiveProgress"></div>
+</div>
 <div class="shimmer-handoff" id="shimmer"></div>
 
 <div class="archive-metadata">
-  <div class="metadata-line" id="mTop">
-    <span>Archive 8442</span>
-    <span>Prototype Ref: B-02</span>
+  <div class="metadata-line">
+    <span>Archive 8442 — Preview Term</span>
+    <span>Encrypted Tunnel: 09</span>
   </div>
-  <div class="metadata-line" id="mBottom">
-    <span>Extraction Phase 09</span>
-    <span>Returning to Source</span>
+  <div class="metadata-line">
+    <span>Prototype Extract</span>
+    <span>Handing Over</span>
   </div>
 </div>
-
-<div class="status-sidebar" id="sSide">Handover Initiated</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
@@ -55,51 +57,60 @@ window.addEventListener('load', () => {
   }
   window.addEventListener('resize', rs); rs();
 
-  // 1. Gravitational Starfield
   const stars = [];
-  for(let i=0; i<800; i++) stars.push({x: Math.random()*w, y: Math.random()*h, ox:0, oy:0, s: Math.random()*1.5});
-  function drawStars(warpX, warpY) {
+  for(let i=0; i<800; i++) stars.push({x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5});
+  function drawStars(warpX, warpY, intensity) {
     bCtx.clearRect(0,0,w,h);
     bCtx.fillStyle = 'rgba(222,200,181,0.4)';
     stars.forEach(s => {
       const dx = s.x - warpX, dy = s.y - warpY;
       const d = Math.sqrt(dx*dx + dy*dy);
-      const shift = 1000 / (d + 100);
+      const shift = (1000 * intensity) / (d + 100);
       bCtx.fillRect(s.x + dx/d * shift, s.y + dy/d * shift, s.s, s.s);
     });
   }
 
-  // 2. 5,000-Point Volumetric Sigil
   const points = [];
   const numPoints = 5000;
   for(let i=0; i<numPoints; i++) {
     points.push({
-      x: (Math.random()-0.5)*2, y: (Math.random()-0.5)*4, z: (Math.random()-0.5)*0.8,
+      x: (Math.random()-0.5)*2.5, y: (Math.random()-0.5)*4.5, z: (Math.random()-0.5)*1.2,
       size: Math.random()*1.5 + 0.5, alpha: Math.random()*0.8 + 0.2
     });
   }
 
   let rotationY = 0, rotationX = 0;
   let count = 5;
+  let surge = 0; // Kinetic Pulse
 
-  // Numeral Negative Space Maps
+  // Expanded Numerals Negative Space Maps
   const numerals = {
-    5: (x,y) => (y < -0.8 && x < 0.5) || (y > -0.2 && y < 0.2) || (y > 0.8 && x > -0.5) || (x < -0.4 && y < 0) || (x > 0.4 && y > 0),
-    4: (x,y) => (x < -0.4 && y < 0) || (x > 0.4) || (y > -0.1 && y < 0.1),
-    3: (x,y) => (y < -0.8) || (y > -0.1 && y < 0.1) || (y > 0.8) || (x > 0.4),
-    2: (x,y) => (y < -0.8) || (y > -0.1 && y < 0.1) || (y > 0.8) || (x > 0.4 && y < 0) || (x < -0.4 && y > 0),
+    5: (x,y) => (y < -1 && x < 0.6) || (y > -0.2 && y < 0.2) || (y > 1 && x > -0.6) || (x < -0.5 && y < 0) || (x > 0.5 && y > 0),
+    4: (x,y) => (x < -0.5 && y < 0.2) || (x > 0.5) || (y > -0.1 && y < 0.1),
+    3: (x,y) => (y < -1) || (y > -0.1 && y < 0.1) || (y > 1) || (x > 0.5),
+    2: (x,y) => (y < -1) || (y > -0.1 && y < 0.1) || (y > 1) || (x > 0.5 && y < 0) || (x < -0.5 && y > 0),
     1: (x,y) => (x > -0.05 && x < 0.05),
-    0: (x,y) => Math.abs(x) > 0.4 || Math.abs(y) > 0.8
+    0: (x,y) => Math.abs(x) > 0.5 || Math.abs(y) > 1
   };
 
   function render() {
     sCtx.clearRect(0,0,w,h);
-    rotationY += 0.006; rotationX += 0.002;
+    rotationY += 0.007; rotationX += 0.003;
     
     const perspective = 800;
     const centerX = w/2, centerY = h/2;
     const sY = Math.sin(rotationY), cY = Math.cos(rotationY);
     const sX = Math.sin(rotationX), cX = Math.cos(rotationX);
+
+    // Render Large Elegant Ghost Numeral (Line-drawn)
+    sCtx.save();
+    sCtx.font = `italic 400 ${Math.min(w, h) * 0.7}px "Instrument Serif"`;
+    sCtx.textAlign = 'center'; sCtx.textBaseline = 'middle';
+    sCtx.strokeStyle = `rgba(196, 156, 123, ${0.15 + surge * 0.5})`;
+    sCtx.lineWidth = 1;
+    sCtx.setLineDash([20, 10]);
+    sCtx.strokeText(count, centerX, centerY);
+    sCtx.restore();
 
     for(let i=0; i<numPoints; i++) {
       const p = points[i];
@@ -108,39 +119,46 @@ window.addEventListener('load', () => {
       let y = p.y * cX - z * sX;
       let zFinal = p.y * sX + z * cX;
 
-      const f = perspective / (zFinal + 4);
+      const f = perspective / (zFinal + 4.5);
       const sx = centerX + x * f * 100;
       const sy = centerY + y * f * 100;
 
-      // Negative Space Check
       const isNegative = numerals[count](x, y);
       
-      // Upscaled Refractive Glow logic
-      const edgeGlow = isNegative ? 1.5 : 0.15;
-      sCtx.globalAlpha = p.alpha * edgeGlow;
+      const alphaBoost = isNegative ? 1.8 + surge * 2 : 0.1;
+      sCtx.globalAlpha = p.alpha * alphaBoost;
       sCtx.fillStyle = isNegative ? '#DEC8B5' : '#C49C7B';
-      const size = isNegative ? p.size * 1.8 : p.size * 0.4;
+      const sizeBoost = isNegative ? 2 + surge * 2 : 0.5;
       
-      if(isNegative && Math.random() > 0.98) { // Technical sparkle
+      if(isNegative && Math.random() > (0.98 - surge*0.1)) {
         sCtx.globalAlpha = 1;
         sCtx.fillStyle = '#FFF';
       }
       
-      sCtx.fillRect(sx, sy, size, size);
+      sCtx.fillRect(sx, sy, p.size * sizeBoost, p.size * sizeBoost);
     }
     
-    drawStars(centerX, centerY);
+    drawStars(centerX, centerY, 1 + surge);
     requestAnimationFrame(render);
   }
   render();
 
-  // 3. Experience Timeline
   const tl = gsap.timeline();
-  tl.to(['#mTop', '#mBottom', '#sSide'], { opacity: 1, duration: 2, stagger: 0.3, ease: 'power2.inOut' }, 0.5);
+  tl.to('.archive-metadata', { opacity: 1, duration: 2 }, 0.5);
+  tl.to('#pBar', { opacity: 1, duration: 1.5 }, 0.5);
 
   const countdown = [5, 4, 3, 2, 1, 0];
   countdown.forEach((val, i) => {
-    tl.to({}, { duration: 1, onStart: () => { count = val; } });
+    tl.to({}, { 
+      duration: 1, 
+      onStart: () => { 
+        count = val; 
+        // Trigger Kinetic Pulse (Surge)
+        gsap.fromTo({s:1}, { s:0, duration: 0.6, onUpdate: function() { surge = this.targets()[0].s; }, ease: 'expo.out' });
+        // Update Progress Bar
+        gsap.to('#archiveProgress', { width: `${((i+1)/6)*100}%`, duration: 0.8, ease: 'power2.inOut' });
+      } 
+    });
   });
 
   tl.to('#shimmer', { opacity: 1, duration: 1.2, ease: 'expo.in' }, 6.5);
