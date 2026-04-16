@@ -103,6 +103,7 @@ window.addEventListener('load', () => {
 
     // We only render every 2nd point for performance during high-end motion
     ctx.fillStyle = '#DEC8B5';
+    ctx.globalCompositeOperation = 'lighter';
     for(let i=0; i<numPoints; i+=2) {
       const p = points[i];
       const { sx, sy, size, alpha } = project(p);
