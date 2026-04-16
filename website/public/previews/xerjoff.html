@@ -138,8 +138,11 @@
 <div class="takeover-ritual" id="takeoverRitual">
   <div class="ritual-grain"></div>
   <canvas class="ritual-canvas" id="ritualCanvas"></canvas>
+  <div class="ritual-header" id="ritualHeader" style="position:absolute; top:4vh; left:50%; transform:translateX(-50%); opacity:0; z-index:10; font-family:var(--sans); text-transform:uppercase; letter-spacing:0.4em; font-size:0.6rem; color:var(--brass);">
+    Prototype Environment — Digital Archive
+  </div>
   <div class="ritual-content">
-    <div class="ritual-message" id="ritualMsg">Structural Integrity Verified.</div>
+    <div class="ritual-message" id="ritualMsg">Structural Prototype Ready.</div>
     <div class="ritual-clock" id="ritualClock"></div>
   </div>
 </div>
@@ -174,11 +177,12 @@ function startTheRitual(){
   tl.to('.content-matrix',{opacity:0, scale:0.95, duration:1.2, ease:'expo.inOut'});
   tl.to('.hero-proxy, #stringCanvas',{opacity:0, duration:0.6},0.2);
   tl.to(tr,{display:'flex', opacity:1, duration:1},0.5);
+  tl.to('#ritualHeader',{opacity:1, duration:1},1);
   tl.to(msg,{opacity:1, transform:'translateY(0)', duration:1},1.2);
   tl.to(clock,{opacity:1, duration:1},1.5);
 
-  // Message Cycling
-  const msgs=["Recalibrating Digital Presence.", "The Source Awaits.", "Authenticity Verified."];
+  // Message Cycling (Clarity Fix)
+  const msgs=["Structural Prototype Session Concluded.", "Returning to Velocity Digital Atelier...", "Diverting to Primary Salon."];
   msgs.forEach((m, i)=>{
     tl.to(msg,{opacity:0, translateY:-20, duration:0.6, delay:0.8, onComplete:()=>{msg.innerText=m;}},1.8+i*1.5);
     tl.to(msg,{opacity:1, translateY:0, duration:0.8},2.5+i*1.5);
