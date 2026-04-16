@@ -99,10 +99,19 @@
   <a href="https://velocity.calyvent.com/previews/xerjoff" class="cta-btn">Explore Bespoke Prototype</a>
 </section>
 
-<footer class="footer-exp g-anim" id="footerExp" style="margin-top: 0;">
-  <div class="footer-content" style="padding-bottom: 5vh; padding-top: 10vh;">
+<footer class="footer-exp" id="footerExp">
+  <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
     <a href="#" class="footer-email" id="footerEmail"></a>
     <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-coords" id="footerCoords"></span>
+    <div class="footer-meta">
+      <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+    </div>
   </div>
 </footer>
 
@@ -157,6 +166,61 @@ function boot(){
     });
     (function l(){ rx+=(tx-rx)*.07; ry+=(ty-ry)*.07; gx+=(mx-gx)*.05; gy+=(my-gy)*.05; r.style.transform=`translate(${rx-20}px,${ry-20}px)`; d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`; g.style.transform=`translate(${gx-250}px,${gy-250}px)`; requestAnimationFrame(l); })();
   }
+
+  // Footer coordinates clock
+  const coordsEl=document.getElementById('footerCoords');
+  if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
+
+  // Footer Particles
+  (function(){
+    const cv=document.getElementById('footerParticles');if(!cv)return;
+    const ctx=cv.getContext('2d');let w,h,particles=[],formed=false;
+    function resize(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight;initP()}
+    function initP(){
+      particles=[];
+      const off=document.createElement('canvas');off.width=w;off.height=h;
+      const oc=off.getContext('2d');
+      const fs=Math.min(w*.13,160);
+      oc.font=`400 ${fs}px 'Instrument Serif',serif`;
+      oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
+      oc.fillText('Velocity.',w/2,h*.30);
+      const d=oc.getImageData(0,0,w,h).data;
+      const gap=Math.max(3,Math.round(w/380));
+      for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
+        const i=(y*w+x)*4;
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
+      }}
+    }
+    resize();window.addEventListener('resize',resize);
+
+    /* Track mouse globally */
+    let mouseX=-1e3,mouseY=-1e3;
+    document.addEventListener('mousemove',e=>{
+      const r=cv.getBoundingClientRect();
+      mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
+    });
+
+    ScrollTrigger.create({trigger:'.footer-exp',start:'top 80%',onEnter:()=>{formed=true},onLeaveBack:()=>{formed=false}});
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        if(formed){
+          const dx=mouseX-p.x,dy=mouseY-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){const f=(120-dist)/120;p.vx-=(dx/dist)*f*5;p.vy-=(dy/dist)*f*5}
+          p.vx+=(p.tx-p.x)*.04;p.vy+=(p.ty-p.y)*.04;
+        }else{
+          p.vx+=(p.tx-p.x)*.003;p.vy+=(p.ty-p.y)*.003;
+          p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
+        }
+        p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
+        ctx.fillRect(p.x,p.y,p.sz,p.sz);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 }
 </script>
 </body>
