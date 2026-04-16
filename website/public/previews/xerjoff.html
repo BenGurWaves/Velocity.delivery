@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XERJOFF — Structural Prototype</title>
+  <style>
+    body, html { margin: 0; padding: 0; background: #000; overflow-x: hidden; color: #fff; font-family: 'Helvetica Neue', sans-serif; cursor: none; }
+    
+    /* Scroll Proxy */
+    .scroll-proxy { height: 600vh; }
+    
+    /* Fixed Z Container */
+    .z-wrap { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    
+    /* Typography */
+    .monolith {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 28vw;
+      font-weight: 400;
+      letter-spacing: -0.5vw;
+      display: flex;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+      position: relative;
+      will-change: transform;
+    }
+    .char { display: block; opacity: 0; }
+    .monolith.is-active { -webkit-text-stroke: 0px; color: #fff; text-shadow: 0 0 40px rgba(255,255,255,0.4); filter: url(#liquidFilter); }
+
+    /* Canvas String */
+    #stringCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; opacity: 1; transition: opacity 1s; }
+
+    /* Void Particles */
+    .void-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2vw; padding: 10vw; box-sizing: border-box; pointer-events: none; perspective: 1000px; }
+    .vp { font-family: 'Helvetica Neue', sans-serif; font-size: clamp(1rem, 2vw, 2.5rem); text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.6); opacity: 0; transform: translateZ(-200px); will-change: transform; transition: color 0.3s; }
+    .vp.hoverable { pointer-events: auto; }
+    .vp:hover { color: #fff; text-shadow: 0 0 10px #fff; }
+
+    /* Acquire CTA */
+    .acquire { position: fixed; bottom: 8vh; left: 50%; transform: translateX(-50%); z-index: 20; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.3); padding: 1.2rem 3rem; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; background: transparent; backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: background 0.4s, color 0.4s, border-color 0.4s; }
+    .acquire:hover { background: #fff; color: #000; border-color: #fff; }
+
+    /* Custom Cursor */
+    .c-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; z-index: 9999; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); }
+    .c-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 9998; pointer-events: none; mix-blend-mode: difference; transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s; transform: translate(-50%, -50%); }
+    .c-ring.hover { width: 80px; height: 80px; border-color: #fff; background: rgba(255,255,255,0.1); backdrop-filter: invert(1); }
+
+    /* Modal Takeover */
+    .takeover { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; color: #000; z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 5vw; box-sizing: border-box; overflow: hidden; }
+    .t-noise { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; pointer-events: none; background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E'); opacity: 0.15; animation: noise 0.2s infinite steps(2); }
+    @keyframes noise { 0% { transform: translate(0,0) } 25% { transform: translate(-1%,1%) } 50% { transform: translate(1%,-1%) } 75% { transform: translate(-2%,-2%) } 100% { transform: translate(1%,1%) } }
+    
+    .t-meta { font-family: monospace; text-transform: uppercase; color: #ff0000; letter-spacing: 0.2em; font-size: 1rem; margin-bottom: 2rem; position: relative; z-index: 2; }
+    .t-head { font-size: clamp(3rem, 8vw, 10rem); font-weight: 900; line-height: 0.85; text-transform: uppercase; margin: 0 0 3rem; letter-spacing: -0.04em; position: relative; z-index: 2; }
+    .t-countdown { font-family: monospace; font-size: clamp(6rem, 15vw, 20rem); font-weight: bold; color: #000; text-stroke: 2px #000; -webkit-text-stroke: 2px #000; color: transparent; position: relative; z-index: 2; margin-bottom: 2rem; }
+    .t-btn { background: #000; color: #fff; padding: 1.5rem 4rem; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; position: relative; z-index: 2; transition: transform 0.3s; cursor: none; }
+    .t-btn:hover { transform: scale(1.05); }
+
+    svg.filters { width: 0; height: 0; position: absolute; }
+  </style>
+</head>
+<body>
+
+<!-- SVG Filters -->
+<svg class="filters">
+  <filter id="liquidFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise" id="turb" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
+
+<div class="c-dot" id="cDot"></div>
+<div class="c-ring" id="cRing"></div>
+
+<canvas id="stringCanvas"></canvas>
+
+<div class="z-wrap">
+  <div class="monolith" id="monolith">
+    <span class="char">X</span>
+    <span class="char">E</span>
+    <span class="char">R</span>
+    <span class="char">J</span>
+    <span class="char" id="targetO">O</span>
+    <span class="char">F</span>
+    <span class="char">F</span>
+  </div>
+</div>
+
+<div class="void-layer" id="voidLayer">
+  <span class="vp hoverable">Bergamot</span>
+  <span class="vp">Iris</span>
+  <span class="vp hoverable">Oud</span>
+  <span class="vp">Cardamom</span>
+  <span class="vp hoverable">Vanilla</span>
+  <span class="vp">Bulgarian Rose</span>
+  <span class="vp hoverable">Sandalwood</span>
+  <span class="vp">Amber</span>
+</div>
+
+<a href="#" class="acquire" id="acquireBtn">Acquire the Essence</a>
+
+<div class="scroll-proxy"></div>
+
+<!-- Brutalist Modal -->
+<div class="takeover" id="takeover">
+  <div class="t-noise"></div>
+  <div class="t-meta">System Interruption</div>
+  <h1 class="t-head">This is a<br>Prototype.</h1>
+  <div class="t-countdown" id="countdown">5</div>
+  <a href="https://velocity.calyvent.com" class="t-btn" id="exitBtn">Exit Architecture</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Smooth Scroll
+  const lenis = new Lenis({ duration: 2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // Cursor
+  const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
+  let mx=window.innerWidth/2, my=window.innerHeight/2;
+  let cx=mx, cy=my, rx=mx, ry=my;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  gsap.ticker.add(()=>{
+    cx += (mx-cx)*0.2; cy += (my-cy)*0.2;
+    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+    cDot.style.left=cx+'px'; cDot.style.top=cy+'px';
+    cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
+  });
+
+  document.querySelectorAll('a, .hoverable').forEach(el => {
+    el.addEventListener('mouseenter', () => cRing.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cRing.classList.remove('hover'));
+  });
+
+  // Modals
+  const tTakeover = document.getElementById('takeover');
+  let countdownActive = false;
+  document.querySelectorAll('a').forEach(btn => {
+    if(btn.id==='exitBtn') return;
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      tTakeover.style.display = 'flex';
+      let ticks = 5;
+      const cnt = document.getElementById('countdown');
+      cnt.innerText = ticks;
+      const int = setInterval(()=>{
+        ticks--;
+        cnt.innerText = ticks;
+        if(ticks<=0) {
+          clearInterval(int);
+          window.location.href = 'https://velocity.calyvent.com';
+        }
+      }, 1000);
+    });
+  });
+
+  // Canvas String
+  const cv = document.getElementById('stringCanvas');
+  const ctx = cv.getContext('2d');
+  let w, h;
+  let line = { y: 0, c: 0 };
+  
+  function resize() {
+    w = cv.width = window.innerWidth;
+    h = cv.height = window.innerHeight;
+    line.y = h/2;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let targetY = h/2, currentY = h/2, velY = 0;
+  
+  function draw() {
+    ctx.clearRect(0,0,w,h);
+    
+    // Physics for string interacting with cursor
+    if (Math.abs(mx - w/2) < w*0.3 && Math.abs(my - line.y) < 100) {
+      targetY = my;
+    } else {
+      targetY = h/2;
+    }
+    
+    velY += (targetY - currentY) * 0.05;
+    velY *= 0.85; // friction
+    currentY += velY;
+
+    // Draw chromatic line
+    ctx.lineWidth = 1;
+    
+    // Red split
+    ctx.beginPath();
+    ctx.moveTo(0, h/2);
+    ctx.quadraticCurveTo(w/2, currentY + velY*5 + Math.sin(Date.now()*.002)*10, w, h/2);
+    ctx.strokeStyle = 'rgba(255, 0, 80, 0.6)';
+    ctx.stroke();
+
+    // Cyan split
+    ctx.beginPath();
+    ctx.moveTo(0, h/2);
+    ctx.quadraticCurveTo(w/2, currentY - velY*5 + Math.sin(Date.now()*.0025)*10, w, h/2);
+    ctx.strokeStyle = 'rgba(0, 255, 255, 0.6)';
+    ctx.stroke();
+
+    // Core white
+    ctx.beginPath();
+    ctx.moveTo(0, h/2);
+    ctx.quadraticCurveTo(w/2, currentY, w, h/2);
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // GSAP Z-Axis Logic
+  const mono = document.getElementById('monolith');
+  const oChar = document.getElementById('targetO');
+  const chars = document.querySelectorAll('.char');
+  
+  // Initial spawn
+  gsap.fromTo(chars, {opacity:0, z:-500, rotationX: 45}, {opacity:1, z:0, rotationX:0, duration:2, stagger:0.1, ease:'expo.out', delay:0.5});
+
+  // Calculate transform origin for 'O' once loaded
+  setTimeout(()=>{
+    const rect = oChar.getBoundingClientRect();
+    const wrapRect = mono.getBoundingClientRect();
+    const ox = (rect.left - wrapRect.left) + rect.width/2;
+    const oy = (rect.top - wrapRect.top) + rect.height/2;
+    gsap.set(mono, { transformOrigin: `${ox}px ${oy}px` });
+  }, 100);
+
+  window.addEventListener('resize', ()=>{
+    const rect = oChar.getBoundingClientRect();
+    const wrapRect = mono.getBoundingClientRect();
+    const ox = (rect.left - wrapRect.left) + rect.width/2;
+    const oy = (rect.top - wrapRect.top) + rect.height/2;
+    gsap.set(mono, { transformOrigin: `${ox}px ${oy}px` });
+  });
+
+  // The main scroll timeline
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.scroll-proxy',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1
+    }
+  });
+
+  // Phase 1: Solidify and liquid displacement
+  tl.to(cv, { opacity: 0, duration: 0.2 }, 0);
+  tl.to(mono, { 
+    duration: 0.1, 
+    onStart: ()=> mono.classList.add('is-active'),
+    onReverseComplete: ()=> mono.classList.remove('is-active')
+  }, 0.1);
+
+  // Animate SVG frequency for liquid effect
+  const turb = document.getElementById('turb');
+  tl.to(turb, { attr: { baseFrequency: '0.001 0.005' }, duration: 0.9 }, 0);
+
+  // Zoom massively through the 'O'
+  tl.to(mono, { scale: 120, opacity: 0, duration: 0.6, ease: 'power2.in' }, 0.4);
+
+  // Phase 3: The Void Particles explode in
+  tl.fromTo('.vp', { z: -800, opacity: 0 }, { z: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'back.out(1.5)' }, 0.6);
+  
+  // Parallax float for particles
+  const vpEls = document.querySelectorAll('.vp');
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 40;
+    const y = (e.clientY / window.innerHeight - 0.5) * 40;
+    vpEls.forEach((vp, i) => {
+      const spd = (i%3)+1;
+      gsap.to(vp, { x: -x*spd, y: -y*spd, duration: 1 });
+    });
+  });
+
+  // Acquire CTA fades in
+  tl.to('#acquireBtn', { opacity: 1, pointerEvents: 'auto', duration: 0.2 }, 0.9);
+
+</script>
+</body>
+</html>
