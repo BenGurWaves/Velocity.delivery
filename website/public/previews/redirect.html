@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Velocity — The Mechanical Assemblage</title>
+  <title>Velocity — The Masterpiece Assemblage</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -32,21 +32,19 @@ window.addEventListener('load', () => {
   const buffer = document.createElement('canvas'), bCtx = buffer.getContext('2d');
   let w, h;
   
-  function rs() { w = canvas.width = buffer.width = window.innerWidth; h = canvas.height = buffer.height = window.innerHeight; }
+  function rs() { w = canvas.width = buffer.width = window.innerWidth; h = canvas.height = buffer.innerHeight = window.innerHeight; }
   window.addEventListener('resize', rs); rs();
 
-  // 1. Atmosphere Scenery
   const lines = [];
   for(let i=0; i<40; i++) lines.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*15 + 5, a: Math.random()*0.1 });
 
-  let count = '5';
-  let numSlices = 60;
+  let count = 5;
+  let numSlices = 70;
   let slices = [];
   for(let i=0; i<numSlices; i++) slices.push({ offset: 0, amp: Math.random() * 2 });
 
-  let shatterAmount = 0; // The transition smear amount
+  let shatterAmount = 0;
 
-  // Update Buffer with current Number
   function updateBuffer(text) {
     bCtx.clearRect(0,0,w,h);
     bCtx.font = `italic 400 ${Math.min(w, h) * 0.75}px "Instrument Serif"`;
@@ -57,10 +55,11 @@ window.addEventListener('load', () => {
   updateBuffer('5');
 
   function render(time) {
+    ctx.clearRect(0,0,w,h);
     ctx.fillStyle = '#0D0C09';
     ctx.fillRect(0,0,w,h);
     
-    // Draw Backdrop Lines
+    // Backdrop
     ctx.strokeStyle = 'rgba(196, 156, 123, 0.05)';
     ctx.lineWidth = 1;
     lines.forEach(l => {
@@ -70,22 +69,18 @@ window.addEventListener('load', () => {
       ctx.globalAlpha = l.a; ctx.stroke();
     });
 
-    // DRAW THE MECHANICAL ASSEMBLAGE
-    // We render the number as 60 horizontal slices
     const sliceH = h / numSlices;
     for(let i=0; i<numSlices; i++) {
       const p = slices[i];
-      // Idle vibration + Shatter smear
       const vibration = Math.sin(time * 0.01 + i) * p.amp;
-      const xOffset = vibration + (p.offset * shatterAmount * w * 0.8);
+      const xOffset = vibration + (p.offset * shatterAmount * w * 1.2);
       
-      ctx.globalAlpha = 1 - (Math.abs(p.offset) * shatterAmount * 0.5);
+      ctx.globalAlpha = 1 - (Math.abs(p.offset) * shatterAmount * 0.6);
       ctx.drawImage(buffer, 0, i * sliceH, w, sliceH, xOffset, i * sliceH, w, sliceH);
       
-      // High-end Chromatic Edge during shatter
       if (shatterAmount > 0.1) {
-        ctx.globalAlpha = 0.3 * shatterAmount;
-        ctx.drawImage(buffer, 0, i * sliceH, w, sliceH, xOffset + shatterAmount * 20, i * sliceH, w, sliceH);
+        ctx.globalAlpha = 0.4 * shatterAmount;
+        ctx.drawImage(buffer, 0, i * sliceH, w, sliceH, xOffset + shatterAmount * 30, i * sliceH, w, sliceH);
       }
     }
 
@@ -93,51 +88,54 @@ window.addEventListener('load', () => {
   }
   render(0);
 
-  // AWWWARDS-CALIBER MECHANICAL TRANSITION
-  const tl = gsap.timeline();
-  
-  const nums = ['5', '4', '3', '2', '1', '0'];
-  nums.forEach((num, index) => {
-    // Each tick: Shatter -> Update -> Assemble
-    tl.to({}, {
-      duration: 1.2,
+  // BULLETPROOF ATOMIC TIMER
+  function startHandoff() {
+    gsap.to('#shimmer', { 
+      opacity: 1, 
+      duration: 1.2, 
+      ease: 'expo.in',
       onStart: () => {
-        // 1. Shatter
-        slices.forEach(s => s.offset = (Math.random() - 0.5) * 2);
-        
-        gsap.fromTo({v: 0}, { 
-          v: 1, duration: 0.4, 
+        ctx.fillStyle = '#DEC8B5';
+        ctx.fillRect(0,0,w,h);
+      },
+      onComplete: () => {
+        window.location.href = 'https://velocity.calyvent.com';
+      }
+    });
+  }
+
+  function tick(currentNum) {
+    if (currentNum < 0) {
+      startHandoff();
+      return;
+    }
+
+    // 1. Shatter
+    slices.forEach(s => s.offset = (Math.random() - 0.5) * 2.5);
+    
+    gsap.to({v: 0}, { 
+      v: 1, duration: 0.35, 
+      onUpdate: function() { shatterAmount = this.targets()[0].v; },
+      ease: 'power3.in',
+      onComplete: () => {
+        // 2. Swop number at peak
+        updateBuffer(currentNum.toString());
+        // 3. Assemble
+        gsap.to({v: 1}, { 
+          v: 0, duration: 0.6, 
           onUpdate: function() { shatterAmount = this.targets()[0].v; },
-          ease: 'power2.in',
+          ease: 'expo.out',
           onComplete: () => {
-            // 2. Swop number at peak shatter
-            updateBuffer(num);
-            // 3. Assemble
-            gsap.to({v: 1}, { 
-              v: 0, duration: 0.6, 
-              onUpdate: function() { shatterAmount = this.targets()[0].v; },
-              ease: 'expo.out'
-            });
+            // 4. Queue next tick
+            gsap.delayedCall(0.5, () => tick(currentNum - 1));
           }
         });
       }
     });
-  });
+  }
 
-  // FINAL REDIRECT
-  tl.to('#shimmer', { 
-    opacity: 1, 
-    duration: 1.2, 
-    ease: 'expo.in',
-    onStart: () => {
-      // Final Kinetic Impact Flash
-      ctx.fillStyle = '#DEC8B5';
-      ctx.fillRect(0,0,w,h);
-    }
-  }, '+=0.5');
-  tl.add(() => {
-    window.location.href = 'https://velocity.calyvent.com';
-  }, '+=0.1');
+  // Initial Delay, then start the Atomic Chain
+  gsap.delayedCall(1.0, () => tick(5));
 });
 </script>
 </body>
