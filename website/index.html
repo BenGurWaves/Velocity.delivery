@@ -132,7 +132,7 @@
   <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
   <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
   <div class="footer-content">
-    <a href="mailto:atelier@calyvent.com" class="footer-email" id="footerEmail">atelier@calyvent.com</a>
+    <a href="#" class="footer-email" id="footerEmail"></a>
     <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
   </div>
   <div class="footer-bottom">
@@ -351,7 +351,8 @@ function boot(){
   /* ═══ FOOTER ═══ */
   const ftEmail=document.getElementById('footerEmail');
   if(ftEmail){
-    const t=ftEmail.textContent;
+    const t='atelier@calyvent.com';
+    ftEmail.href='mailto:'+t;
     ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
     gsap.from('.footer-email .char',{scrollTrigger:{trigger:'.footer-exp',start:'top 70%'},opacity:0,y:50,rotateZ:10,duration:1.4,ease:'expo.out',stagger:.015});
   }
