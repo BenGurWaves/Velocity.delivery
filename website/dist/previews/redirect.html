@@ -15,7 +15,8 @@
     #sigilCanvas { position:absolute; inset:0; z-index:5; width:100%; height:100%; }
     
     .archive-metadata { position:fixed; inset:6vh 8vw; display:flex; flex-direction:column; justify-content:space-between; z-index:10; pointer-events:none; }
-    .metadata-line { display:flex; justify-content:space-between; font-family:var(--sans); text-transform:uppercase; letter-spacing:1.2em; font-size:0.45rem; color:var(--brass); opacity:0.4; }
+    .metadata-line { display:flex; justify-content:space-between; font-family:var(--sans); text-transform:uppercase; letter-spacing:1.2em; font-size:0.45rem; color:var(--brass); opacity:0.4; animation: glitch 4s steps(1) infinite; }
+    @keyframes glitch { 0%, 95% { opacity: 0.4; } 96% { opacity: 0.8; transform: translateX(2px); } 97% { opacity: 0.2; } 98% { opacity: 0.4; transform: translateX(0); } }
     
     .status-sidebar { position:fixed; top:50%; right:4vw; transform:translateY(-50%) rotate(90deg); font-family:var(--sans); font-size:0.5rem; letter-spacing:0.5em; text-transform:uppercase; color:var(--brass); opacity:0; white-space:nowrap; }
 
@@ -114,9 +115,17 @@ window.addEventListener('load', () => {
       // Negative Space Check
       const isNegative = numerals[count](x, y);
       
-      sCtx.globalAlpha = isNegative ? p.alpha * 1.5 : p.alpha * 0.1;
+      // Upscaled Refractive Glow logic
+      const edgeGlow = isNegative ? 1.5 : 0.15;
+      sCtx.globalAlpha = p.alpha * edgeGlow;
       sCtx.fillStyle = isNegative ? '#DEC8B5' : '#C49C7B';
-      const size = isNegative ? p.size * 1.5 : p.size * 0.5;
+      const size = isNegative ? p.size * 1.8 : p.size * 0.4;
+      
+      if(isNegative && Math.random() > 0.98) { // Technical sparkle
+        sCtx.globalAlpha = 1;
+        sCtx.fillStyle = '#FFF';
+      }
+      
       sCtx.fillRect(sx, sy, size, size);
     }
     
