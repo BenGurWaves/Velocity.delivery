@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding — Velocity</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0C09;--bg2:#121109;--sand:#DEC8B5;--brass:#C49C7B;--dim:#565250;--muted:#252320;--border:rgba(222,200,181,.07);--bord2:rgba(222,200,181,.13);--ease:cubic-bezier(0.16,1,0.3,1);--px:clamp(1.75rem,5vw,5.5rem)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--sand);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--brass);outline-offset:4px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;pointer-events:none;z-index:9000;animation:gr .5s steps(2) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,-2%)}50%{transform:translate(2%,1%)}75%{transform:translate(-1%,3%)}}
+.nav{position:fixed;inset:0 0 auto;height:64px;padding:0 var(--px);display:flex;align-items:center;justify-content:space-between;background:rgba(13,12,9,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:100}
+.nav-brand{font-family:'Instrument Serif',Georgia,serif;font-size:1.1rem;letter-spacing:-.02em}
+.nav-brand em{font-style:normal;color:var(--brass)}
+.nav-step{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:680px;margin:0 auto;padding:120px var(--px) 80px}
+.state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:1.5rem;text-align:center}
+.state h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:-.03em}
+.state p{font-size:.82rem;color:var(--dim);line-height:1.8;max-width:38ch}
+.progress-track{position:fixed;top:64px;left:0;right:0;height:1px;background:var(--muted);z-index:99}
+.progress-fill{height:100%;background:var(--brass);transition:width .6s var(--ease)}
+.phase-hdr{margin-bottom:clamp(3rem,6vw,5rem)}
+.phase-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1rem}
+.phase-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2rem,5vw,4rem);letter-spacing:-.04em;line-height:1.1;color:var(--sand)}
+.phase-sub{font-size:.82rem;color:var(--dim);line-height:1.8;margin-top:.75rem;max-width:44ch}
+.field{margin-bottom:2rem}
+.field-label{display:block;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.6rem}
+.req{color:var(--brass);margin-left:.2rem}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=date],textarea,select{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-family:'Inter',system-ui,sans-serif;font-size:.88rem;font-weight:300;padding:.65rem 0;outline:none;transition:border-color .3s;appearance:none;-webkit-appearance:none}
+input[type=date]{color-scheme:dark}
+input:focus,textarea:focus,select:focus{border-color:var(--brass)}
+textarea{resize:vertical;min-height:90px;line-height:1.7}
+select{background:var(--bg);cursor:pointer}
+select option{background:var(--bg2)}
+::placeholder{color:var(--dim);opacity:.6}
+input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:pointer;flex-shrink:0;margin-top:2px}
+.check-row{display:flex;align-items:flex-start;gap:.75rem;cursor:pointer}
+.check-row span,.check-row label{font-size:.82rem;color:var(--dim);line-height:1.6;cursor:pointer}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:520px){.field-row{grid-template-columns:1fr}}
+.url-block{border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem}
+.url-block+.url-block{border-top:none}
+.url-block-inner{display:flex;flex-direction:column;gap:1rem}
+.add-btn{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--brass);border:1px solid var(--bord2);padding:.5rem 1rem;transition:border-color .3s,color .3s;margin-top:.5rem;background:transparent;cursor:pointer}
+.add-btn:hover{border-color:var(--brass);color:var(--sand)}
+.remove-btn{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:.4rem;transition:color .3s;background:transparent;border:none;cursor:pointer}
+.remove-btn:hover{color:var(--brass)}
+.social-row{display:flex;gap:.75rem;align-items:center;margin-bottom:.75rem}
+.social-row input{flex:1}
+.social-row .remove-btn{flex-shrink:0;margin:0}
+.color-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:520px){.color-fields{grid-template-columns:1fr}}
+.disclaimer{border:1px solid var(--bord2);padding:1.5rem;margin:2rem 0}
+.disclaimer p{font-size:.78rem;color:var(--dim);line-height:1.8}
+.disclaimer p+p{margin-top:.75rem}
+.disclaimer strong{color:var(--sand);font-weight:400}
+.nav-btns{display:flex;align-items:center;justify-content:space-between;margin-top:clamp(3rem,5vw,5rem);padding-top:2rem;border-top:1px solid var(--border)}
+.btn-back{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);transition:color .3s;background:transparent;border:none;cursor:pointer}
+.btn-back:hover{color:var(--sand)}
+.btn-next{font-size:.7rem;letter-spacing:.08em;color:var(--sand);border-bottom:1px solid var(--bord2);padding-bottom:2px;position:relative;transition:color .3s;background:transparent;border-top:none;border-left:none;border-right:none;cursor:pointer}
+.btn-next::after{content:'';position:absolute;bottom:-3px;left:0;width:100%;height:1px;background:var(--brass);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.btn-next:hover{color:var(--brass)}.btn-next:hover::after{transform:scaleX(1)}
+.btn-next:disabled,.btn-submit:disabled{opacity:.35;pointer-events:none}
+.btn-submit{font-size:.7rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s,color .3s;border:none;cursor:pointer}
+.btn-submit:hover{background:var(--brass);color:var(--bg)}
+.field-error{font-size:.6rem;color:#e07070;letter-spacing:.06em;margin-top:.4rem;display:none}
+.field-error.show{display:block}
+.phase{display:none;animation:fadeIn .4s var(--ease)}
+.phase.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sign-in gate */
+.signin-box{max-width:420px}
+.signin-note{font-size:.72rem;color:var(--dim);line-height:1.8;margin-top:.75rem;max-width:40ch}
+.btn-signin{font-size:.7rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s,color .3s;border:none;cursor:pointer;margin-top:.5rem}
+.btn-signin:hover{background:var(--brass)}.btn-signin:disabled{opacity:.35;pointer-events:none}
+
+/* Submission success state */
+.success-screen{display:none;min-height:70vh;flex-direction:column;align-items:flex-start;justify-content:center;padding:0;animation:fadeIn .5s var(--ease)}
+.success-screen.show{display:flex}
+.success-rule{width:40px;height:1px;background:var(--brass);margin-bottom:2.5rem}
+.success-eyebrow{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:1.25rem;display:block}
+.success-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2.5rem,6vw,5.5rem);letter-spacing:-.045em;line-height:.95;color:var(--sand);margin-bottom:1.5rem}
+.success-title em{font-style:italic;color:var(--brass)}
+.success-body{font-size:.82rem;color:var(--dim);line-height:1.9;max-width:40ch;margin-bottom:2.5rem}
+.success-cta{font-size:.68rem;letter-spacing:.1em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s;border:none;cursor:pointer;display:inline-block;text-decoration:none}
+.success-cta:hover{background:var(--brass)}
+.success-note{font-size:.6rem;color:var(--dim);letter-spacing:.06em;margin-top:1.25rem;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<nav class="nav">
+  <a href="/" class="nav-brand">Velocity<em>.</em></a>
+  <span class="nav-step" id="navStep">Project Brief</span>
+</nav>
+<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="wrap" id="wrap">
+  <!-- Success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-rule"></div>
+    <span class="success-eyebrow">Brief Received</span>
+    <h1 class="success-title">You&rsquo;re<br>all <em>set.</em></h1>
+    <p class="success-body">Your brief has been submitted. We&rsquo;ll review everything and get back to you within 24 hours with a custom quote and next steps.</p>
+    <a id="dashboardCta" href="#" class="success-cta">View your project dashboard &rarr;</a>
+    <p class="success-note">You can edit your brief for the next 24 hours from your dashboard.</p>
+  </div>
+
+  <div class="state" id="stateLoading"><p style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)">Loading&hellip;</p></div>
+  <div class="state" id="stateNotFound" style="display:none"><h2>Link not found.</h2><p>This onboarding link is invalid or has expired. Contact <a href="mailto:hello@calyvent.com" style="color:var(--brass)">hello@calyvent.com</a>.</p></div>
+  <div class="state" id="stateLocked" style="display:none"><h2>Submission locked.</h2><p>The 24-hour editing window has passed. Your brief is read-only. <a href="#" id="dashLinkLocked" style="color:var(--brass)">View your dashboard &rarr;</a></p></div>
+
+  <div id="formWrap" style="display:none">
+    <!-- Phase 0: Sign In -->
+    <div class="phase active" id="phase0">
+      <div class="phase-hdr signin-box">
+        <span class="phase-label">Welcome</span>
+        <h1 class="phase-title">Let&rsquo;s get<br>started.</h1>
+        <p class="phase-sub">Enter the email address you gave us. We&rsquo;ll use it to keep your brief and dashboard linked to you.</p>
+      </div>
+      <div class="signin-box">
+        <div class="field">
+          <label class="field-label" for="signinEmail">Your Email <span class="req">*</span></label>
+          <input type="email" id="signinEmail" placeholder="you@company.com" autocomplete="email">
+          <div class="field-error" id="err-signinEmail">Please enter a valid email address</div>
+        </div>
+        <button class="btn-signin" id="signinBtn">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Phase 1: You -->
+    <div class="phase" id="phase1">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 01 / 06</span>
+        <h1 class="phase-title">About<br>You.</h1>
+        <p class="phase-sub">Personal details only. Kept strictly confidential &mdash; used for project communication and legal records.</p>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="fullName">Full Legal Name <span class="req">*</span></label><input type="text" id="fullName" placeholder="As it appears on legal documents"><div class="field-error" id="err-fullName">Required</div></div>
+        <div class="field"><label class="field-label" for="email">Personal Email <span class="req">*</span></label><input type="email" id="email" placeholder="your@personal.com"><div class="field-error" id="err-email">Valid email required</div></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="phone">Personal Phone</label><input type="tel" id="phone" placeholder="+1 (000) 000-0000"></div>
+        <div class="field"></div>
+      </div>
+      <div class="nav-btns"><span></span><button class="btn-next" id="next1">Continue &rarr;</button></div>
+    </div>
+
+    <!-- Phase 2: Business -->
+    <div class="phase" id="phase2">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 02 / 06</span>
+        <h1 class="phase-title">Your<br>Business.</h1>
+        <p class="phase-sub">The brand or company. This becomes the legal and operational foundation for your project.</p>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="companyName">Business / Brand Name <span class="req">*</span></label><input type="text" id="companyName" placeholder="Legal business name"><div class="field-error" id="err-companyName">Required</div></div>
+        <div class="field"><label class="field-label" for="businessType">Business Type <span class="req">*</span></label>
+          <select id="businessType">
+            <option value="">Select type&hellip;</option>
+            <option value="sole_proprietor">Sole Proprietor / Self-Employed</option>
+            <option value="llc">LLC</option>
+            <option value="corporation">Corporation (Inc. / Corp.)</option>
+            <option value="partnership">Partnership</option>
+            <option value="nonprofit">Non-Profit</option>
+            <option value="freelancer">Freelancer</option>
+            <option value="agency">Agency / Studio</option>
+            <option value="online_only">Online-Only Business</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="field-error" id="err-businessType">Required</div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="businessEmail">Business Email <span class="req">*</span></label><input type="email" id="businessEmail" placeholder="contact@yourbusiness.com"><div class="field-error" id="err-businessEmail">Valid email required</div></div>
+        <div class="field"><label class="field-label" for="businessPhone">Business Phone</label><input type="tel" id="businessPhone" placeholder="+1 (000) 000-0000"></div>
+      </div>
+      <div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:2rem 0 1.25rem;border-bottom:1px solid var(--border);padding-bottom:.75rem">Business Address</div>
+      <div class="field"><label class="field-label" for="addrStreet">Street Address</label><input type="text" id="addrStreet" placeholder="123 Example Street, Suite 100"></div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="addrCity">City</label><input type="text" id="addrCity" placeholder="New York"></div>
+        <div class="field"><label class="field-label" for="addrState">State / Province</label><input type="text" id="addrState" placeholder="NY"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="field-label" for="addrPostal">Postal Code</label><input type="text" id="addrPostal" placeholder="10001"></div>
+        <div class="field"><label class="field-label" for="addrCountry">Country <span class="req">*</span></label><input type="text" id="addrCountry" placeholder="United States"><div class="field-error" id="err-addrCountry">Required</div></div>
+      </div>
+      <div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:2rem 0 1.25rem;border-bottom:1px solid var(--border);padding-bottom:.75rem">About the Business</div>
+      <div class="field"><label class="field-label" for="context">What does your business do? <span class="req">*</span></label><textarea id="context" rows="4" placeholder="Describe your business, niche, and what makes it distinct."></textarea><div class="field-error" id="err-context">Please describe your business</div></div>
+      <div class="field"><label class="field-label">Social Profiles</label><div id="socialsList"></div><button class="add-btn" type="button" id="addSocial">+ Add Social</button></div>
+      <div class="field"><label class="check-row"><input type="checkbox" id="includeSocials"><span>Include social media icons on my website</span></label></div>
+      <div class="nav-btns"><button class="btn-back" id="back2">&larr; Back</button><button class="btn-next" id="next2">Continue &rarr;</button></div>
+    </div>
+
+    <!-- Phase 3: Creative Direction -->
+    <div class="phase" id="phase3">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 03 / 06</span>
+        <h1 class="phase-title">Creative<br>Direction.</h1>
+        <p class="phase-sub">This is where your project finds its voice. Help us understand the feeling you want to create.</p>
+      </div>
+      <div class="field">
+        <label class="field-label" for="siteVibe">The Feeling <span class="req">*</span></label>
+        <p style="font-size:.75rem;color:var(--dim);line-height:1.75;margin-bottom:.75rem">When someone scrolls through your website, what do you want them to feel? What should their gut reaction be? What emotion, word, or sensation captures the experience you want to create?</p>
+        <textarea id="siteVibe" rows="5" placeholder="e.g. Like stepping into a quiet private gallery. Calm, expensive, effortless. Or: I want them to feel like they just found the best-kept secret in the room. Or: Confident. Premium. Like they already know they are making the right choice."></textarea>
+        <div class="field-error" id="err-siteVibe">Please describe the feeling</div>
+      </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label" for="targetCustomer">Who Is This Site For? <span class="req">*</span></label>
+        <textarea id="targetCustomer" rows="4" placeholder="Who will be visiting and what do you want them to do or feel? e.g. Potential clients looking for a watchmaker. I want them to trust us before they read a single word."></textarea>
+        <div class="field-error" id="err-targetCustomer">Please describe your target audience</div>
+      </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label">Inspiration <span style="color:var(--dim);text-transform:none;letter-spacing:0;font-size:.7rem">-- sites you admire</span></label>
+        <div id="inspirationList"></div>
+        <button class="add-btn" type="button" id="addInspiration">+ Add Site</button>
+      </div>
+      <div class="field" style="margin-top:2.5rem">
+        <label class="field-label">Anti-Inspiration <span style="color:var(--dim);text-transform:none;letter-spacing:0;font-size:.7rem">-- what to avoid</span></label>
+        <div id="antiList"></div>
+        <button class="add-btn" type="button" id="addAnti">+ Add Site</button>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" id="back3">&larr; Back</button>
+        <button class="btn-next" id="next3">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase" id="phase4">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 04 / 06</span>
+        <h1 class="phase-title">Visual<br>DNA.</h1>
+        <p class="phase-sub">Your palette, your type, your feel. Hex codes, color names, or plain descriptions &mdash; whatever helps.</p>
+      </div>
+      <div class="field"><label class="field-label">Color Palette</label>
+        <div class="color-fields">
+          <div><label class="field-label" for="colorBg">Background</label><input type="text" id="colorBg" placeholder="#0D0C09 or 'near black'"></div>
+          <div><label class="field-label" for="colorSec">Secondary</label><input type="text" id="colorSec" placeholder="#DEC8B5 or 'warm ivory'"></div>
+          <div><label class="field-label" for="colorAcc">Accent</label><input type="text" id="colorAcc" placeholder="#C49C7B or 'aged brass'"></div>
+        </div>
+      </div>
+      <div class="field"><label class="field-label" for="colorsExtra">Additional Palette Notes</label><textarea id="colorsExtra" rows="3" placeholder="Any other colors, gradients, or palette notes. Leave blank if unsure."></textarea></div>
+      <div class="field"><label class="field-label" for="fonts">Typography Preferences</label><textarea id="fonts" rows="3" placeholder="List 2-3 font names or styles. e.g. 'Instrument Serif for headings, Inter for body' or 'something editorial and restrained'."></textarea></div>
+      <div class="field"><label class="field-label">Design Direction</label>
+        <label class="check-row"><input type="checkbox" id="upgradePerm"><span>If the Velocity team identifies a way to elevate my brand guidelines, they have permission to pivot &mdash; I trust their judgment over my specs.</span></label>
+      </div>
+      <div class="nav-btns"><button class="btn-back" id="back4">&larr; Back</button><button class="btn-next" id="next4">Continue &rarr;</button></div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase" id="phase5">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 05 / 06</span>
+        <h1 class="phase-title">Logistics &amp;<br>Assets.</h1>
+        <p class="phase-sub">The practical details. Leave blank wherever you don&rsquo;t have something yet &mdash; we&rsquo;ll follow up.</p>
+      </div>
+      <div class="field"><label class="field-label" for="mottos">Mottos, Taglines &amp; Copy</label><textarea id="mottos" rows="3" placeholder="Any existing slogans, taglines, or copy you want used. Leave blank and we'll write it."></textarea></div>
+      <div class="field"><label class="field-label" for="copyright">Copyright / Legal Name</label><input type="text" id="copyright" placeholder="e.g. &copy; 2026 Acme Inc. &mdash; leave blank for us to fill in"></div>
+      <div class="field"><label class="field-label" for="assetsLinks">Asset Links</label><textarea id="assetsLinks" rows="3" placeholder="Google Drive, Dropbox, or other links containing logos, photos, trademarks."></textarea></div>
+      <div class="field"><label class="field-label">Starting Point</label>
+        <select id="startingPoint">
+          <option value="scratch">Starting from scratch &mdash; no existing site</option>
+          <option value="existing">I have an existing website to replace</option>
+        </select>
+      </div>
+      <div class="field" id="existingUrlField" style="display:none"><label class="field-label" for="existingUrl">Existing Website URL</label><input type="url" id="existingUrl" placeholder="https://yoursite.com"></div>
+      <div class="field"><label class="field-label" for="dueDate">Deadline <span class="req">*</span></label><input type="date" id="dueDate"><div class="field-error" id="err-dueDate">Date must be at least 48 hours from now</div><p style="font-size:.6rem;color:var(--dim);margin-top:.5rem;letter-spacing:.04em">Timelines under 7 days may incur a rush fee.</p></div>
+      <div class="disclaimer">
+        <p><strong>Right to Decline.</strong> Submitting this brief does not guarantee a project start. Velocity reserves the right to decline any project that is not a fit for our studio.</p>
+        <p><strong>24-Hour Rule.</strong> All information in this brief becomes read-only exactly 24 hours after submission. Make sure everything is accurate before you submit.</p>
+      </div>
+      <div class="disclaimer" style="margin-top:1.5rem">
+        <p><strong>Terms &amp; Conditions.</strong> By submitting this brief you agree that: (1) This submission does not constitute a contract or guarantee of services. (2) All information provided is accurate to the best of your knowledge. (3) Velocity retains the right to decline any project at its sole discretion. (4) Your brief data will be stored securely and used solely for the purpose of evaluating and executing your project. (5) You will not hold Velocity liable for any delay or decline of service. (6) Upon payment, the project scope is defined by this brief and any written amendments agreed to by both parties. (7) All original design work created by Velocity remains the property of Velocity until full payment is received.</p>
+      </div>
+      <div class="field"><label class="check-row"><input type="checkbox" id="agreeTerms"><span>I have read and agree to the Terms &amp; Conditions above. I understand my submission may be declined, and that my brief locks 24 hours after first submission.</span></label><div class="field-error" id="err-agreeTerms" style="margin-top:.5rem">You must agree to the terms to continue</div></div>
+      <div class="nav-btns"><button class="btn-back" id="back5">&larr; Back</button><button class="btn-next" id="next5">Continue &rarr;</button></div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase" id="phase6">
+      <div class="phase-hdr">
+        <span class="phase-label">Phase 06 / 06</span>
+        <h1 class="phase-title">Final<br>Details.</h1>
+        <p class="phase-sub">Almost done. A few last things before we get to work.</p>
+      </div>
+      <div class="field">
+        <label class="field-label" style="display:flex;align-items:center;gap:.4rem">
+          Domain
+          <span id="domainHelpBtn" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--bord2);font-size:.55rem;color:var(--dim);cursor:pointer;flex-shrink:0;line-height:1" tabindex="0">?</span>
+        </label>
+        <div id="domainTooltip" style="display:none;background:var(--bg2);border:1px solid var(--bord2);padding:.85rem 1rem;margin-bottom:1rem;font-size:.75rem;color:var(--dim);line-height:1.75">
+          A <strong style="color:var(--sand);font-weight:400">domain</strong> is your website&rsquo;s address on the internet &mdash; like <span style="color:var(--brass)">yourbrand.com</span>. You purchase it once and pay a small renewal fee each year (~$15&ndash;$20). If you already have one, great. If not, we can register one for you.
+        </div>
+        <p style="font-size:.75rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">How would you like to handle your domain?</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <label class="check-row"><input type="radio" name="domainChoice" id="domainClient" value="client_provides" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>I already have a domain &mdash; I&rsquo;ll connect it myself</span></label>
+          <label class="check-row"><input type="radio" name="domainChoice" id="domainClientSetup" value="client_has_needs_setup" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>I already have a domain but need help connecting it &mdash; please set it up for me</span></label>
+          <label class="check-row"><input type="radio" name="domainChoice" id="domainVelocity" value="velocity_provides" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>I don&rsquo;t have a domain &mdash; please register one for me (&sim;$20/yr)</span></label>
+        </div>
+      </div>
+      <div class="field" id="domainNameField" style="display:none">
+        <label class="field-label" for="domainName" id="domainNameLabel">Domain Name</label>
+        <input type="text" id="domainName" placeholder="e.g. yourbrand.com">
+        <p id="domainNameHint" style="font-size:.6rem;color:var(--dim);margin-top:.4rem;letter-spacing:.04em"></p>
+      </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label" for="additionalNotes">Additional Notes</label>
+        <textarea id="additionalNotes" rows="5" placeholder="Anything else we should know. Leave blank if you&rsquo;ve covered everything."></textarea>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" id="back6">&larr; Back</button>
+        <button class="btn-submit" id="submitBtn">Submit Brief</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let TOKEN = '';
+let VERIFIED_EMAIL = '';
+(function(){ const p = location.pathname.split('/').filter(Boolean); TOKEN = p[1] || ''; })();
+
+function show(id){ document.getElementById(id).style.display='' }
+function hide(id){ document.getElementById(id).style.display='none' }
+
+async function init() {
+  if (!TOKEN) { hide('stateLoading'); show('stateNotFound'); return; }
+  let lead;
+  try {
+    const r = await fetch('/api/leads/' + TOKEN);
+    if (r.status === 404) { hide('stateLoading'); show('stateNotFound'); return; }
+    lead = await r.json();
+  } catch { hide('stateLoading'); show('stateNotFound'); return; }
+  hide('stateLoading');
+  if (lead.is_locked) { document.getElementById('dashLinkLocked').href='/dashboard/'+TOKEN; show('stateLocked'); return; }
+  // Show sign-in gate first
+  show('formWrap');
+  // Pre-fill email if already on lead
+  if (lead.client_email) {
+    document.getElementById('signinEmail').value = lead.client_email;
+  }
+  // Setup signin button
+  document.getElementById('signinBtn').onclick = async function() {
+    const emailVal = document.getElementById('signinEmail').value.trim().toLowerCase();
+    if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      document.getElementById('err-signinEmail').classList.add('show'); return;
+    }
+    document.getElementById('err-signinEmail').classList.remove('show');
+    const btn = document.getElementById('signinBtn');
+    btn.disabled = true; btn.textContent = 'Verifying\u2026';
+    // If lead has a pre-set email, verify it matches
+    if (lead.client_email && lead.client_email.toLowerCase() !== emailVal) {
+      btn.disabled = false; btn.textContent = 'Continue \u2192';
+      document.getElementById('err-signinEmail').textContent = 'This email does not match your invitation.';
+      document.getElementById('err-signinEmail').classList.add('show');
+      return;
+    }
+    // Save email to lead if not set
+    if (!lead.client_email) {
+      await fetch('/api/leads/' + TOKEN, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ client_email: emailVal })
+      });
+    }
+    VERIFIED_EMAIL = emailVal;
+    try {
+      // Safely handle null/undefined full_data
+      const fullData = lead.full_data || {};
+      if (lead.submitted_at) prefill(fullData);
+      // Only setup dynamic form elements if they exist in this form version
+      if (document.getElementById('socialsList')) setupSocials((fullData.phase1 && fullData.phase1.socials) || []);
+      if (document.getElementById('inspirationList')) setupUrlBlocks('inspirationList','addInspiration',true,(fullData.phase2 && fullData.phase2.inspiration) || []);
+      if (document.getElementById('antiList')) setupUrlBlocks('antiList','addAnti',false,(fullData.phase2 && fullData.phase2.anti_inspiration) || []);
+      const startingPointEl = document.getElementById('startingPoint');
+      if (startingPointEl) startingPointEl.addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
+      document.querySelectorAll('input[name="domainChoice"]').forEach(r=>r.addEventListener('change',function(){
+        const show = this.value==='velocity_provides'||this.value==='client_has_needs_setup';
+        document.getElementById('domainNameField').style.display=show?'':'none';
+        const lbl=document.getElementById('domainNameLabel');
+        const hint=document.getElementById('domainNameHint');
+        if(this.value==='velocity_provides'){
+          lbl.textContent='Preferred Domain';
+          hint.textContent="We’ll confirm availability before registering.";
+        } else {
+          lbl.textContent='Your Domain Name';
+          hint.textContent="e.g. yourbrand.com — we’ll take care of the setup.";
+        }
+      }));
+      // Domain tooltip toggle
+      const helpBtn=document.getElementById('domainHelpBtn');
+      const tooltip=document.getElementById('domainTooltip');
+      if(helpBtn&&tooltip){
+        helpBtn.addEventListener('click',e=>{e.stopPropagation();tooltip.style.display=tooltip.style.display==='block'?'none':'block';});
+        helpBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tooltip.style.display=tooltip.style.display==='block'?'none':'block';}});
+        document.addEventListener('click',()=>{if(tooltip)tooltip.style.display='none';});
+      }
+      document.getElementById('dueDate').min = new Date(Date.now()+48*3600000).toISOString().split('T')[0];
+      bindNav();
+      document.getElementById('email').value = VERIFIED_EMAIL;
+      goTo(1);
+    } catch(setupErr) {
+      console.error('Form setup error:', setupErr);
+      alert('Something went wrong loading the form. Please refresh and try again.');
+    }
+    btn.disabled = false; btn.textContent = 'Continue →';
+  };
+  // Allow enter key on email field
+  document.getElementById('signinEmail').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('signinBtn').click();
+  });
+}
+
+function prefill(d) {
+  if (!d || typeof d !== 'object') return;
+  const p1=d.phase1||{},p2=d.phase2||{},p3=d.phase3||{},p4=d.phase4||{},p5=d.phase5||{};
+  sv('fullName',p1.full_name);sv('companyName',p1.company_name);
+  sv('email',p1.personal_email||p1.email);sv('phone',p1.personal_phone||p1.phone);
+  sv('businessEmail',p1.business_email);sv('businessPhone',p1.business_phone);
+  if(p1.business_type)document.getElementById('businessType').value=p1.business_type;
+  const addr=p1.address||{};
+  sv('addrStreet',addr.street);sv('addrCity',addr.city);sv('addrState',addr.state_province);
+  sv('addrPostal',addr.postal_code);sv('addrCountry',addr.country);
+  sv('context',p1.context);
+  if(p1.include_socials)document.getElementById('includeSocials').checked=true;
+  sv('targetCustomer',p2.target_customer);sv('siteVibe',p2.site_vibe);
+  sv('colorBg',p3.color_background);sv('colorSec',p3.color_secondary);sv('colorAcc',p3.color_accent);sv('colorsExtra',p3.colors_extra);sv('fonts',p3.fonts);
+  if(p3.upgrade_permission)document.getElementById('upgradePerm').checked=true;
+  sv('mottos',p4.mottos);sv('copyright',p4.copyright);sv('assetsLinks',p4.assets_links);sv('existingUrl',p4.existing_url);
+  if(p4.starting_point){document.getElementById('startingPoint').value=p4.starting_point;if(p4.starting_point==='existing')document.getElementById('existingUrlField').style.display='';}
+  if(p4.due_date)document.getElementById('dueDate').value=p4.due_date;
+  if(p5.additional_notes)document.getElementById('additionalNotes').value=p5.additional_notes;
+}
+function sv(id,val){ if(val){const el=document.getElementById(id);if(el)el.value=val;} }
+
+function setupSocials(existing=[]) {
+  const list=document.getElementById('socialsList');list.innerHTML='';
+  const items=existing.length?existing:[''];
+  items.forEach(v=>addSocialRow(v));
+  document.getElementById('addSocial').onclick=()=>addSocialRow('');
+}
+function addSocialRow(val='') {
+  const list=document.getElementById('socialsList');
+  const row=document.createElement('div');row.className='social-row';
+  row.innerHTML='<input type="url" placeholder="https://instagram.com/yourprofile" value="'+val+'"><button class="remove-btn" type="button">Remove</button>';
+  row.querySelector('.remove-btn').onclick=()=>{if(list.children.length>1)row.remove();};
+  list.appendChild(row);
+}
+function setupUrlBlocks(listId,addId,req,existing=[]) {
+  const list=document.getElementById(listId);list.innerHTML='';
+  const items=existing.length?existing:[{url:'',notes:''}];
+  items.forEach(i=>addUrlBlock(listId,i.url,i.notes,req));
+  document.getElementById(addId).onclick=()=>addUrlBlock(listId,'','',req);
+}
+function addUrlBlock(listId,url='',notes='',req=false) {
+  const list=document.getElementById(listId);
+  const b=document.createElement('div');b.className='url-block';
+  b.innerHTML='<div class="url-block-inner"><div><label class="field-label">URL'+(req?' <span class="req">*</span>':'')+'</label><input type="url" class="ub-url" placeholder="https://example.com" value="'+url+'"></div><div><label class="field-label">What do you '+(req?'like':'hate')+' about this?'+(req?' <span class="req">*</span>':'')+'</label><textarea class="ub-notes" rows="2" placeholder="'+(req?'What specifically resonates?':'What should we avoid?')+'">'+notes+'</textarea></div><button class="remove-btn" type="button">Remove</button></div>';
+  b.querySelector('.remove-btn').onclick=()=>{if(list.children.length>1)b.remove();};
+  list.appendChild(b);
+}
+
+let cur=0;
+function goTo(n){
+  document.getElementById('phase'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('phase'+n).classList.add('active');
+  document.getElementById('progressFill').style.width=(n/6*100)+'%';
+  const stepLabel = n===0 ? 'Welcome' : (n===6 ? 'Phase 06 / 06' : 'Phase 0'+n+' / 06');
+  document.getElementById('navStep').textContent = stepLabel;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showErr(id,v){const el=document.getElementById('err-'+id);if(el)el.classList.toggle('show',v);}
+function v1(){
+  let ok=true;
+  const n=document.getElementById('fullName').value.trim();
+  const e=document.getElementById('email').value.trim();
+  if(!n){showErr('fullName',true);ok=false;}else showErr('fullName',false);
+  if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){showErr('email',true);ok=false;}else showErr('email',false);
+  return ok;
+}
+function v2(){
+  let ok=true;
+  const co=document.getElementById('companyName').value.trim();
+  const bt=document.getElementById('businessType').value;
+  const be=document.getElementById('businessEmail').value.trim();
+  const cy=document.getElementById('addrCountry').value.trim();
+  const ctx=document.getElementById('context').value.trim();
+  if(!co){showErr('companyName',true);ok=false;}else showErr('companyName',false);
+  if(!bt){showErr('businessType',true);ok=false;}else showErr('businessType',false);
+  if(!be||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(be)){showErr('businessEmail',true);ok=false;}else showErr('businessEmail',false);
+  if(!cy){showErr('addrCountry',true);ok=false;}else showErr('addrCountry',false);
+  if(!ctx){showErr('context',true);ok=false;}else showErr('context',false);
+  return ok;
+}
+function v3(){
+  let ok=true;
+  const sv=document.getElementById('siteVibe');
+  const tc=document.getElementById('targetCustomer');
+  if(sv&&!sv.value.trim()){showErr('siteVibe',true);ok=false;}else if(sv)showErr('siteVibe',false);
+  if(tc&&!tc.value.trim()){showErr('targetCustomer',true);ok=false;}else if(tc)showErr('targetCustomer',false);
+  return ok;
+}
+function v5(){
+  let ok=true;
+  const due=document.getElementById('dueDate').value,agree=document.getElementById('agreeTerms').checked;
+  if(!due||new Date(due)<new Date(Date.now()+48*3600000-60000)){showErr('dueDate',true);ok=false;}else showErr('dueDate',false);
+  if(!agree){showErr('agreeTerms',true);ok=false;}else showErr('agreeTerms',false);
+  return ok;
+}
+function bindNav(){
+  const bind = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+  bind('next1', ()=>{if(v1())goTo(2);});
+  bind('next2', ()=>{if(v2())goTo(3);});
+  bind('next4', ()=>goTo(5));
+  bind('next5', ()=>{if(v5())goTo(6);});
+  bind('back2', ()=>goTo(1));
+  bind('next3', ()=>{if(v3())goTo(4);});
+  bind('back3', ()=>goTo(2));
+  bind('back4', ()=>goTo(3));
+  bind('back5', ()=>goTo(4));
+  bind('back6', ()=>goTo(5));
+  bind('submitBtn', submit);
+}
+function collect(){
+  const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const getChecked = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
+  const socials=[...document.querySelectorAll('#socialsList .social-row input')].map(i=>i.value.trim()).filter(Boolean);
+  const inspiration=[]; // Phase 3 doesn't exist in current form
+  const anti=document.getElementById('antiList')?[...document.querySelectorAll('#antiList .url-block')].map(b=>({url:b.querySelector('.ub-url').value.trim(),notes:b.querySelector('.ub-notes').value.trim()})).filter(b=>b.url):[];
+  const sp=getVal('startingPoint');
+  return {
+    phase1:{
+      full_name:getVal('fullName'),
+      personal_email:getVal('email').toLowerCase(),
+      personal_phone:getVal('phone'),
+      company_name:getVal('companyName'),
+      business_type:getVal('businessType'),
+      business_email:getVal('businessEmail').toLowerCase(),
+      business_phone:getVal('businessPhone'),
+      email:getVal('email').toLowerCase(),
+      phone:getVal('phone'),
+      address:{
+        street:getVal('addrStreet'),
+        city:getVal('addrCity'),
+        state_province:getVal('addrState'),
+        postal_code:getVal('addrPostal'),
+        country:getVal('addrCountry'),
+      },
+      context:getVal('context'),
+      socials,include_socials:getChecked('includeSocials'),
+    },
+    phase2:{inspiration,anti_inspiration:anti,target_customer:getVal('targetCustomer'),site_vibe:getVal('siteVibe')},
+    phase3:{color_background:getVal('colorBg'),color_secondary:getVal('colorSec'),color_accent:getVal('colorAcc'),colors_extra:getVal('colorsExtra'),fonts:getVal('fonts'),upgrade_permission:getChecked('upgradePerm')},
+    phase4:{mottos:getVal('mottos'),copyright:getVal('copyright'),assets_links:getVal('assetsLinks'),starting_point:sp,existing_url:sp==='existing'?getVal('existingUrl'):'',due_date:getVal('dueDate')},
+    phase5:{additional_notes:getVal('additionalNotes')}
+  };
+}
+async function submit(){
+  if(!v5())return;
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting\u2026';
+  const data=collect();
+  const domSel=document.querySelector('input[name="domainChoice"]:checked');
+  const domChoice=domSel?domSel.value:'';
+  const domName=domChoice==='velocity_provides'?document.getElementById('domainName').value.trim():'';
+  try{
+    const r=await fetch('/api/leads/'+TOKEN,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        full_data:data,
+        submitted_at:new Date().toISOString(),
+        due_date:data.phase4.due_date||null,
+        client_name:data.phase1.full_name,
+        client_email:data.phase1.personal_email||data.phase1.email,
+        personal_email:data.phase1.personal_email||data.phase1.email,
+        personal_phone:data.phase1.personal_phone||data.phase1.phone,
+        business_name:data.phase1.company_name,
+        business_type:data.phase1.business_type,
+        business_email:data.phase1.business_email,
+        business_phone:data.phase1.business_phone,
+        business_address:data.phase1.address,
+        upgrade_permission:data.phase3.upgrade_permission,
+        domain_choice:domChoice||null,
+        domain_name:domName||null,
+        terms_accepted:true,
+        terms_accepted_at:new Date().toISOString(),
+      })});
+    if(!r.ok){const e=await r.json();btn.disabled=false;btn.textContent='Submit Brief';alert(e.error||'Error. Please try again.');return;}
+    // Show success screen
+    document.getElementById('formWrap').style.display='none';
+    const successEl=document.getElementById('successScreen');
+    successEl.classList.add('show');
+    document.getElementById('dashboardCta').href='/dashboard/'+TOKEN;
+    document.getElementById('progressFill').style.width='100%';
+    document.getElementById('navStep').textContent='Brief Submitted';
+    // Auto-redirect after 5s
+    setTimeout(()=>{location.href='/dashboard/'+TOKEN;},5000);
+  }catch{btn.disabled=false;btn.textContent='Submit Brief';alert('Network error. Please try again.');}
+}
+init();
+</script>
+</body>
+</html>

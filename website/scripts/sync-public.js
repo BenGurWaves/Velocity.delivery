@@ -1,37 +1,44 @@
 /**
- * sync-public.js — runs as prebuild
- * Copies all non-Next.js static app shells into public/
- * so they land in dist/ after next build.
+ * sync-public.js — runs as prebuild and can be run standalone
+ * Copies all non-Next.js static app shells into BOTH public/ and dist/
  *
- * RULE: Only Claude (or an AI with explicit permission) modifies
- * _onboard.html, _dashboard.html, admin/, functions/
- * This script must not be removed or altered by other processes.
+ * WHY BOTH:
+ * - public/ feeds Next.js build, ensuring files land in dist/ on Cloudflare
+ * - dist/  is committed to git, so it works even if Cloudflare skips the build
+ *
+ * PROTECTION RULE (enforced in Windsurf rules):
+ * Only Claude may modify _onboard.html, _dashboard.html, admin/, functions/
+ * This script must never be removed or bypassed.
  */
 const fs   = require('fs');
 const path = require('path');
 const root = path.join(__dirname, '..');
 
-const COPIES = [
-  ['_onboard.html',   'public/_onboard.html'],
-  ['_dashboard.html', 'public/_dashboard.html'],
-  ['admin/index.html','public/admin/index.html'],
-  ['favicon.svg',     'public/favicon.svg'],
-  ['robots.txt',      'public/robots.txt'],
-  ['sitemap.xml',     'public/sitemap.xml'],
-  ['404.html',        'public/404.html'],
-  ['_headers',        'public/_headers'],
+const SINGLE_FILES = [
+  '_onboard.html',
+  '_dashboard.html',
+  'admin/index.html',
+  'favicon.svg',
+  'robots.txt',
+  'sitemap.xml',
+  '404.html',
+  '_headers',
 ];
 
 let count = 0;
-for (const [src, dst] of COPIES) {
-  const srcPath = path.join(root, src);
-  const dstPath = path.join(root, dst);
-  if (fs.existsSync(srcPath)) {
-    fs.mkdirSync(path.dirname(dstPath), { recursive: true });
-    fs.copyFileSync(srcPath, dstPath);
-    count++;
-  } else {
-    console.warn('[sync-public] WARNING: source not found:', src);
+
+for (const file of SINGLE_FILES) {
+  const src = path.join(root, file);
+  if (!fs.existsSync(src)) {
+    console.warn('[sync-public] WARNING: source not found:', file);
+    continue;
   }
+  for (const destDir of ['public', 'dist']) {
+    const dst = path.join(root, destDir, file);
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.copyFileSync(src, dst);
+  }
+  count++;
 }
-console.log('[sync-public] Synced', count, 'files to public/');
+
+console.log('[sync-public] Synced', count, 'files to public/ and dist/');
