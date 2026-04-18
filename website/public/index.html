@@ -139,10 +139,11 @@
     <span class="footer-coords" id="footerCoords"></span>
     <div class="footer-meta">
       <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
-      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+      <div class="footer-links"><a href="#" id="footerProjectLink" style="display:none">Your Commission</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
     </div>
   </div>
 </footer>
+<script>(function(){try{var t=localStorage.getItem('v_project_token');if(t&&/^[a-f0-9\-]{20,}$/i.test(t)){var el=document.getElementById('footerProjectLink');if(el){el.href='/dashboard/'+t;el.style.display='';}}}catch(e){}})();</script>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
