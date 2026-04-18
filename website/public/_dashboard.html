@@ -160,6 +160,7 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 .dash-footer p{font-size:.62rem;color:var(--dim);letter-spacing:.04em;line-height:1.8}
 .dash-footer a{color:var(--sand);border-bottom:1px solid var(--border);transition:border-color .25s}
 .dash-footer a:hover{border-color:var(--sand)}
+.dash-footer-return{margin-top:.5rem}
 
 /* Declined screen */
 .declined-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:80px var(--px) 4rem;text-align:center}
@@ -265,6 +266,7 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
   </div>
   <div class="dash-footer">
     <p>Questions? Email us at <a href="mailto:client@calyvent.com">client@calyvent.com</a> — we reply within 24 hours.</p>
+    <p style="margin-top:.75rem;font-size:.6rem;opacity:.6;letter-spacing:.04em">To return to this dashboard, visit <a href="https://velocity.calyvent.com">velocity.calyvent.com</a> and select <strong>Your Commission</strong> in the footer &mdash; or simply bookmark this page.</p>
   </div>
 </div>
 
@@ -318,12 +320,14 @@ async function init(){
       if(val!==leadEmail){err.classList.add('show');return;}
       err.classList.remove('show');
       sessionStorage.setItem('v_dash_'+TOKEN,val);
+      try{localStorage.setItem('v_project_token',TOKEN);}catch(e){}
       hide('authWrap');renderDash(lead,justPaid);
     }
     btn.onclick=tryAuth;
     input.addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth();});
     return;
   }
+    try{localStorage.setItem('v_project_token',TOKEN);}catch(e){}
   renderDash(lead,justPaid);
 }
 

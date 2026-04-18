@@ -1,24 +1,32 @@
-# PROTECTED FILES — DO NOT MODIFY WITHOUT EXPLICIT PERMISSION
+# VELOCITY PROTECTED FILES
 
-The following files are managed exclusively by Claude (claude.ai) under specific prompting.
-They must NOT be modified, moved, deleted, or overwritten by Windsurf, Cascade, or any automated process:
+No AI tool may modify these without EXPLICIT permission from Ben:
 
-## Absolutely Protected
-- `website/_onboard.html` — client onboarding SPA (6-phase form)
-- `website/_dashboard.html` — client project dashboard
-- `website/admin/index.html` — admin panel
-- `functions/` — ALL Cloudflare Pages Functions (entire directory)
+## NEVER TOUCH:
+- website/_onboard.html
+- website/_dashboard.html
+- website/admin/index.html
+- functions/ (entire directory)
+- website/public/_onboard.html
+- website/public/_dashboard.html
+- website/dist/_onboard.html
+- website/dist/_dashboard.html
 
-## Why
-These files are the core revenue-generating infrastructure of velocity.calyvent.com.
-Unauthorized changes cause direct financial loss (clients cannot submit briefs, admins cannot respond).
+## REQUIRE EXPLICIT CONFIRMATION:
+- website/styles.css
+- website/public/index.html
+- website/dist/index.html
+- website/public/terms.html
+- website/public/privacy.html
+- wrangler.toml
+- functions/_lib/security.js
+- functions/_lib/supabase.js
 
-## What You CAN Do
-- Fix bugs explicitly described in the prompt
-- Add features explicitly requested
-- Never make changes to these files as a side effect of another task
-
-## Sync Rule
-After ANY change to `_onboard.html`, `_dashboard.html`, or `admin/index.html`, ALWAYS run:
+## SYNC RULE (MANDATORY):
+After changing _onboard.html, _dashboard.html, or admin/index.html:
   node website/scripts/sync-public.js
-Then commit public/ and dist/ together in the same commit.
+Then commit public/ and dist/ in the same commit.
+
+## WHY:
+These files are live revenue infrastructure.
+Unauthorized changes = clients cannot access briefs = money lost.
