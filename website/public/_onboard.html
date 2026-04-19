@@ -179,6 +179,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
           </select>
           <div class="field-error" id="err-businessType">Required</div>
         </div>
+      <div class="field" id="bizTypeOtherField" style="display:none;margin-top:.75rem"><label class="field-label" for="bizTypeOther">Describe your business type</label><input type="text" id="bizTypeOther" placeholder="e.g. Independent craftsperson, gallery, private practice..."></div>
       </div>
       <div class="field-row">
         <div class="field"><label class="field-label" for="businessEmail">Business Email <span class="req">*</span></label><input type="email" id="businessEmail" placeholder="contact@yourbusiness.com"><div class="field-error" id="err-businessEmail">Valid email required</div></div>
@@ -197,7 +198,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
       <div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:2rem 0 1.25rem;border-bottom:1px solid var(--border);padding-bottom:.75rem">About the Business</div>
       <div class="field"><label class="field-label" for="context">What does your business do? <span class="req">*</span></label><textarea id="context" rows="4" placeholder="Describe your business, niche, and what makes it distinct."></textarea><div class="field-error" id="err-context">Please describe your business</div></div>
       <div class="field"><label class="field-label">Social Profiles</label><div id="socialsList"></div><button class="add-btn" type="button" id="addSocial">+ Add Social</button></div>
-      <div class="field"><label class="check-row"><input type="checkbox" id="includeSocials"><span>Include social media icons on my website</span></label></div>
+      <div class="field"><label class="check-row"><input type="checkbox" id="includeSocials"><span>Include social media icons on my website <span style="color:var(--dim);font-size:.7rem">(not recommended &mdash; keeps the design clean)</span></span></label></div>
       <div class="nav-btns"><button class="btn-back" id="back2">&larr; Back</button><button class="btn-next" id="next2">Continue &rarr;</button></div>
     </div>
 
@@ -252,7 +253,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
       <div class="field"><label class="field-label" for="colorsExtra">Additional Palette Notes</label><textarea id="colorsExtra" rows="3" placeholder="Any other colors, gradients, or palette notes. Leave blank if unsure."></textarea></div>
       <div class="field"><label class="field-label" for="fonts">Typography Preferences</label><textarea id="fonts" rows="3" placeholder="List 2-3 font names or styles. e.g. 'Instrument Serif for headings, Inter for body' or 'something editorial and restrained'."></textarea></div>
       <div class="field"><label class="field-label">Design Direction</label>
-        <label class="check-row"><input type="checkbox" id="upgradePerm"><span>If the Velocity team identifies a way to elevate my brand guidelines, they have permission to pivot &mdash; I trust their judgment over my specs.</span></label>
+        <label class="check-row"><input type="checkbox" id="upgradePerm" checked><span>If the Velocity team identifies a way to elevate my brand guidelines, they have permission to pivot &mdash; I trust their judgment over my specs.</span></label>
       </div>
       <div class="nav-btns"><button class="btn-back" id="back4">&larr; Back</button><button class="btn-next" id="next4">Continue &rarr;</button></div>
     </div>
@@ -282,7 +283,7 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
       <div class="disclaimer" style="margin-top:1.5rem">
         <p><strong>Terms &amp; Conditions.</strong> By submitting this brief you agree that: (1) This submission does not constitute a contract or guarantee of services. (2) All information provided is accurate to the best of your knowledge. (3) Velocity retains the right to decline any project at its sole discretion. (4) Your brief data will be stored securely and used solely for the purpose of evaluating and executing your project. (5) You will not hold Velocity liable for any delay or decline of service. (6) Upon payment, the project scope is defined by this brief and any written amendments agreed to by both parties. (7) All original design work created by Velocity remains the property of Velocity until full payment is received.</p>
       </div>
-      <div class="field"><label class="check-row"><input type="checkbox" id="agreeTerms"><span>I have read and agree to the Terms &amp; Conditions above. I understand my submission may be declined, and that my brief locks 24 hours after first submission.</span></label><div class="field-error" id="err-agreeTerms" style="margin-top:.5rem">You must agree to the terms to continue</div></div>
+      <div class="field"><label class="check-row"><input type="checkbox" id="agreeTerms"><span>I have read and agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer" style="color:var(--brass);border-bottom:1px solid rgba(196,156,123,.25)">Terms &amp; Conditions</a> above. I understand my submission may be declined, and that my brief locks 24 hours after first submission.</span></label><div class="field-error" id="err-agreeTerms" style="margin-top:.5rem">You must agree to the terms to continue</div></div>
       <div class="nav-btns"><button class="btn-back" id="back5">&larr; Back</button><button class="btn-next" id="next5">Continue &rarr;</button></div>
     </div>
 
@@ -384,7 +385,9 @@ async function init() {
       if (document.getElementById('antiList')) setupUrlBlocks('antiList','addAnti',false,(fullData.phase2 && fullData.phase2.anti_inspiration) || []);
       const startingPointEl = document.getElementById('startingPoint');
       if (startingPointEl) startingPointEl.addEventListener('change',function(){ document.getElementById('existingUrlField').style.display=this.value==='existing'?'':'none'; });
-      document.querySelectorAll('input[name="domainChoice"]').forEach(r=>r.addEventListener('change',function(){
+      
+  const btEl=document.getElementById('businessType');if(btEl)btEl.addEventListener('change',function(){document.getElementById('bizTypeOtherField').style.display=this.value==='other'?'':'none';});
+  document.querySelectorAll('input[name="domainChoice"]').forEach(r=>r.addEventListener('change',function(){
         const show = this.value==='velocity_provides'||this.value==='client_has_needs_setup';
         document.getElementById('domainNameField').style.display=show?'':'none';
         const lbl=document.getElementById('domainNameLabel');
@@ -404,8 +407,10 @@ async function init() {
         helpBtn.addEventListener('click',e=>{e.stopPropagation();tooltip.style.display=tooltip.style.display==='block'?'none':'block';});
         helpBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tooltip.style.display=tooltip.style.display==='block'?'none':'block';}});
         document.addEventListener('click',()=>{if(tooltip)tooltip.style.display='none';});
+  // Upgrade permission: lock as checked when no colors filled
+  const upgradeAutoLogic=()=>{const cb=document.getElementById('upgradePerm');const bg=document.getElementById('colorBg');const sec=document.getElementById('colorSec');const acc=document.getElementById('colorAcc');if(!cb||!bg)return;const hasColors=(bg&&bg.value.trim())||(sec&&sec.value.trim())||(acc&&acc.value.trim());if(!hasColors){cb.checked=true;cb.disabled=true;cb.title='Unlock by filling in your brand colors above';}else{cb.disabled=false;cb.title='';}};['colorBg','colorSec','colorAcc'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',upgradeAutoLogic);el.addEventListener('blur',upgradeAutoLogic);}});upgradeAutoLogic();
       }
-      document.getElementById('dueDate').min = new Date(Date.now()+48*3600000).toISOString().split('T')[0];
+      const ddEl=document.getElementById('dueDate');if(ddEl){ddEl.min=new Date(Date.now()+48*3600000).toISOString().split('T')[0];ddEl.value=new Date(Date.now()+7*86400000).toISOString().split('T')[0];}
       bindNav();
       document.getElementById('email').value = VERIFIED_EMAIL;
       goTo(1);
@@ -447,6 +452,7 @@ function setupSocials(existing=[]) {
   const list=document.getElementById('socialsList');list.innerHTML='';
   const items=existing.length?existing:[''];
   items.forEach(v=>addSocialRow(v));
+  const cpEl=document.getElementById('copyright');const coEl=document.getElementById('companyName');if(cpEl&&coEl){coEl.addEventListener('blur',()=>{if(!cpEl.value.trim()&&coEl.value.trim()){cpEl.value='© '+coEl.value.trim()+' '+new Date().getFullYear();}});}
   document.getElementById('addSocial').onclick=()=>addSocialRow('');
 }
 function addSocialRow(val='') {
@@ -567,6 +573,10 @@ function collect(){
   };
 }
 async function submit(){
+  // Check edit count
+  const editCount = parseInt(localStorage.getItem('v_edits_'+TOKEN)||'0',10);
+  if(editCount>=3){toast('You have reached the maximum of 3 edits.');return;}
+  localStorage.setItem('v_edits_'+TOKEN,String(editCount+1));
   if(!v5())return;
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting\u2026';
   const data=collect();

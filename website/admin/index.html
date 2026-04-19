@@ -34,8 +34,8 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 .nav-right{display:flex;align-items:center;gap:1.25rem}
 .btn-new{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--brass);padding:.38rem .95rem;border:none;cursor:pointer;transition:background .3s}
 .btn-new:hover{background:var(--sand)}
-.auto-badge{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:.22rem .6rem;transition:color .3s}
-.auto-badge.live{color:#8fc98f;border-color:rgba(143,201,143,.25)}
+.btn-refresh{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:transparent;border:1px solid var(--border);padding:.3rem .8rem;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-refresh:hover{color:var(--sand);border-color:var(--sand)}
 .btn-logout{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .3s}
 .btn-logout:hover{color:var(--sand)}
 .main{padding:72px 1.75rem 3rem;max-width:1100px;margin:0 auto}
@@ -137,7 +137,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
   <nav class="nav">
     <span class="nav-brand">Velocity<em>.</em><span class="nav-tag">Admin</span></span>
     <div class="nav-right">
-      <span class="auto-badge" id="autoBadge">&#9679; Live</span>
+      <button class="btn-refresh" id="btnRefresh">&#8635;&nbsp;Refresh</button>
       <button class="btn-new" id="btnNew">+ New Lead</button>
       <button class="btn-logout" id="btnLogout">Sign Out</button>
     </div>
@@ -188,7 +188,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 <script>
 const SL={pending:'Pending',accepted:'Accepted',in_progress:'In Progress',declined:'Declined',completed:'Completed'};
 const SB={pending:'bp',accepted:'ba',in_progress:'bi',declined:'bd',completed:'bc'};
-let SEC='',LEADS=[],FILTER='',SORT='due_date',POLL=null;
+let SEC='',LEADS=[],FILTER='',SORT='due_date';
 
 document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};
 document.getElementById('authBtn').onclick=async()=>{
@@ -201,14 +201,11 @@ document.getElementById('authBtn').onclick=async()=>{
   LEADS=await r.json();renderStats();renderLeads();
   startPoll();
 };
-document.getElementById('btnLogout').onclick=()=>{sessionStorage.removeItem('v_admin');clearInterval(POLL);location.reload();};
+document.getElementById('btnRefresh').onclick=async()=>{const b=document.getElementById('btnRefresh');b.textContent='...';await reload();b.innerHTML='&#8635;&nbsp;Refresh';toast('Refreshed');};document.getElementById('btnLogout').onclick=()=>{sessionStorage.removeItem('v_admin');location.reload();};
 const saved=sessionStorage.getItem('v_admin');
 if(saved){document.getElementById('secretInput').value=saved;document.getElementById('authBtn').click();}
 
-function startPoll(){
-  POLL=setInterval(async()=>{
-    try{
-      const r=await fetch('/api/leads/list?sort='+SORT+(FILTER?'&status='+FILTER:''),{headers:{'X-Admin-Secret':SEC}});
+});
       if(r.ok){LEADS=await r.json();renderStats();renderLeads();}
     }catch(_){}
   },20000);
