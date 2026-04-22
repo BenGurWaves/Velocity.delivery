@@ -112,6 +112,13 @@
     tl.to(geo, { scale: 0, opacity: 0, duration: 2, ease: "power3.in" }, 12);
     tl.to(layerOutro, { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, 13);
 
+    // ─── WATCH HANDS CONTINUOUS TICK ───
+    const minHand = document.querySelector('.minute-hand');
+    const hrHand = document.querySelector('.hour-hand');
+    if (minHand && hrHand) {
+        gsap.to(minHand, { rotation: "+=360", duration: 10, repeat: -1, ease: "none" });
+        gsap.to(hrHand, { rotation: "+=360", duration: 120, repeat: -1, ease: "none" });
+    }
 
     // ─── CURSOR ENGINE ───
     const cursorDot  = document.querySelector('.cursor-dot');

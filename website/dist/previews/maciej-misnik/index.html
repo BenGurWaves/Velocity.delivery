@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=Space+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=11">
+    <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
 
@@ -23,13 +23,15 @@
         <div class="void-gradient"></div>
         <div class="noise" aria-hidden="true"></div>
 
-        <!-- Abstract Geometry (The Tourbillon) -->
+        <!-- Abstract Watch Geometry -->
         <div class="geometry-container" id="geo">
+            <div class="watch-dial"></div>
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
             <div class="circle circle-3"></div>
-            <div class="axis-line axis-x"></div>
-            <div class="axis-line axis-y"></div>
+            <div class="hand hour-hand"></div>
+            <div class="hand minute-hand"></div>
+            <div class="center-pin"></div>
         </div>
 
         <!-- Kinetic Typography Layers -->
@@ -71,9 +73,12 @@
                 <span class="mono">MACIEJ MIŚNIK</span>
                 <div class="links">
                     <a href="https://www.instagram.com/maciej_misnik/" target="_blank" class="serif-link">INSTAGRAM</a>
+                    <span class="link-separator">—</span>
                     <a href="https://www.ahci.ch/members/maciej-misnik/" target="_blank" class="serif-link">AHCI ACADEMY</a>
                 </div>
-                <span class="mono vel">© 2026 VELOCITY</span>
+                <div class="outro-footer">
+                    <span class="mono vel">PREVIEW / © 2026 VELOCITY</span>
+                </div>
             </div>
         </div>
 
@@ -88,6 +93,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="script.js?v=11"></script>
+    <script src="script.js?v=12"></script>
 </body>
 </html>
