@@ -56,14 +56,13 @@ h1, h2 { font-family: var(--serif); font-weight: 300; line-height: 1; }
     background-size: 180px;
 }
 
-/* ── Atmosphere ── */
-.atmosphere {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: radial-gradient(
-        800px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(165, 124, 76, 0.018),
-        transparent
-    );
+/* ── Ambient Fluid Canvas ── */
+#fluid-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8; /* Subtle */
 }
 
 /* ── Cursor ── */

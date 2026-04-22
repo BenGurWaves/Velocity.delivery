@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════
 // MACIEJ MIŚNIK — ROOM GALLERY ENGINE
-// Parallax · Cursor States · Room Walk
+// Pure Typography · Liquid Parallax
 // ═══════════════════════════════════════
 
 (() => {
@@ -9,11 +9,69 @@
     const rooms     = document.querySelectorAll('.room');
     const dots      = document.querySelectorAll('.room-dot');
     const counterEl = document.querySelector('.counter-current');
-    const promptEl  = document.querySelector('.room-prompt');
 
     let current = 0;
     let locked  = false;
-    const COOLDOWN = 1300;
+    const COOLDOWN = 1400; // Slower, more deliberate transitions
+
+    // ─── AMBIENT FLUID BACKGROUND ───
+    const canvas = document.getElementById('fluid-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        const particles = [];
+        const numParticles = 40;
+
+        function initParticles() {
+            particles.length = 0;
+            for(let i=0; i<numParticles; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * (width * 0.4) + (width * 0.2),
+                    colorStart: [165, 124, 76, Math.random() * 0.01 + 0.005], // Bronze
+                    colorEnd: [10, 30, 20, 0] // Fade to dark
+                });
+            }
+        }
+        initParticles();
+
+        function drawFluid() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for(let p of particles) {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce
+                if (p.x < -p.size) p.vx *= -1;
+                if (p.x > width + p.size) p.vx *= -1;
+                if (p.y < -p.size) p.vy *= -1;
+                if (p.y > height + p.size) p.vy *= -1;
+
+                const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+                grad.addColorStop(0, `rgba(${p.colorStart[0]}, ${p.colorStart[1]}, ${p.colorStart[2]}, ${p.colorStart[3]})`);
+                grad.addColorStop(1, `rgba(${p.colorEnd[0]}, ${p.colorEnd[1]}, ${p.colorEnd[2]}, ${p.colorEnd[3]})`);
+                
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(drawFluid);
+        }
+        drawFluid();
+    }
 
     // ─── ROOM TRANSITIONS ───
 
@@ -26,68 +84,72 @@
         const to   = rooms[index];
         const dir  = index > current ? 1 : -1;
 
-        if (promptEl && promptEl.style.opacity !== '0') {
-            gsap.to(promptEl, { opacity: 0, duration: .2 });
-        }
-
         const fromEls = from.querySelectorAll('[data-animate]');
         const toEls   = to.querySelectorAll('[data-animate]');
 
         // Cursor pulse during transition
         if (cursorRing) {
-            gsap.to(cursorRing, { scale: 1.4, opacity: .3, duration: .3, ease: 'power2.out' });
-            gsap.to(cursorRing, { scale: 1, opacity: 1, duration: .5, ease: 'power2.inOut', delay: .5 });
+            gsap.to(cursorRing, { scale: 1.5, opacity: .2, duration: .4, ease: 'power2.out' });
+            gsap.to(cursorRing, { scale: 1, opacity: 1, duration: .6, ease: 'power2.inOut', delay: .6 });
         }
 
         const tl = gsap.timeline({
             onComplete: () => {
                 from.classList.remove('active');
-                // Reset parallax on exited room
-                from.querySelectorAll('[data-depth]').forEach(el => {
-                    gsap.set(el, { x: 0, y: 0 });
-                });
                 current = index;
                 locked = false;
                 updateNav();
             }
         });
 
-        // Exit
+        // Exit: Smooth float away
         tl.to(fromEls, {
-            y: -18 * dir,
+            y: -25 * dir,
             opacity: 0,
-            stagger: 0.03,
-            duration: 0.4,
-            ease: 'power3.in',
+            stagger: 0.04,
+            duration: 0.6,
+            ease: 'power2.inOut',
         });
 
         tl.to(from, {
             opacity: 0,
-            duration: 0.2,
+            duration: 0.4,
             ease: 'power2.inOut',
-        }, '-=0.1');
+        }, '-=0.2');
 
-        // Enter
+        // Enter: Smooth float in
         to.classList.add('active');
         tl.fromTo(to,
             { opacity: 0 },
-            { opacity: 1, duration: 0.25, ease: 'power2.out' },
-            '-=0.05'
+            { opacity: 1, duration: 0.4, ease: 'power2.out' },
+            '-=0.1'
         );
 
         tl.fromTo(toEls,
-            { y: 28 * dir, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.05, duration: 0.55, ease: 'power3.out' },
-            '-=0.1'
+            { y: 35 * dir, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.06, duration: 0.8, ease: 'power3.out' },
+            '-=0.2'
         );
     }
 
     function updateNav() {
         dots.forEach((d, i) => d.classList.toggle('active', i === current));
         if (counterEl) counterEl.textContent = String(current + 1).padStart(2, '0');
+        
+        // Slightly shift background colors based on room
+        if (particles && particles.length > 0) {
+            const hueShifts = [0, 5, 10, -5, 0, 15, 0];
+            const shift = hueShifts[current] || 0;
+            const newR = 165 + shift;
+            const newG = 124 - shift;
+            
+            particles.forEach(p => {
+                gsap.to(p.colorStart, { 0: newR, 1: newG, duration: 1.5 });
+            });
+        }
     }
 
-    // ─── INPUT: WHEEL ───
+    // ─── INPUT: WHEEL (Debounced & Accumulating) ───
 
     let lastWheel = 0;
     let wheelAccum = 0;
@@ -98,7 +160,7 @@
         if (now - lastWheel < COOLDOWN || locked) return;
 
         wheelAccum += e.deltaY;
-        if (Math.abs(wheelAccum) >= 35) {
+        if (Math.abs(wheelAccum) >= 40) {
             lastWheel = now;
             if (wheelAccum > 0) goTo(current + 1);
             else goTo(current - 1);
@@ -109,7 +171,7 @@
     let wheelTimer;
     window.addEventListener('wheel', () => {
         clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(() => { wheelAccum = 0; }, 120);
+        wheelTimer = setTimeout(() => { wheelAccum = 0; }, 150);
     }, { passive: true });
 
     // ─── INPUT: KEYBOARD ───
@@ -130,8 +192,8 @@
 
     window.addEventListener('touchend', (e) => {
         const diff = touchY - e.changedTouches[0].clientY;
-        const fast = Date.now() - touchTime < 200;
-        if (Math.abs(diff) > (fast ? 25 : 45)) {
+        const fast = Date.now() - touchTime < 250;
+        if (Math.abs(diff) > (fast ? 30 : 50)) {
             if (diff > 0) goTo(current + 1);
             else goTo(current - 1);
         }
@@ -147,41 +209,59 @@
         dot.addEventListener('click', () => goTo(parseInt(dot.dataset.target)));
     });
 
-    // ─── CURSOR SYSTEM ───
+    // ─── CURSOR & PARALLAX ENGINE ───
 
     const cursorDot  = document.querySelector('.cursor-dot');
     const cursorRing = document.querySelector('.cursor-ring');
     const isTouch = !window.matchMedia('(hover: hover)').matches;
 
-    let cx = 0, cy = 0, rx = 0, ry = 0;
+    // We store the target mouse position from the event
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    
+    // We store the interpolated position
+    let currentX = targetX;
+    let currentY = targetY;
+    
+    // Ring interpolation
+    let ringX = targetX;
+    let ringY = targetY;
 
     if (!isTouch && cursorDot && cursorRing) {
 
         document.addEventListener('mousemove', (e) => {
-            cx = e.clientX;
-            cy = e.clientY;
-            document.documentElement.style.setProperty('--mx', cx + 'px');
-            document.documentElement.style.setProperty('--my', cy + 'px');
+            targetX = e.clientX;
+            targetY = e.clientY;
         });
 
-        // Animation frame: cursor + parallax
+        // The tick loop handles the smoothing (lerp)
         (function tick() {
-            cursorDot.style.left = cx + 'px';
-            cursorDot.style.top  = cy + 'px';
-            rx += (cx - rx) * 0.16;
-            ry += (cy - ry) * 0.16;
-            cursorRing.style.left = rx + 'px';
-            cursorRing.style.top  = ry + 'px';
+            // Lerp current mouse position slightly to smooth out tiny jitters
+            currentX += (targetX - currentX) * 0.25;
+            currentY += (targetY - currentY) * 0.25;
+
+            // Cursor dot follows smoothed position
+            cursorDot.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+            
+            // Ring lags behind
+            ringX += (targetX - ringX) * 0.12;
+            ringY += (targetY - ringY) * 0.12;
+            cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
 
             // Mouse parallax on active room
             const activeRoom = rooms[current];
             if (activeRoom) {
-                const nx = (cx / window.innerWidth - 0.5) * 2;
-                const ny = (cy / window.innerHeight - 0.5) * 2;
+                // Use smoothed mouse coordinates for parallax
+                const nx = (currentX / window.innerWidth - 0.5) * 2;
+                const ny = (currentY / window.innerHeight - 0.5) * 2;
+                
                 activeRoom.querySelectorAll('[data-depth]').forEach(el => {
-                    const d = parseFloat(el.dataset.depth);
-                    const tx = nx * d * -14;
-                    const ty = ny * d * -10;
+                    // Cache depth property if not already
+                    if(!el._depth) el._depth = parseFloat(el.dataset.depth || 0);
+                    const d = el._depth;
+                    
+                    const tx = nx * d * -18;
+                    const ty = ny * d * -12;
                     el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
                 });
             }
@@ -191,65 +271,74 @@
 
         // ── Cursor states ──
 
+        function setCS(cls) {
+            cursorDot.classList.add(cls);
+            cursorRing.classList.add(cls);
+        }
+        function clearCS(cls) {
+            cursorDot.classList.remove(cls);
+            cursorRing.classList.remove(cls);
+        }
+
         // Links & buttons
         document.querySelectorAll('a, button, [data-magnetic]').forEach(el => {
-            el.addEventListener('mouseenter', () => { setCS('on-link'); });
-            el.addEventListener('mouseleave', () => { clearCS(); });
+            el.addEventListener('mouseenter', () => setCS('on-link'));
+            el.addEventListener('mouseleave', () => clearCS('on-link'));
         });
 
         // Headings
         document.querySelectorAll('h1, h2, .room-title, .threshold-name').forEach(el => {
-            el.addEventListener('mouseenter', () => { setCS('on-heading'); });
-            el.addEventListener('mouseleave', () => { clearCS(); });
+            el.addEventListener('mouseenter', () => setCS('on-heading'));
+            el.addEventListener('mouseleave', () => clearCS('on-heading'));
         });
 
         // Ghost text
         document.querySelectorAll('.ghost-text, .cl-ghost').forEach(el => {
-            el.addEventListener('mouseenter', () => { setCS('on-ghost'); });
-            el.addEventListener('mouseleave', () => { clearCS(); });
+            el.addEventListener('mouseenter', () => setCS('on-ghost'));
+            el.addEventListener('mouseleave', () => clearCS('on-ghost'));
         });
 
         // Data values
         document.querySelectorAll('.data-val').forEach(el => {
-            el.addEventListener('mouseenter', () => { setCS('on-data'); });
-            el.addEventListener('mouseleave', () => { clearCS(); });
+            el.addEventListener('mouseenter', () => setCS('on-data'));
+            el.addEventListener('mouseleave', () => clearCS('on-data'));
         });
-
-        function setCS(cls) {
-            cursorDot.className = 'cursor-dot ' + cls;
-            cursorRing.className = 'cursor-ring ' + cls;
-        }
-        function clearCS() {
-            cursorDot.className = 'cursor-dot';
-            cursorRing.className = 'cursor-ring';
-        }
 
         // Click
         document.addEventListener('mousedown', () => {
-            gsap.to(cursorRing, { scale: 0.75, duration: 0.12, ease: 'power2.in' });
+            gsap.to(cursorRing, { scale: 0.6, duration: 0.15, ease: 'power2.in' });
         });
         document.addEventListener('mouseup', () => {
-            gsap.to(cursorRing, { scale: 1, duration: 0.35, ease: 'elastic.out(1, 0.4)' });
+            gsap.to(cursorRing, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
         });
 
-        // Magnetic
+        // Magnetic Objects
         document.querySelectorAll('[data-magnetic]').forEach(el => {
             el.addEventListener('mousemove', (e) => {
                 const r = el.getBoundingClientRect();
                 gsap.to(el, {
-                    x: (e.clientX - r.left - r.width / 2) * 0.3,
-                    y: (e.clientY - r.top - r.height / 2) * 0.3,
-                    duration: 0.2, ease: 'power2.out',
+                    x: (e.clientX - r.left - r.width / 2) * 0.4,
+                    y: (e.clientY - r.top - r.height / 2) * 0.4,
+                    duration: 0.3, ease: 'power2.out',
+                    overwrite: 'auto'
                 });
             });
             el.addEventListener('mouseleave', () => {
-                gsap.to(el, { x: 0, y: 0, duration: 0.45, ease: 'elastic.out(1, 0.3)' });
+                gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
             });
         });
 
     } else {
         if (cursorDot) cursorDot.style.display = 'none';
         if (cursorRing) cursorRing.style.display = 'none';
+        
+        // Still run parallax on touch, but tie it to device orientation instead if possible
+        // For now, center it.
+        rooms.forEach((r) => {
+            r.querySelectorAll('[data-depth]').forEach(el => {
+                el.style.transform = `translate3d(0, 0, 0)`;
+            });
+        });
     }
 
     // ─── ENTRANCE ANIMATION ───
@@ -257,11 +346,11 @@
     const first = rooms[0];
     if (first) {
         const els = first.querySelectorAll('[data-animate]');
-        gsap.set(els, { y: 35, opacity: 0 });
+        gsap.set(els, { y: 40, opacity: 0 });
         gsap.to(els, {
             y: 0, opacity: 1,
-            stagger: 0.12, duration: 1.2,
-            ease: 'power3.out', delay: 0.25,
+            stagger: 0.15, duration: 1.4,
+            ease: 'power3.out', delay: 0.2,
         });
     }
 
