@@ -2,151 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maciej Miśnik — Horology</title>
-    <meta name="description" content="Independent Horology. Warsaw.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maciej Miśnik — Independent Horology</title>
+    <meta name="description" content="Fifth-generation self-taught watchmaker.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=9">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
-    <canvas id="fluid-canvas" aria-hidden="true"></canvas>
-    <div class="grain" aria-hidden="true"></div>
-    
-    <!-- Magnetic custom cursor -->
-    <div class="cursor-dot" aria-hidden="true"></div>
-    <div class="cursor-ring" aria-hidden="true"></div>
-    <div class="cursor-text mono" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="ambient-light" aria-hidden="true"></div>
 
-    <div class="room-nav">
-        <button class="room-dot active" data-target="0"><span>I</span></button>
-        <button class="room-dot" data-target="1"><span>II</span></button>
-        <button class="room-dot" data-target="2"><span>III</span></button>
-        <button class="room-dot" data-target="3"><span>IV</span></button>
-        <button class="room-dot" data-target="4"><span>V</span></button>
-        <button class="room-dot" data-target="5"><span>VI</span></button>
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <nav class="top-nav">
+        <span class="mono">M. MIŚNIK</span>
+        <span class="mono">ATELIER</span>
+    </nav>
+
+    <div class="scroll-container">
+        
+        <header class="section hero">
+            <div class="hero-content">
+                <h1 class="hero-title" data-speed="0.8">
+                    <span class="indent">MACIEJ</span><br>
+                    <span>MIŚNIK</span>
+                </h1>
+                <div class="hero-image-wrapper" data-speed="1.2">
+                    <img src="assets/watch_movement_editorial_1776897476651.png" alt="Movement" class="parallax-img">
+                </div>
+            </div>
+            <div class="scroll-indicator mono">SCROLL TO EXPLORE</div>
+        </header>
+
+        <section class="section abstract-split">
+            <div class="split-left" data-speed="1.1">
+                <h2 class="section-title">The<br>Physicist</h2>
+                <p class="body-text">He walked away from a PhD in physics to master micro-mechanics. Driven by the singular pursuit of perfection, creating every component by hand in solitary dedication.</p>
+            </div>
+            <div class="split-right" data-speed="0.9">
+                <div class="image-mask">
+                    <img src="assets/physicist_watchmaker_fusion_1776892739442.png" alt="The Physicist" class="parallax-img">
+                </div>
+            </div>
+        </section>
+
+        <section class="section showcase">
+            <div class="showcase-content">
+                <div class="showcase-image" data-speed="1.05">
+                    <img src="assets/hero_watch_mechanism_1776892714770.png" alt="Mechanism" class="parallax-img">
+                </div>
+                <div class="showcase-text" data-speed="0.95">
+                    <span class="mono accent">ZERO CNC</span>
+                    <h2 class="section-title">1,000+ Hours</h2>
+                    <p class="body-text">Every wheel, every pinion, every bridge finished by a single pair of hands. A mastery of traditional technique devoid of modern automation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section seaman">
+            <div class="seaman-content">
+                <div class="seaman-text" data-speed="1.1">
+                    <h2 class="section-title">The<br>Seaman</h2>
+                    <p class="body-text">A marine chronometer crafted for a father who spent his life on the Baltic Sea. An instrument not merely for time, but for navigation and legacy.</p>
+                </div>
+                <div class="seaman-image" data-speed="0.85">
+                    <img src="assets/marine_chronometer_luxury_1776892821938.png" alt="Chronometer" class="parallax-img">
+                </div>
+            </div>
+        </section>
+
+        <section class="section quote-section">
+            <h3 class="quote-text">
+                "Independence is freedom.<br>
+                Freedom means producing<br>
+                every part myself."
+            </h3>
+        </section>
+
+        <footer class="section footer">
+            <div class="footer-content">
+                <a href="https://www.instagram.com/maciej_misnik/" target="_blank" class="footer-link">INSTAGRAM</a>
+                <a href="https://www.ahci.ch/members/maciej-misnik/" target="_blank" class="footer-link">AHCI MEMBER</a>
+                <div class="footer-meta mono">
+                    <span>52.2297°N, 21.0122°E</span>
+                    <span>© 2026 VELOCITY</span>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
-    <div class="room-counter">
-        <span class="counter-current">01</span>
-        <span class="counter-sep">/</span>
-        <span class="counter-total">06</span>
-    </div>
-
-    <!-- ═══ ROOM 0: THRESHOLD (HERO) ═══ -->
-    <section class="room room-0 active" data-room="0">
-        <div class="room-inner hero-layout">
-            <h1 class="hero-title" data-animate>
-                <div class="line"><span data-split>MACIEJ</span></div>
-                <div class="line o-offset"><span data-split>MIŚNIK</span></div>
-            </h1>
-            
-            <div class="hero-media" data-animate data-depth="0.25" data-cursor="DISCOVER">
-                <div class="img-wrapper">
-                    <img src="assets/watch_movement_editorial_1776897476651.png" alt="Tourbillon movement">
-                </div>
-            </div>
-
-            <div class="hero-sub" data-animate data-depth="0.1">
-                <span class="mono">INDEPENDENT HOROLOGIST</span>
-                <span class="mono">52.2297°N, 21.0122°E</span>
-            </div>
-            
-            <div class="room-prompt" data-animate>
-                <div class="mouse-line"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ ROOM 1: ORIGIN / PHYSICIST ═══ -->
-    <section class="room room-1" data-room="1">
-        <div class="room-inner asym-abstract">
-            <div class="text-block text-left" data-animate>
-                <h2 class="sub-title"><span data-split>The Physicist</span></h2>
-                <p class="body-text">Walking away from the rigidity of academic science to master micro-mechanics. A PhD in physics traded for the pursuit of ultimate, solitary precision.</p>
-            </div>
-            <div class="media-block block-right" data-animate data-depth="0.18" data-cursor="OBSERVE">
-                <div class="img-wrapper slit-mask">
-                    <img src="assets/physicist_watchmaker_fusion_1776892739442.png" alt="The Physicist">
-                </div>
-            </div>
-            <div class="bg-typography" data-depth="0.05">Φ</div>
-        </div>
-    </section>
-
-    <!-- ═══ ROOM 2: THE INSTRUMENT ═══ -->
-    <section class="room room-2" data-room="2">
-        <div class="room-inner asym-abstract reverse">
-            <div class="text-block text-right" data-animate>
-                <h2 class="sub-title"><span data-split>Zero CNC</span></h2>
-                <div class="stat-grid">
-                    <div class="stat"><span class="mono">HOURS</span><span>1,000+</span></div>
-                    <div class="stat"><span class="mono">PARTS</span><span>200+</span></div>
-                    <div class="stat"><span class="mono">FINISH</span><span>HAND</span></div>
-                </div>
-                <p class="body-text highlight">Every wheel, every pinion, every drop of oil placed by one man. Absolute autonomy in creation.</p>
-            </div>
-            <div class="media-block block-left" data-animate data-depth="0.22" data-cursor="EXAMINE">
-                <div class="img-wrapper circle-mask">
-                    <img src="assets/hero_watch_mechanism_1776892714770.png" alt="Tourbillon Bridge">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ ROOM 3: THE SEAMAN ═══ -->
-    <section class="room room-3" data-room="3">
-        <div class="room-inner center-focus">
-            <div class="media-block center-wide" data-animate data-depth="0.15" data-cursor="HORIZON">
-                <div class="img-wrapper abstract-mask">
-                    <img src="assets/marine_chronometer_luxury_1776892821938.png" alt="Marine Chronometer">
-                </div>
-            </div>
-            <div class="text-block float-front" data-animate data-depth="0.3">
-                <h2 class="sub-title"><span data-split>For the Seaman</span></h2>
-                <p class="body-text">A chronometer built for a father navigating the Baltic. <br>A machine not for telling time, but for finding home.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ ROOM 4: TESTAMENT ═══ -->
-    <section class="room room-4" data-room="4">
-        <div class="room-inner floating-quote">
-            <blockquote class="massive-quote" data-animate data-depth="0.2">
-                "Independence is freedom.<br> Freedom is producing<br> every part myself."
-            </blockquote>
-            <cite class="mono" data-animate data-depth="0.1">MACIEJ MIŚNIK — QLEKTA</cite>
-        </div>
-    </section>
-
-    <!-- ═══ ROOM 5: THE COORDINATES ═══ -->
-    <section class="room room-5" data-room="5">
-        <div class="room-inner abstract-footer">
-            <div class="footer-top" data-animate>
-                <span class="mono press-heading">RECOGNITION</span>
-                <span class="press-marquee">HODINKEE — NEW YORK TIMES — F.P.JOURNE — EUROPA STAR — HODINKEE — NEW YORK TIMES</span>
-            </div>
-            
-            <div class="footer-mid" data-animate data-depth="0.1">
-                <a href="https://www.instagram.com/maciej_misnik/" target="_blank" rel="noopener" class="huge-link" data-cursor="EXTERNAL">INSTAGRAM<span class="arrow">↗</span></a>
-                <a href="https://www.ahci.ch/members/maciej-misnik/" target="_blank" rel="noopener" class="huge-link" data-cursor="EXTERNAL">AHCI PROFILE<span class="arrow">↗</span></a>
-            </div>
-
-            <div class="footer-bottom" data-animate>
-                <div class="coord-display">
-                    <span class="mono">52°13'46.9"N</span>
-                    <span class="mono">21°00'44.0"E</span>
-                </div>
-                <div class="vel-mark mono">PREVIEW / © 2026 VELOCITY</div>
-            </div>
-        </div>
-    </section>
-
+    <!-- GSAP & Lenis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
-    <script src="script.js?v=9"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="script.js?v=10"></script>
 </body>
 </html>
