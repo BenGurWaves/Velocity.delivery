@@ -138,7 +138,7 @@ export async function onRequestPatch(context) {
   let body;
   try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
 
-  const { token, quote_amount, status, admin_comment, site_link } = body;
+  const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at } = body;
   if (!token) return errRes('token required');
 
   const patch = {};
@@ -179,7 +179,9 @@ export async function onRequestPatch(context) {
       patch.admin_comment.link = body.admin_comment_link ? safeUrl(body.admin_comment_link) : null;
     }
   }
-  if (site_link !== undefined) {
+  if (scope_text !== undefined) { patch.scope_text = scope_text || null; }
+  if (scope_sent_at !== undefined) { patch.scope_sent_at = scope_sent_at || null; }
+    if (site_link !== undefined) {
     patch.site_link = site_link ? safeUrl(site_link) : null;
   }
 

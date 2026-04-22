@@ -60,7 +60,7 @@ export async function onRequestPatch(context) {
   let body;
   try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
 
-  const allowed = ['full_data','submitted_at','due_date','client_name','client_email','upgrade_permission','domain_choice','domain_name','email_verified','personal_email','personal_phone','business_name','business_type','business_email','business_phone','business_address','terms_accepted','terms_accepted_at'];
+  const allowed = ['full_data','submitted_at','due_date','client_name','client_email','upgrade_permission','domain_choice','domain_name','email_verified','personal_email','personal_phone','business_name','business_type','business_email','business_phone','business_address','terms_accepted','terms_accepted_at','scope_accepted','scope_accepted_at'];
   const patch = {};
   for (const key of allowed) { if (body[key] !== undefined) patch[key] = body[key]; }
 

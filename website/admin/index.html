@@ -251,7 +251,8 @@ function renderLeads(){
     // Copy links
     card.querySelectorAll('.clink[data-copy]').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();navigator.clipboard.writeText(btn.dataset.copy);toast('Copied');};});
     // Individual client view
-    const viewBtn=card.querySelector('.view-btn');
+    const scopeBtn=card.querySelector('.send-scope');if(scopeBtn){scopeBtn.onclick=async()=>{const st=card.querySelector('.scope-text');const txt=st?st.value.trim():'';if(!txt){toast('Write the scope first');return;}scopeBtn.disabled=true;scopeBtn.textContent='Sending...';try{await aupd(l.token,{scope_text:txt,scope_sent_at:new Date().toISOString()});toast('Scope sent to client');await reload();}catch(_){toast('Error sending scope');}scopeBtn.disabled=false;};}
+        const viewBtn=card.querySelector('.view-btn');
     if(viewBtn)viewBtn.onclick=async e=>{
       e.stopPropagation();
       viewBtn.textContent='Opening…';
@@ -376,6 +377,10 @@ function buildCard(l){
         <input class="cinput sl" type="url" placeholder="https://clientsite.com" style="width:200px" value="${esc(l.site_link||'')}">
       </div>
       <button class="cbtn ssl" style="align-self:flex-end">Save Link</button>
+      <!-- Scope document -->
+      <div class="cg" style="flex-basis:100%"><span class="clabel">Scope Document</span><textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea></div>
+      <button class="cbtn send-scope" style="align-self:flex-end">${l.scope_sent_at?'Resend Scope':'Send Scope to Client'}</button>
+      ${l.scope_accepted?'<span style=""font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#8fc98f"">&#10003; Scope Accepted</span>':''}
 
       <!-- Action links -->
       <div style="display:flex;flex-wrap:wrap;gap:.65rem;align-self:flex-end">
