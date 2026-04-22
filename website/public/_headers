@@ -23,7 +23,13 @@
 
 # ── Preview pages: no cache ─────────────────────────────────────────────────
 /previews/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net unpkg.com; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://www.transparenttextures.com https://velocity.calyvent.com; connect-src 'self'; frame-ancestors 'none';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://www.transparenttextures.com https://velocity.calyvent.com; connect-src 'self'; frame-ancestors 'none';
+  Cache-Control: no-store, no-cache, must-revalidate
+
+/previews/*.css
+  Cache-Control: no-store, no-cache, must-revalidate
+
+/previews/*.js
   Cache-Control: no-store, no-cache, must-revalidate
 
 # ── Immutable assets (hash in filename or content never changes) ─────────────
