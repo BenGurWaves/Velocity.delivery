@@ -18,7 +18,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 .grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;pointer-events:none;z-index:9000;animation:gr .5s steps(2) infinite}
 @keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,-2%)}50%{transform:translate(2%,1%)}75%{transform:translate(-1%,3%)}}
 .auth-gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
-.auth-box{width:100%;max-width:340px}
+.auth-box{width:100%;max-width:380px}
 .auth-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2.4rem;letter-spacing:-.04em;color:var(--sand);margin-bottom:.4rem}
 .auth-sub{font-size:.72rem;color:var(--dim);margin-bottom:2.5rem;letter-spacing:.04em}
 .auth-label{display:block;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem}
@@ -34,8 +34,8 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 .nav-right{display:flex;align-items:center;gap:1.25rem}
 .btn-new{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--brass);padding:.38rem .95rem;border:none;cursor:pointer;transition:background .3s}
 .btn-new:hover{background:var(--sand)}
-.auto-badge{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:.22rem .6rem;transition:color .3s}
-.auto-badge.live{color:#8fc98f;border-color:rgba(143,201,143,.25)}
+.btn-refresh{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:transparent;border:1px solid var(--border);padding:.3rem .8rem;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-refresh:hover{color:var(--sand);border-color:var(--sand)}
 .btn-logout{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .3s}
 .btn-logout:hover{color:var(--sand)}
 .main{padding:72px 1.75rem 3rem;max-width:1100px;margin:0 auto}
@@ -127,7 +127,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
     <h1 class="auth-title">Velocity.</h1>
     <p class="auth-sub">Admin access only.</p>
     <label class="auth-label">Access Key</label>
-    <input class="auth-input" type="password" id="secretInput" placeholder="Enter admin key" autocomplete="current-password">
+    <div style="position:relative;display:block"><input class="auth-input" type="password" id="secretInput" placeholder="Enter admin key" autocomplete="current-password" style="padding-right:3.5rem"><button id="togglePw" type="button" style="position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:0;font-family:inherit">Show</button></div>
     <br><button class="auth-btn" id="authBtn">Enter &#8594;</button>
     <div class="auth-err" id="authErr">Incorrect key. Try again.</div>
   </div>
@@ -137,7 +137,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
   <nav class="nav">
     <span class="nav-brand">Velocity<em>.</em><span class="nav-tag">Admin</span></span>
     <div class="nav-right">
-      <span class="auto-badge" id="autoBadge">&#9679; Live</span>
+      <button class="btn-refresh" id="btnRefresh">&#8635;&nbsp;Refresh</button>
       <button class="btn-new" id="btnNew">+ New Lead</button>
       <button class="btn-logout" id="btnLogout">Sign Out</button>
     </div>
@@ -188,9 +188,9 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 <script>
 const SL={pending:'Pending',accepted:'Accepted',in_progress:'In Progress',declined:'Declined',completed:'Completed'};
 const SB={pending:'bp',accepted:'ba',in_progress:'bi',declined:'bd',completed:'bc'};
-let SEC='',LEADS=[],FILTER='',SORT='due_date',POLL=null;
+let SEC='',LEADS=[],FILTER='',SORT='due_date';
 
-document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};
+document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};document.getElementById('togglePw').onclick=function(){var i=document.getElementById('secretInput');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='text'?'Hide':'Show';};
 document.getElementById('authBtn').onclick=async()=>{
   const s=document.getElementById('secretInput').value.trim();if(!s)return;
   const r=await fetch('/api/leads/list',{headers:{'X-Admin-Secret':s}});
@@ -199,21 +199,10 @@ document.getElementById('authBtn').onclick=async()=>{
   document.getElementById('authGate').style.display='none';
   document.getElementById('app').style.display='';
   LEADS=await r.json();renderStats();renderLeads();
-  startPoll();
 };
-document.getElementById('btnLogout').onclick=()=>{sessionStorage.removeItem('v_admin');clearInterval(POLL);location.reload();};
+document.getElementById('btnRefresh').onclick=async()=>{const b=document.getElementById('btnRefresh');b.textContent='...';await reload();b.innerHTML='&#8635;&nbsp;Refresh';toast('Refreshed');};document.getElementById('btnLogout').onclick=()=>{sessionStorage.removeItem('v_admin');location.reload();};
 const saved=sessionStorage.getItem('v_admin');
 if(saved){document.getElementById('secretInput').value=saved;document.getElementById('authBtn').click();}
-
-function startPoll(){
-  POLL=setInterval(async()=>{
-    try{
-      const r=await fetch('/api/leads/list?sort='+SORT+(FILTER?'&status='+FILTER:''),{headers:{'X-Admin-Secret':SEC}});
-      if(r.ok){LEADS=await r.json();renderStats();renderLeads();}
-    }catch(_){}
-  },20000);
-  const badge = document.getElementById('autoBadge'); if(badge) badge.classList.add('live');
-}
 
 document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');FILTER=b.dataset.filter;renderLeads();});
 document.getElementById('sDue').onclick=()=>{SORT='due_date';document.getElementById('sDue').classList.add('active');document.getElementById('sNew').classList.remove('active');renderLeads();};
@@ -262,7 +251,8 @@ function renderLeads(){
     // Copy links
     card.querySelectorAll('.clink[data-copy]').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();navigator.clipboard.writeText(btn.dataset.copy);toast('Copied');};});
     // Individual client view
-    const viewBtn=card.querySelector('.view-btn');
+    const scopeBtn=card.querySelector('.send-scope');if(scopeBtn){scopeBtn.onclick=async()=>{const st=card.querySelector('.scope-text');const txt=st?st.value.trim():'';if(!txt){toast('Write the scope first');return;}scopeBtn.disabled=true;scopeBtn.textContent='Sending...';try{await aupd(l.token,{scope_text:txt,scope_sent_at:new Date().toISOString()});toast('Scope sent to client');await reload();}catch(_){toast('Error sending scope');}scopeBtn.disabled=false;};}
+        const viewBtn=card.querySelector('.view-btn');
     if(viewBtn)viewBtn.onclick=async e=>{
       e.stopPropagation();
       viewBtn.textContent='Opening…';
@@ -387,6 +377,10 @@ function buildCard(l){
         <input class="cinput sl" type="url" placeholder="https://clientsite.com" style="width:200px" value="${esc(l.site_link||'')}">
       </div>
       <button class="cbtn ssl" style="align-self:flex-end">Save Link</button>
+      <!-- Scope document -->
+      <div class="cg" style="flex-basis:100%"><span class="clabel">Scope Document</span><textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea></div>
+      <button class="cbtn send-scope" style="align-self:flex-end">${l.scope_sent_at?'Resend Scope':'Send Scope to Client'}</button>
+      ${l.scope_accepted?'<span style=""font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#8fc98f"">&#10003; Scope Accepted</span>':''}
 
       <!-- Action links -->
       <div style="display:flex;flex-wrap:wrap;gap:.65rem;align-self:flex-end">
