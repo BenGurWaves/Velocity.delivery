@@ -187,7 +187,7 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 .chat-send{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--sand);border:none;padding:.5rem 1.25rem;cursor:pointer;white-space:nowrap;transition:background .2s}
 .chat-send:hover{background:var(--brass)}
 .chat-send:disabled{opacity:.35;pointer-events:none}
-</style>
+@media(max-width:640px){.hero-band{padding:clamp(4rem,12vw,6rem) 1.5rem clamp(1.5rem,4vw,2rem)}.hero-name{font-size:clamp(2.2rem,11vw,4rem)}.content{padding:0 1.5rem clamp(3rem,8vw,5rem)}.section{padding:clamp(1.5rem,4vw,2rem)}.timeline .tl-title{font-size:.8rem}.quote-amount{font-size:clamp(2rem,10vw,4rem)}.pay-btn{width:100%;padding:1rem}}</style>
 </head>
 <body>
 <div class="grain"></div>
@@ -365,7 +365,7 @@ function renderDash(lead,justPaid=false){
   // Hero
   document.getElementById('heroName').innerHTML=name+'<em>.</em>';
   document.getElementById('navRight').textContent=name;
-  const meta=document.getElementById('heroMeta');
+  const meta=document.getElementById('heroStatus');
   meta.innerHTML=`<span class="pill ${SP[lead.status]||'pill-pending'}">${SL[lead.status]||'Pending'}</span>
     ${paid?'<span class="pill pill-paid">Payment Confirmed</span>':''}
     ${lead.upgrade_permission?`<span class="pill pill-upgrade" id="upgradePill" tabindex="0">Upgrade Approved<div class="upgrade-popup" id="upgradePopup"><p><strong>What this means:</strong> You’ve given the Velocity team full creative latitude to elevate your brand — colors, typography, layout, and identity — beyond your original specifications if we see a better direction. We’ll always show you before applying major changes.</p></div></span>`:''}`;

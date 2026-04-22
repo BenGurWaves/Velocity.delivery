@@ -127,7 +127,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
     <h1 class="auth-title">Velocity.</h1>
     <p class="auth-sub">Admin access only.</p>
     <label class="auth-label">Access Key</label>
-    <div style="position:relative;display:inline-block"><input class="auth-input" type="password" id="secretInput" placeholder="Enter admin key" autocomplete="current-password" style="padding-right:2rem"><button onclick="var i=document.getElementById('secretInput');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='text'?'👁':'👁'︎'" type="button" style="position:absolute;right:.4rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.9rem;opacity:.5;padding:0;line-height:1">👁︎</button></div>
+    <div style="position:relative;display:inline-block"><input class="auth-input" type="password" id="secretInput" placeholder="Enter admin key" autocomplete="current-password" style="padding-right:3.5rem"><button id="togglePw" type="button" style="position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:0;font-family:inherit">Show</button></div>
     <br><button class="auth-btn" id="authBtn">Enter &#8594;</button>
     <div class="auth-err" id="authErr">Incorrect key. Try again.</div>
   </div>
@@ -190,7 +190,7 @@ const SL={pending:'Pending',accepted:'Accepted',in_progress:'In Progress',declin
 const SB={pending:'bp',accepted:'ba',in_progress:'bi',declined:'bd',completed:'bc'};
 let SEC='',LEADS=[],FILTER='',SORT='due_date';
 
-document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};
+document.getElementById('secretInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click();};document.getElementById('togglePw').onclick=function(){var i=document.getElementById('secretInput');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='text'?'Hide':'Show';};
 document.getElementById('authBtn').onclick=async()=>{
   const s=document.getElementById('secretInput').value.trim();if(!s)return;
   const r=await fetch('/api/leads/list',{headers:{'X-Admin-Secret':s}});
