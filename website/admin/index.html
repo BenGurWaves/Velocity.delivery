@@ -338,6 +338,7 @@ function buildCard(l){
           ${dr('Existing URL',p4.existing_url)}
           ${dr('Assets',p4.assets_links)}
           ${dr('Domain',l.domain_choice==='velocity_provides'?'Velocity registers'+(l.domain_name?' — '+l.domain_name:''):(l.domain_choice||''))}
+          ${dr('Showcase',l.showcase_permission==='yes'?'✓ Yes — portfolio':(l.showcase_permission==='no'?'✗ No — private':'⏳ Decide later'))}
         </div>
         ${insp?`<div class="dsec"><div class="dlabel">Inspiration</div>${insp}</div>`:''}
         ${anti?`<div class="dsec"><div class="dlabel">Anti-Inspiration</div>${anti}</div>`:''}
