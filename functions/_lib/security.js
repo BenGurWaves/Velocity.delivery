@@ -3,6 +3,15 @@
  * Imported by every endpoint that handles auth, rate limiting, or user input.
  */
 
+// ── Input length limits ──────────────────────────────────────────────────────
+const INPUT_LIMITS = {
+  client_email: 255,
+  client_name: 255,
+  admin_comment: 2000,
+  site_link: 500,
+  scope_text: 5000,
+};
+
 // ── Timing-safe string comparison ────────────────────────────────────────────
 // Prevents timing attacks on admin secret comparison.
 // Standard === leaks info: attackers measure response time to guess characters.
