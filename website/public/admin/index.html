@@ -118,12 +118,18 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 .toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--bg2);border:1px solid var(--bord2);padding:.65rem 1.1rem;font-size:.68rem;letter-spacing:.06em;z-index:9999;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 .empty{text-align:center;padding:4rem 2rem;color:var(--dim);font-size:.75rem;letter-spacing:.06em}
-.chat-messages{display:flex;flex-direction:column;gap:.5rem}
-.chat-msg{max-width:85%;padding:.5rem .75rem;font-size:.72rem;line-height:1.6}
-.chat-msg.admin{background:rgba(196,156,123,.1);border:1px solid rgba(196,156,123,.15);align-self:flex-end;border-radius:4px 0 0 4px}
-.chat-msg.client{background:rgba(222,200,181,.05);border:1px solid var(--border);align-self:flex-start;border-radius:0 4px 4px 0}
-.chat-msg-time{font-size:.5rem;color:var(--dim);margin-top:.25rem}
+.chat-messages{display:flex;flex-direction:column;gap:0.65rem;padding:0.5rem 0;scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+.chat-messages::-webkit-scrollbar{width:5px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px}
+.chat-msg{max-width:80%;padding:0.6rem 0.85rem;font-size:0.72rem;line-height:1.65;word-wrap:break-word}
+.chat-msg.admin{background:rgba(196,156,123,.12);border:1px solid rgba(196,156,123,.18);align-self:flex-end;border-radius:8px 2px 2px 8px}
+.chat-msg.client{background:rgba(222,200,181,.06);border:1px solid var(--border);align-self:flex-start;border-radius:2px 8px 8px 2px}
+.chat-msg-time{font-size:0.5rem;color:var(--dim);margin-top:0.3rem;opacity:0.7}
 .chat-input{width:auto!important}
+.chat-send{transition:all .2s}
+.chat-send:hover:not(:disabled){transform:translateY(-1px)}
+.chat-send:active:not(:disabled){transform:translateY(0)}
 </style>
 </head>
 <body>
@@ -503,11 +509,39 @@ document.getElementById('mClose').onclick=closeModal;
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closeModal();});
 document.getElementById('mSubmit').onclick=async()=>{
   const email=document.getElementById('mEmail').value.trim();
-  const btn=document.getElementById('mSubmit');btn.disabled=true;btn.textContent='Generating\u2026';
-  const r=await fetch('/api/leads/create',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({client_email:email||null,client_name:document.getElementById('mName').value.trim()||null})});
-  const d=await r.json();btn.disabled=false;btn.textContent='Generate Link \u2192';
-  if(d.onboard_url){document.getElementById('mUrl').textContent=d.onboard_url;document.getElementById('mResult').classList.add('show');document.getElementById('mError').classList.remove('show');document.getElementById('mCopy').onclick=()=>{navigator.clipboard.writeText(d.onboard_url);toast('Copied');};await reload();}
-  else{document.getElementById('mErrorText').textContent=d.error||d.message||'Failed to create lead.';document.getElementById('mError').classList.add('show');document.getElementById('mResult').classList.remove('show');toast('Error: '+(d.error||d.message||'Failed'));}
+  const name=document.getElementById('mName').value.trim();
+  const btn=document.getElementById('mSubmit');
+  btn.disabled=true;
+  btn.textContent='Generating\u2026';
+  document.getElementById('mError').classList.remove('show');
+  document.getElementById('mResult').classList.remove('show');
+  try{
+    const r=await fetch('/api/leads/create',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},
+      body:JSON.stringify({client_email:email||null,client_name:name||null})
+    });
+    const d=await r.json();
+    btn.disabled=false;
+    btn.textContent='Generate Link \u2192';
+    if(r.ok&&d.onboard_url){
+      document.getElementById('mUrl').textContent=d.onboard_url;
+      document.getElementById('mResult').classList.add('show');
+      document.getElementById('mCopy').onclick=()=>{navigator.clipboard.writeText(d.onboard_url);toast('Copied');};
+      await reload();
+    }else{
+      document.getElementById('mErrorText').textContent=d.error||d.message||'Failed to create lead.';
+      document.getElementById('mError').classList.add('show');
+      toast('Error: '+(d.error||d.message||'Failed'));
+    }
+  }catch(e){
+    console.error('Create lead error:',e);
+    btn.disabled=false;
+    btn.textContent='Generate Link \u2192';
+    document.getElementById('mErrorText').textContent='Network error. Please try again.';
+    document.getElementById('mError').classList.add('show');
+    toast('Network error');
+  }
 };
 
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
