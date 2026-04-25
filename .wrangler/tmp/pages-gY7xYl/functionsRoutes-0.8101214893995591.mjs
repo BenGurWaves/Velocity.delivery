@@ -25,6 +25,7 @@ import { onRequestGet as __dashboard__token__js_onRequestGet } from "/Users/beng
 import { onRequestGet as __onboard__token__js_onRequestGet } from "/Users/bengur/velocity-delivery/functions/onboard/[token].js"
 import { onRequestGet as __preview__id__js_onRequestGet } from "/Users/bengur/velocity-delivery/functions/preview/[id].js"
 import { onRequestOptions as __preview__id__js_onRequestOptions } from "/Users/bengur/velocity-delivery/functions/preview/[id].js"
+import { onRequestGet as __scope__token__js_onRequestGet } from "/Users/bengur/velocity-delivery/functions/scope/[token].js"
 
 export const routes = [
     {
@@ -215,5 +216,12 @@ export const routes = [
       method: "OPTIONS",
       middlewares: [],
       modules: [__preview__id__js_onRequestOptions],
+    },
+  {
+      routePath: "/scope/:token",
+      mountPath: "/scope",
+      method: "GET",
+      middlewares: [],
+      modules: [__scope__token__js_onRequestGet],
     },
   ]

@@ -1312,6 +1312,27 @@ var init_id = __esm({
     __name2(onRequestOptions10, "onRequestOptions");
   }
 });
+async function onRequestGet8(context) {
+  const url = new URL(context.request.url);
+  url.pathname = "/scope/index.html";
+  const res = await fetch(url.toString());
+  return new Response(res.body, {
+    status: res.status,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
+}
+__name(onRequestGet8, "onRequestGet8");
+var init_token6 = __esm({
+  "scope/[token].js"() {
+    init_functionsRoutes_0_8101214893995591();
+    __name2(onRequestGet8, "onRequestGet");
+  }
+});
 var routes;
 var init_functionsRoutes_0_8101214893995591 = __esm({
   "../.wrangler/tmp/pages-gY7xYl/functionsRoutes-0.8101214893995591.mjs"() {
@@ -1342,6 +1363,7 @@ var init_functionsRoutes_0_8101214893995591 = __esm({
     init_token5();
     init_id();
     init_id();
+    init_token6();
     routes = [
       {
         routePath: "/api/admin/temp-token",
@@ -1531,6 +1553,13 @@ var init_functionsRoutes_0_8101214893995591 = __esm({
         method: "OPTIONS",
         middlewares: [],
         modules: [onRequestOptions10]
+      },
+      {
+        routePath: "/scope/:token",
+        mountPath: "/scope",
+        method: "GET",
+        middlewares: [],
+        modules: [onRequestGet8]
       }
     ];
   }
