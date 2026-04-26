@@ -1,0 +1,34 @@
+[build]
+  command = "echo 'Static site - no build needed'"
+  publish = "."
+
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/public/dashboard/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboard/*"
+  to = "/public/onboard/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/public/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/scope/*"
+  to = "/public/scope/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  directory = "functions"
+
+[build.environment]
+  NODE_VERSION = "18"
