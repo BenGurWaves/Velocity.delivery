@@ -130,47 +130,37 @@ body {
 }
 
 /* ========================================
-   Loader — Initial State
+   Loader — LB Monogram with Grid Centering
    ======================================== */
 .loader {
   position: fixed;
   inset: 0;
   background: #000000;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
+  place-items: center;
+  height: 100vh;
 }
 .loader__inner {
   position: relative;
   width: 120px;
   height: 120px;
-}
-.loader__mark {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(166, 124, 82, 0.3);
-  border-radius: 50%;
-}
-.loader__mark::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(166, 124, 82, 0.15);
-  border-radius: 50%;
-}
-.loader__glyph {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 2.5rem;
-  font-weight: 300;
-  color: #A67C52;
-  letter-spacing: 0.1em;
+}
+.loader__monogram {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.monogram__stroke {
+  stroke: #E7E6E6;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
 }
 .loader__line {
   position: absolute;
@@ -179,17 +169,19 @@ body {
   transform: translateX(-50%);
   width: 1px;
   height: 60px;
-  background: linear-gradient(to bottom, #A67C52, transparent);
+  background: linear-gradient(to bottom, #E7E6E6, transparent);
   transform-origin: top;
+  opacity: 0;
 }
 
 /* ========================================
-   Navigation — Edge-Anchored
+   Navigation — Edge-Anchored with Offset
    ======================================== */
 .nav {
   position: fixed;
   top: 6vw;
   right: 6vw;
+  transform: translateY(-30px);
   z-index: 100;
 }
 .nav__trigger {
@@ -515,6 +507,9 @@ body {
   font-size: clamp(4rem, 10vw, 9rem);
   margin-bottom: 3rem;
 }
+.title--tracked {
+  letter-spacing: 0.2em;
+}
 .title--secondary {
   font-size: clamp(2.5rem, 5vw, 4.5rem);
 }
@@ -647,6 +642,32 @@ body {
 }
 
 /* ========================================
+   Hero Section — Background & Luminosity
+   ======================================== */
+.hero__background {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/The-upside-down-hero-img.jpeg');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.hero__luminosity {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(231, 230, 230, 0.08) 0%, transparent 50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.section--manifesto .section__grid {
+  position: relative;
+  z-index: 2;
+}
+
+/* ========================================
    Manifesto Section
    ======================================== */
 .manifesto__text {
@@ -774,7 +795,7 @@ body {
   height: 100%;
   border: 1px solid rgba(166, 124, 82, 0.3);
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(21, 33, 47, 0.8), transparent 70%);
+  background: radial-gradient(circle at 30% 30%, rgba(10, 10, 10, 0.8), transparent 70%);
 }
 .showcase__details {
   position: absolute;
@@ -1428,7 +1449,7 @@ body {
 }
 
 /* ========================================
-   Modal — Glassmorphism
+   Modal — 5 Second Auto-Close with Progress
    ======================================== */
 .modal {
   position: fixed;
@@ -1450,8 +1471,25 @@ body {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(40px);
+  background: #000000;
+  backdrop-filter: blur(20px);
+}
+
+.modal__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(231, 230, 230, 0.1);
+  z-index: 10001;
+}
+
+.modal__progress-bar {
+  height: 100%;
+  width: 100%;
+  background: #E7E6E6;
+  transform-origin: left;
 }
 
 .modal__overlay {
@@ -1543,20 +1581,53 @@ body {
   inset: 0;
 }
 .texture--guilloche {
-  background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(21, 33, 47, 0.1) 2px, rgba(21, 33, 47, 0.1) 4px), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(21, 33, 47, 0.05) 2px, rgba(21, 33, 47, 0.05) 4px);
+  background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(231, 230, 230, 0.05) 2px, rgba(231, 230, 230, 0.05) 4px), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(231, 230, 230, 0.03) 2px, rgba(231, 230, 230, 0.03) 4px);
   opacity: 0.6;
 }
 .texture--deep {
-  background: radial-gradient(ellipse at center, rgba(21, 33, 47, 0.4), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(10, 10, 10, 0.4), transparent 70%);
 }
 
 /* ========================================
-   Responsive
+   Responsive — Desktop 2K, iPad, Mobile
    ======================================== */
+
+/* iPad and Tablet */
+@media (max-width: 1024px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  .section__grid {
+    gap: 2vw;
+    padding: 4vw;
+  }
+  
+  .title--primary {
+    font-size: clamp(3rem, 8vw, 6rem);
+  }
+  
+  .title--tracked {
+    letter-spacing: 0.2em;
+  }
+  
+  .hero__background {
+    background-position: center center;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
   .section__grid {
     grid-template-columns: 1fr;
-    padding: 4rem 2rem;
+    padding: 4rem 1.5rem;
+    gap: 2rem;
   }
   
   .section__body {
@@ -1569,6 +1640,29 @@ body {
   .section__body--mastery,
   .section__body--technical {
     padding: 0;
+  }
+  
+  .section__corner--tl {
+    left: 1.5rem;
+    top: 4rem;
+  }
+  
+  .section__corner--tr {
+    right: 1.5rem;
+    top: 4rem;
+  }
+  
+  .nav {
+    top: calc(4vw - 15px);
+    right: 4vw;
+  }
+  
+  .title--primary {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+  
+  .title--tracked {
+    letter-spacing: 0.2em;
   }
   
   .masonry__grid {
@@ -1609,5 +1703,33 @@ body {
   
   body {
     cursor: auto;
+  }
+  
+  .hero__background {
+    background-position: center center;
+  }
+  
+  .progress {
+    left: 4vw;
+  }
+  
+  .edge-text {
+    display: none;
+  }
+}
+
+/* Desktop 2K+ */
+@media (min-width: 2560px) {
+  html {
+    font-size: clamp(16px, 0.8vw, 22px);
+  }
+  
+  .section__grid {
+    padding: 4vw 6vw;
+  }
+  
+  .loader__monogram {
+    width: 140px;
+    height: 140px;
   }
 }

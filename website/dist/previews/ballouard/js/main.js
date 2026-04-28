@@ -123,12 +123,15 @@ if (!window.matchMedia('(pointer: coarse)').matches) {
 }
 
 // ========================================
-// Modal Functionality
+// Modal Functionality — 5 Second Auto-Close
 // ========================================
 
 const modal = document.getElementById('prototype-modal');
 const modalCloseBtns = document.querySelectorAll('[data-modal-close], .modal__close');
 const modalTriggers = document.querySelectorAll('[data-modal="prototype"]');
+const progressBar = document.querySelector('.modal__progress-bar');
+let modalTimer = null;
+let progressAnimation = null;
 
 function openModal() {
     modal.classList.add('is-active');
@@ -138,12 +141,44 @@ function openModal() {
 function closeModal() {
     modal.classList.remove('is-active');
     lenis.start();
+    // Clear any existing timer
+    if (modalTimer) {
+        clearTimeout(modalTimer);
+        modalTimer = null;
+    }
+    // Kill progress animation
+    if (progressAnimation) {
+        progressAnimation.kill();
+        progressAnimation = null;
+    }
+    // Reset progress bar
+    if (progressBar) {
+        gsap.set(progressBar, { scaleX: 1 });
+    }
+}
+
+function startModalTimer() {
+    // Reset and animate progress bar
+    if (progressBar) {
+        gsap.set(progressBar, { scaleX: 1 });
+        progressAnimation = gsap.to(progressBar, {
+            scaleX: 0,
+            duration: 5,
+            ease: 'linear'
+        });
+    }
+    
+    // Auto-close after 5 seconds
+    modalTimer = setTimeout(() => {
+        closeModal();
+    }, 5000);
 }
 
 modalTriggers.forEach(trigger => {
     trigger.addEventListener('click', (e) => {
         e.preventDefault();
         openModal();
+        startModalTimer();
     });
 });
 
@@ -164,62 +199,73 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ========================================
-// Loading Sequence
+// Loading Sequence — LB Monogram DrawSVG
 // ========================================
 
 const loadingTimeline = gsap.timeline({
     onComplete: () => {
         document.getElementById('loader').style.pointerEvents = 'none';
         initScrollAnimations();
+        // Show preview modal after loader
+        setTimeout(() => {
+            openModal();
+            startModalTimer();
+        }, 500);
     }
 });
 
-// Loader entrance — slow, deliberate
+// LB Monogram DrawSVG Animation — L coils first, then B follows with 0.1s stagger
 loadingTimeline
-    .from('.loader__mark', {
-        scale: 0,
-        rotation: -180,
-        duration: DURATION_SLOW,
-        ease: EASE_LUXURY
+    // Set initial state for strokes
+    .set('.monogram__stroke', { 
+        opacity: 1,
+        strokeDasharray: 400,
+        strokeDashoffset: 400 
     })
-    .from('.loader__glyph', {
-        opacity: 0,
-        y: 20,
-        duration: DURATION_MEDIUM,
-        ease: EASE_HEAVY
-    }, '-=1.2')
-    .from('.loader__line', {
-        scaleY: 0,
+    // L letter coiling effect
+    .to('.monogram__l', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power2.inOut'
+    })
+    // B follows with 0.1s stagger from L's start
+    .to('.monogram__b', {
+        strokeDashoffset: 0,
+        duration: 1.5,
+        ease: 'power2.inOut'
+    }, '>-1.7') // Starts 0.1s after L starts (1.8 - 0.1 = 1.7)
+    // Brief pause to establish presence
+    .to({}, { duration: 0.8 })
+    // Loading line appears
+    .to('.loader__line', {
+        opacity: 1,
+        scaleY: 1,
         transformOrigin: 'top',
         duration: DURATION_MEDIUM,
         ease: EASE_LUXURY
-    }, '-=0.8')
-    // Brief pause to establish presence
-    .to({}, { duration: 0.6 })
-    // Exit sequence
+    }, '-=0.4')
+    // Pause before exit
+    .to({}, { duration: 0.4 })
+    // Exit sequence — line retracts
     .to('.loader__line', {
         scaleY: 0,
         transformOrigin: 'bottom',
         duration: DURATION_MICRO,
         ease: EASE_LUXURY
     })
-    .to('.loader__glyph', {
+    // Monogram fades out
+    .to('.loader__monogram', {
         opacity: 0,
-        y: -10,
-        duration: DURATION_MICRO,
-        ease: EASE_HEAVY
-    }, '-=0.4')
-    .to('.loader__mark', {
-        scale: 1.5,
-        opacity: 0,
+        scale: 1.1,
         duration: DURATION_MEDIUM,
         ease: EASE_LUXURY
-    }, '-=0.6')
+    }, '-=0.4')
+    // Loader container fades
     .to('.loader', {
         opacity: 0,
         duration: DURATION_MEDIUM,
         ease: EASE_LUXURY
-    }, '-=0.4');
+    }, '-=0.3');
 
 // ========================================
 // Navigation Interactions

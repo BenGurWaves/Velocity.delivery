@@ -16,11 +16,15 @@
         <div class="cursor__dot"></div>
     </div>
 
-    <!-- Loading State -->
+    <!-- Loading State - LB Monogram with DrawSVG Animation -->
     <div id="loader" class="loader">
         <div class="loader__inner">
-            <div class="loader__mark"></div>
-            <div class="loader__glyph">B</div>
+            <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <!-- Coiling L -->
+                <path class="monogram__stroke monogram__l" d="M 55 30 C 45 20 25 35 35 60 C 40 75 55 85 75 85" fill="none" stroke="#E7E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Elegant B -->
+                <path class="monogram__stroke monogram__b" d="M 65 30 L 65 85 M 65 30 C 85 30 90 45 65 55 C 95 55 95 85 65 85" fill="none" stroke="#E7E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
         <div class="loader__line"></div>
     </div>
@@ -82,6 +86,8 @@
             
             <!-- Section I: Hero / Atelier -->
             <section id="atelier" class="section section--manifesto" data-section="0">
+                <div class="hero__background"></div>
+                <div class="hero__luminosity"></div>
                 <div class="section__grid">
                     <div class="section__corner section__corner--tl">
                         <span class="section__index">01</span>
@@ -89,9 +95,8 @@
                     </div>
                     
                     <div class="section__body section__body--asymmetric">
-                        <h1 class="title title--primary">
-                            <span class="title__line" data-animate="word">Time</span>
-                            <span class="title__line title__line--indent" data-animate="word">Redefined</span>
+                        <h1 class="title title--primary title--tracked">
+                            <span class="title__line" data-animate="word">Time Rec.</span>
                         </h1>
                         
                         <div class="manifesto__text">
@@ -99,27 +104,6 @@
                                 In the silence between seconds, we find our purpose. Each Ballouard timepiece is not merely measured in hours, but in the weight of moments that matter.
                             </p>
                         </div>
-
-                        <button class="btn btn--primary" data-modal="prototype">
-                            <span class="btn__text">Discover Atelier</span>
-                            <span class="btn__glyph">→</span>
-                        </button>
-                    </div>
-                    
-                    <div class="section__corner section__corner--br">
-                        <div class="glyph glyph--rotation">
-                            <svg viewBox="0 0 100 100" class="glyph__svg">
-                                <path id="circlePath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
-                                <text class="glyph__text">
-                                    <textPath href="#circlePath">BALLOUARD · GENEVA · ATELIER ·</textPath>
-                                </text>
-                            </svg>
-                            <div class="glyph__center">B</div>
-                        </div>
-                    </div>
-                    
-                    <div class="section__bleed section__bleed--left">
-                        <div class="texture texture--guilloche"></div>
                     </div>
                 </div>
             </section>
@@ -551,19 +535,22 @@
         <span class="edge-text__content">GENÈVE</span>
     </div>
 
-    <!-- Prototype Modal -->
+    <!-- Prototype Modal - 5 Second Auto-Close -->
     <div class="modal" id="prototype-modal">
         <div class="modal__backdrop"></div>
         <div class="modal__overlay">
             <div class="modal__content">
                 <h1 class="modal__title">THE PREVIEW ENVIRONMENT</h1>
                 <p class="modal__text">
-                    This is a bespoke digital prototype curated by VELOCITY for the Ballouard Atelier. Access is currently limited to authorized stakeholders.
+                    THE PREVIEW ENVIRONMENT. This is a bespoke digital prototype curated by VELOCITY for the Ballouard Atelier. Access is currently limited to authorized stakeholders.
                 </p>
                 <button class="modal__close" data-modal-close>
                     <span class="modal__close-text">Close</span>
                 </button>
             </div>
+        </div>
+        <div class="modal__progress">
+            <div class="modal__progress-bar"></div>
         </div>
     </div>
 
