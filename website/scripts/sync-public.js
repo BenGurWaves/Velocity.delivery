@@ -63,6 +63,19 @@ if (fs.existsSync(functionsSrc)) {
   console.warn('[sync-public] WARNING: functions/ directory not found at:', functionsSrc);
 }
 
+// Copy ballouard assets directory to both public/ and dist/
+const ballouardAssetsSrc = path.join(root, 'previews', 'ballouard', 'assets');
+if (fs.existsSync(ballouardAssetsSrc)) {
+  console.log('[sync-public] Copying ballouard/assets/ to public/ and dist/...');
+  for (const destDir of ['public', 'dist']) {
+    const ballouardAssetsDest = path.join(root, destDir, 'previews', 'ballouard', 'assets');
+    copyDirSync(ballouardAssetsSrc, ballouardAssetsDest);
+  }
+  console.log('[sync-public] ✓ Ballouard assets directory synced');
+} else {
+  console.warn('[sync-public] WARNING: ballouard/assets/ directory not found at:', ballouardAssetsSrc);
+}
+
 console.log('[sync-public] Synced', count, 'files to public/ and dist/');
 
 // Helper: recursively copy directory

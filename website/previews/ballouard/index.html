@@ -27,7 +27,7 @@
 
     <!-- Edge-Anchored Navigation -->
     <nav class="nav" aria-label="Primary">
-        <div class="nav__trigger">
+        <div class="nav__trigger" data-modal="prototype">
             <span class="nav__glyph">Menu</span>
             <div class="nav__indicator">
                 <div class="nav__indicator-dot"></div>
@@ -124,6 +124,9 @@
                 </div>
             </section>
 
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
+
             <!-- Section II: Philosophy -->
             <section id="philosophy" class="section section--philosophy" data-section="1">
                 <div class="section__grid section__grid--mirrored">
@@ -161,6 +164,9 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
 
             <!-- Section III: Collection -->
             <section id="collection" class="section section--collection" data-section="2">
@@ -204,6 +210,9 @@
                 </div>
             </section>
 
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
+
             <!-- Section IV: The Scaling of Mastery -->
             <section id="mastery" class="section section--mastery" data-section="3">
                 <div class="section__grid section__grid--mirrored">
@@ -214,7 +223,36 @@
                     
                     <div class="mastery__numbers" data-cursor-parallax="0.04">
                         <div class="number__architectural">
-                            <span class="number__value">35</span>
+                            <div class="scroll-reel" data-target="35">
+                                <div class="scroll-reel__track">
+                                    <div class="scroll-reel__strip">
+                                        <span class="scroll-reel__digit">0</span>
+                                        <span class="scroll-reel__digit">1</span>
+                                        <span class="scroll-reel__digit">2</span>
+                                        <span class="scroll-reel__digit">3</span>
+                                        <span class="scroll-reel__digit">4</span>
+                                        <span class="scroll-reel__digit">5</span>
+                                        <span class="scroll-reel__digit">6</span>
+                                        <span class="scroll-reel__digit">7</span>
+                                        <span class="scroll-reel__digit">8</span>
+                                        <span class="scroll-reel__digit">9</span>
+                                    </div>
+                                </div>
+                                <div class="scroll-reel__track">
+                                    <div class="scroll-reel__strip">
+                                        <span class="scroll-reel__digit">0</span>
+                                        <span class="scroll-reel__digit">1</span>
+                                        <span class="scroll-reel__digit">2</span>
+                                        <span class="scroll-reel__digit">3</span>
+                                        <span class="scroll-reel__digit">4</span>
+                                        <span class="scroll-reel__digit">5</span>
+                                        <span class="scroll-reel__digit">6</span>
+                                        <span class="scroll-reel__digit">7</span>
+                                        <span class="scroll-reel__digit">8</span>
+                                        <span class="scroll-reel__digit">9</span>
+                                    </div>
+                                </div>
+                            </div>
                             <span class="number__label">Pieces Per Year</span>
                         </div>
                         <div class="number__architectural number__architectural--small">
@@ -233,10 +271,10 @@
                             <span class="hairline hairline--short"></span>
                         </div>
                         <p class="text text--body" data-animate="fade">
-                            Through the addition of two master watchmakers to our atelier, we have increased our annual production to 35 pieces. This is not a move toward mass production—it is an achievement of capacity.
+                            Through the addition of two master watchmakers to our atelier, we have increased our annual production to 35 pieces. This is not a move toward mass production—it is an expansion of mastery.
                         </p>
                         <p class="text text--body" data-animate="fade">
-                            Each of the 35 timepieces emerging from our workshop each year receives the same meticulous attention, the same hand-finishing, the same dedication to excellence that has defined Ballouard since inception.
+                            The increase in horological bandwidth ensures that each of the 35 timepieces emerging from our workshop each year receives the same uncompromising craftsmanship, the same hand-finishing, the same dedication to excellence that has defined Ballouard since inception.
                         </p>
                         <div class="mastery__timeline">
                             <div class="timeline__point">
@@ -255,6 +293,9 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
 
             <!-- Section V: The Living Archive -->
             <section id="archive" class="section section--archive" data-section="4">
@@ -282,7 +323,11 @@
                         <div class="masonry__grid">
                             <div class="masonry__item masonry__item--wide" data-modal="prototype">
                                 <div class="masonry__frame">
-                                    <div class="masonry__placeholder masonry__placeholder--watch"></div>
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-001.jpg" alt="Piece No. 024" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
                                     <div class="masonry__overlay">
                                         <span class="masonry__number">Piece No. 024</span>
                                         <span class="masonry__caption">Bespoke Commission</span>
@@ -291,7 +336,11 @@
                             </div>
                             <div class="masonry__item" data-modal="prototype">
                                 <div class="masonry__frame">
-                                    <div class="masonry__placeholder masonry__placeholder--dial"></div>
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-002.jpg" alt="Piece No. 027" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
                                     <div class="masonry__overlay">
                                         <span class="masonry__number">Piece No. 027</span>
                                         <span class="masonry__caption">Dial Work</span>
@@ -300,7 +349,11 @@
                             </div>
                             <div class="masonry__item masonry__item--tall" data-modal="prototype">
                                 <div class="masonry__frame">
-                                    <div class="masonry__placeholder masonry__placeholder--movement"></div>
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-003.jpg" alt="Piece No. 031" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
                                     <div class="masonry__overlay">
                                         <span class="masonry__number">Piece No. 031</span>
                                         <span class="masonry__caption">Movement Assembly</span>
@@ -309,7 +362,11 @@
                             </div>
                             <div class="masonry__item" data-modal="prototype">
                                 <div class="masonry__frame">
-                                    <div class="masonry__placeholder masonry__placeholder--case"></div>
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-004.jpg" alt="Piece No. 033" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
                                     <div class="masonry__overlay">
                                         <span class="masonry__number">Piece No. 033</span>
                                         <span class="masonry__caption">In Progress</span>
@@ -318,10 +375,27 @@
                             </div>
                             <div class="masonry__item masonry__item--tall" data-modal="prototype">
                                 <div class="masonry__frame">
-                                    <div class="masonry__placeholder masonry__placeholder--gear"></div>
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-005.jpg" alt="Piece No. 029" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
                                     <div class="masonry__overlay">
                                         <span class="masonry__number">Piece No. 029</span>
                                         <span class="masonry__caption">Component</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="masonry__item" data-modal="prototype">
+                                <div class="masonry__frame">
+                                    <div class="image-wrapper">
+                                        <div class="image-wrapper__placeholder"></div>
+                                        <img class="image-wrapper__img" src="assets/ballouard-006.jpg" alt="Piece No. 035" loading="lazy">
+                                        <div class="film-grain"></div>
+                                    </div>
+                                    <div class="masonry__overlay">
+                                        <span class="masonry__number">Piece No. 035</span>
+                                        <span class="masonry__caption">Final Assembly</span>
                                     </div>
                                 </div>
                             </div>
@@ -334,6 +408,9 @@
                     </button>
                 </div>
             </section>
+
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
 
             <!-- Section VI: Technical Detail -->
             <section id="technical" class="section section--technical" data-section="5">
@@ -407,6 +484,9 @@
                 </div>
             </section>
 
+            <!-- Hairline Divider -->
+            <div class="section-divider"></div>
+
             <!-- Section VII: Contact -->
             <section id="contact" class="section section--contact" data-section="6">
                 <div class="section__grid section__grid--centered">
@@ -447,16 +527,15 @@
 
             <!-- Footer -->
             <footer class="footer">
-                <div class="footer__grid">
-                    <div class="footer__massive">
-                        <span class="footer__word" data-cursor-parallax="0.02">VELOCITY</span>
+                <div class="footer__watermark">VELOCITY</div>
+                <div class="footer__content">
+                    <div class="footer__links">
+                        <a href="#atelier" class="footer__link">Atelier</a>
+                        <a href="#collection" class="footer__link">The Collection</a>
+                        <a href="#archive" class="footer__link">Archive</a>
                     </div>
-                    <div class="footer__details">
-                        <span class="footer__copyright">© 2024 Ballouard Atelier</span>
-                        <span class="footer__divider">·</span>
-                        <span class="footer__location">Geneva, Switzerland</span>
-                        <span class="footer__divider">·</span>
-                        <span class="footer__production">A Velocity Prototype</span>
+                    <div class="footer__copyright">
+                        <span>© 2026 VELOCITY. ALL RIGHTS RESERVED.</span>
                     </div>
                 </div>
             </footer>
@@ -475,27 +554,15 @@
     <!-- Prototype Modal -->
     <div class="modal" id="prototype-modal">
         <div class="modal__backdrop"></div>
-        <div class="modal__container">
+        <div class="modal__overlay">
             <div class="modal__content">
-                <button class="modal__close">
-                    <span class="modal__close-line"></span>
-                    <span class="modal__close-line"></span>
-                </button>
-                <div class="modal__header">
-                    <span class="modal__glyph">B</span>
-                </div>
-                <h3 class="modal__title">Atelier Access Restricted</h3>
+                <h1 class="modal__title">THE PREVIEW ENVIRONMENT</h1>
                 <p class="modal__text">
-                    This is a bespoke prototype by Velocity for Ballouard. Full functionality will be available upon project approval.
+                    This is a bespoke digital prototype curated by VELOCITY for the Ballouard Atelier. Access is currently limited to authorized stakeholders.
                 </p>
-                <div class="modal__dividers">
-                    <span class="hairline hairline--center"></span>
-                </div>
-                <div class="modal__actions">
-                    <button class="btn btn--modal" data-modal-close>
-                        <span class="btn__text">Understood</span>
-                    </button>
-                </div>
+                <button class="modal__close" data-modal-close>
+                    <span class="modal__close-text">Close</span>
+                </button>
             </div>
         </div>
     </div>

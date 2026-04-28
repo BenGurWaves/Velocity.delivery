@@ -43,7 +43,7 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 // ========================================
-// Custom Cursor
+// Custom Cursor — Lerp-based weighted movement
 // ========================================
 
 const cursor = document.querySelector('.cursor');
@@ -54,6 +54,7 @@ let cursorX = 0;
 let cursorY = 0;
 let ringX = 0;
 let ringY = 0;
+const LERP_FACTOR = 0.1;
 
 if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
     document.addEventListener('mousemove', (e) => {
@@ -62,8 +63,9 @@ if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
     });
     
     function updateCursor() {
-        ringX += (cursorX - ringX) * 0.15;
-        ringY += (cursorY - ringY) * 0.15;
+        // Lerp interpolation for weighted, graceful lag
+        ringX += (cursorX - ringX) * LERP_FACTOR;
+        ringY += (cursorY - ringY) * LERP_FACTOR;
         
         cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
         cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
@@ -73,8 +75,8 @@ if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
     
     updateCursor();
     
-    // Hover states for interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, .masonry__item, .nav__link');
+    // Hover states for interactive elements — silver ring expansion
+    const interactiveElements = document.querySelectorAll('a, button, .masonry__item, .nav__link, .scroll-reel');
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
@@ -226,33 +228,41 @@ loadingTimeline
 const navTrigger = document.querySelector('.nav__trigger');
 const nav = document.querySelector('.nav');
 
-navTrigger.addEventListener('click', () => {
-    nav.classList.toggle('is-open');
-    
-    const dot = nav.querySelector('.nav__indicator-dot');
-    
-    if (nav.classList.contains('is-open')) {
-        gsap.to(dot, {
-            scale: 1.5,
-            duration: DURATION_MICRO,
-            ease: EASE_LUXURY
-        });
+// Menu trigger now opens modal instead of nav panel
+if (navTrigger && navTrigger.dataset.modal === 'prototype') {
+    navTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+    });
+} else {
+    navTrigger.addEventListener('click', () => {
+        nav.classList.toggle('is-open');
         
-        gsap.from('.nav__link', {
-            x: 20,
-            opacity: 0,
-            duration: DURATION_MICRO,
-            stagger: STAGGER_DELAY,
-            ease: EASE_HEAVY
-        });
-    } else {
-        gsap.to(dot, {
-            scale: 1,
-            duration: DURATION_MICRO,
-            ease: EASE_LUXURY
-        });
-    }
-});
+        const dot = nav.querySelector('.nav__indicator-dot');
+        
+        if (nav.classList.contains('is-open')) {
+            gsap.to(dot, {
+                scale: 1.5,
+                duration: DURATION_MICRO,
+                ease: EASE_LUXURY
+            });
+            
+            gsap.from('.nav__link', {
+                x: 20,
+                opacity: 0,
+                duration: DURATION_MICRO,
+                stagger: STAGGER_DELAY,
+                ease: EASE_HEAVY
+            });
+        } else {
+            gsap.to(dot, {
+                scale: 1,
+                duration: DURATION_MICRO,
+                ease: EASE_LUXURY
+            });
+        }
+    });
+}
 
 // Smooth scroll for nav links
 document.querySelectorAll('.nav__link').forEach(link => {
@@ -514,7 +524,7 @@ function initScrollAnimations() {
     
     const masterySection = document.querySelector('.section--mastery');
     
-    // Architectural numbers reveal
+    // Architectural numbers reveal with scroll-reel animation
     gsap.from('.number__architectural', {
         scrollTrigger: {
             trigger: masterySection,
@@ -526,6 +536,28 @@ function initScrollAnimations() {
         duration: DURATION_MEDIUM,
         stagger: STAGGER_DELAY * 2,
         ease: EASE_LUXURY
+    });
+
+    // Scroll-reel counter animation
+    const scrollReels = document.querySelectorAll('.scroll-reel');
+    scrollReels.forEach(reel => {
+        const target = parseInt(reel.dataset.target);
+        const strips = reel.querySelectorAll('.scroll-reel__strip');
+        const targetDigits = target.toString().split('').map(Number);
+        
+        strips.forEach((strip, index) => {
+            const targetDigit = targetDigits[index] || 0;
+            gsap.to(strip, {
+                scrollTrigger: {
+                    trigger: masterySection,
+                    start: 'top 50%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: -targetDigit * 100,
+                duration: 2,
+                ease: 'power4.inOut'
+            });
+        });
     });
     
     // Title reveal
@@ -766,25 +798,38 @@ function initScrollAnimations() {
     // Footer Animation
     // ========================================
     
-    gsap.from('.footer__massive', {
+    gsap.from('.footer__watermark', {
         scrollTrigger: {
             trigger: '.footer',
             start: 'top 80%',
             toggleActions: 'play none none reverse'
         },
-        y: 60,
+        scale: 0.9,
         opacity: 0,
         duration: DURATION_SLOW,
         ease: EASE_LUXURY
     });
     
-    gsap.from('.footer__details', {
+    gsap.from('.footer__links', {
         scrollTrigger: {
             trigger: '.footer',
             start: 'top 60%',
             toggleActions: 'play none none reverse'
         },
         y: 30,
+        opacity: 0,
+        duration: DURATION_MEDIUM,
+        stagger: STAGGER_DELAY,
+        ease: EASE_LUXURY
+    });
+    
+    gsap.from('.footer__copyright', {
+        scrollTrigger: {
+            trigger: '.footer',
+            start: 'top 50%',
+            toggleActions: 'play none none reverse'
+        },
+        y: 20,
         opacity: 0,
         duration: DURATION_MEDIUM,
         ease: EASE_LUXURY
@@ -859,6 +904,34 @@ if (contactLink) {
         });
     });
 }
+
+// ========================================
+// Image Loading State
+// ========================================
+
+function initImageLoading() {
+    const imageWrappers = document.querySelectorAll('.image-wrapper');
+    
+    imageWrappers.forEach(wrapper => {
+        const img = wrapper.querySelector('.image-wrapper__img');
+        const placeholder = wrapper.querySelector('.image-wrapper__placeholder');
+        
+        if (img && placeholder) {
+            if (img.complete) {
+                img.classList.add('is-loaded');
+                placeholder.classList.add('is-hidden');
+            } else {
+                img.addEventListener('load', () => {
+                    img.classList.add('is-loaded');
+                    placeholder.classList.add('is-hidden');
+                });
+            }
+        }
+    });
+}
+
+// Initialize image loading after page load
+window.addEventListener('load', initImageLoading);
 
 // ========================================
 // Refresh ScrollTrigger on Resize

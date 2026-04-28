@@ -53,7 +53,7 @@ body {
   border: 1px solid rgba(231, 230, 230, 0.5);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.3s cubic-bezier(0.8, 0, 0.2, 1), height 0.3s cubic-bezier(0.8, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.8, 0, 0.2, 1);
+  transition: width 0.4s cubic-bezier(0.8, 0, 0.2, 1), height 0.4s cubic-bezier(0.8, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.8, 0, 0.2, 1);
 }
 
 .cursor__dot {
@@ -63,12 +63,17 @@ body {
   background: #A67C52;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  transition: opacity 0.3s cubic-bezier(0.8, 0, 0.2, 1);
 }
 
 .cursor.is-hovering .cursor__ring {
-  width: 60px;
-  height: 60px;
-  border-color: #A67C52;
+  width: 80px;
+  height: 80px;
+  border-color: #E7E6E6;
+}
+
+.cursor.is-hovering .cursor__dot {
+  opacity: 0;
 }
 
 /* ========================================
@@ -850,6 +855,39 @@ body {
   text-align: center;
 }
 
+.scroll-reel {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.scroll-reel__track {
+  width: 0.6em;
+  height: 1.2em;
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-reel__strip {
+  display: flex;
+  flex-direction: column;
+  transition: transform 1.5s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.scroll-reel__digit {
+  height: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 300;
+  color: #E7E6E6;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
 .number__value {
   display: block;
   font-family: "Cormorant Garamond", Georgia, serif;
@@ -1190,23 +1228,155 @@ body {
 }
 
 /* ========================================
-   Footer
+   Section Dividers — Hairline Light Leaks
    ======================================== */
-.footer {
-  padding: 8vw 6vw;
-  border-top: 0.5px solid rgba(231, 230, 230, 0.2);
+.section-divider {
+  width: 100%;
+  height: 0.5px;
+  background: rgba(231, 230, 230, 0.3);
+  margin: 0;
 }
 
-.footer__grid {
+/* ========================================
+   Image Loading State — Blurred Placeholder
+   ======================================== */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-wrapper__placeholder {
+  position: absolute;
+  inset: 0;
+  background: #15212F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.image-wrapper__placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(21, 33, 47, 0.8), rgba(21, 33, 47, 0.4));
+}
+
+.image-wrapper__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.image-wrapper__img.is-loaded {
+  opacity: 1;
+}
+
+.image-wrapper__placeholder.is-hidden {
+  opacity: 0;
+}
+
+/* ========================================
+   Film Grain Overlay — Instagram Treatment
+   ======================================== */
+.film-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
+/* ========================================
+   Footer — Monumental 100vh
+   ======================================== */
+.footer {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 0.5px solid rgba(231, 230, 230, 0.3);
+  overflow: hidden;
+}
+
+.footer__watermark {
+  position: absolute;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(15vw, 40vw, 50vw);
+  font-weight: 600;
+  color: #15212F;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+}
+
+.footer__content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 4rem;
+  text-align: center;
+}
+
+.footer__links {
+  display: flex;
   gap: 3rem;
 }
 
-.footer__massive {
+.footer__link {
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #E7E6E6;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.footer__link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
   width: 100%;
-  text-align: center;
+  height: 0.5px;
+  background: #E7E6E6;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.footer__link:hover {
+  color: #A67C52;
+}
+
+.footer__link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.footer__copyright {
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(231, 230, 230, 0.4);
 }
 
 .footer__word {
@@ -1280,87 +1450,81 @@ body {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(40px);
 }
 
-.modal__container {
-  position: relative;
-  max-width: 500px;
-  width: 90%;
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal__content {
-  position: relative;
-  background: rgba(21, 33, 47, 0.9);
-  border: 0.5px solid rgba(231, 230, 230, 0.3);
-  padding: 3rem;
   text-align: center;
-  backdrop-filter: blur(20px);
-}
-
-.modal__close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  width: 30px;
-  height: 30px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.modal__close-line {
-  width: 20px;
-  height: 0.5px;
-  background: rgba(231, 230, 230, 0.5);
-  transition: transform 0.3s cubic-bezier(0.8, 0, 0.2, 1);
-}
-
-.modal__close-line:first-child {
-  transform: rotate(45deg);
-}
-
-.modal__close-line:last-child {
-  transform: rotate(-45deg);
-}
-
-.modal__close:hover .modal__close-line {
-  background: #A67C52;
-}
-
-.modal__header {
-  margin-bottom: 2rem;
-}
-
-.modal__glyph {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 2rem;
-  color: #A67C52;
-  letter-spacing: 0.1em;
+  max-width: 600px;
+  padding: 2rem;
 }
 
 .modal__title {
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 600;
   color: #E7E6E6;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+  line-height: 1.2;
 }
 
 .modal__text {
   font-family: "Inter", -apple-system, sans-serif;
-  font-size: 0.85rem;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
   color: rgba(231, 230, 230, 0.7);
   line-height: 1.8;
-  max-width: 35ch;
-  margin: 0 auto;
+  max-width: 40ch;
+  margin: 0 auto 4rem;
+}
+
+.modal__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 1rem 2rem;
+  display: inline-block;
+}
+
+.modal__close-text {
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(231, 230, 230, 0.5);
+  position: relative;
+  transition: color 0.3s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.modal__close-text::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 0.5px;
+  background: #E7E6E6;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.modal__close:hover .modal__close-text {
+  color: #E7E6E6;
+}
+
+.modal__close:hover .modal__close-text::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .modal__dividers {
