@@ -21,7 +21,7 @@ const STAGGER_DELAY = 0.08;
 // ========================================
 
 const lenis = new Lenis({
-    lerp: 0.05, // High inertia
+    lerp: 0.05, // High inertia for luxury feel
     duration: 1.5,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     direction: 'vertical',
@@ -60,8 +60,8 @@ if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
         ringX += (cursorX - ringX) * LERP_FACTOR;
         ringY += (cursorY - ringY) * LERP_FACTOR;
         
-        cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-        cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+        if (cursorDot) cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+        if (cursorRing) cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
         
         requestAnimationFrame(updateCursor);
     }
@@ -133,31 +133,40 @@ if (modalClose) {
 const loader = document.getElementById('loader');
 const loadingTimeline = gsap.timeline({
     onComplete: () => {
-        if (loader) loader.style.display = 'none';
-        initScrollAnimations();
-        openModal();
+        if (loader) {
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    loader.style.display = 'none';
+                    initScrollAnimations();
+                    openModal();
+                }
+            });
+        } else {
+            initScrollAnimations();
+            openModal();
+        }
     }
 });
 
-loadingTimeline
-    .to('.monogram__stroke', {
-        strokeDashoffset: 0,
-        duration: 2,
-        stagger: 0.3,
-        ease: 'power2.inOut'
-    })
-    .to('.loader__text', {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power2.out'
-    }, '-=1')
-    .to('#loader', {
-        opacity: 0,
-        duration: 1.5,
-        delay: 0.5,
-        ease: 'power4.inOut'
-    });
+if (document.querySelector('.monogram__stroke')) {
+    loadingTimeline
+        .to('.monogram__stroke', {
+            strokeDashoffset: 0,
+            duration: 2,
+            stagger: 0.3,
+            ease: 'power2.inOut'
+        })
+        .to('.loader__text', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out'
+        }, '-=1');
+} else {
+    loadingTimeline.to({}, { duration: 0.1 });
+}
 
 // ========================================
 // Scroll Animations
@@ -166,28 +175,32 @@ loadingTimeline
 function initScrollAnimations() {
     
     // Section 1: Hero Parallax
-    gsap.to('.hero__background', {
-        scrollTrigger: {
-            trigger: '#atelier',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true
-        },
-        y: '20%',
-        scale: 1.1
-    });
+    if (document.querySelector('.hero__background')) {
+        gsap.to('.hero__background', {
+            scrollTrigger: {
+                trigger: '#atelier',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            y: '20%',
+            scale: 1.1
+        });
+    }
 
     // Section 2: Z-Axis Zoom
-    gsap.to('.zoom-artifact', {
-        scrollTrigger: {
-            trigger: '#philosophy',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
-        },
-        scale: 4,
-        ease: 'none'
-    });
+    if (document.querySelector('.zoom-artifact')) {
+        gsap.to('.zoom-artifact', {
+            scrollTrigger: {
+                trigger: '#philosophy',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            },
+            scale: 4,
+            ease: 'none'
+        });
+    }
 
     // Section 3: Horizontal Strip
     const horizontalSection = document.querySelector('.section--horizontal');
@@ -210,39 +223,45 @@ function initScrollAnimations() {
     }
 
     // Section 4: Floating Watch
-    gsap.to('.watch-floating', {
-        scrollTrigger: {
-            trigger: '#mastery',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
-        },
-        rotation: 360,
-        y: -100,
-        ease: 'none'
-    });
+    if (document.querySelector('.watch-floating')) {
+        gsap.to('.watch-floating', {
+            scrollTrigger: {
+                trigger: '#mastery',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            },
+            rotation: 360,
+            y: -100,
+            ease: 'none'
+        });
+    }
 
     // Section 5: Last Section Fade
-    gsap.from('.last-content', {
-        scrollTrigger: {
-            trigger: '#contact',
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: true
-        },
-        opacity: 0,
-        y: 100
-    });
+    if (document.querySelector('.last-content')) {
+        gsap.from('.last-content', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 80%',
+                end: 'top 20%',
+                scrub: true
+            },
+            opacity: 0,
+            y: 100
+        });
+    }
 
     // Footer Watermark Parallax
-    gsap.from('.footer__watermark', {
-        scrollTrigger: {
-            trigger: '.footer',
-            start: 'top bottom',
-            end: 'bottom bottom',
-            scrub: true
-        },
-        y: '20%',
-        opacity: 0
-    });
+    if (document.querySelector('.footer__watermark')) {
+        gsap.from('.footer__watermark', {
+            scrollTrigger: {
+                trigger: '.footer',
+                start: 'top bottom',
+                end: 'bottom bottom',
+                scrub: true
+            },
+            y: '20%',
+            opacity: 0
+        });
+    }
 }
