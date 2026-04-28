@@ -214,38 +214,26 @@ const loadingTimeline = gsap.timeline({
     }
 });
 
-// LB Monogram DrawSVG Animation — L coils first, then B with stagger
+// LB Monogram DrawSVG Animation — L coils first, then B follows with 0.1s stagger
 loadingTimeline
     // Set initial state for strokes
     .set('.monogram__stroke', { 
         opacity: 1,
-        strokeDasharray: 300,
-        strokeDashoffset: 300 
+        strokeDasharray: 400,
+        strokeDashoffset: 400 
     })
-    // L letter draws first (coiling effect)
+    // L letter coiling effect
     .to('.monogram__l', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power2.inOut'
+    })
+    // B follows with 0.1s stagger from L's start
+    .to('.monogram__b', {
         strokeDashoffset: 0,
         duration: 1.5,
         ease: 'power2.inOut'
-    })
-    // B vertical draws immediately after L starts
-    .to('.monogram__b-vertical', {
-        strokeDashoffset: 0,
-        duration: 1.2,
-        ease: 'power2.inOut'
-    }, '-=1.0')
-    // B top curve draws with 0.1s stagger
-    .to('.monogram__b-top', {
-        strokeDashoffset: 0,
-        duration: 1.0,
-        ease: 'power2.inOut'
-    }, '-=0.9')
-    // B bottom curve draws last
-    .to('.monogram__b-bottom', {
-        strokeDashoffset: 0,
-        duration: 1.0,
-        ease: 'power2.inOut'
-    }, '-=0.8')
+    }, '>-1.7') // Starts 0.1s after L starts (1.8 - 0.1 = 1.7)
     // Brief pause to establish presence
     .to({}, { duration: 0.8 })
     // Loading line appears

@@ -179,8 +179,9 @@ body {
    ======================================== */
 .nav {
   position: fixed;
-  top: calc(6vw - 30px);
+  top: 6vw;
   right: 6vw;
+  transform: translateY(-30px);
   z-index: 100;
 }
 .nav__trigger {
@@ -646,7 +647,7 @@ body {
 .hero__background {
   position: absolute;
   inset: 0;
-  background-image: url('../assets/hero-bg.jpeg');
+  background-image: url('../assets/The-upside-down-hero-img.jpeg');
   background-size: cover;
   background-position: center;
   z-index: 0;
@@ -794,7 +795,7 @@ body {
   height: 100%;
   border: 1px solid rgba(166, 124, 82, 0.3);
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(21, 33, 47, 0.8), transparent 70%);
+  background: radial-gradient(circle at 30% 30%, rgba(10, 10, 10, 0.8), transparent 70%);
 }
 .showcase__details {
   position: absolute;
@@ -1580,11 +1581,11 @@ body {
   inset: 0;
 }
 .texture--guilloche {
-  background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(21, 33, 47, 0.1) 2px, rgba(21, 33, 47, 0.1) 4px), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(21, 33, 47, 0.05) 2px, rgba(21, 33, 47, 0.05) 4px);
+  background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(231, 230, 230, 0.05) 2px, rgba(231, 230, 230, 0.05) 4px), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(231, 230, 230, 0.03) 2px, rgba(231, 230, 230, 0.03) 4px);
   opacity: 0.6;
 }
 .texture--deep {
-  background: radial-gradient(ellipse at center, rgba(21, 33, 47, 0.4), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(10, 10, 10, 0.4), transparent 70%);
 }
 
 /* ========================================
@@ -1608,7 +1609,7 @@ body {
   }
   
   .title--tracked {
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
   }
   
   .hero__background {
@@ -1661,7 +1662,7 @@ body {
   }
   
   .title--tracked {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.2em;
   }
   
   .masonry__grid {
