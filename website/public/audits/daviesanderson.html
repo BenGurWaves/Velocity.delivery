@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnostic Report: Davies and Son — Velocity</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=31">
+  <style>
+    /* Light overrides for audit structure */
+    .audit-page body { overflow-x: hidden; }
+    .audit-hero { min-height: 40vh; display: flex; flex-direction: column; justify-content: center; padding: 15vh 5vw 5vh; }
+    .audit-conviction { min-height: auto; padding: 10vh 5vw; display: flex; align-items: flex-start; justify-content: center; }
+    .audit-insights { padding: 10vh 5vw 15vh; max-width: 1200px; margin: 0 auto; }
+    .audit-insight-group { margin-bottom: 5rem; }
+    .audit-insight-num { font-family: 'Instrument Serif', serif; font-size: clamp(2.5rem, 5vw, 4rem); color: rgba(222, 76, 76, 0.9); line-height: 1; display: block; margin-bottom: 0.5rem; }
+    .audit-insight-title { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; color: var(--paper); margin-bottom: 1.5rem; }
+    .audit-insight-desc { font-family: 'Inter', sans-serif; font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.6; color: var(--dim); font-weight: 300; max-width: 600px; }
+    
+    .audit-cta { padding: 10vh 5vw 20vh; text-align: center; }
+    .cta-btn { display: inline-block; padding: 1rem 2.5rem; border: 1px solid var(--brass); color: var(--obsidian); background: var(--brass); font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; text-decoration: none; border-radius: 40px; transition: all 0.4s ease; margin-top: 2rem; }
+    .cta-btn:hover { background: transparent; color: var(--brass); }
+
+    /* Fix maison static positioning */
+    .st-pos { opacity: 1 !important; transform: none !important; position: relative !important; left: 0 !important; top: 0 !important; font-size: inherit !important; }
+  </style>
+</head>
+<body class="audit-page">
+
+<div class="grain"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="preloader" id="preloader">
+  <span class="pl-brand">Velocity<em>.</em></span>
+  <div class="pl-line"><div class="pl-line-inner" id="plLine"></div></div>
+</div>
+
+<section class="audit-hero g-anim">
+  <span class="label" style="margin-bottom: 2rem;">Diagnostic Report • 2026</span>
+  <h1 class="atelier-heading" style="font-size: clamp(2.5rem, 6vw, 5rem);">Structural Analysis: <br><em style="color:var(--brass);">Davies and Son</em></h1>
+</section>
+
+<section class="audit-conviction g-anim">
+  <div class="conviction-grid" style="align-items: start;">
+    <div>
+      <p class="conviction-label">The Verdict</p>
+      <h2 class="conviction-heading" style="font-size: clamp(1.5rem, 3.5vw, 2.5rem); margin-top: 1.5rem;">A digital presentation that lacks the <em>bespoke refinement</em> of Savile Row.</h2>
+      <p class="atelier-para" style="margin-top: 2rem; font-size: 1rem; color: var(--dim); max-width: 400px;">While the heritage is undeniable, the current technical foundation is aging. High latency and slow rendering times are diluting the brand's premium positioning.</p>
+    </div>
+    <div class="conviction-right">
+      <div class="conviction-stat">
+        <span class="conviction-stat-num" data-count="28" style="color: rgba(222, 76, 76, 0.9);">0</span>
+        <span class="conviction-stat-label">Performance</span>
+      </div>
+      <div class="conviction-divider"></div>
+      <div class="conviction-stat">
+        <span class="conviction-stat-num" data-count="100">0</span>
+        <span class="conviction-stat-label">Accessibility</span>
+      </div>
+      <div class="conviction-divider"></div>
+      <div class="conviction-stat">
+        <span class="conviction-stat-num" data-count="100">0</span>
+        <span class="conviction-stat-label">SEO Profile</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="audit-insights g-anim">
+  <span class="label" style="display: block; margin-bottom: 4rem;">Critical Path Insights</span>
+  
+  <div class="audit-insight-group">
+    <span class="audit-insight-num">6.3s</span>
+    <h3 class="audit-insight-title">Largest Contentful Paint</h3>
+    <p class="audit-insight-desc">The primary visual entry point takes over 6 seconds to materialize. In the world of bespoke luxury, time is the ultimate commodity. Forced waiting breaks the illusion of effortless service.</p>
+  </div>
+
+  <div class="audit-insight-group">
+    <span class="audit-insight-num">8.7s</span>
+    <h3 class="audit-insight-title">Time to Interactive</h3>
+    <p class="audit-insight-desc">The engine behind the experience remains locked for nearly 9 seconds. The digital fabric must feel as responsive as a well-fitted cloth; current delays create a "stiff" user experience.</p>
+  </div>
+
+  <div class="audit-insight-group">
+    <span class="audit-insight-num">0.0</span>
+    <h3 class="audit-insight-title">Cumulative Layout Shift</h3>
+    <p class="audit-insight-desc">The visual hierarchy is stable once loaded, which is a testament to the layout's structural integrity. However, the wait to reach this stability is the primary friction point.</p>
+  </div>
+</section>
+
+<section class="audit-cta g-anim">
+  <h2 class="atelier-heading" style="margin-bottom: 1.5rem;">The <em>Alternative</em></h2>
+  <p class="atelier-para" style="margin: 0 auto; max-width: 600px;">We have tailored a digital masterpiece that mirrors the precision of a Davies & Son cut—fluid, heritage-rich, and technically flawless.</p>
+  <a href="/previews/daviesanderson.html" class="cta-btn">Explore Bespoke Prototype</a>
+</section>
+
+<footer class="footer-exp" id="footerExp">
+  <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
+    <a href="#" class="footer-email" id="footerEmail"></a>
+    <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-coords" id="footerCoords"></span>
+    <div class="footer-meta">
+      <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+/* Preloader */
+(function(){
+  const pl=document.getElementById('preloader'),brand=pl.querySelector('.pl-brand'),line=document.getElementById('plLine');
+  function go(){
+    setTimeout(()=>{brand.style.transition='opacity .5s,transform .5s';brand.style.opacity='1';brand.style.transform='translateY(0)'},80);
+    setTimeout(()=>{const l=pl.querySelector('.pl-line');l.style.transition='opacity .3s';l.style.opacity='1';line.style.transition='width .6s cubic-bezier(.16,1,.3,1)';line.style.width='100%'},250);
+    setTimeout(()=>{gsap.to(pl,{clipPath:'inset(0 0 100% 0)',duration:0.8,ease:'expo.inOut',onComplete:()=>{pl.style.display='none'; boot();}})},900);
+  }
+  if(document.readyState==='complete')go();else window.addEventListener('load',go);
+})();
+
+function boot(){
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis = new Lenis({duration: 2.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t))});
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // Minimal animations for content
+  gsap.from('.g-anim', { opacity: 0, y: 30, duration: 1.2, stagger: 0.15, ease: 'power3.out' });
+
+  // Number counting for scores
+  document.querySelectorAll('.conviction-stat-num').forEach(el=>{
+    const target=parseInt(el.dataset.count);
+    gsap.to(el,{innerText:target,snap:{innerText:1},duration:2,ease:'power2.out', delay: 0.5});
+  });
+
+  // Footer Email bypass
+  const ftEmail=document.getElementById('footerEmail');
+  if(ftEmail){
+    const t='atelier@calyvent.com';
+    ftEmail.href='mailto:'+t;
+    ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
+  }
+
+  // Custom Cursor
+  if(!window.matchMedia('(pointer:coarse)').matches) {
+    const g=document.getElementById('cursorGlow'), r=document.getElementById('cursorRing'), d=document.getElementById('cursorDot');
+    let mx=-200, my=-200, rx=-200, ry=-200, gx=-200, gy=-200, tx=-200, ty=-200, mag=false;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; if(!mag){tx=mx; ty=my;} });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter',()=>{r.classList.add('is-active'); mag=true;});
+      el.addEventListener('mouseleave',()=>{r.classList.remove('is-active'); mag=false; tx=mx; ty=my;});
+      el.addEventListener('mousemove',()=>{if(!mag)return;const b=el.getBoundingClientRect(); tx=mx+((b.left+b.width/2)-mx)*.2; ty=my+((b.top+b.height/2)-my)*.2;});
+    });
+    (function l(){ rx+=(tx-rx)*.07; ry+=(ty-ry)*.07; gx+=(mx-gx)*.05; gy+=(my-gy)*.05; r.style.transform=`translate(${rx-20}px,${ry-20}px)`; d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`; g.style.transform=`translate(${gx-250}px,${gy-250}px)`; requestAnimationFrame(l); })();
+  }
+
+  // Footer coordinates clock
+  const coordsEl=document.getElementById('footerCoords');
+  if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
+
+  // Footer Particles
+  (function(){
+    const cv=document.getElementById('footerParticles');if(!cv)return;
+    const ctx=cv.getContext('2d');let w,h,particles=[],formed=false;
+    function resize(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight;initP()}
+    function initP(){
+      particles=[];
+      const off=document.createElement('canvas');off.width=w;off.height=h;
+      const oc=off.getContext('2d');
+      const fs=Math.min(w*.13,160);
+      oc.font=`400 ${fs}px 'Instrument Serif',serif`;
+      oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
+      oc.fillText('Velocity.',w/2,h*.30);
+      const d=oc.getImageData(0,0,w,h).data;
+      const gap=Math.max(3,Math.round(w/380));
+      for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
+        const i=(y*w+x)*4;
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
+      }}
+    }
+    resize();window.addEventListener('resize',resize);
+
+    /* Track mouse globally */
+    let mouseX=-1e3,mouseY=-1e3;
+    document.addEventListener('mousemove',e=>{
+      const r=cv.getBoundingClientRect();
+      mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
+    });
+
+    ScrollTrigger.create({trigger:'.footer-exp',start:'top 80%',onEnter:()=>{formed=true},onLeaveBack:()=>{formed=false}});
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        if(formed){
+          const dx=mouseX-p.x,dy=mouseY-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){const f=(120-dist)/120;p.vx-=(dx/dist)*f*5;p.vy-=(dy/dist)*f*5}
+          p.vx+=(p.tx-p.x)*.04;p.vy+=(p.ty-p.y)*.04;
+        }else{
+          p.vx+=(p.tx-p.x)*.003;p.vy+=(p.ty-p.y)*.003;
+          p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
+        }
+        p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
+        ctx.fillRect(p.x,p.y,p.sz,p.sz);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+}
+</script>
+</body>
+</html>

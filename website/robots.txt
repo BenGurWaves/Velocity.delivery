@@ -1,0 +1,55 @@
+# Velocity — robots.txt
+
+# ── Standard crawlers: full homepage access, no private routes ────────────────
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin
+Disallow: /onboard/
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /_onboard.html
+Disallow: /_dashboard.html
+
+# ── AI crawlers: homepage ONLY ────────────────────────────────────────────────
+User-agent: GPTBot
+Allow: /$
+Disallow: /
+
+User-agent: ChatGPT-User
+Allow: /$
+Disallow: /
+
+User-agent: PerplexityBot
+Allow: /$
+Disallow: /
+
+User-agent: ClaudeBot
+Allow: /$
+Disallow: /
+
+User-agent: anthropic-ai
+Allow: /$
+Disallow: /
+
+User-agent: cohere-ai
+Allow: /$
+Disallow: /
+
+User-agent: Google-Extended
+Allow: /$
+Disallow: /
+
+User-agent: Gemini
+Allow: /$
+Disallow: /
+
+User-agent: Applebot-Extended
+Allow: /$
+Disallow: /
+
+User-agent: Amazonbot
+Allow: /$
+Disallow: /
+
+Sitemap: https://velocity.calyvent.com/sitemap.xml

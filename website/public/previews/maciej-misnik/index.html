@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Maciej Miśnik — Horological Art</title>
+    <meta name="description" content="A digital expression of mechanical autonomy.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=12">
+</head>
+<body>
+
+    <!-- This div provides the actual scroll height (e.g. 500vh) so the user can scroll natively -->
+    <div id="scroll-proxy"></div>
+
+    <!-- The fixed stage where all the magic happens -->
+    <main id="fixed-stage">
+        
+        <!-- Ambient Background -->
+        <div class="void-gradient"></div>
+        <div class="noise" aria-hidden="true"></div>
+
+        <!-- Abstract Watch Geometry -->
+        <div class="geometry-container" id="geo">
+            <div class="watch-dial"></div>
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+            <div class="hand hour-hand"></div>
+            <div class="hand minute-hand"></div>
+            <div class="center-pin"></div>
+        </div>
+
+        <!-- Kinetic Typography Layers -->
+        <div class="kinetic-layer" id="layer-intro">
+            <h1 class="huge-name">
+                <span class="char-span m1">M</span><br>
+                <span class="char-span m2">I</span><br>
+                <span class="char-span m3">Ś</span><br>
+                <span class="char-span m4">N</span><br>
+                <span class="char-span m5">I</span><br>
+                <span class="char-span m6">K</span>
+            </h1>
+            <div class="coord-tag mono">52.2297°N / 21.0122°E</div>
+        </div>
+
+        <div class="kinetic-layer" id="layer-thesis">
+            <div class="thesis-text">
+                <span class="mono accent">THE PHYSICIST</span>
+                <p class="serif-xl">Abandoning the rigidity of academia to master absolute, solitary micro-mechanics.</p>
+            </div>
+        </div>
+
+        <div class="kinetic-layer" id="layer-data">
+            <div class="data-orbit" id="orbit-1"><span class="mono">1,000+ HOURS</span></div>
+            <div class="data-orbit" id="orbit-2"><span class="mono">200+ COMPONENTS</span></div>
+            <div class="data-orbit" id="orbit-3"><span class="mono">ZERO CNC</span></div>
+            <div class="center-core serif-xxl">AUTONOMY</div>
+        </div>
+
+        <div class="kinetic-layer" id="layer-legacy">
+            <div class="thesis-text right-align">
+                <span class="mono accent">THE SEAMAN</span>
+                <p class="serif-xl">A chronometer forged for a father navigating the Baltic. An instrument of legacy.</p>
+            </div>
+        </div>
+
+        <div class="kinetic-layer" id="layer-outro">
+            <div class="outro-content">
+                <span class="mono">MACIEJ MIŚNIK</span>
+                <div class="links">
+                    <a href="https://www.instagram.com/maciej_misnik/" target="_blank" class="serif-link">INSTAGRAM</a>
+                    <span class="link-separator">—</span>
+                    <a href="https://www.ahci.ch/members/maciej-misnik/" target="_blank" class="serif-link">AHCI ACADEMY</a>
+                </div>
+                <div class="outro-footer">
+                    <span class="mono vel">PREVIEW / © 2026 VELOCITY</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-prompt mono">SCROLL</div>
+
+    </main>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="script.js?v=12"></script>
+</body>
+</html>
