@@ -118,12 +118,6 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:in
 .toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--bg2);border:1px solid var(--bord2);padding:.65rem 1.1rem;font-size:.68rem;letter-spacing:.06em;z-index:9999;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 .empty{text-align:center;padding:4rem 2rem;color:var(--dim);font-size:.75rem;letter-spacing:.06em}
-.chat-messages{display:flex;flex-direction:column;gap:.5rem}
-.chat-msg{max-width:85%;padding:.5rem .75rem;font-size:.72rem;line-height:1.6}
-.chat-msg.admin{background:rgba(196,156,123,.1);border:1px solid rgba(196,156,123,.15);align-self:flex-end;border-radius:4px 0 0 4px}
-.chat-msg.client{background:rgba(222,200,181,.05);border:1px solid var(--border);align-self:flex-start;border-radius:0 4px 4px 0}
-.chat-msg-time{font-size:.5rem;color:var(--dim);margin-top:.25rem}
-.chat-input{width:auto!important}
 </style>
 </head>
 <body>
@@ -309,34 +303,6 @@ function renderLeads(){
       };
       confirm2.querySelector('.conf-no2').onclick=e=>{e.stopPropagation();confirm2.style.display='none';};
     }
-    // Chat
-    loadChat(l.id,l.token);
-    const chatSendBtn=card.querySelector('#chatSend-'+l.id);
-    const chatInput=card.querySelector('#chatIn-'+l.id);
-    if(chatSendBtn&&chatInput){
-      chatSendBtn.onclick=async()=>{
-        const msg=chatInput.value.trim();
-        if(!msg)return;
-        chatSendBtn.disabled=true;
-        chatSendBtn.textContent='Sending...';
-        try{
-          const r=await fetch('/api/messages/'+l.token,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({message:msg})});
-          if(r.ok){
-            chatInput.value='';
-            await loadChat(l.id,l.token);
-          }else{
-            toast('Failed to send message');
-          }
-        }catch(_){
-          toast('Network error');
-        }
-        chatSendBtn.disabled=false;
-        chatSendBtn.textContent='Send';
-      };
-      chatInput.addEventListener('keydown',e=>{
-        if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();chatSendBtn.click();}
-      });
-    }
   });
   }catch(e){
     console.error('Render leads error:',e);
@@ -431,14 +397,7 @@ function buildCard(l){
         </select>
       </div>
 
-      <!-- Client message -->
-      <div class="cg"><span class="clabel">Message to Client</span>
-        <textarea class="ctextarea ct" placeholder="Update message for client dashboard (disappears in 24h)&#10;Leave blank to clear">${l.admin_comment?esc(l.admin_comment.text):''}</textarea>
-        <input class="cinput cl-input" type="url" placeholder="Optional link URL" style="margin-top:.4rem;width:220px" value="${l.admin_comment&&l.admin_comment.link?esc(l.admin_comment.link):''}">
-      </div>
-      <button class="cbtn sc" style="align-self:flex-end">Send Message</button>
-
-      <!-- Site link -->
+<!-- Site link -->
       <div class="cg"><span class="clabel">Site Link (finished)</span>
         <input class="cinput sl" type="url" placeholder="https://clientsite.com" style="width:200px" value="${esc(l.site_link||'')}">
       </div>
@@ -447,18 +406,6 @@ function buildCard(l){
       <div class="cg" style="flex-basis:100%"><span class="clabel">Scope Document</span><textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea></div>
       <button class="cbtn send-scope" style="align-self:flex-end">${l.scope_sent_at?'Resend Scope':'Send Scope to Client'}</button>
       ${l.scope_accepted?'<span style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#8fc98f">&#10003; Scope Accepted</span>':''}
-
-      <!-- Chat -->
-      <div class="cg" style="flex-basis:100%;margin-top:1rem">
-        <span class="clabel">Messages</span>
-        <div class="chat-messages" id="chatMsgs-${l.id}" style="max-height:200px;overflow-y:auto;margin-bottom:.75rem;padding:.25rem 0">
-          <div style="font-size:.68rem;color:var(--dim);padding:1rem 0;text-align:center">Loading messages…</div>
-        </div>
-        <div style="display:flex;gap:.5rem">
-          <input class="cinput chat-input" id="chatIn-${l.id}" placeholder="Type a message…" style="flex:1;width:auto">
-          <button class="cbtn chat-send" id="chatSend-${l.id}">Send</button>
-        </div>
-      </div>
 
       <!-- Action links -->
       <div style="display:flex;flex-wrap:wrap;gap:.65rem;align-self:flex-end">
@@ -511,23 +458,6 @@ document.getElementById('mSubmit').onclick=async()=>{
 };
 
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
-async function loadChat(cardId,token){
-  const el=document.getElementById('chatMsgs-'+cardId);
-  if(!el)return;
-  try{
-    const r=await fetch('/api/messages/'+token);
-    if(!r.ok)return;
-    const msgs=await r.json();
-    if(!msgs.length){el.innerHTML='<div style="font-size:.68rem;color:var(--dim);padding:1rem 0;text-align:center">No messages yet.</div>';return;}
-    el.innerHTML=msgs.map(m=>{
-      const who=m.sender==='admin'?'You':'Client';
-      const time=new Date(m.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      return '<div class="chat-msg '+m.sender+'"><div>'+esc(m.body)+'</div><div class="chat-msg-time">'+who+' · '+time+'</div></div>';
-    }).join('');
-    el.scrollTop=el.scrollHeight;
-    await fetch('/api/messages/'+token,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({reader:'admin'})}).catch(()=>{});
-  }catch(_){}
-}
 </script>
 </body>
 </html>
