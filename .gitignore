@@ -6,6 +6,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 dist/
+!website/dist/
+!website/dist/**
+!website/dist/previews/
+!website/dist/previews/**
 *.egg-info/
 node_modules/
 .venv/
@@ -14,6 +18,8 @@ screenshots/
 previews/
 !website/previews/
 !website/previews/**
+!website/dist/previews/
+!website/dist/previews/**
 builds/
 .DS_Store
 **/.DS_Store
