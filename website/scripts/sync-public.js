@@ -30,6 +30,10 @@ const SINGLE_FILES = [
   'previews/maciej-misnik/assets/hero.png',
   'previews/maciej-misnik/assets/physicist.png',
   'previews/maciej-misnik/assets/chronometer.png',
+  'previews/ballouard/index.html',
+  'previews/ballouard/js/main.js',
+  'previews/ballouard/styles/main.css',
+  'previews/ballouard/styles/main.scss',
 ];
 
 let count = 0;
