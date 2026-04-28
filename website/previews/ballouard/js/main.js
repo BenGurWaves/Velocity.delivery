@@ -81,16 +81,19 @@ if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
 
 const modal = document.getElementById('prototype-modal');
 const progressBar = document.querySelector('.modal__progress-bar');
+const modalClose = document.querySelector('[data-modal-close]');
 let modalTimer = null;
 let progressAnimation = null;
 
 function openModal() {
+    if (!modal) return;
     modal.classList.add('is-active');
     lenis.stop();
     startModalTimer();
 }
 
 function closeModal() {
+    if (!modal) return;
     modal.classList.remove('is-active');
     lenis.start();
     if (modalTimer) {
@@ -119,13 +122,18 @@ function startModalTimer() {
     }, 5000);
 }
 
+if (modalClose) {
+    modalClose.addEventListener('click', closeModal);
+}
+
 // ========================================
 // Loading Sequence
 // ========================================
 
+const loader = document.getElementById('loader');
 const loadingTimeline = gsap.timeline({
     onComplete: () => {
-        document.getElementById('loader').style.display = 'none';
+        if (loader) loader.style.display = 'none';
         initScrollAnimations();
         openModal();
     }
@@ -144,7 +152,7 @@ loadingTimeline
         duration: 1,
         ease: 'power2.out'
     }, '-=1')
-    .to('.loader', {
+    .to('#loader', {
         opacity: 0,
         duration: 1.5,
         delay: 0.5,
@@ -226,7 +234,7 @@ function initScrollAnimations() {
         y: 100
     });
 
-    // Footer Watermark
+    // Footer Watermark Parallax
     gsap.from('.footer__watermark', {
         scrollTrigger: {
             trigger: '.footer',
@@ -234,7 +242,7 @@ function initScrollAnimations() {
             end: 'bottom bottom',
             scrub: true
         },
-        y: '30%',
+        y: '20%',
         opacity: 0
     });
 }
