@@ -1,28 +1,17 @@
 // ========================================
-// Ballouard — GSAP Animation Architecture
-// Heavy, Mechanical, Precise
+// Ballouard — Delusional Atelier
+// Heavy, Mechanical, Intentional
 // ========================================
 
 gsap.registerPlugin(ScrollTrigger);
 
 // ========================================
-// Configuration
-// ========================================
-
-const EASE_LUXURY = 'power4.inOut';
-const EASE_HEAVY = 'power3.inOut';
-const DURATION_SLOW = 2;
-const DURATION_MEDIUM = 1.5;
-const DURATION_MICRO = 0.8;
-const STAGGER_DELAY = 0.08;
-
-// ========================================
-// Lenis Smooth Scroll — High Inertia
+// Lenis Smooth Scroll — High Viscosity
 // ========================================
 
 const lenis = new Lenis({
-    lerp: 0.05, // High inertia for luxury feel
-    duration: 1.5,
+    lerp: 0.03, // High viscosity
+    duration: 1.8,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     direction: 'vertical',
     gestureDirection: 'vertical',
@@ -37,7 +26,7 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 // ========================================
-// Custom Cursor
+// Custom Cursor — Persistence over Modal
 // ========================================
 
 const cursor = document.querySelector('.cursor');
@@ -50,40 +39,31 @@ let ringX = 0;
 let ringY = 0;
 const LERP_FACTOR = 0.15;
 
-if (cursor && !window.matchMedia('(pointer: coarse)').matches) {
-    document.addEventListener('mousemove', (e) => {
-        cursorX = e.clientX;
-        cursorY = e.clientY;
-    });
+document.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+});
+
+function updateCursor() {
+    ringX += (cursorX - ringX) * LERP_FACTOR;
+    ringY += (cursorY - ringY) * LERP_FACTOR;
     
-    function updateCursor() {
-        ringX += (cursorX - ringX) * LERP_FACTOR;
-        ringY += (cursorY - ringY) * LERP_FACTOR;
-        
-        if (cursorDot) cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-        if (cursorRing) cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-        
-        requestAnimationFrame(updateCursor);
-    }
+    if (cursorDot) cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+    if (cursorRing) cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
     
-    updateCursor();
-    
-    const interactiveElements = document.querySelectorAll('a, button, .nav__trigger');
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
-    });
+    requestAnimationFrame(updateCursor);
 }
 
+updateCursor();
+
 // ========================================
-// Modal Functionality — 5 Second Auto-Close
+// Modal Interaction & Logic
 // ========================================
 
 const modal = document.getElementById('prototype-modal');
 const progressBar = document.querySelector('.modal__progress-bar');
 const modalClose = document.querySelector('[data-modal-close]');
 let modalTimer = null;
-let progressAnimation = null;
 
 function openModal() {
     if (!modal) return;
@@ -94,32 +74,38 @@ function openModal() {
 
 function closeModal() {
     if (!modal) return;
-    modal.classList.remove('is-active');
-    lenis.start();
-    if (modalTimer) {
-        clearTimeout(modalTimer);
-        modalTimer = null;
-    }
-    if (progressAnimation) {
-        progressAnimation.kill();
-        progressAnimation = null;
-    }
+    
+    // "Shatter" exit animation
+    const tl = gsap.timeline({
+        onComplete: () => {
+            modal.classList.remove('is-active');
+            lenis.start();
+        }
+    });
+
+    tl.to('.modal__content', {
+        scale: 1.5,
+        opacity: 0,
+        filter: 'blur(20px)',
+        duration: 1.2,
+        ease: 'power4.in'
+    })
+    .to('.modal__backdrop', {
+        opacity: 0,
+        duration: 0.8
+    }, '-=0.4');
 }
 
 function startModalTimer() {
     if (progressBar) {
         gsap.set(progressBar, { scaleX: 1 });
-        progressAnimation = gsap.to(progressBar, {
+        gsap.to(progressBar, {
             scaleX: 0,
             duration: 5,
             ease: 'none',
             onComplete: closeModal
         });
     }
-    
-    modalTimer = setTimeout(() => {
-        closeModal();
-    }, 5000);
 }
 
 if (modalClose) {
@@ -127,7 +113,7 @@ if (modalClose) {
 }
 
 // ========================================
-// Loading Sequence
+// Loading Sequence — Fine-Line Engraving
 // ========================================
 
 const loader = document.getElementById('loader');
@@ -136,73 +122,91 @@ const loadingTimeline = gsap.timeline({
         if (loader) {
             gsap.to(loader, {
                 opacity: 0,
-                duration: 1,
+                duration: 1.5,
+                ease: 'power4.inOut',
                 onComplete: () => {
                     loader.style.display = 'none';
                     initScrollAnimations();
                     openModal();
                 }
             });
-        } else {
-            initScrollAnimations();
-            openModal();
         }
     }
 });
 
-if (document.querySelector('.monogram__stroke')) {
-    loadingTimeline
-        .to('.monogram__stroke', {
-            strokeDashoffset: 0,
-            duration: 2,
-            stagger: 0.3,
-            ease: 'power2.inOut'
-        })
-        .to('.loader__text', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power2.out'
-        }, '-=1');
-} else {
-    loadingTimeline.to({}, { duration: 0.1 });
-}
+loadingTimeline
+    .to('.monogram__stroke', {
+        strokeDashoffset: 0,
+        duration: 3,
+        ease: 'power2.inOut', // Variable speed feel
+        stagger: 0.5
+    })
+    .to('.loader__text', {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: 'power3.out'
+    }, '-=1');
 
 // ========================================
-// Scroll Animations
+// Multi-Dimensional Scroll Transitions
 // ========================================
 
 function initScrollAnimations() {
     
-    // Section 1: Hero Parallax
-    if (document.querySelector('.hero__background')) {
-        gsap.to('.hero__background', {
-            scrollTrigger: {
-                trigger: '#atelier',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: true
-            },
-            y: '20%',
-            scale: 1.1
-        });
-    }
+    // Journey I: S1 to S2 (Z-Axis Walkthrough)
+    const journey1 = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#atelier',
+            start: 'top top',
+            end: '+=100%',
+            scrub: true,
+            pin: true,
+            anticipatePin: 1
+        }
+    });
 
-    // Section 2: Z-Axis Zoom
-    if (document.querySelector('.zoom-artifact')) {
-        gsap.to('.zoom-artifact', {
-            scrollTrigger: {
-                trigger: '#philosophy',
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-            },
-            scale: 4,
-            ease: 'none'
-        });
-    }
+    journey1.to('#atelier .title--primary', {
+        scale: 0.5,
+        opacity: 0,
+        filter: 'blur(10px)',
+        duration: 1
+    })
+    .to('#atelier .hero__background', {
+        scale: 1.5,
+        opacity: 0,
+        duration: 1
+    }, 0)
+    .from('#philosophy', {
+        scale: 0.8,
+        opacity: 0,
+        duration: 1
+    }, 0);
 
-    // Section 3: Horizontal Strip
+    // Journey II: S2 to S3 (360-Degree Viewport Rotation)
+    const journey2 = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#philosophy',
+            start: 'top top',
+            end: '+=100%',
+            scrub: true,
+            pin: true,
+            anticipatePin: 1
+        }
+    });
+
+    journey2.to('#smooth-content', {
+        rotation: 360,
+        scale: 0.5,
+        duration: 1,
+        ease: 'power2.inOut'
+    })
+    .to('#smooth-content', {
+        scale: 1,
+        duration: 0.5
+    });
+
+    // Journey III: S3 to S4 (Horizontal Excursion)
     const horizontalSection = document.querySelector('.section--horizontal');
     const horizontalStrip = document.querySelector('.horizontal-strip');
     
@@ -222,46 +226,43 @@ function initScrollAnimations() {
         });
     }
 
-    // Section 4: Floating Watch
-    if (document.querySelector('.watch-floating')) {
-        gsap.to('.watch-floating', {
-            scrollTrigger: {
-                trigger: '#mastery',
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-            },
-            rotation: 360,
-            y: -100,
-            ease: 'none'
-        });
-    }
+    // Journey IV: S4 Floating Void
+    gsap.to('.watch-floating', {
+        scrollTrigger: {
+            trigger: '#mastery',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+        },
+        rotation: 720,
+        scale: 1.2,
+        y: -100,
+        ease: 'none'
+    });
 
-    // Section 5: Last Section Fade
-    if (document.querySelector('.last-content')) {
-        gsap.from('.last-content', {
-            scrollTrigger: {
-                trigger: '#contact',
-                start: 'top 80%',
-                end: 'top 20%',
-                scrub: true
-            },
-            opacity: 0,
-            y: 100
-        });
-    }
+    // Journey V: S5 Distant Memory
+    gsap.from('.last-content', {
+        scrollTrigger: {
+            trigger: '#contact',
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: true
+        },
+        opacity: 0,
+        y: 100
+    });
 
-    // Footer Watermark Parallax
-    if (document.querySelector('.footer__watermark')) {
-        gsap.from('.footer__watermark', {
-            scrollTrigger: {
-                trigger: '.footer',
-                start: 'top bottom',
-                end: 'bottom bottom',
-                scrub: true
-            },
-            y: '20%',
-            opacity: 0
-        });
-    }
+    // Footer Watermark (Fixing 'LOCI')
+    const watermarkSpans = document.querySelectorAll('.footer__watermark span');
+    gsap.from(watermarkSpans, {
+        scrollTrigger: {
+            trigger: '.footer',
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: true
+        },
+        y: 100,
+        opacity: 0,
+        stagger: 0.05
+    });
 }
