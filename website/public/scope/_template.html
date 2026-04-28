@@ -95,12 +95,6 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 .section:last-child{border-bottom:none}
 .sec-label{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:1.75rem;display:block}
 
-/* Admin message banner */
-.msg-banner{background:rgba(196,156,123,.06);border:1px solid rgba(196,156,123,.18);padding:1.25rem 1.5rem;margin-bottom:2rem}
-.msg-text{font-size:.85rem;color:var(--sand);line-height:1.75}
-.msg-link{display:inline-block;margin-top:.5rem;font-size:.72rem;color:var(--brass);border-bottom:1px solid rgba(196,156,123,.3);padding-bottom:1px}
-.msg-exp{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:.5rem}
-
 /* Countdown */
 .countdown-block{display:flex;flex-direction:column;gap:.5rem}
 .countdown-lbl{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
@@ -174,19 +168,6 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
   .countdown-time{font-size:clamp(2rem,10vw,3.5rem)}
 }
 
-.chat-wrap{margin-top:2rem}
-.chat-messages{display:flex;flex-direction:column;gap:.75rem;max-height:320px;overflow-y:auto;padding:.5rem 0;margin-bottom:1rem}
-.chat-msg{max-width:82%;padding:.65rem 1rem;font-size:.78rem;line-height:1.75}
-.chat-msg.admin{background:rgba(222,200,181,.07);border:1px solid var(--border);color:var(--sand);align-self:flex-start;border-radius:0 4px 4px 0}
-.chat-msg.client{background:rgba(196,156,123,.1);border:1px solid rgba(196,156,123,.2);color:var(--sand);align-self:flex-end;border-radius:4px 0 0 4px}
-.chat-msg-meta{font-size:.52rem;letter-spacing:.06em;color:var(--dim);margin-top:.35rem}
-.chat-empty{font-size:.72rem;color:var(--dim);text-align:center;padding:2rem 0;opacity:.5}
-.chat-input-row{display:flex;gap:.5rem;align-items:flex-end}
-.chat-input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--bord2);color:var(--sand);font-family:inherit;font-size:.78rem;font-weight:300;padding:.5rem 0;outline:none;resize:none;min-height:2.5rem;max-height:8rem;transition:border-color .2s}
-.chat-input:focus{border-color:var(--brass)}
-.chat-send{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--sand);border:none;padding:.5rem 1.25rem;cursor:pointer;white-space:nowrap;transition:background .2s}
-.chat-send:hover{background:var(--brass)}
-.chat-send:disabled{opacity:.35;pointer-events:none}
 @media(max-width:640px){.hero-band{padding:clamp(4rem,12vw,6rem) 1.5rem clamp(1.5rem,4vw,2rem)}.hero-name{font-size:clamp(2.2rem,11vw,4rem)}.content{padding:0 1.5rem clamp(3rem,8vw,5rem)}.section{padding:clamp(1.5rem,4vw,2rem)}.timeline .tl-title{font-size:.8rem}.quote-amount{font-size:clamp(2rem,10vw,4rem)}.pay-btn{width:100%;padding:1rem}}.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;transition:background .3s}.status-dot.pending{background:#c4a47b}.status-dot.accepted,.status-dot.in_progress{background:#8fc98f}.status-dot.completed{background:#8fc98f}.status-dot.declined{background:#c47b7b}.hero-status{display:flex;align-items:center;gap:.6rem;margin-top:1rem;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}</style>
 </head>
 <body>
@@ -259,10 +240,7 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
   </div>
   <div class="content">
 
-    <!-- Admin message -->
-    <div id="msgBanner"></div>
-
-    <!-- Window / Timer -->
+<!-- Window / Timer -->
     <div class="section" id="secTimer"></div>
 
     <!-- Payment -->
@@ -278,7 +256,6 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
     <div class="section" id="secBrief"></div>
 
   </div>
-    <div class="section" id="secChat" style="margin-top:2.5rem"><span class="sec-label">Messages</span><div class="chat-wrap"><div class="chat-messages" id="chatMessages"><div class="chat-empty">No messages yet.</div></div><div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="Send a message to your studio..." rows="1"></textarea><button class="chat-send" id="chatSend">Send</button></div></div></div>
   <div class="dash-footer">
     <p>Questions? Email us at <a href="mailto:client@calyvent.com">client@calyvent.com</a> — we reply within 24 hours.</p>
     <p style="margin-top:.75rem;font-size:.6rem;opacity:.6;letter-spacing:.04em">To return to this dashboard, visit <a href="https://velocity.calyvent.com">velocity.calyvent.com</a> and select <strong>Your Commission</strong> in the footer &mdash; or simply bookmark this page.</p>
@@ -366,15 +343,6 @@ function renderDash(lead,justPaid=false){
   document.getElementById('heroName').innerHTML=name+'<em>.</em>';
   document.getElementById('navRight').textContent=name;
   if(document.getElementById('statusDot'))document.getElementById('statusDot').className='status-dot '+(lead.status||'pending');if(document.getElementById('statusLabel'))document.getElementById('statusLabel').textContent=SL[lead.status]||'Pending';
-
-  // Admin message banner
-  if(lead.admin_comment&&lead.admin_comment.text){
-    const banner=document.getElementById('msgBanner');
-    const exp=new Date(lead.admin_comment.created_at).getTime()+86400000;
-    const hoursLeft=Math.max(0,Math.floor((exp-Date.now())/3600000));
-    banner.innerHTML=`<div class="msg-banner"><div style="font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:.6rem">Message from The Velocity Team</div><div class="msg-text">${esc(lead.admin_comment.text)}</div>${lead.admin_comment.link?`<a href="${esc(ensureUrl(lead.admin_comment.link))}" class="msg-link" target="_blank" rel="noopener noreferrer">View Link ↗</a>`:''}${hoursLeft>0?`<div class="msg-exp">This message expires in ${hoursLeft}h</div>`:''}</div>`;
-    show('msgBanner');
-  }
 
   // Timer section
   const timerEl=document.getElementById('secTimer');
@@ -535,8 +503,7 @@ function startPolling(lead) {
         fresh.status !== lead.status ||
         fresh.is_paid !== lead.is_paid ||
         fresh.quote_amount !== lead.quote_amount ||
-        fresh.site_link !== lead.site_link ||
-        JSON.stringify(fresh.admin_comment) !== JSON.stringify(lead.admin_comment);
+        fresh.site_link !== lead.site_link;
       if (changed) {
         if (POLL_INTERVAL) clearInterval(POLL_INTERVAL);
         LEAD = fresh;
@@ -557,8 +524,7 @@ document.addEventListener('visibilitychange', () => {
         fresh.status !== LEAD.status ||
         fresh.is_paid !== LEAD.is_paid ||
         fresh.quote_amount !== LEAD.quote_amount ||
-        fresh.site_link !== LEAD.site_link ||
-        JSON.stringify(fresh.admin_comment) !== JSON.stringify(LEAD.admin_comment);
+        fresh.site_link !== LEAD.site_link;
       if (changed) {
         if (POLL_INTERVAL) clearInterval(POLL_INTERVAL);
         LEAD = fresh;
@@ -570,12 +536,6 @@ document.addEventListener('visibilitychange', () => {
 });
 
 init();
-initChat();
-
-let CHAT_MSGS=[];
-async function loadChat(){try{const r=await fetch('/api/messages/'+TOKEN);if(!r.ok)return;CHAT_MSGS=await r.json();renderChat();await fetch('/api/messages/'+TOKEN,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({reader:'client'})}).catch(()=>{});}catch(_){}}
-function renderChat(){const el=document.getElementById('chatMessages');if(!el)return;if(!CHAT_MSGS.length){el.innerHTML='<div class="chat-empty">No messages yet.</div>';return;}el.innerHTML=CHAT_MSGS.map(m=>{const dt=new Date(m.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});const who=m.sender==='admin'?'Studio':'You';return'<div class="chat-msg '+m.sender+'"><div>'+esc(m.body)+'</div><div class="chat-msg-meta">'+who+' &middot; '+dt+'</div></div>';}).join('');el.scrollTop=el.scrollHeight;}
-function initChat(){const inp=document.getElementById('chatInput');const btn=document.getElementById('chatSend');if(!btn||!inp)return;loadChat();btn.onclick=async()=>{const msg=inp.value.trim();if(!msg)return;btn.disabled=true;try{const r=await fetch('/api/messages/'+TOKEN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});if(r.ok){inp.value='';inp.style.height='auto';await loadChat();}}catch(_){}btn.disabled=false;};inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();btn.click();}});}
 
 </script>
 </body>
