@@ -89,6 +89,15 @@ function initLoader() {
     const monogramPaths = document.querySelectorAll('.monogram__stroke');
     const heroSection = document.querySelector('.section--hero');
 
+    if (!loader || !heroSection) {
+        console.error('Loader or hero section not found');
+        document.body.style.overflow = 'auto';
+        if (loader) loader.style.display = 'none';
+        initScrollAnimations();
+        updateCursor();
+        return;
+    }
+
     // Hero initial state
     gsap.set(heroSection, {
         scale: 0.8,
@@ -99,24 +108,44 @@ function initLoader() {
 
     // Calculate path lengths for DrawSVG (1.5s)
     monogramPaths.forEach(path => {
-        const length = path.getTotalLength();
-        gsap.set(path, {
-            strokeDasharray: length,
-            strokeDashoffset: length
-        });
+        try {
+            const length = path.getTotalLength();
+            gsap.set(path, {
+                strokeDasharray: length,
+                strokeDashoffset: length
+            });
+        } catch (e) {
+            console.warn('Could not get path length:', e);
+        }
     });
 
     const tl = gsap.timeline({
         onComplete: () => {
-            gsap.set('body', { overflow: 'auto' });
-            gsap.set(loader, {
-                pointerEvents: 'none',
-                display: 'none'
-            });
-            initScrollAnimations();
-            updateCursor();
+            cleanupLoader();
         }
     });
+
+    // Fallback timeout: force reveal after 5 seconds
+    const fallbackTimeout = setTimeout(() => {
+        console.warn('Loader fallback triggered');
+        cleanupLoader();
+    }, 5000);
+
+    function cleanupLoader() {
+        clearTimeout(fallbackTimeout);
+        gsap.set('body', { overflow: 'auto' });
+        gsap.set(loader, {
+            pointerEvents: 'none',
+            display: 'none'
+        });
+        gsap.set(heroSection, {
+            scale: 1,
+            filter: 'blur(0px)',
+            opacity: 1
+        });
+        initScrollAnimations();
+        updateCursor();
+    }
 
     // PHASE 1: DrawSVG Animation (1.5s)
     tl.to('.monogram__l', {
