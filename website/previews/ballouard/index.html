@@ -2,76 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ludovic Ballouard — Only The Present Moment Has A Meaning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Canela';
-            src: url('fonts/Canela-Thin.woff2') format('woff2');
-            font-weight: 100;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: 'Söhne';
-            src: url('fonts/Sohne-Standard.woff2') format('woff2');
-            font-weight: 300;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: 'Söhne Mono';
-            src: url('fonts/Sohne-Mono.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-
         :root {
-            /* Muted Bronze/Terracotta Palette — NO YELLOW */
             --bronze: #C4A484;
             --bronze-light: #D4B8A3;
             --bronze-dark: #9A7B5B;
-            --bronze-muted: rgba(196, 164, 132, 0.3);
-            
-            /* Warm Backgrounds */
             --void: #0D0C0B;
-            --void-warm: #12100E;
             --ivory: #F5F0EB;
-            --ivory-warm: #FAF7F3;
-            
-            /* Text Colors */
-            --text-dark: #1A1816;
-            --text-light: #F5F0EB;
-            --ghost-dark: #8B7D6E;
-            --ghost-light: rgba(245, 240, 235, 0.4);
+            --charcoal: #1A1816;
+            --ghost: rgba(245, 240, 235, 0.3);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
         body {
-            font-family: 'Söhne', sans-serif;
+            font-family: 'Cormorant Garamond', 'Times New Roman', serif;
             background: var(--void);
-            color: var(--text-light);
-            overflow-x: hidden;
+            color: var(--ivory);
             font-weight: 300;
         }
 
-        /* ============================================
-           SECTIONS - 100vh Snap, Single Focus
-           ============================================ */
+        /* LOADER */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--void);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .loader-word {
+            font-size: 12vw;
+            letter-spacing: 2em;
+            opacity: 0;
+            filter: blur(30px);
+            color: var(--bronze);
+            white-space: nowrap;
+        }
+        .loader-sub {
+            font-size: 0.9rem;
+            letter-spacing: 0.5em;
+            opacity: 0;
+            color: var(--ghost);
+            margin-top: 4rem;
+            text-transform: uppercase;
+        }
+
+        /* MAIN CONTENT */
+        #main-content {
+            opacity: 0;
+            transition: opacity 2s ease;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+        }
+        #main-content.visible { opacity: 1; }
+
         section {
             height: 100vh;
             width: 100%;
@@ -80,799 +73,566 @@
             position: relative;
             overflow: hidden;
             display: flex;
+            flex-direction: column;
+        }
+
+        /* SECTION 1: GENESIS */
+        #section1 {
+            background: var(--void);
             align-items: center;
             justify-content: center;
         }
-
-        .section-dark {
-            background: var(--void);
-            color: var(--text-light);
-        }
-
-        .section-light {
-            background: var(--ivory);
-            color: var(--text-dark);
-        }
-
-        /* ============================================
-           FOCUS ELEMENT - Stretched Vertically
-           ============================================ */
-        .focus-text {
-            font-family: 'Canela', serif;
-            font-weight: 100;
-            font-size: 28vh;
-            line-height: 0.85;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-align: center;
-            color: var(--bronze);
-            opacity: 0.9;
-            transform: scaleY(1.4);
-            transform-origin: center center;
-            z-index: 10;
-            position: relative;
-        }
-
-        .focus-text.dark-section {
-            color: var(--bronze);
-        }
-
-        .focus-text.light-section {
-            color: var(--bronze-dark);
-        }
-
-        /* ============================================
-           SUPPORTING ELEMENTS - Tiny, Whispering
-           ============================================ */
-        .whisper {
-            font-family: 'Söhne Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+        #particle-canvas {
             position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             opacity: 0.4;
-            z-index: 5;
+            pointer-events: none;
+        }
+        .genesis-text {
+            font-size: 28vh;
+            color: var(--bronze);
+            letter-spacing: 0.1em;
+            transform: scaleY(1.5);
+            z-index: 10;
+            line-height: 0.8;
+            white-space: nowrap;
+            margin-top: -5vh;
+        }
+        .genesis-year {
+            position: absolute;
+            bottom: 8%;
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+            color: var(--ghost);
+            text-transform: uppercase;
         }
 
-        .ghost {
-            font-family: 'Söhne', sans-serif;
-            font-size: 0.6rem;
+        /* SECTION 2: WATCHMAKER */
+        #section2 {
+            background: var(--void);
+            align-items: center;
+            justify-content: center;
+        }
+        .typewriter-container { text-align: center; z-index: 10; }
+        .typewriter-text {
+            font-size: 15vh;
+            color: var(--ivory);
             letter-spacing: 0.15em;
-            text-transform: uppercase;
-            position: absolute;
-            opacity: 0.25;
-            z-index: 4;
+            line-height: 1.2;
         }
-
-        .micro {
-            font-family: 'Söhne Mono', monospace;
-            font-size: 0.5rem;
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 0.8em;
+            background: var(--bronze);
+            margin-left: 0.1em;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        .typewriter-sub {
+            font-size: 1rem;
             letter-spacing: 0.3em;
+            color: var(--bronze);
+            margin-top: 2rem;
+            opacity: 0;
             text-transform: uppercase;
-            position: absolute;
-            opacity: 0.2;
-            z-index: 3;
         }
-
-        /* ============================================
-           SECTION 1: THE WATCHMAKER (Dark)
-           ============================================ */
-        #section1 .focus-text {
-            color: var(--bronze);
-            filter: blur(20px);
+        .typewriter-year {
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+            color: var(--ghost);
+            margin-top: 1rem;
             opacity: 0;
+            text-transform: uppercase;
         }
 
-        #section1 .whisper-year {
-            top: 8%;
-            left: 5%;
-            color: var(--ghost-light);
-        }
-
-        #section1 .whisper-city {
-            bottom: 8%;
-            left: 5%;
-            color: var(--ghost-light);
-        }
-
-        #section1 .ghost-countryside {
-            top: 8%;
-            right: 5%;
-            color: var(--ghost-light);
-        }
-
-        #section1 .micro-atelier {
-            bottom: 8%;
-            right: 5%;
-            color: var(--ghost-light);
-        }
-
-        /* ============================================
-           SECTION 2: THE PAST (Dark)
-           ============================================ */
-        #section2 .focus-text {
-            color: var(--bronze);
-            font-size: 18vh;
-            opacity: 0;
-        }
-
-        #section2 .whisper-years-1 {
-            top: 12%;
-            left: 5%;
-            color: var(--ghost-light);
-        }
-
-        #section2 .whisper-years-2 {
-            top: 12%;
-            right: 5%;
-            color: var(--ghost-light);
-        }
-
-        #section2 .ghost-sonnerie {
-            bottom: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--ghost-light);
-        }
-
-        #section2 .svg-bridges {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.15;
-        }
-
-        /* ============================================
-           SECTION 3: THE PRESENT (Light)
-           ============================================ */
+        /* SECTION 3: PHILOSOPHY */
         #section3 {
             background: var(--ivory);
+            flex-direction: row;
         }
-
-        #section3 .focus-text {
+        .mechanism-side {
+            width: 45%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #disc-canvas { width: 350px; height: 350px; }
+        .philosophy-side {
+            width: 55%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3vh;
+        }
+        .time-label {
+            font-size: 12vh;
+            letter-spacing: 0.1em;
+        }
+        .time-label.past, .time-label.future {
+            color: rgba(26, 24, 22, 0.15);
+            transform: rotate(180deg);
+        }
+        .time-label.present {
             color: var(--bronze-dark);
-            font-size: 22vh;
-            opacity: 0;
+            font-size: 18vh;
+            transform: scaleY(1.3);
         }
 
-        #section3 .whisper-past {
-            top: 10%;
-            left: 3%;
-            transform: rotate(-90deg);
-            transform-origin: left center;
-            color: var(--ghost-dark);
+        /* SECTION 4: CRAFT */
+        #section4 {
+            background: var(--void);
+            align-items: center;
+            justify-content: center;
         }
-
-        #section3 .whisper-future {
-            bottom: 10%;
-            right: 3%;
-            transform: rotate(90deg);
-            transform-origin: right center;
-            color: var(--ghost-dark);
-        }
-
-        #section3 .ghost-now {
-            top: 50%;
-            right: 5%;
-            transform: translateY(-50%);
-            color: var(--ghost-dark);
-        }
-
-        #section3 .hour-canvas {
+        #svg-container {
             position: absolute;
-            top: 50%;
-            left: 15%;
-            transform: translateY(-50%);
-            width: 200px;
-            height: 200px;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+        }
+        .craft-line {
+            fill: none;
+            stroke: var(--bronze);
+            stroke-width: 0.5;
+            stroke-linecap: round;
             opacity: 0.3;
         }
-
-        /* ============================================
-           SECTION 4: THE COMPLEXITY (Light)
-           ============================================ */
-        #section4 {
-            background: var(--ivory);
-        }
-
-        #section4 .focus-text {
-            color: var(--bronze-dark);
-            font-size: 26vh;
-            opacity: 0;
-        }
-
-        #section4 .ghost-jewels {
-            top: 15%;
-            left: 3%;
-            color: var(--ghost-dark);
-        }
-
-        #section4 .ghost-components {
-            top: 15%;
-            right: 3%;
-            color: var(--ghost-dark);
-        }
-
-        #section4 .ghost-calibre {
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--ghost-dark);
-        }
-
-        #section4 .ghost-retrograde {
-            top: 50%;
-            left: 3%;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: left center;
-            color: var(--ghost-dark);
-        }
-
-        /* ============================================
-           SECTION 5: THE CRAFT (Dark)
-           ============================================ */
-        #section5 .focus-text {
-            color: var(--bronze);
+        .craft-text {
             font-size: 20vh;
-            opacity: 0;
+            color: var(--bronze);
+            letter-spacing: 0.15em;
+            z-index: 1;
+            transform: scaleY(1.4);
+            mix-blend-mode: difference;
         }
-
-        #section5 .ghost-word {
-            font-size: 0.5rem;
-            letter-spacing: 0.2em;
-            color: var(--ghost-light);
-        }
-
-        #section5 .ghost-case {
-            top: 20%;
-            left: 8%;
-        }
-
-        #section5 .ghost-crown {
-            top: 35%;
-            right: 10%;
-        }
-
-        #section5 .ghost-buckle {
-            bottom: 30%;
-            left: 12%;
-        }
-
-        #section5 .ghost-geneva {
-            bottom: 20%;
-            right: 8%;
-        }
-
-        #section5 .svg-engraving {
+        .craft-labels {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
         }
-
-        /* ============================================
-           SECTION 6: THE COMMISSION (Light)
-           ============================================ */
-        #section6 {
-            background: var(--ivory);
-        }
-
-        #section6 .commission-container {
-            position: relative;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        #section6 .focus-text {
-            color: var(--bronze-dark);
-            font-size: 22vh;
-            opacity: 0.85;
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        #section6 .focus-text.morphed {
-            opacity: 0;
-        }
-
-        #section6 .email-text {
-            font-family: 'Canela', serif;
-            font-weight: 100;
-            font-size: 18vh;
-            line-height: 0.85;
-            letter-spacing: 0.05em;
+        .craft-label {
+            position: absolute;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--ghost);
             text-transform: uppercase;
-            text-align: center;
-            color: var(--bronze-dark);
+        }
+
+        /* SECTION 5: COMMISSION */
+        #section5 {
+            background: var(--ivory);
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        #noise-canvas {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .commission-container {
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+        }
+        .commission-text {
+            font-size: 22vh;
+            color: var(--bronze-dark);
+            letter-spacing: 0.1em;
+            transform: scaleY(1.4);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            line-height: 0.9;
+        }
+        .commission-text.hidden { opacity: 0; }
+        .email-text {
+            font-size: 18vh;
+            color: var(--bronze-dark);
+            letter-spacing: 0.08em;
+            position: absolute;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scaleY(1.4);
             opacity: 0;
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
+            pointer-events: none;
+            line-height: 0.9;
+        }
+        .email-text.visible { opacity: 1; }
+        .copied-feedback {
+            position: absolute;
+            bottom: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--bronze);
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .copied-feedback.visible { opacity: 1; }
+        .commission-footer {
+            position: absolute;
+            bottom: 8%;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: rgba(26, 24, 22, 0.4);
+            text-transform: uppercase;
         }
 
-        #section6 .email-text.visible {
-            opacity: 0.85;
-        }
-
-        #section6 .copied-indicator {
-            font-family: 'Söhne Mono', monospace;
+        .scroll-hint {
+            position: fixed;
+            bottom: 3%;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 0.6rem;
             letter-spacing: 0.3em;
-            color: var(--bronze);
-            position: absolute;
-            bottom: 30%;
-            left: 50%;
-            transform: translateX(-50%);
+            color: var(--ghost);
+            text-transform: uppercase;
+            z-index: 100;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 1s ease;
         }
-
-        #section6 .copied-indicator.visible {
-            opacity: 1;
-        }
-
-        #section6 .micro-copyright {
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--ghost-dark);
-        }
-
-        #section6 .ghost-atelier {
-            bottom: 8%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--ghost-dark);
-        }
-
-        /* ============================================
-           GRAIN TEXTURE OVERLAY
-           ============================================ */
-        .grain-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.03;
-        }
+        .scroll-hint.visible { opacity: 0.5; }
     </style>
 </head>
 <body>
-    <!-- Grain Texture Canvas -->
-    <canvas class="grain-overlay" id="grainCanvas"></canvas>
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-word" id="loaderWord">BALLOUARD</div>
+        <div class="loader-sub" id="loaderSub">Geneva MMXXVI</div>
+    </div>
+    <div class="scroll-hint" id="scrollHint">Scroll</div>
 
-    <!-- SECTION 1: THE WATCHMAKER (Dark) -->
-    <section id="section1" class="section-dark">
-        <span class="whisper whisper-year">2009</span>
-        <span class="whisper whisper-city">Geneva</span>
-        <span class="ghost ghost-countryside">Countryside</span>
-        <span class="micro micro-atelier">Atelier</span>
-        <h1 class="focus-text">LUDOVIC</h1>
-    </section>
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+        
+        <!-- SECTION 1: GENESIS -->
+        <section id="section1">
+            <canvas id="particle-canvas"></canvas>
+            <div class="genesis-text">BALLOUARD</div>
+            <div class="genesis-year">Geneva MMXXVI</div>
+        </section>
 
-    <!-- SECTION 2: THE PAST (Dark) -->
-    <section id="section2" class="section-dark">
-        <svg class="svg-bridges" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,30 Q25,25 50,30 T100,30" fill="none" stroke="var(--bronze)" stroke-width="0.2"/>
-            <path d="M0,50 Q33,45 66,50 T100,50" fill="none" stroke="var(--bronze)" stroke-width="0.15"/>
-            <path d="M0,70 Q20,65 40,70 T80,70" fill="none" stroke="var(--bronze)" stroke-width="0.1"/>
-        </svg>
-        <span class="whisper whisper-years-1">3 YEARS</span>
-        <span class="whisper whisper-years-2">7 YEARS</span>
-        <span class="ghost ghost-sonnerie">Sonnerie Souveraine</span>
-        <h2 class="focus-text" id="pastText">FRANCK MULLER</h2>
-    </section>
+        <!-- SECTION 2: WATCHMAKER -->
+        <section id="section2">
+            <div class="typewriter-container">
+                <div class="typewriter-text">
+                    <span id="typewriter-content"></span><span class="typewriter-cursor"></span>
+                </div>
+                <div class="typewriter-sub" id="typewriterSub">Founder & Watchmaker</div>
+                <div class="typewriter-year" id="typewriterYear">Since 2009</div>
+            </div>
+        </section>
 
-    <!-- SECTION 3: THE PRESENT (Light) -->
-    <section id="section3" class="section-light">
-        <canvas class="hour-canvas" id="hourCanvas"></canvas>
-        <span class="whisper whisper-past">PAST IS UPSIDE DOWN</span>
-        <span class="whisper whisper-future">FUTURE IS UPSIDE DOWN</span>
-        <span class="ghost ghost-now">ONLY NOW IS RIGHT</span>
-        <h2 class="focus-text light-section">UPSIDE DOWN</h2>
-    </section>
+        <!-- SECTION 3: PHILOSOPHY -->
+        <section id="section3">
+            <div class="mechanism-side">
+                <canvas id="disc-canvas"></canvas>
+            </div>
+            <div class="philosophy-side">
+                <div class="time-label past">PAST</div>
+                <div class="time-label present">PRESENT</div>
+                <div class="time-label future">FUTURE</div>
+            </div>
+        </section>
 
-    <!-- SECTION 4: THE COMPLEXITY (Light) -->
-    <section id="section4" class="section-light">
-        <span class="ghost ghost-jewels">51 JEWELS</span>
-        <span class="ghost ghost-components">228 COMPONENTS</span>
-        <span class="ghost ghost-calibre">CALIBRE B01</span>
-        <span class="ghost ghost-retrograde">RETROGRADE</span>
-        <h2 class="focus-text light-section">HALF TIME</h2>
-    </section>
+        <!-- SECTION 4: CRAFT -->
+        <section id="section4">
+            <svg id="svg-container" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="craft-line" d="M10,30 Q30,25 50,30 T90,30" />
+                <path class="craft-line" d="M5,50 Q35,45 65,50 T95,50" />
+                <path class="craft-line" d="M15,70 Q40,65 60,70 T85,70" />
+                <path class="craft-line" d="M20,20 L20,80" />
+                <path class="craft-line" d="M80,15 L80,85" />
+                <path class="craft-line" d="M40,10 Q40,50 40,90" />
+                <path class="craft-line" d="M60,5 Q60,50 60,95" />
+                <circle class="craft-line" cx="30" cy="40" r="8" />
+                <circle class="craft-line" cx="70" cy="60" r="12" />
+                <circle class="craft-line" cx="50" cy="75" r="6" />
+            </svg>
+            <div class="craft-text">HAND ENGRAVED</div>
+            <div class="craft-labels">
+                <div class="craft-label" style="top: 20%; left: 10%;">CASE</div>
+                <div class="craft-label" style="top: 35%; right: 12%;">CROWN</div>
+                <div class="craft-label" style="bottom: 30%; left: 15%;">BUCKLE</div>
+                <div class="craft-label" style="bottom: 20%; right: 10%;">GENEVA</div>
+            </div>
+        </section>
 
-    <!-- SECTION 5: THE CRAFT (Dark) -->
-    <section id="section5" class="section-dark">
-        <svg class="svg-engraving" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path class="engraving-stroke" d="M20,20 Q40,15 60,20 T80,25" fill="none" stroke="var(--bronze)" stroke-width="0.3"/>
-            <path class="engraving-stroke" d="M15,40 Q35,35 55,40 T75,45" fill="none" stroke="var(--bronze)" stroke-width="0.2"/>
-            <path class="engraving-stroke" d="M25,60 Q45,55 65,60 T85,65" fill="none" stroke="var(--bronze)" stroke-width="0.25"/>
-            <path class="engraving-stroke" d="M10,80 Q30,75 50,80 T90,85" fill="none" stroke="var(--bronze)" stroke-width="0.15"/>
-        </svg>
-        <span class="ghost ghost-word ghost-case">CASE</span>
-        <span class="ghost ghost-word ghost-crown">CROWN</span>
-        <span class="ghost ghost-word ghost-buckle">BUCKLE</span>
-        <span class="ghost ghost-word ghost-geneva">GENEVA</span>
-        <h2 class="focus-text">HAND ENGRAVED</h2>
-    </section>
+        <!-- SECTION 5: COMMISSION -->
+        <section id="section5">
+            <canvas id="noise-canvas"></canvas>
+            <div class="commission-container" id="commissionContainer">
+                <div class="commission-text" id="commissionText">COMMISSION</div>
+                <div class="email-text" id="emailText">INFO@BALLOUARD.COM</div>
+                <div class="copied-feedback" id="copiedFeedback">Copied to clipboard</div>
+            </div>
+            <div class="commission-footer">MMXXVI L'ATELIER BALLOUARD, GENEVE</div>
+        </section>
+    </div>
 
-    <!-- SECTION 6: THE COMMISSION (Light) -->
-    <section id="section6" class="section-light">
-        <span class="ghost ghost-atelier">Geneva Atelier</span>
-        <span class="micro micro-copyright">©Velocity2026</span>
-        <div class="commission-container" id="commissionContainer">
-            <h2 class="focus-text light-section" id="commissionText">COMMISSION</h2>
-            <span class="email-text" id="emailText">INFO@BALLOUARD.COM</span>
-        </div>
-        <span class="copied-indicator" id="copiedIndicator">COPIED TO CLIPBOARD</span>
-    </section>
-
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // ============================================
-        // HEAVY SLOW SCROLL — Like winding a watch
-        // ============================================
-        const lenis = new Lenis({
-            lerp: 0.01,           // Ultra slow interpolation (was 0.02)
-            wheelMultiplier: 0.4, // Heavy resistance (was 0.6)
-            smooth: true,
-            smoothTouch: false
-        });
+        // LOADER SEQUENCE
+        const loader = document.getElementById('loader');
+        const loaderWord = document.getElementById('loaderWord');
+        const loaderSub = document.getElementById('loaderSub');
+        const mainContent = document.getElementById('main-content');
+        const scrollHint = document.getElementById('scrollHint');
 
-        lenis.on('scroll', ScrollTrigger.update);
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
+        function runLoader() {
+            const tl = gsap.timeline();
+            tl.to(loaderWord, { letterSpacing: '0.15em', opacity: 0.9, filter: 'blur(0px)', duration: 5, ease: 'power2.out' });
+            tl.to(loaderSub, { opacity: 0.6, duration: 1.5, ease: 'power2.out' }, '-=1');
+            tl.to({}, { duration: 1 }); // Hold
+            tl.to(loaderWord, { letterSpacing: '3em', opacity: 0, filter: 'blur(20px)', duration: 1.5, ease: 'power2.inOut' });
+            tl.to(loaderSub, { opacity: 0, duration: 1, ease: 'power2.inOut' }, '-=1');
+            tl.add(() => {
+                loader.style.display = 'none';
+                mainContent.classList.add('visible');
+                scrollHint.classList.add('visible');
+                setTimeout(() => scrollHint.classList.remove('visible'), 5000);
+                initSectionAnimations();
+            });
         }
-        requestAnimationFrame(raf);
+        window.addEventListener('load', runLoader);
 
-        // ============================================
-        // GRAIN TEXTURE OVERLAY — Subtle, timeless
-        // ============================================
-        const grainCanvas = document.getElementById('grainCanvas');
-        const grainCtx = grainCanvas.getContext('2d');
-        let grainWidth, grainHeight;
+        // SECTION 1: PARTICLES
+        function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            const particles = [];
 
-        function resizeGrain() {
-            grainWidth = window.innerWidth;
-            grainHeight = window.innerHeight;
-            grainCanvas.width = grainWidth;
-            grainCanvas.height = grainHeight;
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            class Particle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = height + Math.random() * 100;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speed = Math.random() * 0.3 + 0.1;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                }
+                update() {
+                    this.y -= this.speed;
+                    if (this.y < -10) this.reset();
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(196, 164, 132, ${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 25; i++) particles.push(new Particle());
+
+            let frameCount = 0;
+            function animate() {
+                frameCount++;
+                if (frameCount % 2 === 0) {
+                    ctx.clearRect(0, 0, width, height);
+                    particles.forEach(p => { p.update(); p.draw(); });
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
-        resizeGrain();
-        window.addEventListener('resize', resizeGrain);
 
-        let frameCount = 0;
-        function drawGrain() {
-            frameCount++;
-            // Update only every 3 frames (20fps instead of 60fps) for subtlety
-            if (frameCount % 3 === 0) {
-                const imageData = grainCtx.createImageData(grainWidth, grainHeight);
-                const data = imageData.data;
-                
-                for (let i = 0; i < data.length; i += 4) {
-                    const value = Math.random() * 255;
-                    data[i] = value;     // R
-                    data[i + 1] = value; // G
-                    data[i + 2] = value; // B
-                    data[i + 3] = 8;     // A (very subtle)
+        // SECTION 2: TYPEWRITER
+        let typewriterStarted = false;
+        function initTypewriter() {
+            if (typewriterStarted) return;
+            typewriterStarted = true;
+            const content = document.getElementById('typewriter-content');
+            const sub = document.getElementById('typewriterSub');
+            const year = document.getElementById('typewriterYear');
+            const text = 'LUDOVIC BALLOUARD';
+            let index = 0;
+
+            function type() {
+                if (index < text.length) {
+                    content.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, 150);
+                } else {
+                    gsap.to(sub, { opacity: 0.7, duration: 1.5, delay: 0.5 });
+                    gsap.to(year, { opacity: 0.5, duration: 1.5, delay: 1 });
                 }
-                
-                grainCtx.putImageData(imageData, 0, 0);
             }
-            requestAnimationFrame(drawGrain);
+            type();
         }
-        drawGrain();
 
-        // ============================================
-        // SECTION 1: THE WATCHMAKER — Fade in slowly
-        // ============================================
-        gsap.to('#section1 .focus-text', {
-            opacity: 0.9,
-            filter: 'blur(0px)',
-            duration: 4,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section1',
-                start: 'top top',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // SECTION 3: DISC
+        function initDisc() {
+            const canvas = document.getElementById('disc-canvas');
+            const ctx = canvas.getContext('2d');
+            const size = 350;
+            canvas.width = size;
+            canvas.height = size;
+            let rotation = 0;
+            const cx = size / 2, cy = size / 2, radius = 140;
 
-        // ============================================
-        // SECTION 2: THE PAST — Crossfade text over 8s
-        // ============================================
-        const pastText = document.getElementById('pastText');
-        
-        // Timeline for text crossfade
-        const pastTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: '#section2',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
-            }
-        });
+            function draw() {
+                ctx.clearRect(0, 0, size, size);
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(196, 164, 132, 0.1)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(196, 164, 132, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
 
-        // Fade in "FRANCK MULLER"
-        pastTl.to('#section2 .focus-text', {
-            opacity: 0.9,
-            duration: 3,
-            ease: 'power2.out'
-        });
-
-        // Hold for 3 seconds
-        pastTl.to('#section2 .focus-text', {
-            duration: 3
-        });
-
-        // Crossfade to "F.P. JOURNE"
-        pastTl.to('#section2 .focus-text', {
-            opacity: 0,
-            duration: 1.5,
-            ease: 'power2.inOut',
-            onComplete: () => {
-                pastText.textContent = 'F.P. JOURNE';
-            }
-        });
-        pastTl.to('#section2 .focus-text', {
-            opacity: 0.9,
-            duration: 1.5,
-            ease: 'power2.out'
-        });
-
-        // SVG bridges draw on
-        const bridgePaths = document.querySelectorAll('#section2 .svg-bridges path');
-        bridgePaths.forEach((path, i) => {
-            const length = path.getTotalLength ? path.getTotalLength() : 100;
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            
-            gsap.to(path, {
-                strokeDashoffset: 0,
-                duration: 4,
-                delay: i * 0.5,
-                ease: 'power2.inOut',
-                scrollTrigger: {
-                    trigger: '#section2',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
+                for (let i = 1; i <= 12; i++) {
+                    const angle = (i / 12) * Math.PI * 2 + rotation;
+                    const x = cx + Math.cos(angle) * (radius - 30);
+                    const y = cy + Math.sin(angle) * (radius - 30);
+                    ctx.save();
+                    ctx.translate(x, y);
+                    const textRotation = angle - rotation - Math.PI / 2;
+                    ctx.rotate(textRotation);
+                    ctx.font = '24px Cormorant Garamond';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const isCurrent = Math.abs((angle - rotation + Math.PI / 2) % (Math.PI * 2)) < 0.3;
+                    ctx.fillStyle = isCurrent ? '#9A7B5B' : 'rgba(154, 123, 91, 0.2)';
+                    ctx.fillText(i.toString(), 0, 0);
+                    ctx.restore();
                 }
-            });
-        });
 
-        // ============================================
-        // SECTION 3: THE PRESENT — Hour canvas animation
-        // ============================================
-        const hourCanvas = document.getElementById('hourCanvas');
-        const hCtx = hourCanvas.getContext('2d');
-        hourCanvas.width = 200;
-        hourCanvas.height = 200;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#C4A484';
+                ctx.fill();
 
-        let hourRotation = 0;
-        function drawHourDisc() {
-            hCtx.clearRect(0, 0, 200, 200);
-            const cx = 100;
-            const cy = 100;
-            const radius = 80;
-
-            // Draw disc
-            hCtx.beginPath();
-            hCtx.arc(cx, cy, radius, 0, Math.PI * 2);
-            hCtx.fillStyle = 'rgba(196, 164, 132, 0.2)';
-            hCtx.fill();
-
-            // Draw "12" upright
-            hCtx.save();
-            hCtx.translate(cx, cy);
-            hCtx.rotate(-hourRotation);
-            hCtx.font = '30px Canela';
-            hCtx.fillStyle = '#1A1816';
-            hCtx.textAlign = 'center';
-            hCtx.textBaseline = 'middle';
-            hCtx.fillText('12', 0, -radius + 30);
-            hCtx.restore();
-
-            // Draw other numerals upside down
-            for (let i = 1; i <= 11; i++) {
-                if (i === 12) continue;
-                const angle = (i / 12) * Math.PI * 2;
-                const x = cx + Math.cos(angle) * (radius - 30);
-                const y = cy + Math.sin(angle) * (radius - 30);
-                
-                hCtx.save();
-                hCtx.translate(x, y);
-                hCtx.rotate(angle + Math.PI / 2); // Upside down
-                hCtx.font = '20px Canela';
-                hCtx.fillStyle = 'rgba(26, 24, 22, 0.3)';
-                hCtx.textAlign = 'center';
-                hCtx.textBaseline = 'middle';
-                hCtx.fillText(i.toString(), 0, 0);
-                hCtx.restore();
+                rotation += 0.002;
+                requestAnimationFrame(draw);
             }
-
-            hourRotation += 0.001; // Very slow rotation
-            requestAnimationFrame(drawHourDisc);
+            draw();
         }
-        drawHourDisc();
 
-        // Section 3 focus text
-        gsap.to('#section3 .focus-text', {
-            opacity: 0.9,
-            duration: 3,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section3',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
+        // SECTION 4: SVG
+        function initSvg() {
+            const lines = document.querySelectorAll('.craft-line');
+            lines.forEach((line, i) => {
+                const length = line.getTotalLength ? line.getTotalLength() : 200;
+                line.style.strokeDasharray = length;
+                line.style.strokeDashoffset = length;
+                gsap.to(line, {
+                    strokeDashoffset: 0,
+                    duration: 4,
+                    delay: i * 0.4,
+                    ease: 'power2.inOut',
+                    scrollTrigger: { trigger: '#section4', start: 'top center', toggleActions: 'play none none reverse' }
+                });
+            });
+            gsap.utils.toArray('.craft-label').forEach((label, i) => {
+                gsap.fromTo(label, { opacity: 0 }, {
+                    opacity: 0.4,
+                    duration: 2,
+                    delay: 2 + (i * 0.3),
+                    scrollTrigger: { trigger: '#section4', start: 'top center', toggleActions: 'play none none reverse' }
+                });
+            });
+        }
+
+        // SECTION 5: COMMISSION
+        function initCommission() {
+            const container = document.getElementById('commissionContainer');
+            const commissionText = document.getElementById('commissionText');
+            const emailText = document.getElementById('emailText');
+            const feedback = document.getElementById('copiedFeedback');
+
+            container.addEventListener('mouseenter', () => {
+                commissionText.classList.add('hidden');
+                emailText.classList.add('visible');
+            });
+            container.addEventListener('mouseleave', () => {
+                commissionText.classList.remove('hidden');
+                emailText.classList.remove('visible');
+            });
+            container.addEventListener('click', () => {
+                navigator.clipboard.writeText('info@ballouard.com').then(() => {
+                    feedback.classList.add('visible');
+                    setTimeout(() => feedback.classList.remove('visible'), 2000);
+                });
+            });
+        }
+
+        // NOISE
+        function initNoise() {
+            const canvas = document.getElementById('noise-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
             }
-        });
+            resize();
+            window.addEventListener('resize', resize);
 
-        // ============================================
-        // SECTION 4: THE COMPLEXITY — Specs scattered
-        // ============================================
-        gsap.to('#section4 .focus-text', {
-            opacity: 0.9,
-            duration: 3,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section4',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
-            }
-        });
-
-        // Ghost specs fade in slowly
-        gsap.utils.toArray('#section4 .ghost').forEach((ghost, i) => {
-            gsap.to(ghost, {
-                opacity: 0.25,
-                duration: 2,
-                delay: 1 + (i * 0.3),
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: '#section4',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
+            let frameCount = 0;
+            function draw() {
+                frameCount++;
+                if (frameCount % 3 === 0) {
+                    const imageData = ctx.createImageData(width, height);
+                    const data = imageData.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const value = Math.random() * 255;
+                        data[i] = value;
+                        data[i + 1] = value;
+                        data[i + 2] = value;
+                        data[i + 3] = 12;
+                    }
+                    ctx.putImageData(imageData, 0, 0);
                 }
-            });
-        });
-
-        // ============================================
-        // SECTION 5: THE CRAFT — Engraving strokes
-        // ============================================
-        const engravingPaths = document.querySelectorAll('.engraving-stroke');
-        engravingPaths.forEach((path, i) => {
-            const length = path.getTotalLength ? path.getTotalLength() : 100;
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            
-            gsap.to(path, {
-                strokeDashoffset: 0,
-                duration: 5,
-                delay: i * 0.8,
-                ease: 'power2.inOut',
-                scrollTrigger: {
-                    trigger: '#section5',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        });
-
-        gsap.to('#section5 .focus-text', {
-            opacity: 0.9,
-            duration: 3,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section5',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
+                requestAnimationFrame(draw);
             }
-        });
+            draw();
+        }
 
-        // Ghost words fade in
-        gsap.utils.toArray('#section5 .ghost-word').forEach((word, i) => {
-            gsap.to(word, {
-                opacity: 0.25,
-                duration: 2,
-                delay: 2 + (i * 0.4),
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: '#section5',
-                    start: 'top center',
-                    toggleActions: 'play none none reverse'
-                }
-            });
-        });
+        // INIT ALL
+        function initSectionAnimations() {
+            initParticles();
+            ScrollTrigger.create({ trigger: '#section2', start: 'top center', onEnter: initTypewriter, once: true });
+            ScrollTrigger.create({ trigger: '#section3', start: 'top center', onEnter: initDisc, once: true });
+            initSvg();
+            initCommission();
+            initNoise();
+        }
 
-        // ============================================
-        // SECTION 6: THE COMMISSION — Morphing email
-        // ============================================
-        const commissionContainer = document.getElementById('commissionContainer');
-        const commissionText = document.getElementById('commissionText');
-        const emailText = document.getElementById('emailText');
-        const copiedIndicator = document.getElementById('copiedIndicator');
-
-        // Hover: morph to email
-        commissionContainer.addEventListener('mouseenter', () => {
-            commissionText.classList.add('morphed');
-            emailText.classList.add('visible');
-        });
-
-        commissionContainer.addEventListener('mouseleave', () => {
-            commissionText.classList.remove('morphed');
-            emailText.classList.remove('visible');
-        });
-
-        // Click: copy to clipboard
-        commissionContainer.addEventListener('click', () => {
-            navigator.clipboard.writeText('info@ballouard.com').then(() => {
-                copiedIndicator.classList.add('visible');
-                setTimeout(() => {
-                    copiedIndicator.classList.remove('visible');
-                }, 2000);
-            });
-        });
-
-        // Section 6 animations
-        gsap.to('#section6 .focus-text', {
-            opacity: 0.85,
-            duration: 3,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section6',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
-            }
-        });
-
-        gsap.to('#section6 .ghost-atelier', {
-            opacity: 0.25,
-            duration: 2,
-            delay: 1,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section6',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
-            }
-        });
-
-        gsap.to('#section6 .micro-copyright', {
-            opacity: 0.2,
-            duration: 2,
-            delay: 1.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '#section6',
-                start: 'top center',
-                toggleActions: 'play none none reverse'
-            }
-        });
-
-        // ============================================
-        // KEYBOARD NAVIGATION
-        // ============================================
-        const sections = document.querySelectorAll('section');
-        
+        // KEYBOARD NAV
         document.addEventListener('keydown', (e) => {
-            const currentSection = document.querySelector('section:hover') || sections[0];
-            const currentIndex = Array.from(sections).indexOf(currentSection);
+            const scrollContainer = document.getElementById('main-content');
+            const sections = document.querySelectorAll('section');
+            const scrollTop = scrollContainer.scrollTop;
+            const viewportHeight = window.innerHeight;
+            const currentSection = Math.round(scrollTop / viewportHeight);
             
-            if (e.key === 'ArrowDown' && currentIndex < sections.length - 1) {
-                lenis.scrollTo(sections[currentIndex + 1]);
-            } else if (e.key === 'ArrowUp' && currentIndex > 0) {
-                lenis.scrollTo(sections[currentIndex - 1]);
+            if (e.key === 'ArrowDown' && currentSection < sections.length - 1) {
+                sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' && currentSection > 0) {
+                sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
             }
         });
     </script>
