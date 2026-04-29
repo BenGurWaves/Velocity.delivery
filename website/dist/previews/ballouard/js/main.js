@@ -166,26 +166,26 @@ function initScrollAnimations() {
         scrollTrigger: {
             trigger: '#atelier',
             start: 'top top',
-            end: '+=150%',
-            scrub: 1,
+            end: '+=100%',
+            scrub: true,
             pin: true,
             anticipatePin: 1
         }
     });
 
     journey1.to('.hero-title', {
-        scale: 0.4,
+        scale: 0.5,
         opacity: 0,
         filter: 'blur(20px)',
         duration: 1
     })
     .to('.hero__background', {
-        scale: 1.8,
+        scale: 2,
         opacity: 0,
         duration: 1
     }, 0)
     .from('#philosophy', {
-        scale: 0.6,
+        scale: 0.5,
         opacity: 0,
         duration: 1
     }, 0);
@@ -195,8 +195,8 @@ function initScrollAnimations() {
         scrollTrigger: {
             trigger: '#philosophy',
             start: 'top top',
-            end: '+=150%',
-            scrub: 1,
+            end: '+=100%',
+            scrub: true,
             pin: true,
             anticipatePin: 1
         }
@@ -225,7 +225,7 @@ function initScrollAnimations() {
                 trigger: horizontalSection,
                 start: 'top top',
                 end: () => `+=${horizontalStrip.scrollWidth}`,
-                scrub: 1,
+                scrub: true,
                 pin: true,
                 anticipatePin: 1,
                 invalidateOnRefresh: true
@@ -239,11 +239,11 @@ function initScrollAnimations() {
             trigger: '#mastery',
             start: 'top bottom',
             end: 'bottom top',
-            scrub: 1
+            scrub: true
         },
-        rotation: 1080,
-        scale: 1.3,
-        y: -150,
+        rotation: 720,
+        scale: 1.2,
+        y: -100,
         ease: 'none'
     });
 
@@ -253,10 +253,10 @@ function initScrollAnimations() {
             trigger: '#contact',
             start: 'top 80%',
             end: 'top 20%',
-            scrub: 1
+            scrub: true
         },
         opacity: 0,
-        y: 150
+        y: 100
     });
 
     // Footer Watermark (Fixing 'LOCI')
@@ -266,10 +266,10 @@ function initScrollAnimations() {
             trigger: '.footer',
             start: 'top bottom',
             end: 'bottom bottom',
-            scrub: 1
+            scrub: true
         },
-        y: 150,
+        y: 100,
         opacity: 0,
-        stagger: 0.08
+        stagger: 0.05
     });
 }

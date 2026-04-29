@@ -128,11 +128,10 @@ img {
 
 .monogram__stroke {
   stroke: var(--silver);
-  stroke-width: 1.2;
+  stroke-width: 1.5;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.8;
 }
 
 .loader__text {
@@ -176,7 +175,7 @@ img {
 
 .section {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   background: var(--bg);
   display: flex;
@@ -392,7 +391,7 @@ img {
   left: 0;
   width: 100vw;
   font-family: "Cormorant Garamond", serif;
-  font-size: 15vw;
+  font-size: 11vw;
   font-weight: 600;
   color: rgba(231, 230, 230, 0.03);
   letter-spacing: -0.02em;
@@ -401,7 +400,7 @@ img {
   text-align: center;
   display: flex;
   justify-content: space-between;
-  padding: 0 4vw;
+  padding: 0 6vw;
 }
 
 .footer__cta {
