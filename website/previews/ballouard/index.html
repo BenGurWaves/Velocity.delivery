@@ -38,7 +38,6 @@
             z-index: 99999;
             transition: transform 0.15s ease, opacity 0.15s ease, width 0.3s ease, height 0.3s ease;
             transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
         }
         .cursor.hover {
             transform: translate(-50%, -50%) scale(2);
@@ -88,8 +87,7 @@
         .loader-word {
             font-size: 12vw;
             letter-spacing: 0.2em;
-            opacity: 0.9;
-            filter: blur(0px);
+            opacity: 1;
             color: var(--bronze);
             white-space: nowrap;
             font-weight: 400;
@@ -123,31 +121,44 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            padding: 15vh 0;
         }
 
         /* SECTION 1: GENESIS */
         #section1 {
-            background: var(--void);
+            background: radial-gradient(ellipse at center, #0D0C0B 0%, #151412 100%);
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: 35vh;
         }
         #particle-canvas {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            opacity: 0.4;
+            opacity: 0.25;
             pointer-events: none;
         }
         .genesis-text {
-            font-size: 26vh;
+            font-size: 18vh;
             color: var(--bronze);
-            letter-spacing: 0.08em;
-            transform: scaleY(1.4);
+            letter-spacing: -0.02em;
+            transform: scaleY(1.2);
             z-index: 10;
-            line-height: 0.85;
+            line-height: 0.9;
             white-space: nowrap;
-            margin-top: -5vh;
             font-weight: 400;
+            background: linear-gradient(to top, var(--bronze-dark) 0%, var(--bronze-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .genesis-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 0.4em;
+            color: var(--ghost);
+            text-transform: uppercase;
+            margin-top: 4vh;
+            font-weight: 300;
         }
         .genesis-year {
             position: absolute;
@@ -160,17 +171,39 @@
 
         /* SECTION 2: WATCHMAKER */
         #section2 {
-            background: var(--void);
+            background: linear-gradient(180deg, #0D0C0B 0%, #121110 50%, #0D0C0B 100%);
             align-items: center;
             justify-content: center;
         }
-        .typewriter-container { text-align: center; z-index: 10; }
+        .typewriter-container { 
+            text-align: center; 
+            z-index: 10;
+            max-width: 80vw;
+        }
+        .typewriter-pretitle {
+            font-size: 1rem;
+            letter-spacing: 0.5em;
+            color: var(--bronze);
+            text-transform: uppercase;
+            margin-bottom: 3vh;
+            font-weight: 300;
+            opacity: 0.7;
+        }
         .typewriter-text {
-            font-size: 14vh;
+            font-size: 10vh;
             color: var(--ivory);
-            letter-spacing: 0.12em;
-            line-height: 1.2;
+            letter-spacing: 0.15em;
+            line-height: 1.3;
             font-weight: 400;
+        }
+        .typewriter-quote {
+            font-size: 2.5vh;
+            font-style: italic;
+            letter-spacing: 0.1em;
+            color: var(--ghost);
+            margin-top: 4vh;
+            max-width: 50vw;
+            line-height: 1.6;
         }
         .typewriter-cursor {
             display: inline-block;
@@ -276,19 +309,41 @@
 
         /* SECTION 5: COMMISSION */
         #section5 {
-            background: var(--ivory);
+            background: linear-gradient(135deg, #F5F0EB 0%, #EDE8E3 50%, #F5F0EB 100%);
             align-items: center;
             justify-content: center;
             position: relative;
         }
+        #section5::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-radial-gradient(
+                circle at 50% 50%,
+                transparent 0,
+                transparent 2px,
+                rgba(196, 164, 132, 0.03) 2px,
+                rgba(196, 164, 132, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+        .commission-pretitle {
+            position: absolute;
+            top: 25%;
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+            color: rgba(154, 123, 91, 0.6);
+            text-transform: uppercase;
+            font-weight: 300;
+        }
         .commission-hint {
             position: absolute;
-            bottom: -2rem;
+            bottom: -2.5rem;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.6rem;
-            letter-spacing: 0.3em;
-            color: rgba(154, 123, 91, 0.5);
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            color: rgba(154, 123, 91, 0.4);
             text-transform: uppercase;
             opacity: 1;
             transition: opacity 0.5s ease;
@@ -304,22 +359,38 @@
             padding: 2rem;
         }
         .commission-text {
-            font-size: 16vh;
+            font-size: 12vh;
             color: var(--bronze-dark);
-            letter-spacing: 0.15em;
-            transform: scaleY(1.3);
+            letter-spacing: 0.2em;
+            transform: scaleY(1.2);
             transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             line-height: 0.9;
             font-weight: 400;
         }
         .commission-text.hidden { opacity: 0; }
-        .email-text {
-            font-size: 10vh;
-            color: var(--bronze-dark);
-            letter-spacing: 0.2em;
+        .appointment-text {
             position: absolute;
             top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scaleY(1.3);
+            transform: translate(-50%, -50%) scaleY(1.1);
+            font-size: 2vh;
+            letter-spacing: 0.3em;
+            color: var(--bronze-dark);
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            white-space: nowrap;
+            font-weight: 300;
+        }
+        .appointment-text.visible {
+            opacity: 0.8;
+        }
+        .email-text {
+            font-size: 8vh;
+            color: var(--bronze-dark);
+            letter-spacing: 0.25em;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scaleY(1.1);
             opacity: 0;
             transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
@@ -330,10 +401,10 @@
         .email-text.visible { opacity: 1; }
         .copied-feedback {
             position: absolute;
-            bottom: -3rem;
+            bottom: -4rem;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             letter-spacing: 0.4em;
             color: var(--bronze);
             text-transform: uppercase;
@@ -344,19 +415,30 @@
         .commission-footer {
             position: absolute;
             bottom: 8%;
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            color: rgba(26, 24, 22, 0.4);
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            color: rgba(26, 24, 22, 0.35);
             text-transform: uppercase;
             text-align: center;
             width: 100%;
         }
+        .atelier-note {
+            position: absolute;
+            bottom: 12%;
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            color: rgba(154, 123, 91, 0.5);
+            text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+            font-style: italic;
+        }
         .velocity-credit {
             position: absolute;
             bottom: 4%;
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
-            color: rgba(26, 24, 22, 0.25);
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            color: rgba(26, 24, 22, 0.2);
             text-transform: uppercase;
             text-align: center;
             width: 100%;
@@ -399,15 +481,18 @@
         <section id="section1">
             <canvas id="particle-canvas"></canvas>
             <div class="genesis-text">BALLOUARD</div>
+            <div class="genesis-subtitle">Haute Horlogerie</div>
             <div class="genesis-year">Geneva MMXXVI</div>
         </section>
 
         <!-- SECTION 2: WATCHMAKER -->
         <section id="section2">
             <div class="typewriter-container">
+                <div class="typewriter-pretitle">The Watchmaker</div>
                 <div class="typewriter-text">
                     <span id="typewriter-content"></span><span class="typewriter-cursor"></span>
                 </div>
+                <div class="typewriter-quote">"Only the present moment has a meaning."</div>
                 <div class="typewriter-sub" id="typewriterSub">Founder & Watchmaker</div>
                 <div class="typewriter-year" id="typewriterYear">Since 2009</div>
             </div>
@@ -450,12 +535,15 @@
 
         <!-- SECTION 5: COMMISSION -->
         <section id="section5">
+            <div class="commission-pretitle">Private Access</div>
             <div class="commission-container" id="commissionContainer">
                 <div class="commission-text" id="commissionText">COMMISSION</div>
+                <div class="appointment-text" id="appointmentText">By Appointment Only</div>
                 <div class="email-text" id="emailText">INFO@BALLOUARD.COM</div>
-                <div class="copied-feedback" id="copiedFeedback">Copied to clipboard</div>
+                <div class="copied-feedback" id="copiedFeedback">Invitation Extended</div>
                 <div class="commission-hint" id="commissionHint">hover to inquire</div>
             </div>
+            <div class="atelier-note">Geneva atelier visits limited to four per month</div>
             <div class="commission-footer">MMXXVI L'ATELIER BALLOUARD, GENEVE</div>
             <div class="velocity-credit">Experience by Velocity</div>
         </section>
@@ -491,6 +579,16 @@
             });
         }
         window.addEventListener('load', runLoader);
+        
+        // Fallback: show content after 12 seconds regardless
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                loader.style.display = 'none';
+                mainContent.classList.add('visible');
+                scrollHint.classList.add('visible');
+                initSectionAnimations();
+            }
+        }, 12000);
 
         // SECTION 1: PARTICLES
         function initParticles() {
@@ -642,31 +740,84 @@
         function initCommission() {
             const container = document.getElementById('commissionContainer');
             const commissionText = document.getElementById('commissionText');
+            const appointmentText = document.getElementById('appointmentText');
             const emailText = document.getElementById('emailText');
             const feedback = document.getElementById('copiedFeedback');
             const hint = document.getElementById('commissionHint');
+            let isRevealed = false;
 
             container.addEventListener('mouseenter', () => {
-                commissionText.classList.add('hidden');
-                emailText.classList.add('visible');
+                if (!isRevealed) {
+                    commissionText.classList.add('hidden');
+                    appointmentText.classList.add('visible');
+                    setTimeout(() => {
+                        appointmentText.classList.remove('visible');
+                        emailText.classList.add('visible');
+                    }, 1200);
+                    isRevealed = true;
+                }
                 hint.classList.add('hidden');
             });
             container.addEventListener('mouseleave', () => {
                 commissionText.classList.remove('hidden');
+                appointmentText.classList.remove('visible');
                 emailText.classList.remove('visible');
                 hint.classList.remove('hidden');
+                isRevealed = false;
             });
             container.addEventListener('click', () => {
                 navigator.clipboard.writeText('info@ballouard.com').then(() => {
                     feedback.classList.add('visible');
-                    setTimeout(() => feedback.classList.remove('visible'), 2000);
+                    setTimeout(() => feedback.classList.remove('visible'), 2500);
                 });
+            });
+        }
+
+        // SECTION ENTRANCE ANIMATIONS
+        function initEntranceAnimations() {
+            // Genesis elements
+            gsap.fromTo('.genesis-text', 
+                { opacity: 0, y: 30 }, 
+                { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out', delay: 0.3 }
+            );
+            gsap.fromTo('.genesis-subtitle', 
+                { opacity: 0 }, 
+                { opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.8 }
+            );
+            
+            // Section 2 pretitle
+            ScrollTrigger.create({
+                trigger: '#section2',
+                start: 'top 70%',
+                onEnter: () => {
+                    gsap.fromTo('.typewriter-pretitle', 
+                        { opacity: 0, y: 20 }, 
+                        { opacity: 0.7, y: 0, duration: 1, ease: 'power2.out' }
+                    );
+                },
+                once: true
+            });
+            
+            // Section 2 quote reveals after typewriter
+            ScrollTrigger.create({
+                trigger: '#section2',
+                start: 'top 50%',
+                onEnter: () => {
+                    setTimeout(() => {
+                        gsap.fromTo('.typewriter-quote', 
+                            { opacity: 0, y: 15 }, 
+                            { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out' }
+                        );
+                    }, 4000);
+                },
+                once: true
             });
         }
 
         // INIT ALL
         function initSectionAnimations() {
             initParticles();
+            initEntranceAnimations();
             // Typewriter triggers when Section 2 enters viewport
             ScrollTrigger.create({ 
                 trigger: '#section2', 
