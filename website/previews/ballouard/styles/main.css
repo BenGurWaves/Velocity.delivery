@@ -1,15 +1,14 @@
 /* ========================================
-   Ballouard — Delusional Atelier
-   Quiet Luxury & Intentional Motion
+   Ballouard — Cinematic Atelier
+   Matte Organic & Non-Linear
    ======================================== */
 
 :root {
   --bg: #000000;
   --text: #E7E6E6;
-  --accent: #A67C52;
   --silver: #E7E6E6;
+  --ease-expo: cubic-bezier(1, 0, 0, 1);
   --ease-heavy: cubic-bezier(0.7, 0, 0.3, 1);
-  --ease-organic: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ========================================
@@ -30,7 +29,7 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Inter", -apple-system, sans-serif;
+  font-family: "Söhne", "Helvetica Neue", Helvetica, sans-serif;
   font-weight: 300;
   line-height: 1.6;
   overflow-x: hidden;
@@ -52,56 +51,53 @@ img {
 /* ========================================
    Typography
    ======================================== */
-.title {
-  font-family: "Cormorant Garamond", serif;
+.headline {
+  font-family: "Canela", "Optima", "Cormorant Garamond", serif;
   font-weight: 300;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .title--primary {
-  font-size: clamp(4rem, 18vw, 15rem);
-  letter-spacing: 0.3em;
-  line-height: 1;
-  text-align: center;
+  font-size: clamp(4rem, 15vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
 }
 
 .title--secondary {
-  font-size: clamp(2rem, 6vw, 5rem);
-  letter-spacing: 0.1em;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.body-text {
+  font-family: "Söhne", "Helvetica", sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* ========================================
-   Custom Cursor
+   Custom Geometric Cursor
    ======================================== */
 .cursor {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1000000; /* Absolute persistence */
-  mix-blend-mode: difference;
+  z-index: 1000000;
 }
 
 .cursor__ring {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(231, 230, 230, 0.4);
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--silver);
   transform: translate(-50%, -50%);
-  transition: width 0.4s var(--ease-heavy), height 0.4s var(--ease-heavy);
-}
-
-.cursor__dot {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--silver);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transition: border-radius 0.3s ease;
+  will-change: transform, width, height, border-radius;
 }
 
 /* ========================================
-   Loader
+   Section 0: Fly-Through Loader
    ======================================== */
 .loader {
   position: fixed;
@@ -111,321 +107,263 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.loader__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  perspective: 2000px;
 }
 
 .loader__monogram {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   overflow: visible;
+  will-change: transform, opacity;
 }
 
 .monogram__stroke {
   stroke: var(--silver);
-  stroke-width: 1.5;
+  stroke-width: 1;
   fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.loader__text {
-  font-family: "Inter", sans-serif;
-  font-size: 0.5rem;
-  font-weight: 400;
-  letter-spacing: 0.5em;
-  text-transform: uppercase;
-  color: rgba(231, 230, 230, 0.5);
-  opacity: 0;
-  display: flex;
-  gap: 0.5em;
 }
 
 /* ========================================
-   Navigation
+   Section 1: Hero (The Illusion)
    ======================================== */
-.nav {
-  position: fixed;
+.hero {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
+  display: flex;
+  align-items: center;
+}
+
+.hero__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6vw;
+  transform-origin: right center;
+  will-change: transform, opacity;
+}
+
+.hero__right {
+  position: relative;
+  overflow: hidden;
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+.hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.hero__copy-main {
+  margin-bottom: 2rem;
+}
+
+.hero__copy-sub {
+  font-size: 0.9rem;
+  max-width: 30ch;
+}
+
+.nav__menu {
+  position: absolute;
   top: 3rem;
   right: 3rem;
-  z-index: 1000;
-}
-
-.nav__glyph {
-  font-family: "Inter", sans-serif;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
+  z-index: 100;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
   color: rgba(231, 230, 230, 0.6);
   cursor: pointer;
 }
 
-/* ========================================
-   Transitions & Layout
-   ======================================== */
-#smooth-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.section {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-  background: #000000;
+.calibration-mark {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  width: 40px;
+  height: 40px;
+  border: 0.5px solid rgba(231, 230, 230, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-}
-
-.section__grid {
-  position: relative;
-  z-index: 10; /* Above luminosity */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 6vw;
-}
-
-.hero__background {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  will-change: transform;
-}
-
-.hero__luminosity {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent, #000 85%);
-  z-index: 1;
-}
-
-/* Section 2 Zoom */
-.section--zoom {
-  background: #000;
-}
-
-.zoom-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.zoom-artifact {
-  width: 60vw;
-  height: auto;
-  will-change: transform;
-}
-
-.section__overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 20;
-}
-
-/* Section 3 Horizontal */
-.section--horizontal {
-  background: #0a0a0a;
-}
-
-.horizontal-strip {
-  display: flex;
-  height: 100vh;
-  width: fit-content;
-  padding: 0 20vw;
-  align-items: center;
-  gap: 20vw;
-}
-
-.strip-item {
-  flex-shrink: 0;
-  width: 50vw;
-  height: 60vh;
-  background: var(--bg);
-  border: 1px solid rgba(231, 230, 230, 0.05);
-  overflow: hidden;
-}
-
-/* Section 4 Floating */
-.watch-floating {
-  width: 60vh;
-  height: 60vh;
-  will-change: transform;
-}
-
-/* Last Section */
-.section--last {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.last-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3;
-  filter: blur(10px);
-  z-index: 0;
-}
-
-.last-content {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-}
-
-/* ========================================
-   Modal
-   ======================================== */
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 999998;
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.modal.is-active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(5px);
-}
-
-.modal__content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 500px;
-  padding: 4rem;
-}
-
-.modal__title {
-  font-family: "Cormorant Garamond", serif;
-  font-size: 2rem;
-  letter-spacing: 0.2em;
-  margin-bottom: 2rem;
-  color: var(--silver);
-}
-
-.modal__text {
-  font-family: "Inter", sans-serif;
-  font-size: 0.75rem;
-  line-height: 2;
-  color: rgba(231, 230, 230, 0.6);
-  margin-bottom: 3rem;
-}
-
-.modal__progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: rgba(231, 230, 230, 0.1);
-}
-
-.modal__progress-bar {
-  height: 100%;
-  width: 100%;
-  background: var(--silver);
-  transform-origin: left;
-}
-
-.modal__close {
-  background: none;
-  border: none;
-  color: rgba(231, 230, 230, 0.5);
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  cursor: pointer;
-  transition: color 0.4s var(--ease-heavy);
-}
-
-.modal__close:hover {
-  color: var(--silver);
-}
-
-/* ========================================
-   High-End Footer
-   ======================================== */
-.footer {
-  position: relative;
-  padding: 30vh 0 10vh;
-  background: var(--bg);
-  text-align: center;
-}
-
-.footer__watermark {
-  position: absolute;
-  bottom: 8vh;
-  left: 0;
-  width: 100vw;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 8vw;
-  font-weight: 600;
-  color: rgba(231, 230, 230, 0.05);
-  letter-spacing: 0.1em;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  gap: 2vw;
-  padding: 0 4vw;
-}
-
-.footer__cta {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-style: italic;
-  font-weight: 300;
-  color: var(--silver);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(231, 230, 230, 0.1);
-  padding-bottom: 0.5rem;
-}
-
-.footer__copyright {
-  margin-top: 10vh;
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+  font-size: 0.5rem;
   color: rgba(231, 230, 230, 0.3);
 }
 
 /* ========================================
-   Responsive
+   Section 2: Philosophy (Pure Typography)
    ======================================== */
+.philosophy {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vw;
+  text-align: center;
+  background: var(--bg);
+  will-change: transform, opacity;
+}
+
+.philosophy__text {
+  max-width: 25ch;
+}
+
+.char {
+  opacity: 0.1;
+  will-change: opacity;
+}
+
+/* ========================================
+   Section 3: Craft (The Exploded View)
+   ======================================== */
+.craft {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.craft__assembly {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.craft__layer {
+  position: absolute;
+  width: 60vh;
+  height: 60vh;
+  will-change: transform, opacity;
+}
+
+.craft__copy {
+  position: absolute;
+  bottom: 10vh;
+  left: 10vw;
+  max-width: 40ch;
+  z-index: 10;
+}
+
+.heartbeat {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border: 0.5px solid rgba(231, 230, 230, 0.1);
+  border-radius: 50%;
+  animation: rotateClockwise 60s linear infinite;
+}
+
+@keyframes rotateClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Section 4: Legacy (Shader Abstraction)
+   ======================================== */
+.legacy {
+  height: 150vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#shader-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.legacy__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 60ch;
+}
+
+.legacy__text-fragment {
+  display: block;
+  will-change: transform, opacity, filter;
+  margin-bottom: 2rem;
+}
+
+/* ========================================
+   Section 5: Monumental Footer
+   ======================================== */
+.footer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+  text-align: center;
+  position: relative;
+}
+
+.footer__micro {
+  font-size: 0.6rem;
+  letter-spacing: 0.5em;
+  margin-bottom: 5vh;
+  color: rgba(231, 230, 230, 0.5);
+}
+
+.footer__cta {
+  font-size: clamp(3rem, 10vw, 8rem);
+  color: var(--silver);
+  transition: all 0.6s var(--ease-heavy);
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.footer__cta:hover {
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+}
+
+.footer__bottom {
+  position: absolute;
+  bottom: 4rem;
+  left: 6vw;
+  right: 6vw;
+  padding-top: 2rem;
+  border-top: 0.5px solid rgba(231, 230, 230, 0.2);
+  display: flex;
+  justify-content: flex-start;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: rgba(231, 230, 230, 0.3);
+}
+
+/* Global Section Breath */
+.section-breath {
+  will-change: transform;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .cursor { display: none; }
-  body { cursor: auto; }
-  .footer__watermark { font-size: 20vw; padding: 0 2vw; }
+  .hero__split {
+    grid-template-columns: 1fr;
+  }
+  .hero__left {
+    padding-top: 20vh;
+  }
+  .hero__right {
+    height: 50vh;
+  }
 }

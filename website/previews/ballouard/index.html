@@ -3,136 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ballouard — Delusional Atelier</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Ballouard — Cinematic Atelier</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <!-- Custom Cursor (Elite Persistence) -->
+    <!-- Custom Abstract Cursor -->
     <div class="cursor">
         <div class="cursor__ring"></div>
-        <div class="cursor__dot"></div>
     </div>
 
-    <!-- Loading State - LB Monogram (Precision Re-code) -->
+    <!-- Section 0: Fly-Through Loader -->
     <div id="loader" class="loader">
-        <div class="loader__inner">
-            <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <!-- Surgical LB Monogram -->
-                <path class="monogram__stroke" d="M 45 35 L 45 85 L 65 85" />
-                <path class="monogram__stroke" d="M 65 35 L 65 85 M 65 35 C 85 35 90 50 65 60 C 95 60 95 85 65 85" />
-            </svg>
-            <div class="loader__text">
-                <span>PREVIEW</span>
-                <span>ENVIRONMENT</span>
-            </div>
-        </div>
+        <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- Precise LB Monogram -->
+            <path class="monogram__stroke" d="M 45 35 L 45 85 L 65 85" />
+            <path class="monogram__stroke" d="M 65 35 L 65 85 M 65 35 C 85 35 90 50 65 60 C 95 60 95 85 65 85" />
+        </svg>
     </div>
-
-    <!-- Navigation Purge -->
-    <nav class="nav">
-        <div class="nav__trigger" data-modal="prototype">
-            <span class="nav__glyph">Menu</span>
-        </div>
-    </nav>
 
     <!-- Main Content -->
-    <main class="canvas" id="smooth-wrapper">
+    <main id="smooth-wrapper">
         <div id="smooth-content">
             
-            <!-- Section I: Hero (Breathing Immersion) -->
-            <section id="atelier" class="section">
-                <div class="hero__background" style="background-image: url('assets/The-upside-down-hero-img.jpeg');"></div>
-                <div class="hero__luminosity"></div>
-                <div class="section__grid">
-                    <h1 class="title title--primary hero-title">BALLOUARD</h1>
+            <!-- Section 1: The Hero (The Illusion) -->
+            <section id="hero" class="hero section-breath">
+                <div class="hero__split">
+                    <div class="hero__left">
+                        <div class="hero__copy-main">
+                            <h1 class="headline title--primary">Time is an<br>illusion.</h1>
+                        </div>
+                        <div class="hero__copy-sub">
+                            <p class="body-text">Ludovic Ballouard makes reality.</p>
+                        </div>
+                    </div>
+                    <div class="hero__right">
+                        <img src="assets/The-upside-down-hero-img.jpeg" class="hero__img" alt="The Illusion">
+                    </div>
+                </div>
+                <div class="nav__menu">MENU</div>
+                <div class="calibration-mark">
+                    <div class="calibration-inner">01</div>
                 </div>
             </section>
 
-            <!-- Section II: The Zoom (Z-Axis Walkthrough) -->
-            <section id="philosophy" class="section section--zoom">
-                <div class="rotation-wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                    <div class="zoom-container">
-                        <img src="assets/The-upside-down-hero-img.jpeg" class="zoom-artifact" alt="Detail">
-                    </div>
-                </div>
-                <div class="section__overlay">
-                    <h2 class="title title--secondary">The Architecture of Silence</h2>
-                </div>
-            </section>
-
-            <!-- Section III: Horizontal Excursion -->
-            <section id="collection" class="section section--horizontal">
-                <div class="horizontal-strip">
-                    <div class="strip-item">
-                        <img src="assets/movement.jpeg" alt="Movement">
-                    </div>
-                    <div class="strip-item">
-                        <img src="assets/ballouard-001.jpg" alt="Detail 1">
-                    </div>
-                    <div class="strip-item">
-                        <img src="assets/ballouard-002.jpg" alt="Detail 2">
-                    </div>
-                    <div class="strip-item">
-                        <img src="assets/ballouard-003.jpg" alt="Detail 3">
-                    </div>
+            <!-- Section 2: Philosophy (Pure Typography) -->
+            <section id="philosophy" class="philosophy section-breath">
+                <div class="philosophy__text">
+                    <h2 class="headline title--secondary" id="reveal-text">
+                        Discard the lie of past and future. 
+                        Embrace the only truth. 
+                        Our timepieces reveal the present... 
+                        the fleeting, terrifying, beautiful now.
+                    </h2>
                 </div>
             </section>
 
-            <!-- Section IV: Floating Void -->
-            <section id="mastery" class="section section--floating">
-                <div class="watch-floating">
-                    <img src="assets/half-time-watch.jpeg" alt="Half Time Watch">
+            <!-- Section 3: Craft (The Exploded View) -->
+            <section id="craft" class="craft section-breath">
+                <div class="craft__assembly">
+                    <div class="heartbeat"></div>
+                    <div class="craft__layer" data-depth="0.2">
+                        <img src="assets/movement.jpeg" alt="Movement Layer">
+                    </div>
+                    <div class="craft__layer" data-depth="0.5">
+                        <img src="assets/ballouard-001.jpg" alt="Component 1">
+                    </div>
+                    <div class="craft__layer" data-depth="0.8">
+                        <img src="assets/ballouard-003.jpg" alt="Component 2">
+                    </div>
+                    <div class="craft__layer" data-depth="1.1">
+                        <img src="assets/half-time-watch.jpeg" alt="Final Assembly">
+                    </div>
                 </div>
-                <div class="section__overlay">
-                    <h2 class="title title--secondary">Half Time</h2>
+                <div class="craft__copy">
+                    <p class="body-text">Obsessive detail. Hand-engraved in Geneva. We do not build watches; we forge philosophies that disrupt perception.</p>
                 </div>
             </section>
 
-            <!-- Section V: Distant Memory -->
-            <section id="contact" class="section--last">
-                <div class="last-bg" style="background-image: url('assets/random-bg.jpeg');"></div>
-                <div class="section__grid">
-                    <div class="last-content">
-                        <h2 class="title title--secondary" style="margin-bottom: 2rem;">Inquiries</h2>
-                        <a href="mailto:info@ballouard.com" class="footer__cta">info@ballouard.com</a>
+            <!-- Section 4: Legacy (Shader Abstraction) -->
+            <section id="legacy" class="legacy section-breath">
+                <canvas id="shader-canvas"></canvas>
+                <div class="legacy__content">
+                    <div class="legacy__text-fragment" data-index="0">
+                        <p class="body-text">Born from a dream to elevate time.</p>
+                    </div>
+                    <div class="legacy__text-fragment" data-index="1">
+                        <p class="body-text">Since 2009, Ludovic Ballouard has challenged every convention.</p>
+                    </div>
+                    <div class="legacy__text-fragment" data-index="2">
+                        <p class="body-text">Crafting mechanical marvels that defy perception.</p>
+                    </div>
+                    <div class="legacy__text-fragment" data-index="3">
+                        <p class="body-text">Our history is written in unexpected movements.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Footer Masterpiece -->
-            <footer class="footer">
-                <div class="footer__watermark">
-                    <span>V</span><span>E</span><span>L</span><span>O</span><span>C</span><span>I</span><span>T</span><span>Y</span>
+            <!-- Section 5: Monumental Footer -->
+            <footer class="footer section-breath">
+                <div class="footer__micro">
+                    <p class="body-text">To question time, inquire.</p>
                 </div>
-                <div class="footer__copyright">
+                <div class="footer__cta-wrap">
+                    <a href="mailto:info@ballouard.com" class="headline footer__cta">info@ballouard.com</a>
+                </div>
+                <div class="footer__bottom">
                     © 2026 VELOCITY | THE BALLOUARD PROTOTYPE
                 </div>
             </footer>
 
         </div>
     </main>
-
-    <!-- Preview Modal -->
-    <div class="modal" id="prototype-modal">
-        <div class="modal__backdrop"></div>
-        <div class="modal__overlay">
-            <div class="modal__content">
-                <h1 class="modal__title">THE PREVIEW ENVIRONMENT</h1>
-                <p class="modal__text">
-                    This is a bespoke digital prototype curated by VELOCITY for the Ballouard Atelier. Access is currently limited to authorized stakeholders.
-                </p>
-                <div class="modal__actions">
-                    <button class="modal__close" data-modal-close>Close</button>
-                </div>
-            </div>
-        </div>
-        <div class="modal__progress">
-            <div class="modal__progress-bar"></div>
-        </div>
-    </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
