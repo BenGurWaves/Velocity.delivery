@@ -1,0 +1,427 @@
+/* ============================================
+   LUDOVIC BALLOUARD — CINEMATIC ATELIER
+   A Pure HTML/CSS/JS Experience
+   ============================================ */
+
+/* Font Face Declarations */
+@font-face {
+    font-family: 'Canela';
+    src: url('fonts/Canela-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('fonts/Canela-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Söhne';
+    src: url('fonts/Sohne-Standard.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* CSS Reset & Base */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background: #000000;
+    color: #E7E6E6;
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow: hidden;
+    cursor: none;
+}
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+.cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(231, 230, 230, 0.8);
+    border-radius: 50%;
+    transition: width 0.15s ease, height 0.15s ease;
+}
+
+.cursor-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: #E7E6E6;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 6px rgba(231, 230, 230, 0.6);
+}
+
+/* ============================================
+   LOADER
+   ============================================ */
+.loader {
+    position: fixed;
+    inset: 0;
+    background: #000000;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.monogram {
+    width: 120px;
+    height: 120px;
+}
+
+.monogram-path {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+}
+
+/* ============================================
+   SECTIONS BASE
+   ============================================ */
+.section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    will-change: transform;
+}
+
+/* ============================================
+   SECTION 1 — HERO
+   ============================================ */
+.hero {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.hero-content {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.hero-text {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: calc((100vw - 1280px) / 2 + 40px);
+    padding-right: 4rem;
+    z-index: 2;
+    transform-style: preserve-3d;
+}
+
+.hero-text h1 {
+    font-family: 'Canela', 'Times New Roman', serif;
+    font-weight: 100;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    letter-spacing: 0.03em;
+    color: #E7E6E6;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-text p {
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    letter-spacing: 0.12em;
+    color: #B0B0B0;
+}
+
+.hero-image {
+    width: 40%;
+    height: 100%;
+    background: url('assets/The-upside-down-hero-img.jpeg') center right / cover no-repeat;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.hero-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(to right, #000000 0%, transparent 100%);
+    z-index: 1;
+}
+
+/* Menu */
+.menu {
+    position: absolute;
+    top: 3rem;
+    right: 3rem;
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #E7E6E6;
+    z-index: 100;
+}
+
+/* Calibration Mark */
+.calibration-mark {
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #E7E6E6;
+    transform: rotate(45deg);
+    animation: rotate-slow 20s linear infinite;
+    z-index: 100;
+}
+
+@keyframes rotate-slow {
+    from { transform: rotate(45deg); }
+    to { transform: rotate(405deg); }
+}
+
+/* ============================================
+   SECTION 2 — PHILOSOPHY
+   ============================================ */
+.philosophy {
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150vh;
+}
+
+.philosophy-content {
+    width: 40%;
+    text-align: left;
+    position: relative;
+    z-index: 2;
+}
+
+.philosophy-content h2 {
+    font-family: 'Canela', 'Times New Roman', serif;
+    font-weight: 100;
+    font-size: clamp(3rem, 7vw, 7rem);
+    line-height: 1.1;
+    color: #E7E6E6;
+    margin-bottom: 0.5em;
+}
+
+.philosophy-content p {
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    letter-spacing: 0.08em;
+    color: #A0A0A0;
+    margin-top: 2rem;
+    line-height: 1.8;
+}
+
+/* Split text characters */
+.char {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(40px);
+    will-change: opacity, filter, transform;
+}
+
+/* ============================================
+   SECTION 3 — CRAFT
+   ============================================ */
+.craft {
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200vh;
+}
+
+.watch-canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    z-index: 1;
+}
+
+.craft-text {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    max-width: 600px;
+    z-index: 2;
+    opacity: 0;
+}
+
+.craft-text p {
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    line-height: 1.9;
+    color: #B0B0B0;
+}
+
+.gold-accent {
+    color: #C5A15A;
+}
+
+/* ============================================
+   SECTION 4 — LEGACY
+   ============================================ */
+.legacy {
+    background: #000000;
+    min-height: 150vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.fluid-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.legacy-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.legacy-fragment {
+    position: absolute;
+    font-family: 'Canela', 'Times New Roman', serif;
+    font-weight: 100;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.4;
+    color: #E7E6E6;
+    opacity: 0;
+    filter: blur(10px);
+    max-width: 500px;
+}
+
+.fragment-1 {
+    top: 20%;
+    left: 15%;
+}
+
+.fragment-2 {
+    top: 45%;
+    right: 15%;
+    text-align: right;
+}
+
+.fragment-3 {
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+/* ============================================
+   SECTION 5 — FOOTER
+   ============================================ */
+.footer-section {
+    background: #000000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 6rem;
+}
+
+.footer-micro {
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #E7E6E6;
+    margin-top: 2rem;
+}
+
+.gold-text {
+    color: #C5A15A;
+}
+
+.footer-macro {
+    font-family: 'Canela', 'Times New Roman', serif;
+    font-weight: 100;
+    font-size: clamp(4rem, 12vw, 10rem);
+    color: #E7E6E6;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    transition: color 0.8s ease, transform 0.8s ease;
+}
+
+.footer-macro:hover {
+    color: #C5A15A;
+    transform: scale(1.02);
+}
+
+.footer-line {
+    width: 60%;
+    max-width: 600px;
+    height: 1px;
+    background: rgba(231, 230, 230, 0.4);
+}
+
+.footer-copyright {
+    font-family: 'Söhne', 'Helvetica Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(231, 230, 230, 0.5);
+    margin-bottom: 2rem;
+}
