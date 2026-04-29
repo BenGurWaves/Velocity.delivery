@@ -2,8 +2,8 @@
 :root {
     --color-base: #000000;
     --color-accent: #E7E6E6;
-    --font-headline: 'Canela', 'Optima', 'Helvetica', sans-serif;
-    --font-body: 'Inter', 'Helvetica Neue', 'Helvetica', sans-serif;
+    --font-headline: 'Canela', serif;
+    --font-body: 'Söhne', 'Inter', sans-serif;
 }
 
 *, *::before, *::after {
@@ -639,33 +639,79 @@ body {
 }
 
 /* ========================================
-   Hero Section — Background & Luminosity
+   Hero Section — Full-Bleed Layout
    ======================================== */
 .section--hero {
   position: relative;
+  width: 100vw;
+  height: 100vh;
   z-index: 1;
-}
-.hero__background {
-  position: absolute;
-  inset: 0;
-  background-image: url('../assets/hero-bg.jpeg');
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  opacity: 0.6;
+  overflow: hidden;
 }
 
-.hero__luminosity {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(231, 230, 230, 0.08) 0%, transparent 50%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.section--manifesto .section__grid {
+.hero__container {
   position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6vw;
+}
+
+.hero__left {
+  flex: 0 0 45%;
   z-index: 2;
+}
+
+.hero__right {
+  flex: 0 0 45%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__image-wrapper {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 500px;
+}
+
+.hero__content {
+  padding: 4rem 0;
+}
+
+.hero__headline {
+  font-family: var(--font-headline);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+  margin-bottom: 2rem;
+}
+
+.hero__line {
+  display: block;
+}
+
+.hero__subline {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: rgba(231, 230, 230, 0.7);
 }
 
 /* ========================================
@@ -725,16 +771,40 @@ body {
 }
 
 /* ========================================
-   Philosophy Section
+   Philosophy Section — Character Reveal
    ======================================== */
-.philosophy__visual {
-  grid-column: 1/6;
+.section--philosophy {
   position: relative;
-  height: 70vh;
-  align-self: center;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 6vw;
+}
+
+.philosophy__content {
+  max-width: 80%;
+  text-align: center;
+}
+
+.philosophy__text {
+  font-family: var(--font-headline);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 200;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+}
+
+.philosophy__line {
+  display: block;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+}
+
+.philosophy__char {
+  display: inline-block;
+  opacity: 0;
 }
 
 .visual__ring {
@@ -1407,20 +1477,183 @@ body {
   font-weight: 300;
   color: rgba(231, 230, 230, 0.15);
   letter-spacing: 0.1em;
-  line-height: 1;
 }
 
-.footer__details {
+/* ========================================
+   Craft Section — Heartbeat Animation
+   ======================================== */
+.section--craft {
+  position: relative;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  color: rgba(231, 230, 230, 0.4);
+  justify-content: center;
+  padding: 6vw;
 }
 
-.footer__divider {
-  color: rgba(231, 230, 230, 0.2);
+.craft__content {
+  max-width: 80%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+}
+
+.craft__text {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: rgba(231, 230, 230, 0.7);
+  max-width: 50ch;
+}
+
+.craft__heartbeat-container {
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.craft__heartbeat-circle {
+  width: 300px;
+  height: 300px;
+  border: 2px solid rgba(231, 230, 230, 0.3);
+  border-radius: 50%;
+  position: relative;
+}
+
+.craft__heartbeat-circle::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 1px solid rgba(231, 230, 230, 0.2);
+  border-radius: 50%;
+}
+
+.craft__heartbeat-circle::after {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border: 0.5px solid rgba(231, 230, 230, 0.15);
+  border-radius: 50%;
+}
+
+/* ========================================
+   Legacy Section — Matte Pastel Gradient
+   ======================================== */
+.section--legacy {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.legacy__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(231, 230, 230, 0.1) 0%, 
+    rgba(200, 190, 180, 0.05) 25%, 
+    rgba(180, 170, 160, 0.08) 50%, 
+    rgba(210, 200, 190, 0.06) 75%, 
+    rgba(231, 230, 230, 0.1) 100%);
+  filter: blur(80px);
+  animation: gradientShift 20s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.1) translate(-5%, -5%);
+  }
+}
+
+.legacy__content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+}
+
+.legacy__text {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: rgba(231, 230, 230, 0.6);
+  max-width: 60ch;
+  text-align: center;
+}
+
+/* ========================================
+   Footer Section — Massive Email
+   ======================================== */
+.section--footer {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+}
+
+.footer__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+  width: 100%;
+  max-width: 90%;
+}
+
+.footer__micro {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(231, 230, 230, 0.5);
+}
+
+.footer__macro {
+  font-family: var(--font-headline);
+  font-size: clamp(2rem, 8vw, 6rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer__macro:hover {
+  color: #A67C52;
+}
+
+.footer__hairline {
+  width: 100%;
+  max-width: 600px;
+  height: 1px;
+  background: rgba(231, 230, 230, 0.3);
+  margin: 2rem 0;
+}
+
+.footer__base {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(231, 230, 230, 0.4);
 }
 
 /* ========================================

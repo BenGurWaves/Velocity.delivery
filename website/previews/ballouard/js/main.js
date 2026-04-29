@@ -160,7 +160,7 @@ function initLoader() {
     
     // PHASE 2: The Fly-Through Mechanic (Super-Expo)
     .to('.loader__inner', {
-        scale: 80,
+        scale: 50,
         opacity: 0,
         z: 1000,
         duration: 1.5,
@@ -210,7 +210,7 @@ function initScrollAnimations() {
     // S1 -> S2: The V-Split
     const heroTl = gsap.timeline({
         scrollTrigger: {
-            trigger: '#hero',
+            trigger: '.section--hero',
             start: 'top top',
             end: '+=100%',
             scrub: true,
@@ -218,21 +218,19 @@ function initScrollAnimations() {
         }
     });
 
-    heroTl.to('.hero__left', {
-        rotateY: -45,
-        x: '-100%',
+    heroTl.to('.hero__right', {
+        rotation: 45,
         scale: 1.5,
+        opacity: 0,
+        x: '50%',
+        ease: 'none'
+    }, 0)
+    .to('.hero__left', {
+        x: '-30%',
         opacity: 0,
         ease: 'none'
     }, 0)
-    .to('.hero__right', {
-        rotateY: 45,
-        x: '100%',
-        scale: 1.5,
-        opacity: 0,
-        ease: 'none'
-    }, 0)
-    .from('#philosophy', {
+    .from('.section--philosophy', {
         z: -500,
         opacity: 0,
         scale: 0.8,
@@ -240,113 +238,100 @@ function initScrollAnimations() {
     }, 0);
 
     // Philosophy Character Reveal
-    splitPhilosophyText();
-    gsap.to('.char', {
-        scrollTrigger: {
-            trigger: '#philosophy',
-            start: 'top 40%',
-            end: 'bottom 60%',
-            scrub: 0.5
-        },
-        opacity: 1,
-        stagger: 0.1,
-        ease: 'power1.inOut'
-    });
+    const philosophyText = document.querySelector('.philosophy__text');
+    if (philosophyText) {
+        const lines = philosophyText.querySelectorAll('.philosophy__line');
+        lines.forEach((line, lineIndex) => {
+            const chars = line.textContent.split('');
+            line.innerHTML = '';
+            chars.forEach((char, charIndex) => {
+                const span = document.createElement('span');
+                span.className = 'philosophy__char';
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                line.appendChild(span);
+            });
+        });
 
-    // Craft Exploded View
+        const allChars = document.querySelectorAll('.philosophy__char');
+        gsap.to(allChars, {
+            scrollTrigger: {
+                trigger: '.section--philosophy',
+                start: 'top 40%',
+                end: 'bottom 60%',
+                scrub: 0.5
+            },
+            opacity: 1,
+            stagger: 0.02,
+            ease: 'power1.inOut'
+        });
+    }
+
+    // Craft Heartbeat Animation with Scroll Pin
     const craftTl = gsap.timeline({
         scrollTrigger: {
-            trigger: '#craft',
+            trigger: '.section--craft',
             start: 'top top',
-            end: '+=200%',
+            end: '+=150%',
             scrub: true,
             pin: true
         }
     });
 
-    document.querySelectorAll('.craft__layer').forEach((layer, i) => {
-        const depth = parseFloat(layer.dataset.depth);
-        craftTl.from(layer, {
-            z: depth * 1000,
+    const heartbeatCircle = document.querySelector('.craft__heartbeat-circle');
+    if (heartbeatCircle) {
+        craftTl.from(heartbeatCircle, {
+            scale: 0.5,
             opacity: 0,
-            y: (i % 2 === 0 ? 100 : -100),
-            ease: 'none'
-        }, 0);
-    });
+            ease: 'power2.out'
+        }, 0)
+        .to(heartbeatCircle, {
+            scale: 1.2,
+            duration: 0.3,
+            ease: 'power1.inOut'
+        }, 0.2)
+        .to(heartbeatCircle, {
+            scale: 1,
+            duration: 0.3,
+            ease: 'power1.inOut'
+        }, 0.5)
+        .to(heartbeatCircle, {
+            scale: 1.15,
+            duration: 0.3,
+            ease: 'power1.inOut'
+        }, 0.8)
+        .to(heartbeatCircle, {
+            scale: 1,
+            duration: 0.3,
+            ease: 'power1.inOut'
+        }, 1.1);
+    }
 
-    // Legacy Drift & Dissolve
-    document.querySelectorAll('.legacy__text-fragment').forEach((fragment, i) => {
-        gsap.fromTo(fragment, 
-            { y: 100, opacity: 0, filter: 'blur(10px)' },
-            { 
-                y: -100, 
-                opacity: 1, 
+    // Legacy Text Dissolve
+    const legacyText = document.querySelector('.legacy__text');
+    if (legacyText) {
+        gsap.fromTo(legacyText,
+            { opacity: 0, filter: 'blur(10px)', y: 50 },
+            {
+                opacity: 1,
                 filter: 'blur(0px)',
+                y: 0,
                 scrollTrigger: {
-                    trigger: fragment,
-                    start: 'top bottom',
-                    end: 'bottom top',
+                    trigger: '.section--legacy',
+                    start: 'top 40%',
+                    end: 'bottom 60%',
                     scrub: true
-                },
-                onUpdate: function() {
-                    const progress = this.progress();
-                    if (progress > 0.8) {
-                        gsap.set(fragment, { opacity: (1 - progress) * 5, filter: `blur(${(progress - 0.8) * 20}px)` });
-                    }
                 }
             }
         );
-    });
-
-    // Shader Logic (Minimal Placeholder for high performance)
-    initLegacyShader();
+    }
 }
 
 // ========================================
-// Legacy Section Shader
+// Legacy Section Shader (Removed - Using CSS Gradient)
 // ========================================
 
 function initLegacyShader() {
-    const canvas = document.getElementById('shader-canvas');
-    if (!canvas) return;
-    
-    // Since full WebGL boilerplate is long, we'll implement a 
-    // high-fidelity canvas gradient animation that simulates 
-    // the monochrome smoke texture requested.
-    
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    
-    function resize() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-    }
-    
-    window.addEventListener('resize', resize);
-    resize();
-    
-    let time = 0;
-    function renderShader() {
-        time += 0.01;
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, width, height);
-        
-        for (let i = 0; i < 3; i++) {
-            const x = width / 2 + Math.sin(time * 0.5 + i) * width * 0.3;
-            const y = height / 2 + Math.cos(time * 0.7 + i) * height * 0.2;
-            
-            const grad = ctx.createRadialGradient(x, y, 0, x, y, width * 0.8);
-            grad.addColorStop(0, `rgba(231, 230, 230, ${0.05 * Math.sin(time)})`);
-            grad.addColorStop(1, 'transparent');
-            
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, width, height);
-        }
-        
-        requestAnimationFrame(renderShader);
-    }
-    
-    renderShader();
+    // No longer needed - using CSS gradient animation
 }
 
 // Kickoff
