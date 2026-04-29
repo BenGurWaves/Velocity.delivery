@@ -91,48 +91,92 @@ function updateCursor() {
 }
 
 // ========================================
-// Section 0: Fly-Through Loader
+// Section 0: Fly-Through Loader (The Portal Breach)
 // ========================================
 
 function initLoader() {
     const loader = document.getElementById('loader');
     const monogramPaths = document.querySelectorAll('.monogram__stroke');
+    const heroSection = document.querySelector('.section--hero');
     
-    // Set initial stroke state
-    monogramPaths.forEach(path => {
-        const length = path.getTotalLength();
-        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+    // Set initial states
+    // Loader z-index: 9999
+    gsap.set(loader, { zIndex: 9999 });
+    
+    // Hero initial state: scale 0.8, blur 10px, opacity 0
+    gsap.set(heroSection, { 
+        scale: 0.8, 
+        filter: 'blur(10px)', 
+        opacity: 0,
+        zIndex: 1
     });
+    
+    // SVG paths already have stroke-dasharray and stroke-dashoffset set in HTML
+    // No need to recalculate - use the values from HTML
 
     const tl = gsap.timeline({
         onComplete: () => {
-            loader.style.display = 'none';
+            // Cleanup: remove overflow hidden on body
+            gsap.set('body', { overflow: 'auto' });
+            
+            // Set pointer-events none and display none on loader
+            gsap.set(loader, { 
+                pointerEvents: 'none',
+                display: 'none'
+            });
+            
             initScrollAnimations();
             updateBreathing();
             updateCursor();
         }
     });
 
-    tl.to(monogramPaths, {
+    // PHASE 1: The Draw Animation (1.8s, power4.inOut)
+    tl.to('.monogram__l', {
         strokeDashoffset: 0,
-        duration: 2,
-        ease: 'power2.inOut',
-        stagger: 0.3
+        duration: 1.8,
+        ease: 'power4.inOut'
     })
-    .to('.loader__monogram', {
-        scale: 100,
+    .to('.monogram__b-vertical', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power4.inOut'
+    }, '-=1.5')
+    .to('.monogram__b-top', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power4.inOut'
+    }, '-=1.4')
+    .to('.monogram__b-bottom', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power4.inOut'
+    }, '-=1.3')
+    
+    // PHASE 2: The Fly-Through Mechanic (Super-Expo)
+    .to('.loader__inner', {
+        scale: 80,
         opacity: 0,
-        duration: 2.5,
-        ease: 'power4.in',
-        // Fly through the negative space of the 'B'
-        x: '20%',
-        y: '5%'
-    }, '+=0.5')
+        z: 1000,
+        duration: 1.5,
+        ease: 'expo.in'
+    })
+    
+    // PHASE 3: Hero Section Reveal (Sync with fly-through)
+    .to(heroSection, {
+        scale: 1,
+        filter: 'blur(0px)',
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power2.out'
+    }, '-=1.2')
+    
+    // PHASE 4: Loader fade out
     .to(loader, {
         opacity: 0,
-        duration: 1,
+        duration: 0.5,
         ease: 'power2.out'
-    }, '-=0.5');
+    }, '-=0.3');
 }
 
 // ========================================

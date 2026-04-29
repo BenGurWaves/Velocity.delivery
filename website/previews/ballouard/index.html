@@ -19,12 +19,45 @@
     <div id="loader" class="loader">
         <div class="loader__inner">
             <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <!-- L Letter -->
-                <path class="monogram__stroke monogram__l" d="M 35 25 L 35 75 L 65 75" fill="none" stroke="#E7E6E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- B Letter -->
-                <path class="monogram__stroke monogram__b-vertical" d="M 75 25 L 75 75" fill="none" stroke="#E7E6E6" stroke-width="2.5" stroke-linecap="round"/>
-                <path class="monogram__stroke monogram__b-top" d="M 75 25 L 90 25 C 100 25 100 45 90 45 L 75 45" fill="none" stroke="#E7E6E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path class="monogram__stroke monogram__b-bottom" d="M 75 45 L 92 45 C 105 45 105 75 92 75 L 75 75" fill="none" stroke="#E7E6E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- L Letter - Single continuous stroke -->
+                <path class="monogram__stroke monogram__l" 
+                      d="M 35 25 L 35 75 L 65 75" 
+                      fill="none" 
+                      stroke="#E7E6E6" 
+                      stroke-width="3" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"
+                      stroke-dasharray="150"
+                      stroke-dashoffset="150"/>
+                <!-- B Letter - Vertical stem -->
+                <path class="monogram__stroke monogram__b-vertical" 
+                      d="M 75 25 L 75 75" 
+                      fill="none" 
+                      stroke="#E7E6E6" 
+                      stroke-width="3" 
+                      stroke-linecap="round"
+                      stroke-dasharray="50"
+                      stroke-dashoffset="50"/>
+                <!-- B Letter - Top curve -->
+                <path class="monogram__stroke monogram__b-top" 
+                      d="M 75 25 L 90 25 C 100 25 100 45 90 45 L 75 45" 
+                      fill="none" 
+                      stroke="#E7E6E6" 
+                      stroke-width="3" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"
+                      stroke-dasharray="80"
+                      stroke-dashoffset="80"/>
+                <!-- B Letter - Bottom curve -->
+                <path class="monogram__stroke monogram__b-bottom" 
+                      d="M 75 45 L 92 45 C 105 45 105 75 92 75 L 75 75" 
+                      fill="none" 
+                      stroke="#E7E6E6" 
+                      stroke-width="3" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"
+                      stroke-dasharray="90"
+                      stroke-dashoffset="90"/>
             </svg>
         </div>
     </div>

@@ -134,7 +134,7 @@ body {
   position: fixed;
   inset: 0;
   background: #000000;
-  z-index: 1000;
+  z-index: 9999;
   display: grid;
   place-items: center;
   height: 100vh;
@@ -154,11 +154,11 @@ body {
 }
 .monogram__stroke {
   stroke: #E7E6E6;
-  stroke-width: 2.5;
+  stroke-width: 3;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0;
+  opacity: 1;
 }
 .loader__line {
   position: absolute;
@@ -641,6 +641,10 @@ body {
 /* ========================================
    Hero Section — Background & Luminosity
    ======================================== */
+.section--hero {
+  position: relative;
+  z-index: 1;
+}
 .hero__background {
   position: absolute;
   inset: 0;
