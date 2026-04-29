@@ -65,6 +65,11 @@ document.addEventListener('mousemove', (e) => {
 });
 
 function updateCursor() {
+    if (!cursorRing) {
+        requestAnimationFrame(updateCursor);
+        return;
+    }
+    
     const dx = mouseX - cursorPosX;
     const dy = mouseY - cursorPosY;
     
