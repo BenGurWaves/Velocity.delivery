@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Canela:ital,wght@0,100;0,200;0,300;1,100;1,200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/sohne@5.0.1/index.min.css">
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -20,45 +19,22 @@
     <div id="loader" class="loader">
         <div class="loader__inner">
             <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <!-- L Letter - Single continuous stroke -->
-                <path class="monogram__stroke monogram__l" 
-                      d="M 35 25 L 35 75 L 65 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="150"
-                      stroke-dashoffset="150"/>
-                <!-- B Letter - Vertical stem -->
-                <path class="monogram__stroke monogram__b-vertical" 
-                      d="M 75 25 L 75 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round"
-                      stroke-dasharray="50"
-                      stroke-dashoffset="50"/>
-                <!-- B Letter - Top curve -->
-                <path class="monogram__stroke monogram__b-top" 
-                      d="M 75 25 L 90 25 C 100 25 100 45 90 45 L 75 45" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="80"
-                      stroke-dashoffset="80"/>
-                <!-- B Letter - Bottom curve -->
-                <path class="monogram__stroke monogram__b-bottom" 
-                      d="M 75 45 L 92 45 C 105 45 105 75 92 75 L 75 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="90"
-                      stroke-dashoffset="90"/>
+                <path class="monogram__stroke monogram__l"
+                      d="M 35 25 L 35 75 L 65 75"
+                      fill="none" stroke="#E7E6E6" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="monogram__stroke monogram__b-vertical"
+                      d="M 75 25 L 75 75"
+                      fill="none" stroke="#E7E6E6" stroke-width="3"
+                      stroke-linecap="round"/>
+                <path class="monogram__stroke monogram__b-top"
+                      d="M 75 25 L 90 25 C 100 25 100 45 90 45 L 75 45"
+                      fill="none" stroke="#E7E6E6" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="monogram__stroke monogram__b-bottom"
+                      d="M 75 45 L 92 45 C 105 45 105 75 92 75 L 75 75"
+                      fill="none" stroke="#E7E6E6" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div>
     </div>
@@ -67,55 +43,47 @@
     <main id="smooth-wrapper">
         <div id="smooth-content">
             
-            <!-- SECTION 1: The Hero (The Illusion) -->
-            <section class="section section--hero" data-section="1">
-                <div class="hero__container">
-                    <div class="hero__left">
-                        <div class="hero__content">
-                            <h1 class="hero__headline">
-                                <span class="hero__line">Time is an illusion.</span>
-                            </h1>
-                            <p class="hero__subline">Ludovic Ballouard makes reality.</p>
-                        </div>
-                    </div>
-                    <div class="hero__right">
-                        <div class="hero__image-wrapper">
-                            <img src="assets/The-upside-down-hero-img.jpeg" alt="" class="hero__image">
-                        </div>
-                    </div>
+            <!-- SECTION 1: The Hero -->
+            <section class="section section--hero" data-section="1" id="hero">
+                <div class="hero__text">
+                    <h1 class="hero__headline">Time is an illusion.</h1>
+                    <p class="hero__subline">Ludovic Ballouard makes reality.</p>
+                </div>
+                <div class="hero__watch">
+                    <img src="assets/The-upside-down-hero-img.jpeg" alt="" class="hero__image">
                 </div>
             </section>
 
-            <!-- SECTION 2: Philosophy (Pure Typography) -->
-            <section class="section section--philosophy" data-section="2">
+            <!-- SECTION 2: Philosophy (V-Split Reveal) -->
+            <section class="section section--philosophy" data-section="2" id="philosophy">
                 <div class="philosophy__content">
-                    <p class="philosophy__text">
-                        <span class="philosophy__line">Discard the lie of past and future.</span>
-                        <span class="philosophy__line">Embrace the only truth.</span>
-                        <span class="philosophy__line">Our timepieces reveal the present...</span>
-                        <span class="philosophy__line">the fleeting, terrifying, beautiful now.</span>
+                    <p class="philosophy__text" id="reveal-text">
+                        Discard the lie of past and future. Embrace the only truth. Our timepieces reveal the present... the fleeting, terrifying, beautiful now.
                     </p>
                 </div>
             </section>
 
-            <!-- SECTION 3: Craft (The Code-Only Heartbeat) -->
-            <section class="section section--craft" data-section="3">
+            <!-- SECTION 3: Craft (The Heartbeat) -->
+            <section class="section section--craft" data-section="3" id="craft">
                 <div class="craft__content">
+                    <div class="craft__heartbeat-container">
+                        <canvas class="craft__heartbeat-canvas"></canvas>
+                    </div>
                     <p class="craft__text">
                         Obsessive detail. Hand-engraved in Geneva. We do not build watches; we forge philosophies that disrupt perception.
                     </p>
-                    <div class="craft__heartbeat-container">
-                        <div class="craft__heartbeat-circle"></div>
-                    </div>
                 </div>
             </section>
 
-            <!-- SECTION 4: Legacy Dissolve (Matte Pastel Gradient) -->
-            <section class="section section--legacy" data-section="4">
+            <!-- SECTION 4: Legacy (Gradient Dissolve) -->
+            <section class="section section--legacy" data-section="4" id="legacy">
                 <div class="legacy__gradient"></div>
                 <div class="legacy__content">
                     <p class="legacy__text">
-                        Born from a dream to elevate time. Since 2009, Ludovic Ballouard has challenged every convention, crafting mechanical marvels that defy perception. Our history is written in unexpected movements.
+                        <span class="legacy__fragment">Born from a dream to elevate time.</span>
+                        <span class="legacy__fragment">Since 2009, Ludovic Ballouard has challenged every convention,</span>
+                        <span class="legacy__fragment">crafting mechanical marvels that defy perception.</span>
+                        <span class="legacy__fragment">Our history is written in unexpected movements.</span>
                     </p>
                 </div>
             </section>
