@@ -1,35 +1,33 @@
-/* ========================================
-   Ballouard — Stealth-Luxe Architecture
-   ======================================== */
-/* Color Palette — Strict Adherence */
-/* Typography */
-/* Animation Timing — Heavy, Mechanical */
-/* Grid Configuration */
-/* ========================================
-   Reset & Foundation
-   ======================================== */
+/* GLOBAL FOUNDATION */
+:root {
+    --color-base: #000000;
+    --color-accent: #E7E6E6;
+    --font-headline: 'Canela', 'Optima', 'Helvetica', sans-serif;
+    --font-body: 'Inter', 'Helvetica Neue', 'Helvetica', sans-serif;
+}
+
 *, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  font-size: clamp(14px, 0.9vw, 18px);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: auto;
+    font-size: clamp(14px, 0.9vw, 18px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: auto;
 }
 
 body {
-  background: #000000;
-  color: #E7E6E6;
-  font-family: "Inter", -apple-system, sans-serif;
-  font-weight: 300;
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  overflow-x: hidden;
-  cursor: none;
+    background: var(--color-base);
+    color: var(--color-accent);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+    cursor: none;
 }
 
 /* ========================================
