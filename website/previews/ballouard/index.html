@@ -1,951 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Ludovic Ballouard — Only The Present Moment Has A Meaning</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bronze: #C4A484;
-            --bronze-light: #D4B8A3;
-            --bronze-dark: #9A7B5B;
-            --void: #0D0C0B;
-            --ivory: #F5F0EB;
-            --charcoal: #1A1816;
-            --ghost: rgba(245, 240, 235, 0.3);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ludovic Ballouard — Horloger, Genève</title>
+<meta name="description" content="Only the present moment has a meaning. Ludovic Ballouard, independent watchmaker, Geneva.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060606;--fg:#E8E4DF;--warm:#A08060;--mid:rgba(232,228,223,0.4);--dim:rgba(232,228,223,0.12);--serif:'Cormorant',Georgia,serif;--sans:'Inter','Helvetica Neue',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--warm);color:var(--bg)}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; overflow: hidden; }
-        body {
-            font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-            background: var(--void);
-            color: var(--ivory);
-            font-weight: 300;
-        }
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:0.028;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-        
-        /* CUSTOM CURSOR WITH TRAIL */
-        .cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 1px solid var(--bronze);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            transition: transform 0.15s ease, opacity 0.15s ease, width 0.3s ease, height 0.3s ease;
-            transform: translate(-50%, -50%);
-        }
-        .cursor.hover {
-            transform: translate(-50%, -50%) scale(2);
-            background: rgba(196, 164, 132, 0.1);
-        }
-        .cursor.idle {
-            opacity: 0;
-        }
-        .cursor-trail {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: rgba(196, 164, 132, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99998;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-        }
-        .cursor-dot {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--bronze);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .cursor-dot.visible {
-            opacity: 1;
-        }
+/* CURSOR */
+.cur{position:fixed;width:36px;height:36px;border:1px solid rgba(232,228,223,0.25);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .5s cubic-bezier(.22,1,.36,1),border-color .4s ease}
+.cur.h{transform:translate(-50%,-50%) scale(2);border-color:var(--fg)}
+@media(pointer:coarse){.cur{display:none}body{cursor:auto}}
 
-        /* LOADER */
-        #loader {
-            position: fixed;
-            inset: 0;
-            background: var(--void);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        .loader-word {
-            font-size: 12vw;
-            letter-spacing: 0.2em;
-            opacity: 1;
-            color: var(--bronze);
-            white-space: nowrap;
-            font-weight: 400;
-        }
-        .loader-sub {
-            font-size: 0.9rem;
-            letter-spacing: 0.5em;
-            opacity: 0;
-            color: var(--ghost);
-            margin-top: 4rem;
-            text-transform: uppercase;
-        }
+/* PROGRESS */
+.prog{position:fixed;top:0;left:0;height:1px;background:var(--warm);z-index:9995;width:0;transition:width .15s linear}
 
-        /* MAIN CONTENT */
-        #main-content {
-            opacity: 0;
-            transition: opacity 2s ease;
-            height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-snap-type: y mandatory;
-        }
-        #main-content.visible { opacity: 1; }
+/* NAV MARKERS */
+.nav{position:fixed;right:3vw;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px}
+.nav__dot{width:6px;height:6px;border-radius:50%;border:1px solid var(--dim);background:transparent;cursor:pointer;transition:all .5s ease}
+.nav__dot.on{background:var(--warm);border-color:var(--warm);transform:scale(1.4)}
+@media(max-width:768px){.nav{display:none}}
 
-        section {
-            height: 100vh;
-            width: 100%;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            padding: 15vh 0;
-        }
+/* LOADER */
+.ld{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
+.ld svg{width:60px;height:60px;overflow:visible}
+.ld__s{fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ld__t{font-family:var(--sans);font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--mid);opacity:0}
 
-        /* SECTION 1: GENESIS */
-        #section1 {
-            background: radial-gradient(ellipse at center, #0D0C0B 0%, #151412 100%);
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 35vh;
-        }
-        #particle-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            opacity: 0.25;
-            pointer-events: none;
-        }
-        .genesis-text {
-            font-size: 18vh;
-            color: var(--bronze);
-            letter-spacing: -0.02em;
-            transform: scaleY(1.2);
-            z-index: 10;
-            line-height: 0.9;
-            white-space: nowrap;
-            font-weight: 400;
-            background: linear-gradient(to top, var(--bronze-dark) 0%, var(--bronze-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .genesis-subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 0.4em;
-            color: var(--ghost);
-            text-transform: uppercase;
-            margin-top: 4vh;
-            font-weight: 300;
-        }
-        .genesis-year {
-            position: absolute;
-            bottom: 8%;
-            font-size: 0.8rem;
-            letter-spacing: 0.4em;
-            color: var(--ghost);
-            text-transform: uppercase;
-        }
+/* === SECTIONS === */
+section{position:relative;overflow:hidden}
 
-        /* SECTION 2: WATCHMAKER */
-        #section2 {
-            background: linear-gradient(180deg, #0D0C0B 0%, #121110 50%, #0D0C0B 100%);
-            align-items: center;
-            justify-content: center;
-        }
-        .typewriter-container { 
-            text-align: center; 
-            z-index: 10;
-            max-width: 80vw;
-        }
-        .typewriter-pretitle {
-            font-size: 1rem;
-            letter-spacing: 0.5em;
-            color: var(--bronze);
-            text-transform: uppercase;
-            margin-bottom: 3vh;
-            font-weight: 300;
-            opacity: 0.7;
-        }
-        .typewriter-text {
-            font-size: 10vh;
-            color: var(--ivory);
-            letter-spacing: 0.15em;
-            line-height: 1.3;
-            font-weight: 400;
-        }
-        .typewriter-quote {
-            font-size: 2.5vh;
-            font-style: italic;
-            letter-spacing: 0.1em;
-            color: var(--ghost);
-            margin-top: 4vh;
-            max-width: 50vw;
-            line-height: 1.6;
-        }
-        .typewriter-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 0.8em;
-            background: var(--bronze);
-            margin-left: 0.1em;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-        }
-        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-        .typewriter-sub {
-            font-size: 1rem;
-            letter-spacing: 0.3em;
-            color: var(--bronze);
-            margin-top: 2rem;
-            opacity: 0;
-            text-transform: uppercase;
-        }
-        .typewriter-year {
-            font-size: 0.8rem;
-            letter-spacing: 0.4em;
-            color: var(--ghost);
-            margin-top: 1rem;
-            opacity: 0;
-            text-transform: uppercase;
-        }
+/* S1: MONUMENT */
+.s1{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.s1__name{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,9rem);letter-spacing:.18em;text-indent:.18em;text-align:center;line-height:1}
+.s1__rule{width:40px;height:1px;background:var(--warm);margin:3.5vh 0;opacity:.6}
+.s1__geo{font-family:var(--sans);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--mid)}
+.s1__scroll{position:absolute;bottom:4vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0}
+.s1__scroll span{font-family:var(--sans);font-size:.45rem;letter-spacing:.35em;text-transform:uppercase;color:var(--mid)}
+.s1__scroll i{display:block;width:1px;height:20px;background:linear-gradient(var(--mid),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.2;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+.s1__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+/* Rotating corner glyph */
+.glyph{position:absolute;bottom:5vh;left:4vw;width:10px;height:10px;border:1px solid var(--dim);transform:rotate(45deg);animation:glyphSpin 30s linear infinite}
+@keyframes glyphSpin{from{transform:rotate(45deg)}to{transform:rotate(405deg)}}
+/* Vertical hairlines */
+.vline{position:absolute;width:1px;height:100%;background:linear-gradient(transparent 10%,var(--dim) 50%,transparent 90%);top:0;pointer-events:none;opacity:.3}
+.vline--l{left:4vw}.vline--r{right:4vw}
 
-        /* SECTION 3: PHILOSOPHY */
-        #section3 {
-            background: var(--ivory);
-            flex-direction: row;
-        }
-        .mechanism-side {
-            width: 45%; height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #disc-canvas { width: 350px; height: 350px; }
-        .philosophy-side {
-            width: 55%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3vh;
-        }
-        .time-label {
-            font-size: 12vh;
-            letter-spacing: 0.1em;
-        }
-        .time-label.past, .time-label.future {
-            color: rgba(26, 24, 22, 0.15);
-            transform: rotate(180deg);
-        }
-        .time-label.present {
-            color: var(--bronze-dark);
-            font-size: 18vh;
-            transform: scaleY(1.3);
-        }
+/* S2: THE QUOTE — KINETIC TYPOGRAPHY */
+.s2{min-height:160vh;position:relative;display:flex;align-items:center;padding:0 8vw}
+.s2__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s2__wrap{width:100%;position:relative;padding:12vh 0}
+.s2__line{display:block;font-family:var(--serif);font-weight:300;line-height:1.25;overflow:hidden;padding:.2em 0;margin:-.2em 0}
+.s2__line span{display:inline-block;transform:translateY(110%)}
+.s2__l1{font-size:clamp(1.1rem,2.2vw,1.8rem);color:var(--mid);font-style:italic;padding-left:2vw;margin-bottom:2vh}
+.s2__l2{font-size:clamp(2.8rem,8vw,7.5rem);margin-top:0}
+.s2__l3{font-size:clamp(1.4rem,4vw,3.5rem);text-align:right;padding-right:6vw;margin-top:2vh;color:rgba(232,228,223,.6)}
+.s2__l4{font-size:clamp(3rem,9.5vw,9rem);margin-top:1vh;padding-left:4vw}
+.s2__attr{position:absolute;bottom:12vh;right:8vw;font-family:var(--sans);font-size:.55rem;letter-spacing:.2em;color:var(--warm);opacity:0}
+.s2__rule{position:absolute;bottom:8vh;left:8vw;width:30px;height:1px;background:var(--dim);opacity:0}
 
-        /* SECTION 4: CRAFT */
-        #section4 {
-            background: var(--void);
-            align-items: center;
-            justify-content: center;
-        }
-        #svg-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 5;
-        }
-        .craft-line {
-            fill: none;
-            stroke: var(--bronze);
-            stroke-width: 0.5;
-            stroke-linecap: round;
-            opacity: 0.3;
-        }
-        .craft-text {
-            font-size: 18vh;
-            color: var(--bronze);
-            letter-spacing: 0.12em;
-            z-index: 1;
-            transform: scaleY(1.35);
-            font-weight: 400;
-        }
-        .craft-labels {
-            position: absolute;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            pointer-events: none;
-        }
-        .craft-label {
-            position: absolute;
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            color: var(--ghost);
-            text-transform: uppercase;
-        }
+/* S3: THE DIAL — ABSTRACT CLOCK */
+.s3{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative}
+.s3__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s3__label{font-family:var(--sans);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--warm);margin-bottom:5vh;opacity:0}
+.dial{position:relative;width:min(50vmin,420px);height:min(50vmin,420px)}
+.dial__ring{position:absolute;inset:0;border-radius:50%;border:.5px solid var(--dim)}
+.dial__ring--sm{inset:28%;border-color:rgba(160,128,96,.12)}
+.dial__ring--xs{inset:46%;border-color:rgba(232,228,223,.05)}
+.dial__dot{position:absolute;top:50%;left:50%;width:5px;height:5px;background:var(--warm);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(160,128,96,.3);z-index:2}
+.dial__hand{position:absolute;bottom:50%;left:50%;width:1px;height:35%;background:linear-gradient(transparent,var(--warm));transform-origin:bottom center;transform:translateX(-50%) rotate(0deg);animation:handSweep 60s linear infinite;z-index:1}
+@keyframes handSweep{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+.dial__tick{position:absolute;width:1px;height:8px;background:rgba(232,228,223,.12);transform-origin:center center}
+.dial__tick.major{height:12px;background:rgba(232,228,223,.2)}
+.dial__h{position:absolute;font-family:var(--serif);font-weight:300;font-size:clamp(1.1rem,2.4vmin,1.5rem);color:rgba(232,228,223,.15);transform:translate(-50%,-50%);transition:all .8s cubic-bezier(.22,1,.36,1)}
+.dial__h.on{color:var(--fg);font-size:clamp(1.6rem,3.8vmin,2.3rem);text-shadow:0 0 20px rgba(232,228,223,.15)}
+.s3__title{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,3vw,2.5rem);letter-spacing:.12em;margin-top:5vh;opacity:0}
+.s3__sub{font-family:var(--sans);font-size:.7rem;letter-spacing:.06em;color:var(--mid);margin-top:1.5rem;text-align:center;max-width:340px;line-height:1.8;opacity:0}
 
-        /* SECTION 5: COMMISSION */
-        #section5 {
-            background: linear-gradient(135deg, #F5F0EB 0%, #EDE8E3 50%, #F5F0EB 100%);
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        #section5::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: repeating-radial-gradient(
-                circle at 50% 50%,
-                transparent 0,
-                transparent 2px,
-                rgba(196, 164, 132, 0.03) 2px,
-                rgba(196, 164, 132, 0.03) 4px
-            );
-            pointer-events: none;
-        }
-        .commission-pretitle {
-            position: absolute;
-            top: 25%;
-            font-size: 0.8rem;
-            letter-spacing: 0.4em;
-            color: rgba(154, 123, 91, 0.6);
-            text-transform: uppercase;
-            font-weight: 300;
-        }
-        .commission-hint {
-            position: absolute;
-            bottom: -2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.55rem;
-            letter-spacing: 0.4em;
-            color: rgba(154, 123, 91, 0.4);
-            text-transform: uppercase;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-        .commission-hint.hidden {
-            opacity: 0;
-        }
-        .commission-container {
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            z-index: 10;
-            padding: 2rem;
-        }
-        .commission-text {
-            font-size: 12vh;
-            color: var(--bronze-dark);
-            letter-spacing: 0.2em;
-            transform: scaleY(1.2);
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-            line-height: 0.9;
-            font-weight: 400;
-        }
-        .commission-text.hidden { opacity: 0; }
-        .appointment-text {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scaleY(1.1);
-            font-size: 2vh;
-            letter-spacing: 0.3em;
-            color: var(--bronze-dark);
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            white-space: nowrap;
-            font-weight: 300;
-        }
-        .appointment-text.visible {
-            opacity: 0.8;
-        }
-        .email-text {
-            font-size: 8vh;
-            color: var(--bronze-dark);
-            letter-spacing: 0.25em;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scaleY(1.1);
-            opacity: 0;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            pointer-events: none;
-            line-height: 0.9;
-            font-weight: 400;
-        }
-        .email-text.visible { opacity: 1; }
-        .copied-feedback {
-            position: absolute;
-            bottom: -4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.65rem;
-            letter-spacing: 0.4em;
-            color: var(--bronze);
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        .copied-feedback.visible { opacity: 1; }
-        .commission-footer {
-            position: absolute;
-            bottom: 8%;
-            font-size: 0.65rem;
-            letter-spacing: 0.35em;
-            color: rgba(26, 24, 22, 0.35);
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-        }
-        .atelier-note {
-            position: absolute;
-            bottom: 12%;
-            font-size: 0.55rem;
-            letter-spacing: 0.3em;
-            color: rgba(154, 123, 91, 0.5);
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-            font-style: italic;
-        }
-        .velocity-credit {
-            position: absolute;
-            bottom: 4%;
-            font-size: 0.55rem;
-            letter-spacing: 0.25em;
-            color: rgba(26, 24, 22, 0.2);
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-        }
+/* S4: PHILOSOPHY — HORIZONTAL TICKER */
+.s4{height:100vh;display:flex;align-items:center;overflow:hidden;position:relative}
+.s4__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s4__content{position:relative;z-index:2;max-width:520px;padding:0 6vw}
+.s4__eyebrow{font-family:var(--sans);font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--warm);margin-bottom:2rem}
+.s4__text{font-family:var(--serif);font-weight:300;font-size:clamp(1.2rem,2.2vw,1.8rem);line-height:1.9;color:rgba(232,228,223,.7)}
+.s4__rule{width:40px;height:1px;background:var(--dim);margin-top:2.5rem}
+/* Ghost text ticker behind */
+.s4__ghost{position:absolute;top:50%;right:0;transform:translateY(-50%);white-space:nowrap;font-family:var(--serif);font-weight:300;font-size:clamp(6rem,18vw,16rem);color:rgba(232,228,223,.025);pointer-events:none;z-index:0}
 
-        .scroll-hint {
-            position: fixed;
-            bottom: 3%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.6rem;
-            letter-spacing: 0.3em;
-            color: var(--ghost);
-            text-transform: uppercase;
-            z-index: 100;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-        .scroll-hint.visible { opacity: 0.5; }
-    </style>
+/* S5: CRAFT */
+.s5{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative}
+.s5__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s5__center{text-align:center;max-width:600px;padding:0 6vw}
+.s5__eyebrow{font-family:var(--sans);font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--warm);margin-bottom:3rem;opacity:0}
+.s5__heading{font-family:var(--serif);font-weight:300;font-size:clamp(2.5rem,6vw,5rem);line-height:1.15;letter-spacing:.04em;opacity:0}
+.s5__body{font-family:var(--sans);font-weight:300;font-size:.75rem;line-height:2.1;color:var(--mid);margin-top:2.5rem;max-width:36ch;margin-left:auto;margin-right:auto;opacity:0}
+.s5__rule{width:1px;height:60px;background:linear-gradient(transparent,var(--dim),transparent);margin:3rem auto 0;opacity:0}
+
+/* S6: CONTACT */
+.s6{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:8vh 6vw}
+.s6__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s6__label{font-family:var(--sans);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--warm);margin-bottom:3rem;opacity:0}
+.s6__email{font-family:var(--serif);font-weight:300;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:.05em;position:relative;display:inline-block;opacity:0}
+.s6__email::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--warm);transition:width .8s cubic-bezier(.22,1,.36,1)}
+.s6__email:hover::after{width:100%}
+.s6__email:hover{color:var(--warm);transition:color .5s ease}
+.s6__copied{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--warm);margin-top:1rem;height:1.5rem;opacity:0;transition:opacity .4s ease}
+.s6__copied.on{opacity:1}
+.s6__geo{font-family:var(--sans);font-size:.6rem;letter-spacing:.15em;color:rgba(232,228,223,.15);margin-top:4rem;opacity:0}
+.s6 footer{position:absolute;bottom:3vh;left:0;width:100%;display:flex;justify-content:space-between;padding:0 4vw}
+.s6 footer span{font-family:var(--sans);font-size:.45rem;letter-spacing:.2em;color:rgba(232,228,223,.1);text-transform:uppercase}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.s2{min-height:150vh;padding:0 5vw}
+.s2__l4{padding-left:0}
+.s4__ghost{font-size:clamp(4rem,25vw,10rem)}
+.s4__content{max-width:100%}
+}
+@media(max-width:480px){
+.s1__name{letter-spacing:.08em;text-indent:.08em}
+.s6 footer{flex-direction:column;align-items:center;gap:.4rem}
+}
+</style>
 </head>
 <body>
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-trail" id="cursorTrail1"></div>
-    <div class="cursor-trail" id="cursorTrail2"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
-    
-    <!-- LOADER -->
-    <div id="loader">
-        <div class="loader-word" id="loaderWord">BALLOUARD</div>
-        <div class="loader-sub" id="loaderSub">Geneva MMXXVI</div>
-    </div>
-    <div class="scroll-hint" id="scrollHint">Scroll</div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main-content">
-        
-        <!-- SECTION 1: GENESIS -->
-        <section id="section1">
-            <canvas id="particle-canvas"></canvas>
-            <div class="genesis-text">BALLOUARD</div>
-            <div class="genesis-subtitle">Haute Horlogerie</div>
-            <div class="genesis-year">Geneva MMXXVI</div>
-        </section>
+<div class="cur" id="cur"></div>
+<div class="prog" id="prog"></div>
 
-        <!-- SECTION 2: WATCHMAKER -->
-        <section id="section2">
-            <div class="typewriter-container">
-                <div class="typewriter-pretitle">The Watchmaker</div>
-                <div class="typewriter-text">
-                    <span id="typewriter-content"></span><span class="typewriter-cursor"></span>
-                </div>
-                <div class="typewriter-quote">"Only the present moment has a meaning."</div>
-                <div class="typewriter-sub" id="typewriterSub">Founder & Watchmaker</div>
-                <div class="typewriter-year" id="typewriterYear">Since 2009</div>
-            </div>
-        </section>
+<nav class="nav" id="nav">
+<div class="nav__dot on" data-s="0"></div>
+<div class="nav__dot" data-s="1"></div>
+<div class="nav__dot" data-s="2"></div>
+<div class="nav__dot" data-s="3"></div>
+<div class="nav__dot" data-s="4"></div>
+<div class="nav__dot" data-s="5"></div>
+</nav>
 
-        <!-- SECTION 3: PHILOSOPHY -->
-        <section id="section3">
-            <div class="mechanism-side">
-                <canvas id="disc-canvas"></canvas>
-            </div>
-            <div class="philosophy-side">
-                <div class="time-label past">PAST</div>
-                <div class="time-label present">PRESENT</div>
-                <div class="time-label future">FUTURE</div>
-            </div>
-        </section>
+<div class="ld" id="ld">
+<svg viewBox="0 0 100 100"><path class="ld__s" id="p1" d="M28 20L28 70L52 70" stroke-dasharray="120" stroke-dashoffset="120"/><path class="ld__s" id="p2" d="M60 20L60 70" stroke-dasharray="50" stroke-dashoffset="50"/><path class="ld__s" id="p3" d="M60 20L72 20C82 20 82 42 72 42L60 42" stroke-dasharray="70" stroke-dashoffset="70"/><path class="ld__s" id="p4" d="M60 42L74 42C86 42 86 70 74 70L60 70" stroke-dasharray="80" stroke-dashoffset="80"/></svg>
+<span class="ld__t" id="ldt">Genève</span>
+</div>
 
-        <!-- SECTION 4: CRAFT -->
-        <section id="section4">
-            <svg id="svg-container" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path class="craft-line" d="M10,30 Q30,25 50,30 T90,30" />
-                <path class="craft-line" d="M5,50 Q35,45 65,50 T95,50" />
-                <path class="craft-line" d="M15,70 Q40,65 60,70 T85,70" />
-                <path class="craft-line" d="M20,20 L20,80" />
-                <path class="craft-line" d="M80,15 L80,85" />
-                <path class="craft-line" d="M40,10 Q40,50 40,90" />
-                <path class="craft-line" d="M60,5 Q60,50 60,95" />
-                <circle class="craft-line" cx="30" cy="40" r="8" />
-                <circle class="craft-line" cx="70" cy="60" r="12" />
-                <circle class="craft-line" cx="50" cy="75" r="6" />
-            </svg>
-            <div class="craft-text">HAND ENGRAVED</div>
-            <div class="craft-labels">
-                <div class="craft-label" style="top: 20%; left: 10%;">CASE</div>
-                <div class="craft-label" style="top: 35%; right: 12%;">CROWN</div>
-                <div class="craft-label" style="bottom: 30%; left: 15%;">BUCKLE</div>
-                <div class="craft-label" style="bottom: 20%; right: 10%;">GENEVA</div>
-            </div>
-        </section>
+<main id="main">
 
-        <!-- SECTION 5: COMMISSION -->
-        <section id="section5">
-            <div class="commission-pretitle">Private Access</div>
-            <div class="commission-container" id="commissionContainer">
-                <div class="commission-text" id="commissionText">COMMISSION</div>
-                <div class="appointment-text" id="appointmentText">By Appointment Only</div>
-                <div class="email-text" id="emailText">INFO@BALLOUARD.COM</div>
-                <div class="copied-feedback" id="copiedFeedback">Invitation Extended</div>
-                <div class="commission-hint" id="commissionHint">hover to inquire</div>
-            </div>
-            <div class="atelier-note">Geneva atelier visits limited to four per month</div>
-            <div class="commission-footer">MMXXVI L'ATELIER BALLOUARD, GENEVE</div>
-            <div class="velocity-credit">Experience by Velocity</div>
-        </section>
-    </div>
+<section class="s1" id="sec0">
+<span class="s1__idx">01</span>
+<div class="vline vline--l"></div>
+<div class="vline vline--r"></div>
+<h1 class="s1__name">Ballouard</h1>
+<div class="s1__rule"></div>
+<p class="s1__geo">Horloger · Genève</p>
+<div class="glyph"></div>
+<div class="s1__scroll" id="sh"><span>Scroll</span><i></i></div>
+</section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
+<section class="s2" id="sec1">
+<span class="s2__idx">02</span>
+<div class="s2__wrap">
+<div class="s2__line s2__l1"><span>"Only</span></div>
+<div class="s2__line s2__l2"><span>the present</span></div>
+<div class="s2__line s2__l3"><span>moment has</span></div>
+<div class="s2__line s2__l4"><span>a meaning."</span></div>
+</div>
+<p class="s2__attr" id="attr">— Ludovic Ballouard</p>
+<div class="s2__rule" id="s2rule"></div>
+</section>
 
-        // LOADER SEQUENCE
-        const loader = document.getElementById('loader');
-        const loaderWord = document.getElementById('loaderWord');
-        const loaderSub = document.getElementById('loaderSub');
-        const mainContent = document.getElementById('main-content');
-        const scrollHint = document.getElementById('scrollHint');
+<section class="s3" id="sec2">
+<span class="s3__idx">03</span>
+<p class="s3__label" id="dlbl">The Signature</p>
+<div class="dial" id="dial"><div class="dial__ring"></div><div class="dial__ring dial__ring--sm"></div><div class="dial__ring dial__ring--xs"></div><div class="dial__hand"></div><div class="dial__dot"></div></div>
+<p class="s3__title" id="dtitle">The Upside Down</p>
+<p class="s3__sub" id="dsub">Twelve hours. Eleven inverted. Only the present is readable.</p>
+</section>
 
-        function runLoader() {
-            const tl = gsap.timeline();
-            // Already visible - just subtle letter spacing adjustment
-            tl.to(loaderWord, { letterSpacing: '0.15em', duration: 2, ease: 'power2.out' });
-            tl.to(loaderSub, { opacity: 0.6, duration: 1.5, ease: 'power2.out' }, '-=1');
-            tl.to({}, { duration: 3 }); // Hold for 3s
-            // Then fade out
-            tl.to(loaderWord, { letterSpacing: '1.5em', opacity: 0, duration: 1.5, ease: 'power2.inOut' });
-            tl.to(loaderSub, { opacity: 0, duration: 1, ease: 'power2.inOut' }, '-=1');
-            tl.add(() => {
-                loader.style.display = 'none';
-                mainContent.classList.add('visible');
-                scrollHint.classList.add('visible');
-                setTimeout(() => scrollHint.classList.remove('visible'), 5000);
-                initSectionAnimations();
-            });
-        }
-        window.addEventListener('load', runLoader);
-        
-        // Fallback: show content after 12 seconds regardless
-        setTimeout(() => {
-            if (loader.style.display !== 'none') {
-                loader.style.display = 'none';
-                mainContent.classList.add('visible');
-                scrollHint.classList.add('visible');
-                initSectionAnimations();
-            }
-        }, 12000);
+<section class="s4" id="sec3">
+<span class="s4__idx">04</span>
+<div class="s4__ghost" id="ghost">BALLOUARD · GENÈVE · BALLOUARD · GENÈVE ·&nbsp;</div>
+<div class="s4__content">
+<p class="s4__eyebrow">Philosophy</p>
+<p class="s4__text">In a world consumed by measuring what has passed and predicting what will come, Ludovic Ballouard builds instruments that honour only what is. Each timepiece dismantles the tyranny of the clock — so that time is never counted, only inhabited.</p>
+<div class="s4__rule"></div>
+</div>
+</section>
 
-        // SECTION 1: PARTICLES
-        function initParticles() {
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            const particles = [];
+<section class="s5" id="sec4">
+<span class="s5__idx">05</span>
+<div class="s5__center">
+<p class="s5__eyebrow" id="ce">The Atelier</p>
+<h2 class="s5__heading" id="ch">Hand-engraved<br>in Geneva</h2>
+<p class="s5__body" id="cb">Every component shaped by hand. Movements finished to a standard that exists for no audience but the watchmaker and the owner. This is conversation between artisan and material.</p>
+<div class="s5__rule" id="cr"></div>
+</div>
+</section>
 
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }
-            resize();
-            window.addEventListener('resize', resize);
+<section class="s6" id="sec5">
+<span class="s6__idx">06</span>
+<p class="s6__label" id="cl">Inquire</p>
+<a href="mailto:info@ballouard.com" class="s6__email" id="em">info@ballouard.com</a>
+<p class="s6__copied" id="cp">Email copied</p>
+<p class="s6__geo" id="cg">46°12′N · 6°09′E</p>
+<footer><span>© Velocity MMXXVI</span><span>The Ballouard Prototype</span></footer>
+</section>
 
-            class Particle {
-                constructor() { this.reset(); }
-                reset() {
-                    this.x = Math.random() * width;
-                    this.y = height + Math.random() * 100;
-                    this.size = Math.random() * 2 + 0.5;
-                    this.speed = Math.random() * 0.3 + 0.1;
-                    this.opacity = Math.random() * 0.5 + 0.2;
-                }
-                update() {
-                    this.y -= this.speed;
-                    if (this.y < -10) this.reset();
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(196, 164, 132, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
+</main>
 
-            for (let i = 0; i < 25; i++) particles.push(new Particle());
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:.06,duration:1.4});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
 
-            let frameCount = 0;
-            function animate() {
-                frameCount++;
-                if (frameCount % 2 === 0) {
-                    ctx.clearRect(0, 0, width, height);
-                    particles.forEach(p => { p.update(); p.draw(); });
-                }
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
+// Progress
+const prog=document.getElementById('prog');
+ScrollTrigger.create({onUpdate:s=>{prog.style.width=Math.round(s.progress*100)+'%'},start:'top top',end:'bottom bottom',scrub:true});
 
-        // SECTION 2: TYPEWRITER
-        let typewriterStarted = false;
-        function initTypewriter() {
-            if (typewriterStarted) return;
-            typewriterStarted = true;
-            const content = document.getElementById('typewriter-content');
-            const sub = document.getElementById('typewriterSub');
-            const year = document.getElementById('typewriterYear');
-            const text = 'LUDOVIC BALLOUARD';
-            let index = 0;
+// Cursor
+const cur=document.getElementById('cur');
+let mx=0,my=0,cx=0,cy=0;
+if(matchMedia('(pointer:fine)').matches){
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function lp(){cx+=(mx-cx)*.1;cy+=(my-cy)*.1;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lp)})();
+document.querySelectorAll('a').forEach(a=>{a.addEventListener('mouseenter',()=>cur.classList.add('h'));a.addEventListener('mouseleave',()=>cur.classList.remove('h'))});
+}
 
-            function type() {
-                if (index < text.length) {
-                    content.textContent += text.charAt(index);
-                    index++;
-                    setTimeout(type, 150);
-                } else {
-                    gsap.to(sub, { opacity: 0.7, duration: 1.5, delay: 0.5 });
-                    gsap.to(year, { opacity: 0.5, duration: 1.5, delay: 1 });
-                }
-            }
-            type();
-        }
+// Nav dots
+const dots=document.querySelectorAll('.nav__dot');
+const secs=document.querySelectorAll('section');
+secs.forEach((s,i)=>{
+ScrollTrigger.create({trigger:s,start:'top center',end:'bottom center',onEnter:()=>setDot(i),onEnterBack:()=>setDot(i)});
+});
+function setDot(i){dots.forEach((d,j)=>{d.classList.toggle('on',j===i)})}
+dots.forEach(d=>{d.addEventListener('click',()=>{const i=+d.dataset.s;lenis.scrollTo(secs[i],{duration:1.5})})});
 
-        // SECTION 3: DISC
-        function initDisc() {
-            const canvas = document.getElementById('disc-canvas');
-            const ctx = canvas.getContext('2d');
-            const size = 350;
-            canvas.width = size;
-            canvas.height = size;
-            let rotation = 0;
-            const cx = size / 2, cy = size / 2, radius = 140;
+// Loader — exactly 3 seconds, elegant fade
+(function loader(){
+const ld=document.getElementById('ld'),sh=document.getElementById('sh');
+const tl=gsap.timeline({onComplete(){ld.style.display='none';initAnims();gsap.to(sh,{opacity:1,duration:1,delay:.5});gsap.to(sh,{opacity:0,duration:1,delay:4.5})}});
+tl.to('#p1',{strokeDashoffset:0,duration:1.2,ease:'power3.inOut'})
+.to('#p2',{strokeDashoffset:0,duration:.9,ease:'power3.inOut'},.2)
+.to('#p3',{strokeDashoffset:0,duration:1,ease:'power3.inOut'},.4)
+.to('#p4',{strokeDashoffset:0,duration:1,ease:'power3.inOut'},.7)
+.to('#ldt',{opacity:.5,duration:.6,ease:'power2.out'},.8)
+.to({},{duration:.2}) /* hold */
+.to(ld,{opacity:0,duration:1.4,ease:'power2.inOut'},1.6);
+})();
+setTimeout(()=>{const l=document.getElementById('ld');if(l&&l.style.display!=='none'){l.style.display='none';initAnims()}},5000);
 
-            function draw() {
-                ctx.clearRect(0, 0, size, size);
-                ctx.beginPath();
-                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(196, 164, 132, 0.1)';
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(196, 164, 132, 0.3)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
+// Build dial with tick marks
+function buildDial(){
+const d=document.getElementById('dial'),r=d.getBoundingClientRect(),sz=r.width,rad=sz*.4,cx=sz/2,cy=sz/2,now=new Date().getHours()%12||12;
+// Tick marks (60)
+for(let i=0;i<60;i++){
+const a=(i*6-90)*(Math.PI/180);
+const tr=sz*.48;
+const x=cx+tr*Math.cos(a),y=cy+tr*Math.sin(a);
+const tick=document.createElement('div');
+tick.className='dial__tick'+(i%5===0?' major':'');
+tick.style.left=x+'px';tick.style.top=y+'px';
+tick.style.transform=`translate(-50%,-50%) rotate(${i*6}deg)`;
+d.appendChild(tick);
+}
+// Hour numbers
+for(let i=1;i<=12;i++){
+const a=((i*30)-90)*(Math.PI/180),x=cx+rad*Math.cos(a),y=cy+rad*Math.sin(a);
+const el=document.createElement('div');
+el.className='dial__h'+(i===now?' on':'');
+el.textContent=i;
+el.style.left=x+'px';el.style.top=y+'px';
+el.style.transform=i===now?'translate(-50%,-50%)':'translate(-50%,-50%) rotate(180deg)';
+d.appendChild(el);
+}}
 
-                for (let i = 1; i <= 12; i++) {
-                    const angle = (i / 12) * Math.PI * 2 + rotation;
-                    const x = cx + Math.cos(angle) * (radius - 30);
-                    const y = cy + Math.sin(angle) * (radius - 30);
-                    ctx.save();
-                    ctx.translate(x, y);
-                    const textRotation = angle - rotation - Math.PI / 2;
-                    ctx.rotate(textRotation);
-                    ctx.font = '24px Cormorant Garamond';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    const isCurrent = Math.abs((angle - rotation + Math.PI / 2) % (Math.PI * 2)) < 0.3;
-                    ctx.fillStyle = isCurrent ? '#9A7B5B' : 'rgba(154, 123, 91, 0.2)';
-                    ctx.fillText(i.toString(), 0, 0);
-                    ctx.restore();
-                }
+// Ghost ticker
+function initTicker(){
+const g=document.getElementById('ghost');
+gsap.to(g,{x:'-50%',duration:40,ease:'none',repeat:-1});
+}
 
-                ctx.beginPath();
-                ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-                ctx.fillStyle = '#C4A484';
-                ctx.fill();
+// All animations
+function initAnims(){
+buildDial();
+initTicker();
 
-                rotation += 0.002;
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
+// S1 parallax
+gsap.to('.s1__name',{y:-50,scrollTrigger:{trigger:'#sec0',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.s1__rule',{scaleX:2.5,opacity:0,scrollTrigger:{trigger:'#sec0',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.s1__geo',{y:20,opacity:0,scrollTrigger:{trigger:'#sec0',start:'top top',end:'60% top',scrub:true}});
 
-        // SECTION 4: SVG
-        function initSvg() {
-            const lines = document.querySelectorAll('.craft-line');
-            lines.forEach((line, i) => {
-                const length = line.getTotalLength ? line.getTotalLength() : 200;
-                line.style.strokeDasharray = length;
-                line.style.strokeDashoffset = length;
-                gsap.to(line, {
-                    strokeDashoffset: 0,
-                    duration: 4,
-                    delay: i * 0.4,
-                    ease: 'power2.inOut',
-                    scrollTrigger: { trigger: '#section4', start: 'top center', toggleActions: 'play none none reverse' }
-                });
-            });
-            gsap.utils.toArray('.craft-label').forEach((label, i) => {
-                gsap.fromTo(label, { opacity: 0 }, {
-                    opacity: 0.4,
-                    duration: 2,
-                    delay: 2 + (i * 0.3),
-                    scrollTrigger: { trigger: '#section4', start: 'top center', toggleActions: 'play none none reverse' }
-                });
-            });
-        }
+// S2 kinetic text reveal
+const lines=document.querySelectorAll('.s2__line span');
+lines.forEach((l,i)=>{
+gsap.to(l,{y:'0%',duration:1.2,ease:'power3.out',scrollTrigger:{trigger:'#sec1',start:`${10+i*8}% bottom`,toggleActions:'play none none reverse'}});
+});
+// Parallax on each line
+lines.forEach((l,i)=>{
+gsap.to(l,{y:-30-i*20,scrollTrigger:{trigger:'#sec1',start:'top bottom',end:'bottom top',scrub:true}});
+});
+gsap.to('#attr',{opacity:.6,duration:1,scrollTrigger:{trigger:'#sec1',start:'60% bottom',toggleActions:'play none none reverse'}});
+gsap.to('#s2rule',{opacity:.4,duration:1,scrollTrigger:{trigger:'#sec1',start:'65% bottom',toggleActions:'play none none reverse'}});
 
-        // SECTION 5: COMMISSION
-        function initCommission() {
-            const container = document.getElementById('commissionContainer');
-            const commissionText = document.getElementById('commissionText');
-            const appointmentText = document.getElementById('appointmentText');
-            const emailText = document.getElementById('emailText');
-            const feedback = document.getElementById('copiedFeedback');
-            const hint = document.getElementById('commissionHint');
-            let isRevealed = false;
+// S3 dial reveals
+gsap.to('#dlbl',{opacity:1,duration:1,scrollTrigger:{trigger:'#sec2',start:'top 70%',toggleActions:'play none none reverse'}});
+gsap.to('#dtitle',{opacity:1,duration:1.2,scrollTrigger:{trigger:'#sec2',start:'30% 70%',toggleActions:'play none none reverse'}});
+gsap.to('#dsub',{opacity:1,duration:1.2,scrollTrigger:{trigger:'#sec2',start:'40% 70%',toggleActions:'play none none reverse'}});
 
-            container.addEventListener('mouseenter', () => {
-                if (!isRevealed) {
-                    commissionText.classList.add('hidden');
-                    appointmentText.classList.add('visible');
-                    setTimeout(() => {
-                        appointmentText.classList.remove('visible');
-                        emailText.classList.add('visible');
-                    }, 1200);
-                    isRevealed = true;
-                }
-                hint.classList.add('hidden');
-            });
-            container.addEventListener('mouseleave', () => {
-                commissionText.classList.remove('hidden');
-                appointmentText.classList.remove('visible');
-                emailText.classList.remove('visible');
-                hint.classList.remove('hidden');
-                isRevealed = false;
-            });
-            container.addEventListener('click', () => {
-                navigator.clipboard.writeText('info@ballouard.com').then(() => {
-                    feedback.classList.add('visible');
-                    setTimeout(() => feedback.classList.remove('visible'), 2500);
-                });
-            });
-        }
+// S4 content
+gsap.fromTo('.s4__content',{y:40,opacity:0},{y:0,opacity:1,duration:1.2,ease:'power2.out',scrollTrigger:{trigger:'#sec3',start:'top 70%',toggleActions:'play none none reverse'}});
 
-        // SECTION ENTRANCE ANIMATIONS
-        function initEntranceAnimations() {
-            // Genesis elements
-            gsap.fromTo('.genesis-text', 
-                { opacity: 0, y: 30 }, 
-                { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out', delay: 0.3 }
-            );
-            gsap.fromTo('.genesis-subtitle', 
-                { opacity: 0 }, 
-                { opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.8 }
-            );
-            
-            // Section 2 pretitle
-            ScrollTrigger.create({
-                trigger: '#section2',
-                start: 'top 70%',
-                onEnter: () => {
-                    gsap.fromTo('.typewriter-pretitle', 
-                        { opacity: 0, y: 20 }, 
-                        { opacity: 0.7, y: 0, duration: 1, ease: 'power2.out' }
-                    );
-                },
-                once: true
-            });
-            
-            // Section 2 quote reveals after typewriter
-            ScrollTrigger.create({
-                trigger: '#section2',
-                start: 'top 50%',
-                onEnter: () => {
-                    setTimeout(() => {
-                        gsap.fromTo('.typewriter-quote', 
-                            { opacity: 0, y: 15 }, 
-                            { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out' }
-                        );
-                    }, 4000);
-                },
-                once: true
-            });
-        }
+// S5 stagger
+['#ce','#ch','#cb','#cr'].forEach((s,i)=>{
+gsap.to(s,{opacity:1,y:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:'#sec4',start:`${15+i*8}% bottom`,toggleActions:'play none none reverse'}});
+gsap.set(s,{y:25});
+});
 
-        // INIT ALL
-        function initSectionAnimations() {
-            initParticles();
-            initEntranceAnimations();
-            // Typewriter triggers when Section 2 enters viewport
-            ScrollTrigger.create({ 
-                trigger: '#section2', 
-                start: 'top 60%', 
-                onEnter: initTypewriter, 
-                once: true 
-            });
-            ScrollTrigger.create({ 
-                trigger: '#section3', 
-                start: 'top 80%', 
-                onEnter: initDisc, 
-                once: true 
-            });
-            initSvg();
-            initCommission();
-        }
+// S6 stagger
+['#cl','#em','#cg'].forEach((s,i)=>{
+gsap.to(s,{opacity:1,y:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:'#sec5',start:`${20+i*8}% bottom`,toggleActions:'play none none reverse'}});
+gsap.set(s,{y:20});
+});
 
-        // CUSTOM CURSOR WITH TRAIL AND IDLE HIDE
-        const cursor = document.getElementById('cursor');
-        const trail1 = document.getElementById('cursorTrail1');
-        const trail2 = document.getElementById('cursorTrail2');
-        const cursorDot = document.getElementById('cursorDot');
-        let cursorX = 0, cursorY = 0;
-        let trail1X = 0, trail1Y = 0;
-        let trail2X = 0, trail2Y = 0;
-        let mouseX = 0, mouseY = 0;
-        let idleTimeout;
-        let isIdle = false;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Reset idle timer
-            clearTimeout(idleTimeout);
-            if (isIdle) {
-                isIdle = false;
-                cursor.classList.remove('idle');
-                trail1.style.opacity = '1';
-                trail2.style.opacity = '1';
-            }
-            idleTimeout = setTimeout(() => {
-                isIdle = true;
-                cursor.classList.add('idle');
-                trail1.style.opacity = '0';
-                trail2.style.opacity = '0';
-            }, 3000);
-        });
-        
-        function animateCursor() {
-            // Main cursor follows quickly
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
-            cursorDot.style.left = cursorX + 'px';
-            cursorDot.style.top = cursorY + 'px';
-            
-            // Trails follow with delay
-            trail1X += (cursorX - trail1X) * 0.08;
-            trail1Y += (cursorY - trail1Y) * 0.08;
-            trail1.style.left = trail1X + 'px';
-            trail1.style.top = trail1Y + 'px';
-            
-            trail2X += (trail1X - trail2X) * 0.06;
-            trail2Y += (trail1Y - trail2Y) * 0.06;
-            trail2.style.left = trail2X + 'px';
-            trail2.style.top = trail2Y + 'px';
-            
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-        
-        // Cursor hover effect
-        const hoverElements = document.querySelectorAll('.commission-container');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.classList.add('hover');
-                cursorDot.classList.add('visible');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hover');
-                cursorDot.classList.remove('visible');
-            });
-        });
-
-        // SMOOTH SCROLL - Heavy and luxurious
-        let scrollTimeout;
-        let isScrolling = false;
-        
-        mainContent.addEventListener('scroll', () => {
-            isScrolling = true;
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                isScrolling = false;
-                const sections = document.querySelectorAll('section');
-                const scrollTop = mainContent.scrollTop;
-                const viewportHeight = window.innerHeight;
-                const currentSection = Math.round(scrollTop / viewportHeight);
-                
-                // Snap to nearest section with grace
-                if (currentSection >= 0 && currentSection < sections.length) {
-                    const targetScroll = currentSection * viewportHeight;
-                    if (Math.abs(scrollTop - targetScroll) > 30) {
-                        gsap.to(mainContent, {
-                            scrollTop: targetScroll,
-                            duration: 0.8,
-                            ease: 'power2.out'
-                        });
-                    }
-                }
-            }, 400); // Longer timeout for luxury feel
-        }, { passive: true });
-
-        // KEYBOARD NAV
-        document.addEventListener('keydown', (e) => {
-            const scrollContainer = document.getElementById('main-content');
-            const sections = document.querySelectorAll('section');
-            const scrollTop = scrollContainer.scrollTop;
-            const viewportHeight = window.innerHeight;
-            const currentSection = Math.round(scrollTop / viewportHeight);
-            
-            if (e.key === 'ArrowDown' && currentSection < sections.length - 1) {
-                sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
-            } else if (e.key === 'ArrowUp' && currentSection > 0) {
-                sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    </script>
+// Email copy
+document.getElementById('em').addEventListener('click',e=>{
+e.preventDefault();
+navigator.clipboard.writeText('info@ballouard.com').then(()=>{
+const c=document.getElementById('cp');c.classList.add('on');setTimeout(()=>c.classList.remove('on'),2000);
+}).catch(()=>{window.location.href='mailto:info@ballouard.com'});
+});
+}
+</script>
 </body>
 </html>

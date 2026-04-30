@@ -1,151 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ballouard — The Cinematic Atelier</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Canela:ital,wght@0,100;0,200;0,300;1,100;1,200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ludovic Ballouard — Horloger, Genève</title>
+<meta name="description" content="Only the present moment has a meaning. Ludovic Ballouard, independent watchmaker, Geneva.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060606;--fg:#E8E4DF;--warm:#A08060;--mid:rgba(232,228,223,0.4);--dim:rgba(232,228,223,0.12);--serif:'Cormorant',Georgia,serif;--sans:'Inter','Helvetica Neue',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--warm);color:var(--bg)}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:0.028;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* CURSOR */
+.cur{position:fixed;width:36px;height:36px;border:1px solid rgba(232,228,223,0.25);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .5s cubic-bezier(.22,1,.36,1),border-color .4s ease}
+.cur.h{transform:translate(-50%,-50%) scale(2);border-color:var(--fg)}
+@media(pointer:coarse){.cur{display:none}body{cursor:auto}}
+
+/* PROGRESS */
+.prog{position:fixed;top:0;left:0;height:1px;background:var(--warm);z-index:9995;width:0;transition:width .15s linear}
+
+/* NAV MARKERS */
+.nav{position:fixed;right:3vw;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px}
+.nav__dot{width:6px;height:6px;border-radius:50%;border:1px solid var(--dim);background:transparent;cursor:pointer;transition:all .5s ease}
+.nav__dot.on{background:var(--warm);border-color:var(--warm);transform:scale(1.4)}
+@media(max-width:768px){.nav{display:none}}
+
+/* LOADER */
+.ld{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
+.ld svg{width:60px;height:60px;overflow:visible}
+.ld__s{fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ld__t{font-family:var(--sans);font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--mid);opacity:0}
+
+/* === SECTIONS === */
+section{position:relative;overflow:hidden}
+
+/* S1: MONUMENT */
+.s1{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.s1__name{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,9rem);letter-spacing:.18em;text-indent:.18em;text-align:center;line-height:1}
+.s1__rule{width:40px;height:1px;background:var(--warm);margin:3.5vh 0;opacity:.6}
+.s1__geo{font-family:var(--sans);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--mid)}
+.s1__scroll{position:absolute;bottom:4vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0}
+.s1__scroll span{font-family:var(--sans);font-size:.45rem;letter-spacing:.35em;text-transform:uppercase;color:var(--mid)}
+.s1__scroll i{display:block;width:1px;height:20px;background:linear-gradient(var(--mid),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.2;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+.s1__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+/* Rotating corner glyph */
+.glyph{position:absolute;bottom:5vh;left:4vw;width:10px;height:10px;border:1px solid var(--dim);transform:rotate(45deg);animation:glyphSpin 30s linear infinite}
+@keyframes glyphSpin{from{transform:rotate(45deg)}to{transform:rotate(405deg)}}
+/* Vertical hairlines */
+.vline{position:absolute;width:1px;height:100%;background:linear-gradient(transparent 10%,var(--dim) 50%,transparent 90%);top:0;pointer-events:none;opacity:.3}
+.vline--l{left:4vw}.vline--r{right:4vw}
+
+/* S2: THE QUOTE — KINETIC TYPOGRAPHY */
+.s2{min-height:160vh;position:relative;display:flex;align-items:center;padding:0 8vw}
+.s2__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s2__wrap{width:100%;position:relative;padding:12vh 0}
+.s2__line{display:block;font-family:var(--serif);font-weight:300;line-height:1.25;overflow:hidden;padding:.2em 0;margin:-.2em 0}
+.s2__line span{display:inline-block;transform:translateY(110%)}
+.s2__l1{font-size:clamp(1.1rem,2.2vw,1.8rem);color:var(--mid);font-style:italic;padding-left:2vw;margin-bottom:2vh}
+.s2__l2{font-size:clamp(2.8rem,8vw,7.5rem);margin-top:0}
+.s2__l3{font-size:clamp(1.4rem,4vw,3.5rem);text-align:right;padding-right:6vw;margin-top:2vh;color:rgba(232,228,223,.6)}
+.s2__l4{font-size:clamp(3rem,9.5vw,9rem);margin-top:1vh;padding-left:4vw}
+.s2__attr{position:absolute;bottom:12vh;right:8vw;font-family:var(--sans);font-size:.55rem;letter-spacing:.2em;color:var(--warm);opacity:0}
+.s2__rule{position:absolute;bottom:8vh;left:8vw;width:30px;height:1px;background:var(--dim);opacity:0}
+
+/* S3: THE DIAL — ABSTRACT CLOCK */
+.s3{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative}
+.s3__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s3__label{font-family:var(--sans);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--warm);margin-bottom:5vh;opacity:0}
+.dial{position:relative;width:min(50vmin,420px);height:min(50vmin,420px)}
+.dial__ring{position:absolute;inset:0;border-radius:50%;border:.5px solid var(--dim)}
+.dial__ring--sm{inset:28%;border-color:rgba(160,128,96,.12)}
+.dial__ring--xs{inset:46%;border-color:rgba(232,228,223,.05)}
+.dial__dot{position:absolute;top:50%;left:50%;width:5px;height:5px;background:var(--warm);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(160,128,96,.3);z-index:2}
+.dial__hand{position:absolute;bottom:50%;left:50%;width:1px;height:35%;background:linear-gradient(transparent,var(--warm));transform-origin:bottom center;transform:translateX(-50%) rotate(0deg);animation:handSweep 60s linear infinite;z-index:1}
+@keyframes handSweep{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+.dial__tick{position:absolute;width:1px;height:8px;background:rgba(232,228,223,.12);transform-origin:center center}
+.dial__tick.major{height:12px;background:rgba(232,228,223,.2)}
+.dial__h{position:absolute;font-family:var(--serif);font-weight:300;font-size:clamp(1.1rem,2.4vmin,1.5rem);color:rgba(232,228,223,.15);transform:translate(-50%,-50%);transition:all .8s cubic-bezier(.22,1,.36,1)}
+.dial__h.on{color:var(--fg);font-size:clamp(1.6rem,3.8vmin,2.3rem);text-shadow:0 0 20px rgba(232,228,223,.15)}
+.s3__title{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,3vw,2.5rem);letter-spacing:.12em;margin-top:5vh;opacity:0}
+.s3__sub{font-family:var(--sans);font-size:.7rem;letter-spacing:.06em;color:var(--mid);margin-top:1.5rem;text-align:center;max-width:340px;line-height:1.8;opacity:0}
+
+/* S4: PHILOSOPHY — HORIZONTAL TICKER */
+.s4{height:100vh;display:flex;align-items:center;overflow:hidden;position:relative}
+.s4__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s4__content{position:relative;z-index:2;max-width:520px;padding:0 6vw}
+.s4__eyebrow{font-family:var(--sans);font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--warm);margin-bottom:2rem}
+.s4__text{font-family:var(--serif);font-weight:300;font-size:clamp(1.2rem,2.2vw,1.8rem);line-height:1.9;color:rgba(232,228,223,.7)}
+.s4__rule{width:40px;height:1px;background:var(--dim);margin-top:2.5rem}
+/* Ghost text ticker behind */
+.s4__ghost{position:absolute;top:50%;right:0;transform:translateY(-50%);white-space:nowrap;font-family:var(--serif);font-weight:300;font-size:clamp(6rem,18vw,16rem);color:rgba(232,228,223,.025);pointer-events:none;z-index:0}
+
+/* S5: CRAFT */
+.s5{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative}
+.s5__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s5__center{text-align:center;max-width:600px;padding:0 6vw}
+.s5__eyebrow{font-family:var(--sans);font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--warm);margin-bottom:3rem;opacity:0}
+.s5__heading{font-family:var(--serif);font-weight:300;font-size:clamp(2.5rem,6vw,5rem);line-height:1.15;letter-spacing:.04em;opacity:0}
+.s5__body{font-family:var(--sans);font-weight:300;font-size:.75rem;line-height:2.1;color:var(--mid);margin-top:2.5rem;max-width:36ch;margin-left:auto;margin-right:auto;opacity:0}
+.s5__rule{width:1px;height:60px;background:linear-gradient(transparent,var(--dim),transparent);margin:3rem auto 0;opacity:0}
+
+/* S6: CONTACT */
+.s6{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:8vh 6vw}
+.s6__idx{position:absolute;top:4vh;left:4vw;font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.5}
+.s6__label{font-family:var(--sans);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--warm);margin-bottom:3rem;opacity:0}
+.s6__email{font-family:var(--serif);font-weight:300;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:.05em;position:relative;display:inline-block;opacity:0}
+.s6__email::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--warm);transition:width .8s cubic-bezier(.22,1,.36,1)}
+.s6__email:hover::after{width:100%}
+.s6__email:hover{color:var(--warm);transition:color .5s ease}
+.s6__copied{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--warm);margin-top:1rem;height:1.5rem;opacity:0;transition:opacity .4s ease}
+.s6__copied.on{opacity:1}
+.s6__geo{font-family:var(--sans);font-size:.6rem;letter-spacing:.15em;color:rgba(232,228,223,.15);margin-top:4rem;opacity:0}
+.s6 footer{position:absolute;bottom:3vh;left:0;width:100%;display:flex;justify-content:space-between;padding:0 4vw}
+.s6 footer span{font-family:var(--sans);font-size:.45rem;letter-spacing:.2em;color:rgba(232,228,223,.1);text-transform:uppercase}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.s2{min-height:150vh;padding:0 5vw}
+.s2__l4{padding-left:0}
+.s4__ghost{font-size:clamp(4rem,25vw,10rem)}
+.s4__content{max-width:100%}
+}
+@media(max-width:480px){
+.s1__name{letter-spacing:.08em;text-indent:.08em}
+.s6 footer{flex-direction:column;align-items:center;gap:.4rem}
+}
+</style>
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="cursor">
-        <div class="cursor__ring"></div>
-    </div>
 
-    <!-- SECTION 0: The Fly-Through Loader -->
-    <div id="loader" class="loader">
-        <div class="loader__inner">
-            <svg class="loader__monogram" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <!-- L Letter - Single continuous stroke -->
-                <path class="monogram__stroke monogram__l" 
-                      d="M 35 25 L 35 75 L 65 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="150"
-                      stroke-dashoffset="150"/>
-                <!-- B Letter - Vertical stem -->
-                <path class="monogram__stroke monogram__b-vertical" 
-                      d="M 75 25 L 75 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round"
-                      stroke-dasharray="50"
-                      stroke-dashoffset="50"/>
-                <!-- B Letter - Top curve -->
-                <path class="monogram__stroke monogram__b-top" 
-                      d="M 75 25 L 90 25 C 100 25 100 45 90 45 L 75 45" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="80"
-                      stroke-dashoffset="80"/>
-                <!-- B Letter - Bottom curve -->
-                <path class="monogram__stroke monogram__b-bottom" 
-                      d="M 75 45 L 92 45 C 105 45 105 75 92 75 L 75 75" 
-                      fill="none" 
-                      stroke="#E7E6E6" 
-                      stroke-width="3" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"
-                      stroke-dasharray="90"
-                      stroke-dashoffset="90"/>
-            </svg>
-        </div>
-    </div>
+<div class="cur" id="cur"></div>
+<div class="prog" id="prog"></div>
 
-    <!-- Main Content -->
-    <main id="smooth-wrapper">
-        <div id="smooth-content">
-            
-            <!-- SECTION 1: The Hero (The Illusion) -->
-            <section class="section section--hero" data-section="1">
-                <div class="hero__perspective">
-                    <div class="hero__background">
-                        <img src="assets/The-upside-down-hero-img.jpeg" alt="" class="hero__image">
-                    </div>
-                    <div class="hero__content">
-                        <h1 class="hero__headline">
-                            <span class="hero__line">Time is an illusion.</span>
-                        </h1>
-                        <p class="hero__subline">Ludovic Ballouard makes reality.</p>
-                    </div>
-                </div>
-                <nav class="hero__menu">MENU</nav>
-                <div class="hero__calibration"></div>
-            </section>
+<nav class="nav" id="nav">
+<div class="nav__dot on" data-s="0"></div>
+<div class="nav__dot" data-s="1"></div>
+<div class="nav__dot" data-s="2"></div>
+<div class="nav__dot" data-s="3"></div>
+<div class="nav__dot" data-s="4"></div>
+<div class="nav__dot" data-s="5"></div>
+</nav>
 
-            <!-- SECTION 2: Philosophy (Pure Typography) -->
-            <section class="section section--philosophy" data-section="2">
-                <div class="philosophy__content">
-                    <p class="philosophy__text">
-                        <span class="philosophy__line">Discard the lie of past and future.</span>
-                        <span class="philosophy__line">Embrace the only truth.</span>
-                        <span class="philosophy__line">Our timepieces reveal the present...</span>
-                        <span class="philosophy__line">the fleeting, terrifying, beautiful now.</span>
-                    </p>
-                </div>
-            </section>
+<div class="ld" id="ld">
+<svg viewBox="0 0 100 100"><path class="ld__s" id="p1" d="M28 20L28 70L52 70" stroke-dasharray="120" stroke-dashoffset="120"/><path class="ld__s" id="p2" d="M60 20L60 70" stroke-dasharray="50" stroke-dashoffset="50"/><path class="ld__s" id="p3" d="M60 20L72 20C82 20 82 42 72 42L60 42" stroke-dasharray="70" stroke-dashoffset="70"/><path class="ld__s" id="p4" d="M60 42L74 42C86 42 86 70 74 70L60 70" stroke-dasharray="80" stroke-dashoffset="80"/></svg>
+<span class="ld__t" id="ldt">Genève</span>
+</div>
 
-            <!-- SECTION 3: Craft (The Exploded View) -->
-            <section class="section section--craft" data-section="3">
-                <div class="craft__content">
-                    <p class="craft__text">
-                        Obsessive detail. Hand-engraved in Geneva. We do not build watches; we forge philosophies that disrupt perception.
-                    </p>
-                    <div class="craft__exploded">
-                        <div class="craft__layer craft__layer--1">
-                            <img src="assets/ballouard-001.jpg" alt="" class="craft__image">
-                        </div>
-                        <div class="craft__layer craft__layer--2">
-                            <img src="assets/ballouard-002.jpg" alt="" class="craft__image">
-                        </div>
-                        <div class="craft__layer craft__layer--3">
-                            <img src="assets/ballouard-003.jpg" alt="" class="craft__image">
-                        </div>
-                        <div class="craft__layer craft__layer--4">
-                            <img src="assets/ballouard-004.jpg" alt="" class="craft__image">
-                        </div>
-                        <div class="craft__heartbeat"></div>
-                    </div>
-                </div>
-            </section>
+<main id="main">
 
-            <!-- SECTION 4: A Legacy of Disruption (The Shader Abstraction) -->
-            <section class="section section--legacy" data-section="4">
-                <canvas class="legacy__shader"></canvas>
-                <div class="legacy__content">
-                    <p class="legacy__text">
-                        Born from a dream to elevate time. Since 2009, Ludovic Ballouard has challenged every convention, crafting mechanical marvels that defy perception. Our history is written in unexpected movements.
-                    </p>
-                </div>
-            </section>
+<section class="s1" id="sec0">
+<span class="s1__idx">01</span>
+<div class="vline vline--l"></div>
+<div class="vline vline--r"></div>
+<h1 class="s1__name">Ballouard</h1>
+<div class="s1__rule"></div>
+<p class="s1__geo">Horloger · Genève</p>
+<div class="glyph"></div>
+<div class="s1__scroll" id="sh"><span>Scroll</span><i></i></div>
+</section>
 
-            <!-- SECTION 5: The Monumental Footer -->
-            <section class="section section--footer" data-section="5">
-                <div class="footer__content">
-                    <p class="footer__micro">To question time, inquire.</p>
-                    <a href="mailto:info@ballouard.com" class="footer__macro">info@ballouard.com</a>
-                    <div class="footer__hairline"></div>
-                    <p class="footer__base">© 2026 VELOCITY | THE BALLOUARD PROTOTYPE.</p>
-                </div>
-            </section>
+<section class="s2" id="sec1">
+<span class="s2__idx">02</span>
+<div class="s2__wrap">
+<div class="s2__line s2__l1"><span>"Only</span></div>
+<div class="s2__line s2__l2"><span>the present</span></div>
+<div class="s2__line s2__l3"><span>moment has</span></div>
+<div class="s2__line s2__l4"><span>a meaning."</span></div>
+</div>
+<p class="s2__attr" id="attr">— Ludovic Ballouard</p>
+<div class="s2__rule" id="s2rule"></div>
+</section>
 
-        </div>
-    </main>
+<section class="s3" id="sec2">
+<span class="s3__idx">03</span>
+<p class="s3__label" id="dlbl">The Signature</p>
+<div class="dial" id="dial"><div class="dial__ring"></div><div class="dial__ring dial__ring--sm"></div><div class="dial__ring dial__ring--xs"></div><div class="dial__hand"></div><div class="dial__dot"></div></div>
+<p class="s3__title" id="dtitle">The Upside Down</p>
+<p class="s3__sub" id="dsub">Twelve hours. Eleven inverted. Only the present is readable.</p>
+</section>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
-    <script src="js/main.js"></script>
+<section class="s4" id="sec3">
+<span class="s4__idx">04</span>
+<div class="s4__ghost" id="ghost">BALLOUARD · GENÈVE · BALLOUARD · GENÈVE ·&nbsp;</div>
+<div class="s4__content">
+<p class="s4__eyebrow">Philosophy</p>
+<p class="s4__text">In a world consumed by measuring what has passed and predicting what will come, Ludovic Ballouard builds instruments that honour only what is. Each timepiece dismantles the tyranny of the clock — so that time is never counted, only inhabited.</p>
+<div class="s4__rule"></div>
+</div>
+</section>
+
+<section class="s5" id="sec4">
+<span class="s5__idx">05</span>
+<div class="s5__center">
+<p class="s5__eyebrow" id="ce">The Atelier</p>
+<h2 class="s5__heading" id="ch">Hand-engraved<br>in Geneva</h2>
+<p class="s5__body" id="cb">Every component shaped by hand. Movements finished to a standard that exists for no audience but the watchmaker and the owner. This is conversation between artisan and material.</p>
+<div class="s5__rule" id="cr"></div>
+</div>
+</section>
+
+<section class="s6" id="sec5">
+<span class="s6__idx">06</span>
+<p class="s6__label" id="cl">Inquire</p>
+<a href="mailto:info@ballouard.com" class="s6__email" id="em">info@ballouard.com</a>
+<p class="s6__copied" id="cp">Email copied</p>
+<p class="s6__geo" id="cg">46°12′N · 6°09′E</p>
+<footer><span>© Velocity MMXXVI</span><span>The Ballouard Prototype</span></footer>
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:.06,duration:1.4});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+// Progress
+const prog=document.getElementById('prog');
+ScrollTrigger.create({onUpdate:s=>{prog.style.width=Math.round(s.progress*100)+'%'},start:'top top',end:'bottom bottom',scrub:true});
+
+// Cursor
+const cur=document.getElementById('cur');
+let mx=0,my=0,cx=0,cy=0;
+if(matchMedia('(pointer:fine)').matches){
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function lp(){cx+=(mx-cx)*.1;cy+=(my-cy)*.1;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lp)})();
+document.querySelectorAll('a').forEach(a=>{a.addEventListener('mouseenter',()=>cur.classList.add('h'));a.addEventListener('mouseleave',()=>cur.classList.remove('h'))});
+}
+
+// Nav dots
+const dots=document.querySelectorAll('.nav__dot');
+const secs=document.querySelectorAll('section');
+secs.forEach((s,i)=>{
+ScrollTrigger.create({trigger:s,start:'top center',end:'bottom center',onEnter:()=>setDot(i),onEnterBack:()=>setDot(i)});
+});
+function setDot(i){dots.forEach((d,j)=>{d.classList.toggle('on',j===i)})}
+dots.forEach(d=>{d.addEventListener('click',()=>{const i=+d.dataset.s;lenis.scrollTo(secs[i],{duration:1.5})})});
+
+// Loader — exactly 3 seconds, elegant fade
+(function loader(){
+const ld=document.getElementById('ld'),sh=document.getElementById('sh');
+const tl=gsap.timeline({onComplete(){ld.style.display='none';initAnims();gsap.to(sh,{opacity:1,duration:1,delay:.5});gsap.to(sh,{opacity:0,duration:1,delay:4.5})}});
+tl.to('#p1',{strokeDashoffset:0,duration:1.2,ease:'power3.inOut'})
+.to('#p2',{strokeDashoffset:0,duration:.9,ease:'power3.inOut'},.2)
+.to('#p3',{strokeDashoffset:0,duration:1,ease:'power3.inOut'},.4)
+.to('#p4',{strokeDashoffset:0,duration:1,ease:'power3.inOut'},.7)
+.to('#ldt',{opacity:.5,duration:.6,ease:'power2.out'},.8)
+.to({},{duration:.2}) /* hold */
+.to(ld,{opacity:0,duration:1.4,ease:'power2.inOut'},1.6);
+})();
+setTimeout(()=>{const l=document.getElementById('ld');if(l&&l.style.display!=='none'){l.style.display='none';initAnims()}},5000);
+
+// Build dial with tick marks
+function buildDial(){
+const d=document.getElementById('dial'),r=d.getBoundingClientRect(),sz=r.width,rad=sz*.4,cx=sz/2,cy=sz/2,now=new Date().getHours()%12||12;
+// Tick marks (60)
+for(let i=0;i<60;i++){
+const a=(i*6-90)*(Math.PI/180);
+const tr=sz*.48;
+const x=cx+tr*Math.cos(a),y=cy+tr*Math.sin(a);
+const tick=document.createElement('div');
+tick.className='dial__tick'+(i%5===0?' major':'');
+tick.style.left=x+'px';tick.style.top=y+'px';
+tick.style.transform=`translate(-50%,-50%) rotate(${i*6}deg)`;
+d.appendChild(tick);
+}
+// Hour numbers
+for(let i=1;i<=12;i++){
+const a=((i*30)-90)*(Math.PI/180),x=cx+rad*Math.cos(a),y=cy+rad*Math.sin(a);
+const el=document.createElement('div');
+el.className='dial__h'+(i===now?' on':'');
+el.textContent=i;
+el.style.left=x+'px';el.style.top=y+'px';
+el.style.transform=i===now?'translate(-50%,-50%)':'translate(-50%,-50%) rotate(180deg)';
+d.appendChild(el);
+}}
+
+// Ghost ticker
+function initTicker(){
+const g=document.getElementById('ghost');
+gsap.to(g,{x:'-50%',duration:40,ease:'none',repeat:-1});
+}
+
+// All animations
+function initAnims(){
+buildDial();
+initTicker();
+
+// S1 parallax
+gsap.to('.s1__name',{y:-50,scrollTrigger:{trigger:'#sec0',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.s1__rule',{scaleX:2.5,opacity:0,scrollTrigger:{trigger:'#sec0',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.s1__geo',{y:20,opacity:0,scrollTrigger:{trigger:'#sec0',start:'top top',end:'60% top',scrub:true}});
+
+// S2 kinetic text reveal
+const lines=document.querySelectorAll('.s2__line span');
+lines.forEach((l,i)=>{
+gsap.to(l,{y:'0%',duration:1.2,ease:'power3.out',scrollTrigger:{trigger:'#sec1',start:`${10+i*8}% bottom`,toggleActions:'play none none reverse'}});
+});
+// Parallax on each line
+lines.forEach((l,i)=>{
+gsap.to(l,{y:-30-i*20,scrollTrigger:{trigger:'#sec1',start:'top bottom',end:'bottom top',scrub:true}});
+});
+gsap.to('#attr',{opacity:.6,duration:1,scrollTrigger:{trigger:'#sec1',start:'60% bottom',toggleActions:'play none none reverse'}});
+gsap.to('#s2rule',{opacity:.4,duration:1,scrollTrigger:{trigger:'#sec1',start:'65% bottom',toggleActions:'play none none reverse'}});
+
+// S3 dial reveals
+gsap.to('#dlbl',{opacity:1,duration:1,scrollTrigger:{trigger:'#sec2',start:'top 70%',toggleActions:'play none none reverse'}});
+gsap.to('#dtitle',{opacity:1,duration:1.2,scrollTrigger:{trigger:'#sec2',start:'30% 70%',toggleActions:'play none none reverse'}});
+gsap.to('#dsub',{opacity:1,duration:1.2,scrollTrigger:{trigger:'#sec2',start:'40% 70%',toggleActions:'play none none reverse'}});
+
+// S4 content
+gsap.fromTo('.s4__content',{y:40,opacity:0},{y:0,opacity:1,duration:1.2,ease:'power2.out',scrollTrigger:{trigger:'#sec3',start:'top 70%',toggleActions:'play none none reverse'}});
+
+// S5 stagger
+['#ce','#ch','#cb','#cr'].forEach((s,i)=>{
+gsap.to(s,{opacity:1,y:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:'#sec4',start:`${15+i*8}% bottom`,toggleActions:'play none none reverse'}});
+gsap.set(s,{y:25});
+});
+
+// S6 stagger
+['#cl','#em','#cg'].forEach((s,i)=>{
+gsap.to(s,{opacity:1,y:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:'#sec5',start:`${20+i*8}% bottom`,toggleActions:'play none none reverse'}});
+gsap.set(s,{y:20});
+});
+
+// Email copy
+document.getElementById('em').addEventListener('click',e=>{
+e.preventDefault();
+navigator.clipboard.writeText('info@ballouard.com').then(()=>{
+const c=document.getElementById('cp');c.classList.add('on');setTimeout(()=>c.classList.remove('on'),2000);
+}).catch(()=>{window.location.href='mailto:info@ballouard.com'});
+});
+}
+</script>
 </body>
 </html>
