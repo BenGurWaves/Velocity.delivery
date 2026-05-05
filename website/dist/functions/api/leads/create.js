@@ -22,15 +22,16 @@ export async function onRequestPost(context) {
   const client_email = validateLength('client_email', (body.client_email || '').toLowerCase()) || null;
   const client_name  = validateLength('client_name',  body.client_name  || '')                || null;
 
+  // Generate a unique token for this lead
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const token = Array.from(bytes, b => b.toString(16).padStart(2,'0')).join('');
+
   try {
-    const rows = await sb.insert('velocity_leads', { client_email, client_name, status: 'pending' });
+    const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
     const lead = Array.isArray(rows) ? rows[0] : rows;
-    if (!lead || !lead.id || !lead.token) {
-      return secureJson({ error: 'Database response missing required fields (id/token). Response: ' + JSON.stringify(lead) }, 500);
-    }
     const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
     return secureJson({ id: lead.id, token: lead.token, onboard_url: `${base}/onboard/${lead.token}` });
   } catch (err) {
-    return secureJson({ error: 'Failed to create lead: ' + (err.message || err), details: String(err) }, 500);
+    return secureErr('Failed to create lead: ' + (err.message || err), 500);
   }
 }
