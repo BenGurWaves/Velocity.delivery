@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
   const client_name  = validateLength('client_name',  body.client_name  || '')                || null;
 
   try {
-    const rows = await sb.insert('velocity_leads', { client_email, client_name, status: 'onboarding_sent' });
+    const rows = await sb.insert('velocity_leads', { client_email, client_name, status: 'pending' });
     const lead = Array.isArray(rows) ? rows[0] : rows;
     if (!lead || !lead.id || !lead.token) {
       return secureErr('Database response missing required fields (id/token). Response: ' + JSON.stringify(lead), 500);
