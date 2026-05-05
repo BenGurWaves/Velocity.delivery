@@ -25,6 +25,9 @@ export async function onRequestPost(context) {
   try {
     const rows = await sb.insert('velocity_leads', { client_email, client_name, status: 'onboarding_sent' });
     const lead = Array.isArray(rows) ? rows[0] : rows;
+    if (!lead || !lead.id || !lead.token) {
+      return secureErr('Database response missing required fields (id/token). Response: ' + JSON.stringify(lead), 500);
+    }
     const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
     return secureJson({ id: lead.id, token: lead.token, onboard_url: `${base}/onboard/${lead.token}` });
   } catch (err) {
