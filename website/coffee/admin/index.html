@@ -284,10 +284,10 @@ function renderLeads(){
       e.stopPropagation();
       viewBtn.textContent='Opening…';
       try{
-        const r=await fetch('/api/admin/temp-token',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:'{}'});
+        const r=await fetch('/api/coffee/admin/temp-token',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:'{}'});
         const d=await r.json();
         if(d.token){
-          window.open('/admin/client/'+l.token+'?t='+encodeURIComponent(d.token),'_blank');
+          window.open('/coffee/admin/client/'+l.token+'?t='+encodeURIComponent(d.token),'_blank');
         } else {
           toast('Could not open brief: '+( d.error||'unknown error'));
         }
