@@ -36,6 +36,6 @@ export async function onRequestPost(context) {
     return secureJson({ id: lead.id, token: lead.token, onboard_url: `${base}/onboard/${lead.token}` });
   } catch (err) {
     console.error('Create lead error:', err);
-    return secureErr('Failed to create lead: ' + (err.message || String(err)), 500);
+    return secureErr('Failed to create lead: ' + (err.message || String(err)), 400);
   }
 }
