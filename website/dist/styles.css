@@ -5,136 +5,21 @@ html{scroll-behavior:auto}::selection{background:var(--brass);color:var(--bg)}
 body{font-family:var(--sans);background:var(--bg);color:var(--sand);-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none}
 a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;border:none;cursor:none;color:inherit}
 
-/* Static grain — the previous steps(3) animation teleported the noise
-   pattern 3x per 0.4s, creating a periodic flicker that read as a
-   "lighter color flash" on the hero's uniform dark bg. Static = no flicker. */
-.grain{position:fixed;inset:0;width:100%;height:100%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.022;pointer-events:none;z-index:9000}
-/* CURSOR — three layered states:
-   • Default: "The Filament" — hairline pendulum + brass weight, tilts with motion
-   • Text: an inverted lozenge via mix-blend-mode difference (true color inversion of whatever's beneath)
-   • Interactive: a large horological chapter ring with 12 ticks + crosshair, rotating slowly */
-.filament{position:fixed;top:0;left:0;width:120px;height:120px;margin:-60px 0 0 -60px;pointer-events:none;z-index:9501;will-change:transform;color:var(--sand)}
-.fil-svg,.fil-dial-svg{width:100%;height:100%;display:block;overflow:visible}
-
-/* Layer 1 — "The Hallmark": a jeweler's punzone, slowly rotating */
-.fil-tilt{position:absolute;inset:0;will-change:transform;transition:opacity .35s cubic-bezier(.4,0,.2,1);color:var(--sand)}
-.fil-mark{transform-origin:center;transform-box:fill-box;animation:fil-mark-spin 22s linear infinite}
-.fil-ray-major{opacity:.85}
-.fil-ray-minor{opacity:.55}
-.fil-core-sm{fill:var(--brass)}
-@keyframes fil-mark-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* Layer 2 — spin rotor (chapter ring). Uses mix-blend-mode:difference
-   so it's always legible regardless of the underlying scene color. */
-.fil-spin{position:absolute;inset:0;opacity:0;transform:scale(.55);transform-origin:center;will-change:transform,opacity;transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.34,1.4,.5,1);color:#fff;mix-blend-mode:difference}
-.fil-spin .fil-dial-svg{animation:fil-rotate 14s linear infinite;width:100%;height:100%;display:block;overflow:visible}
-.fil-spin .fil-dial-ring{stroke:#fff}
-.fil-spin .fil-ticks line{stroke:#fff}
-.fil-spin .fil-cross{stroke:#C49C7B}
-.fil-spin .fil-core{fill:#C49C7B}
-@keyframes fil-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* Layer 3 — "The Brackets": two editorial bracket marks flanking the cursor.
-   Text and its colors remain fully visible BETWEEN the brackets. The dual
-   drop-shadow gives the brass stroke a halo readable on any background. */
-.fil-text{position:absolute;inset:0;opacity:0;will-change:opacity,transform;color:var(--brass);transition:opacity .35s cubic-bezier(.4,0,.2,1)}
-.fil-text-svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 0 1.2px rgba(0,0,0,.55)) drop-shadow(0 0 1.2px rgba(255,255,255,.35))}
-.fil-bracket{transition:d .45s cubic-bezier(.34,1.56,.64,1),transform .45s cubic-bezier(.34,1.56,.64,1)}
-.fil-bracket-l{transform-origin:center;transform:translateX(8px);transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .35s ease}
-.fil-bracket-r{transform-origin:center;transform:translateX(-8px);transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .35s ease}
-
-/* TEXT STATE — hallmark hides, brackets fade in and slide outward to embrace the text */
-.filament.is-text .fil-tilt{opacity:0}
-.filament.is-text .fil-text{opacity:1}
-.filament.is-text .fil-bracket-l{transform:translateX(0)}
-.filament.is-text .fil-bracket-r{transform:translateX(0)}
-
-/* INTERACTIVE STATE — filament hides, large chapter ring blooms in */
-.filament.is-active .fil-tilt{opacity:0}
-.filament.is-active .fil-spin{opacity:.92;transform:scale(1)}
-
-/* PRESS — chapter ring contracts slightly */
-.filament.is-active.is-pressed .fil-spin{transform:scale(.82)}
-.filament.is-text.is-pressed .fil-bracket-l{transform:translateX(3px)}
-.filament.is-text.is-pressed .fil-bracket-r{transform:translateX(-3px)}
-.copy-toast{position:fixed;bottom:clamp(2rem,4vw,3.5rem);left:50%;transform:translate(-50%,12px);padding:.55rem 1.1rem;background:rgba(13,12,9,.85);border:1px solid var(--border2);backdrop-filter:blur(8px);font-family:var(--serif);font-style:italic;font-size:.78rem;letter-spacing:.02em;color:var(--sand);opacity:0;pointer-events:none;z-index:9999;transition:opacity .4s var(--ease),transform .4s var(--ease)}
-.copy-toast.is-on{opacity:1;transform:translate(-50%,0)}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.035;pointer-events:none;z-index:9000;animation:gr .4s steps(3) infinite}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-3%,-1%)}66%{transform:translate(1%,2%)}}
+.cursor-glow{position:fixed;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(196,156,123,.05) 0%,transparent 70%);pointer-events:none;z-index:2;will-change:transform}
+.cursor-ring{position:fixed;width:40px;height:40px;border-radius:50%;border:1px solid rgba(222,200,181,.12);pointer-events:none;z-index:9501;will-change:transform;mix-blend-mode:difference;transition:width .4s var(--ease),height .4s var(--ease),border-color .3s}
+.cursor-ring.is-active{width:80px;height:80px;border-color:rgba(222,200,181,.35)}
+.cursor-dot{position:fixed;width:5px;height:5px;background:var(--brass);border-radius:50%;pointer-events:none;z-index:9502;will-change:transform}
 .scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--brass);z-index:8500;width:100%;transform:scaleX(0);transform-origin:left;will-change:transform}
 
-/* PRELOADER — cross-dissolve sequence of unique pages; figure locked as the anchor */
-.preloader{position:fixed;inset:0;z-index:10000;overflow:hidden;font-family:var(--serif);background:#0D0C09;color:var(--plFg,#DEC8B5)}
+/* PRELOADER */
+.preloader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
 .preloader.is-done{display:none}
-
-/* Stacked page layers — clip-path wipe. Both pages always at opacity:1
-   so the screen is ALWAYS fully covered. Incoming wipes over outgoing. */
-.pl-pages{position:absolute;inset:0}
-.pl-page{position:absolute;inset:0;opacity:1;will-change:clip-path;pointer-events:none;clip-path:inset(0 0 100% 0);transition:clip-path .13s cubic-bezier(.55,0,.2,1)}
-.pl-page.is-active{clip-path:inset(0 0 0 0);z-index:2}
-.pl-page.is-leaving{clip-path:inset(0 0 0 0);z-index:1;transition:none}
-/* Direction variants — randomized per flip for visual variety */
-.pl-page.wipe-down{clip-path:inset(0 0 100% 0)}.pl-page.wipe-down.is-active{clip-path:inset(0 0 0 0)}
-.pl-page.wipe-up{clip-path:inset(100% 0 0 0)}.pl-page.wipe-up.is-active{clip-path:inset(0 0 0 0)}
-.pl-page.wipe-right{clip-path:inset(0 100% 0 0)}.pl-page.wipe-right.is-active{clip-path:inset(0 0 0 0)}
-.pl-page.wipe-left{clip-path:inset(0 0 0 100%)}.pl-page.wipe-left.is-active{clip-path:inset(0 0 0 0)}
-
-/* Inside each page */
-.pl-page .pl-bg{position:absolute;inset:0;pointer-events:none}
-.pl-page .pl-deco{position:absolute;inset:0;pointer-events:none;color:var(--pAccent,#C49C7B)}
-.pl-page .pl-deco > *{position:absolute;will-change:transform,opacity}
-/* Grain removed from per-page layer for perf — the site's own .grain overlay
-   is visible through the preloader when needed. */
-
-/* Locked figure — the one immovable anchor */
-.pl-figure{position:absolute;bottom:clamp(.25rem,1.5vw,1.5rem);left:clamp(1rem,3vw,3.5rem);display:flex;align-items:flex-end;line-height:.78;pointer-events:none;z-index:5}
-.pl-num{font-family:var(--serif);font-size:clamp(10rem,32vw,28rem);font-variant-numeric:tabular-nums;font-style:italic;font-weight:400;letter-spacing:-.055em;color:var(--plFg,#DEC8B5);line-height:.78;transition:color .45s cubic-bezier(.7,0,.3,1)}
-.pl-pct{font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,5vw,4rem);color:var(--plAccent,#C49C7B);padding-left:.08em;opacity:.7;transform:translateY(-.42em);transition:color .45s cubic-bezier(.7,0,.3,1)}
-
-/* Background treatments — applied on each page via data-bg */
-.pl-page[data-bg="plain"] .pl-bg{background:var(--pBg)}
-.pl-page[data-bg="grad-d"] .pl-bg{background:linear-gradient(135deg,var(--pBgHi) 0%,var(--pBg) 50%,var(--pBgDark) 100%)}
-.pl-page[data-bg="grad-r"] .pl-bg{background:radial-gradient(ellipse at 30% 70%,var(--pBgHi) 0%,var(--pBg) 55%,var(--pBgDark) 100%)}
-.pl-page[data-bg="grad-tl"] .pl-bg{background:radial-gradient(ellipse at 80% 20%,var(--pBgHi) 0%,var(--pBg) 60%)}
-.pl-page[data-bg="split-h"] .pl-bg{background:linear-gradient(to bottom,var(--pBg) 60%,var(--pBgDark) 60%)}
-.pl-page[data-bg="split-v"] .pl-bg{background:linear-gradient(to right,var(--pBg) 42%,var(--pBgDark) 42%)}
-.pl-page[data-bg="split-d"] .pl-bg{background:linear-gradient(155deg,var(--pBg) 52%,var(--pBgDark) 52%)}
-.pl-page[data-bg="stripes"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(0deg,transparent 0 3px,var(--pAccentFaint) 3px 4px)}
-.pl-page[data-bg="dots"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle,var(--pAccentFaint2) 1.4px,transparent 1.4px);background-size:32px 32px}
-.pl-page[data-bg="diag"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(45deg,transparent 0 8px,var(--pAccentFaint) 8px 9px)}
-.pl-page[data-bg="diag-r"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(-45deg,transparent 0 12px,var(--pAccentFaint) 12px 13px)}
-.pl-page[data-bg="grid"] .pl-bg{background:var(--pBg);background-image:linear-gradient(var(--pAccentFaint) 1px,transparent 1px),linear-gradient(90deg,var(--pAccentFaint) 1px,transparent 1px);background-size:64px 64px}
-.pl-page[data-bg="grid-fine"] .pl-bg{background:var(--pBg);background-image:linear-gradient(var(--pAccentFaint) 1px,transparent 1px),linear-gradient(90deg,var(--pAccentFaint) 1px,transparent 1px);background-size:16px 16px}
-.pl-page[data-bg="ring"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle at center,transparent 34%,var(--pAccentFaint) 34.05%,var(--pAccentFaint) 34.15%,transparent 34.2%,transparent 49%,var(--pAccentFaint) 49.05%,var(--pAccentFaint) 49.15%,transparent 49.2%)}
-.pl-page[data-bg="halo"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle at 70% 30%,var(--pAccentFaint2) 0%,transparent 50%)}
-.pl-page[data-bg="veil"] .pl-bg{background:var(--pBg);background-image:linear-gradient(180deg,transparent 0%,var(--pAccentFaint) 100%)}
-
-/* Meta text slots */
-.pl-page .pl-meta{position:absolute;font-family:var(--serif);font-style:italic;font-size:clamp(.72rem,1.05vw,1rem);letter-spacing:.04em;color:var(--pAccent,#C49C7B);opacity:.82;pointer-events:none;max-width:35vw;will-change:contents}
-.pl-page .pl-meta--tl{top:clamp(1.5rem,3.5vw,3rem);left:clamp(1.5rem,3.5vw,3rem)}
-.pl-page .pl-meta--tr{top:clamp(1.5rem,3.5vw,3rem);right:clamp(1.5rem,3.5vw,3rem);text-align:right}
-.pl-page .pl-meta--bl{top:clamp(1.5rem,3.5vw,3rem);left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:clamp(.55rem,.75vw,.72rem);letter-spacing:.28em;text-transform:uppercase;font-style:normal;opacity:.55;white-space:nowrap;text-align:center}
-.pl-page .pl-meta--br{bottom:clamp(1.5rem,3.5vw,3rem);right:clamp(1.5rem,3.5vw,3rem);text-align:right;font-family:var(--sans);font-size:clamp(.55rem,.75vw,.72rem);letter-spacing:.24em;text-transform:uppercase;font-style:normal;opacity:.6}
-
-/* Deco primitive base classes */
-.d-line{background:currentColor}
-.d-circle{border:1px solid currentColor;border-radius:50%}
-.d-circle-2{border:1px solid currentColor;border-radius:50%;box-shadow:inset 0 0 0 1px transparent,0 0 0 3px transparent,0 0 0 4px currentColor}
-.d-dash{border-top:1px dashed currentColor}
-.d-dot{width:4px;height:4px;background:currentColor;border-radius:50%;opacity:.7;display:inline-block}
-.d-plus{display:block}
-.d-plus::before,.d-plus::after{content:"";position:absolute;background:currentColor;inset:0}
-.d-plus::before{top:50%;height:1px;transform:translateY(-.5px)}
-.d-plus::after{left:50%;width:1px;transform:translateX(-.5px)}
-.d-frame-c{border-top:1px solid currentColor;border-left:1px solid currentColor}
-.d-rhombus{border:1px solid currentColor;transform-origin:center}
-.d-triangle{width:0;height:0;border-left-style:solid;border-right-style:solid;border-bottom-style:solid;border-left-color:transparent;border-right-color:transparent;border-bottom-color:currentColor}
-.d-sub{font-family:var(--serif);font-style:italic;color:currentColor;letter-spacing:.06em;white-space:nowrap}
-.d-sub-lg{font-family:var(--serif);color:currentColor;letter-spacing:-.04em;line-height:1;white-space:nowrap;font-weight:400}
-.d-mono{font-family:var(--sans);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:currentColor}
-.d-vert{writing-mode:vertical-rl;font-family:var(--serif);font-style:italic;color:currentColor;letter-spacing:.16em}
-.d-grid-mini{background-image:linear-gradient(currentColor 1px,transparent 1px),linear-gradient(90deg,currentColor 1px,transparent 1px);background-size:8px 8px;opacity:.22}
-.d-arc svg{display:block;color:currentColor}
-.d-star{color:currentColor;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1}
-.d-pill{border:1px solid currentColor;border-radius:999px;padding:.28em .8em;font-family:var(--sans);font-size:.55rem;letter-spacing:.22em;text-transform:uppercase}
+.pl-brand{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-.02em;color:var(--sand);opacity:0;transform:translateY(10px)}
+.pl-brand em{font-style:normal;color:var(--brass)}
+.pl-line{width:80px;height:1px;background:var(--muted);overflow:hidden;opacity:0}
+.pl-line-inner{height:100%;width:0%;background:var(--brass)}
 
 /* HERO */
 .hero{height:400vh;position:relative}
@@ -219,47 +104,21 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;
 .maison-cta-head{font-family:var(--serif);font-size:clamp(2.5rem,6vw,6rem);font-weight:400;letter-spacing:-.04em;line-height:1.05;color:var(--sand);max-width:14ch;margin:0 auto 2rem}
 .maison-cta-sub{font-size:clamp(.8rem,.9vw,.88rem);font-weight:300;color:var(--dim);line-height:1.9;max-width:38ch;margin:0 auto}
 
-/* EMAIL STAGE — "The Letterhead": the email as an engraved title plate.
-   Two thin hairlines frame a single elegant line: atelier @ calyvent.com
-   Wide letter-spacing, restrained scale. The composition is abstract through
-   proportion — like an inscription on a maison's stationery. */
-.email-stage{position:relative;min-height:100vh;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(4rem,8vw,8rem) var(--px);overflow:hidden}
-.email-mark{appearance:none;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:clamp(.8rem,1.6vw,1.4rem);font-family:var(--serif);font-style:italic;font-weight:400;color:var(--sand);cursor:none;padding:0;pointer-events:auto;transition:color .5s var(--ease)}
-
-/* Hairline rules — the frame that turns a line into a monument */
-.em-rule{display:block;width:min(78vw,980px);height:1px;background:rgba(196,156,123,.18);transition:background .6s var(--ease),transform .7s var(--ease)}
-.em-rule-top{transform-origin:left}
-.em-rule-bot{transform-origin:right}
-.email-mark:hover .em-rule{background:rgba(196,156,123,.38);transform:scaleX(1.04)}
-.email-mark.is-copied .em-rule{background:rgba(222,200,181,.55)}
-
-/* The email line — elegant, restrained, readable as an address */
-.em-line{display:flex;align-items:baseline;gap:clamp(.9rem,2.2vw,2rem);font-size:clamp(2.2rem,6.2vw,7rem);letter-spacing:-.02em;line-height:1.05}
-.em-name,.em-domain{color:var(--sand);transition:color .5s var(--ease)}
-.em-at{color:var(--brass);transition:color .5s var(--ease),transform .6s var(--ease)}
-.email-mark:hover .em-at{transform:scale(1.08)}
-.email-mark.is-copied .em-at{color:var(--sand);transform:scale(1)}
-.email-mark.is-copied .em-name,.email-mark.is-copied .em-domain{color:var(--brass)}
-
-/* Inline CTA — small, quiet, morphs on copy (no toast popup) */
-.em-cta{display:flex;align-items:center;gap:.55em;font-family:var(--sans);font-size:clamp(.42rem,.9vw,.55rem);letter-spacing:.38em;text-transform:uppercase;color:var(--dim);opacity:.55;transition:opacity .4s,color .4s}
-.em-cta-mark{color:var(--brass);font-size:.9em;transition:opacity .4s}
-.email-mark:hover .em-cta{opacity:.9;color:var(--sand)}
-.email-mark.is-copied .em-cta{opacity:1;color:var(--brass)}
-.email-mark.is-copied .em-cta-mark{opacity:0}
-.email-mark.is-copied .em-cta-text::before{content:"✓ "}
-
-.email-tagline{font-family:var(--serif);font-style:italic;font-size:clamp(.78rem,1.1vw,1rem);color:var(--dim);letter-spacing:.02em;opacity:.75;margin-top:clamp(2.2rem,4vw,4rem);text-align:center}
-.email-tagline em{font-style:italic;color:var(--brass);opacity:.85}
-
-/* FOOTER — Velocity particle mark + orbit + meta bar */
-.footer-exp{position:relative;min-height:60vh;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.footer-particle-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
-.footer-orbit{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:clamp(220px,30vw,380px);height:clamp(220px,30vw,380px);border:1px solid rgba(196,156,123,.18);border-radius:50%;animation:orbit 28s linear infinite;pointer-events:none;z-index:0}
-.footer-orbit::before{content:"";position:absolute;inset:8%;border:1px dashed rgba(222,200,181,.08);border-radius:50%}
+/* FOOTER */
+.footer-exp{position:relative;min-height:100vh;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.footer-particle-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.footer-content{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:0 var(--px) clamp(6rem,10vw,10rem);pointer-events:none}
+.footer-email{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(1.8rem,4.5vw,5.5rem);letter-spacing:-.04em;line-height:1;color:var(--brass);white-space:nowrap;transition:color .4s;margin-bottom:clamp(2rem,3.5vw,3rem);pointer-events:auto}
+.footer-email:hover{color:var(--sand)}
+.footer-email .char{display:inline-block;transition:transform .4s var(--ease)}
+.footer-email:hover .char:nth-child(odd){transform:translateY(-5px)}
+.footer-email:hover .char:nth-child(even){transform:translateY(5px)}
+.footer-tagline{font-family:var(--serif);font-size:clamp(.9rem,1.8vw,1.5rem);color:var(--dim);letter-spacing:-.02em;margin-top:clamp(1.5rem,3vw,3rem)}
+.footer-tagline em{font-style:italic;color:var(--brass)}
+.footer-orbit{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:clamp(200px,32vw,400px);height:clamp(200px,32vw,400px);border:1px solid var(--border);border-radius:50%;animation:orbit 30s linear infinite;pointer-events:none;z-index:0}
 @keyframes orbit{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
-.footer-orbit-dot{position:absolute;top:-4px;left:50%;width:8px;height:8px;background:var(--brass);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 14px rgba(196,156,123,.55)}
-.footer-bottom{position:relative;z-index:2;padding:clamp(2rem,4vw,4rem) var(--px);margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:2rem}
+.footer-orbit-dot{position:absolute;top:-3px;left:50%;width:6px;height:6px;background:var(--brass);border-radius:50%;transform:translateX(-50%)}
+.footer-bottom{position:relative;z-index:1;padding:clamp(2rem,4vw,4rem) var(--px);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:2rem}
 .footer-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.6rem}
 .footer-meta span,.footer-meta a{font-size:.52rem;letter-spacing:.1em;color:var(--dim);transition:color .25s}
 .footer-meta a:hover{color:var(--sand)}
@@ -269,7 +128,7 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;
 @media(max-width:1024px){.conviction-grid,.atelier-grid{grid-template-columns:1fr;gap:clamp(3rem,6vw,5rem)}}
 @media(max-width:768px){
   :root{--px:1.5rem}
-  .filament{display:none!important}body{cursor:auto}a,button{cursor:pointer}
+  .cursor-ring,.cursor-dot,.cursor-glow{display:none!important}body{cursor:auto}a,button{cursor:pointer}
   .hero-title{font-size:clamp(3rem,14vw,6rem)}
   .hero-phrase{font-size:clamp(1.2rem,4vw,2rem)!important}
   .philosophy-track{flex-direction:column;padding:0 var(--px) clamp(3rem,6vw,5rem)}
@@ -278,20 +137,7 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;
   .atelier-bg{font-size:clamp(5rem,18vw,10rem)}
   .atelier-facts{flex-direction:column;gap:1.5rem}
   .conviction-heading{font-size:clamp(1.8rem,6vw,3rem)}
-  .em-line{font-size:clamp(1.6rem,7vw,3.2rem);gap:clamp(.5rem,1.6vw,.9rem)}
-  .em-rule{width:min(88vw,640px)}
-  .em-cta{font-size:.42rem;letter-spacing:.28em}
-  .pl-num{font-size:clamp(6rem,34vw,12rem)}.pl-page .pl-meta{font-size:.65rem;max-width:50vw}
+  .footer-email{font-size:clamp(1.3rem,4vw,2.5rem)}
+  .pl-brand{font-size:clamp(1.5rem,5vw,2rem)}
 }
-/* Legal pages — minimal footer (no email stage needed) */
-.legal-minimal-footer{border-top:1px solid var(--border);padding:clamp(2.5rem,5vw,4rem) var(--px);background:var(--bg)}
-.legal-footer-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
-.legal-footer-copy{font-size:.55rem;letter-spacing:.06em;color:var(--dim)}
-.legal-footer-copy a{color:var(--sand);transition:color .25s}
-.legal-footer-copy a:hover{color:var(--brass)}
-.legal-footer-links{display:flex;align-items:center;gap:1.5rem}
-.legal-footer-links a{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);transition:color .25s}
-.legal-footer-links a:hover{color:var(--sand)}
-@media(max-width:600px){.legal-footer-inner{flex-direction:column;text-align:center;gap:1rem}}
-
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}

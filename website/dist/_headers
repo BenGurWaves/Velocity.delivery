@@ -17,8 +17,13 @@
 /_dashboard.html
   Cache-Control: public, s-maxage=3600, max-age=0, must-revalidate
 
-# ── Admin: never cache ────────────────────────────────────────────────────────
+# ── Block old admin path ────────────────────────────────────────────────────────
 /admin/*
+  X-Robots-Tag: noindex, nofollow
+  Status: 404
+
+# ── Admin: never cache ────────────────────────────────────────────────────────
+/coffee/admin/*
   Cache-Control: no-store, no-cache
 
 # ── Preview pages: no cache ─────────────────────────────────────────────────

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=32">
+  <link rel="stylesheet" href="/styles.css?v=31">
   <style>
     .legal {
       padding: clamp(8rem,14vw,12rem) var(--px) clamp(5rem,10vw,8rem);
@@ -86,48 +86,9 @@
 <body>
 
 <div class="grain"></div>
-<div class="filament" id="filament" aria-hidden="true">
-  <div class="fil-tilt" id="filTilt">
-    <svg class="fil-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g class="fil-mark">
-        <line class="fil-ray fil-ray-major" x1="-9" y1="0" x2="9" y2="0" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-major" x1="0" y1="-9" x2="0" y2="9" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-minor" x1="-6.5" y1="-6.5" x2="6.5" y2="6.5" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-minor" x1="-6.5" y1="6.5" x2="6.5" y2="-6.5" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <circle class="fil-core-sm" cx="0" cy="0" r="1.3" fill="currentColor"/>
-      </g>
-    </svg>
-  </div>
-  <div class="fil-spin">
-    <svg class="fil-dial-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle class="fil-dial-ring" cx="0" cy="0" r="38" fill="none" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <circle cx="0" cy="0" r="32" fill="none" stroke="currentColor" stroke-width="0.4" stroke-dasharray="0.5 4" vector-effect="non-scaling-stroke" opacity="0.55"/>
-      <g class="fil-ticks">
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(30)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(60)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(90)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(120)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(150)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(180)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(210)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(240)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(270)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(300)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(330)"/>
-      </g>
-      <line class="fil-cross" x1="-7" y1="0" x2="7" y2="0" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <line class="fil-cross" x1="0" y1="-7" x2="0" y2="7" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <circle class="fil-core" cx="0" cy="0" r="1.6" fill="currentColor"/>
-    </svg>
-  </div>
-  <div class="fil-text">
-    <svg class="fil-text-svg" viewBox="-50 -15 100 30" xmlns="http://www.w3.org/2000/svg">
-      <path class="fil-bracket fil-bracket-l" d="M -19 -10 L -23 -10 L -23 10 L -19 10" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-      <path class="fil-bracket fil-bracket-r" d="M 19 -10 L 23 -10 L 23 10 L 19 10" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-    </svg>
-  </div>
-</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <nav style="padding: var(--px); position: absolute; top:0; left:0; width: 100%; z-index: 10;">
@@ -207,11 +168,20 @@
   <p class="legal-foot">Velocity is a trade name of Calyvent. &copy; 2026 Calyvent. All rights reserved.</p>
 </div>
 
-<!-- ═══ MINIMAL FOOTER — Legal pages only ═══ -->
-<footer class="legal-minimal-footer">
-  <div class="legal-footer-inner">
-    <span class="legal-footer-copy">© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
-    <div class="legal-footer-links"><a href="/">Home</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer-exp" id="footerExp">
+  <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
+    <a href="#" class="footer-email" id="footerEmail"></a>
+    <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-coords" id="footerCoords"></span>
+    <div class="footer-meta">
+      <span>© 2026 Velocity by <a href="https://calyvent.com" target="_blank" rel="noopener noreferrer">Calyvent</a></span>
+      <div class="footer-links"><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+    </div>
   </div>
 </footer>
 
@@ -227,47 +197,84 @@
 
   gsap.to('#scrollProgress',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:true}});
 
-  /* ═══ CURSOR — "The Filament" ═══ */
+  /* ═══ FOOTER ═══ */
+  const ftEmail=document.getElementById('footerEmail');
+  if(ftEmail){
+    const t='atelier@calyvent.com';
+    ftEmail.href='mailto:'+t;
+    ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
+    gsap.from('.footer-email .char',{scrollTrigger:{trigger:'.footer-exp',start:'top 70%'},opacity:0,y:50,rotateZ:10,duration:1.4,ease:'expo.out',stagger:.015});
+  }
+  gsap.from('.footer-tagline',{scrollTrigger:{trigger:'.footer-exp',start:'top 65%'},opacity:0,y:20,duration:1,ease:'expo.out',delay:.2});
+
+  const coordsEl=document.getElementById('footerCoords');
+  if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
+
+  /* Particle text */
   (function(){
-    if(window.matchMedia('(pointer:coarse)').matches)return;
-    const fil=document.getElementById('filament');
-    const rotor=document.getElementById('filTilt');
-    if(!fil||!rotor)return;
-    let mx=-200,my=-200,px=-200,py=-200,vx=0,vy=0;
-    let lastX=-200,lastY=-200,lastT=performance.now();
-    let textHover=false,actvHover=false;
+    const cv=document.getElementById('footerParticles');if(!cv)return;
+    const ctx=cv.getContext('2d');let w,h,particles=[],formed=false;
+    function resize(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight;initP()}
+    function initP(){
+      particles=[];
+      const off=document.createElement('canvas');off.width=w;off.height=h;
+      const oc=off.getContext('2d');
+      const fs=Math.min(w*.13,160);
+      oc.font=`400 ${fs}px 'Instrument Serif',serif`;
+      oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
+      oc.fillText('Velocity.',w/2,h*.30);
+      const d=oc.getImageData(0,0,w,h).data;
+      const gap=Math.max(3,Math.round(w/380));
+      for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
+        const i=(y*w+x)*4;
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
+      }}
+    }
+    resize();window.addEventListener('resize',resize);
+
+    /* Track mouse globally */
+    let mouseX=-1e3,mouseY=-1e3;
     document.addEventListener('mousemove',e=>{
-      const now=performance.now();
-      const dt=Math.max(1,now-lastT);
-      vx=vx*.7+((e.clientX-lastX)/dt)*.3;
-      vy=vy*.7+((e.clientY-lastY)/dt)*.3;
-      lastX=e.clientX;lastY=e.clientY;lastT=now;
-      mx=e.clientX;my=e.clientY;
-    },{passive:true});
-    document.querySelectorAll('a,button,[data-hover]').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{fil.classList.add('is-active');actvHover=true;});
-      el.addEventListener('mouseleave',()=>{fil.classList.remove('is-active','is-pressed');actvHover=false;});
+      const r=cv.getBoundingClientRect();
+      mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
     });
-    document.querySelectorAll('p,h1,h2,h3,h4,li').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{if(actvHover)return;fil.classList.add('is-text');textHover=true;});
-      el.addEventListener('mouseleave',()=>{fil.classList.remove('is-text');textHover=false;});
-    });
-    document.addEventListener('mousedown',()=>fil.classList.add('is-pressed'),{passive:true});
-    document.addEventListener('mouseup',()=>fil.classList.remove('is-pressed'),{passive:true});
-    document.addEventListener('mouseleave',()=>{fil.style.opacity='0';},{passive:true});
-    document.addEventListener('mouseenter',()=>{fil.style.opacity='';},{passive:true});
-    let scale=1,scaleTarget=1;
-    (function loop(){
-      px+=(mx-px)*.32;py+=(my-py)*.32;
-      const speed=Math.hypot(vx,vy);
-      scaleTarget=(textHover||actvHover)?1:1+Math.min(0.18,speed*0.08);
-      scale+=(scaleTarget-scale)*0.16;
-      fil.style.transform=`translate3d(${px}px,${py}px,0)`;
-      rotor.style.transform=`scale(${scale.toFixed(3)})`;
-      vx*=.86;vy*=.86;
-      requestAnimationFrame(loop);
-    })();
+
+    ScrollTrigger.create({trigger:'.footer-exp',start:'top 80%',onEnter:()=>{formed=true},onLeaveBack:()=>{formed=false}});
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        if(formed){
+          const dx=mouseX-p.x,dy=mouseY-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){const f=(120-dist)/120;p.vx-=(dx/dist)*f*5;p.vy-=(dy/dist)*f*5}
+          p.vx+=(p.tx-p.x)*.04;p.vy+=(p.ty-p.y)*.04;
+        }else{
+          p.vx+=(p.tx-p.x)*.003;p.vy+=(p.ty-p.y)*.003;
+          p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
+        }
+        p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
+        ctx.fillRect(p.x,p.y,p.sz,p.sz);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
   })();
+
+/* ═══ CURSOR ═══ */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches)return;
+  const g=document.getElementById('cursorGlow'),r=document.getElementById('cursorRing'),d=document.getElementById('cursorDot');
+  if(!r||!d||!g)return;
+  let mx=-200,my=-200,rx=-200,ry=-200,gx=-200,gy=-200,tx=-200,ty=-200,mag=false;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!mag){tx=mx;ty=my}});
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{r.classList.add('is-active');mag=true});
+    el.addEventListener('mouseleave',()=>{r.classList.remove('is-active');mag=false;tx=mx;ty=my});
+    el.addEventListener('mousemove',()=>{if(!mag)return;const b=el.getBoundingClientRect();tx=mx+((b.left+b.width/2)-mx)*.2;ty=my+((b.top+b.height/2)-my)*.2});
+  });
+  (function l(){rx+=(tx-rx)*.07;ry+=(ty-ry)*.07;gx+=(mx-gx)*.05;gy+=(my-gy)*.05;r.style.transform=`translate(${rx-20}px,${ry-20}px)`;d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;g.style.transform=`translate(${gx-250}px,${gy-250}px)`;requestAnimationFrame(l)})();
+})();
 </script>
 </body>
 </html>

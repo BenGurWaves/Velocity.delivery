@@ -5,7 +5,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com 'unsafe-inline'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none';
+  Content-Security-Policy: default-src 'self'; script-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none';
 
 # ── Homepage: CDN caches for 10 minutes, browser revalidates ─────────────────
 /index.html
@@ -17,13 +17,18 @@
 /_dashboard.html
   Cache-Control: public, s-maxage=3600, max-age=0, must-revalidate
 
-# ── Admin: never cache ────────────────────────────────────────────────────────
+# ── Block old admin path ────────────────────────────────────────────────────────
 /admin/*
+  X-Robots-Tag: noindex, nofollow
+  Status: 404
+
+# ── Admin: never cache ────────────────────────────────────────────────────────
+/coffee/admin/*
   Cache-Control: no-store, no-cache
 
 # ── Preview pages: no cache ─────────────────────────────────────────────────
 /previews/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com 'unsafe-inline'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://www.transparenttextures.com https://velocity.calyvent.com; connect-src 'self'; frame-ancestors 'none';
+  Content-Security-Policy: default-src 'self'; script-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://www.transparenttextures.com https://velocity.calyvent.com; connect-src 'self'; frame-ancestors 'none';
   Cache-Control: no-store, no-cache, must-revalidate
 
 /previews/*.css

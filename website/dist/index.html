@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Elegance Gate: PASSED | Loader exits at ~3400ms | Paradigm: cinematic spatial corridor | Metaphor: Velocity digital atelier -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -13,85 +12,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=40">
+  <link rel="stylesheet" href="/styles.css?v=31">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Velocity Digital Atelier","url":"https://velocity.calyvent.com","email":"atelier@calyvent.com"}</script>
 </head>
 <body>
 
 <div class="grain"></div>
-<div class="filament" id="filament" aria-hidden="true">
-  <!-- Default state: "The Hallmark" — a jeweler's punzone, an 8-ray asterisk
-       slowly rotating around a brass core. The small mark visually blooms
-       into the large chapter ring on interactive elements. -->
-  <div class="fil-tilt" id="filTilt">
-    <svg class="fil-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g class="fil-mark">
-        <line class="fil-ray fil-ray-major" x1="-9" y1="0" x2="9" y2="0" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-major" x1="0" y1="-9" x2="0" y2="9" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-minor" x1="-6.5" y1="-6.5" x2="6.5" y2="6.5" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <line class="fil-ray fil-ray-minor" x1="-6.5" y1="6.5" x2="6.5" y2="-6.5" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        <circle class="fil-core-sm" cx="0" cy="0" r="1.3" fill="currentColor"/>
-      </g>
-    </svg>
-  </div>
-  <!-- Interactive state: large chapter ring with tick marks + crosshair, slowly rotating -->
-  <div class="fil-spin">
-    <svg class="fil-dial-svg" viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle class="fil-dial-ring" cx="0" cy="0" r="38" fill="none" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <circle cx="0" cy="0" r="32" fill="none" stroke="currentColor" stroke-width="0.4" stroke-dasharray="0.5 4" vector-effect="non-scaling-stroke" opacity="0.55"/>
-      <g class="fil-ticks">
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(30)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(60)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(90)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(120)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(150)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(180)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(210)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(240)"/>
-        <line x1="0" y1="-38" x2="0" y2="-33" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(270)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(300)"/>
-        <line x1="0" y1="-38" x2="0" y2="-35" stroke="currentColor" stroke-width="0.6" vector-effect="non-scaling-stroke" transform="rotate(330)"/>
-      </g>
-      <line class="fil-cross" x1="-7" y1="0" x2="7" y2="0" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <line class="fil-cross" x1="0" y1="-7" x2="0" y2="7" stroke="currentColor" stroke-width="0.7" vector-effect="non-scaling-stroke"/>
-      <circle class="fil-core" cx="0" cy="0" r="1.6" fill="currentColor"/>
-    </svg>
-  </div>
-  <!-- Text state: two editorial brackets flanking the cursor.
-       The text remains fully visible BETWEEN them — colors preserved. -->
-  <div class="fil-text">
-    <svg class="fil-text-svg" viewBox="-50 -15 100 30" xmlns="http://www.w3.org/2000/svg">
-      <path class="fil-bracket fil-bracket-l" d="M -19 -10 L -23 -10 L -23 10 L -19 10" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-      <path class="fil-bracket fil-bracket-r" d="M 19 -10 L 23 -10 L 23 10 L 19 10" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-    </svg>
-  </div>
-</div>
-<div class="copy-toast" id="copyToast">Copied to clipboard</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <div class="preloader" id="preloader">
-  <div class="pl-pages" id="plPages">
-    <div class="pl-page" id="plPageA" data-bg="plain">
-      <div class="pl-bg"></div>
-      <div class="pl-deco"></div>
-      <div class="pl-meta pl-meta--tl"></div>
-      <div class="pl-meta pl-meta--tr"></div>
-      <div class="pl-meta pl-meta--bl"></div>
-      <div class="pl-meta pl-meta--br"></div>
-    </div>
-    <div class="pl-page" id="plPageB" data-bg="plain">
-      <div class="pl-bg"></div>
-      <div class="pl-deco"></div>
-      <div class="pl-meta pl-meta--tl"></div>
-      <div class="pl-meta pl-meta--tr"></div>
-      <div class="pl-meta pl-meta--bl"></div>
-      <div class="pl-meta pl-meta--br"></div>
-    </div>
-  </div>
-  <div class="pl-figure" id="plFigure">
-    <span class="pl-num" id="plNum">00</span><span class="pl-pct" id="plPct">%</span>
-  </div>
+  <span class="pl-brand">Velocity<em>.</em></span>
+  <div class="pl-line"><div class="pl-line-inner" id="plLine"></div></div>
 </div>
 
 <!-- ═══ HERO ═══ -->
@@ -193,29 +127,14 @@
   </div>
 </section>
 
-<!-- ═══ EMAIL STAGE — full-screen focal moment, abstract typographic composition ═══ -->
-<section class="email-stage" id="emailStage" aria-label="Contact">
-  <button class="email-mark" id="emailMark" type="button" aria-label="Copy email atelier@calyvent.com">
-    <span class="em-rule em-rule-top" aria-hidden="true"></span>
-    <span class="em-line">
-      <span class="em-name">atelier</span>
-      <span class="em-at" aria-hidden="true">@</span>
-      <span class="em-name-sr" style="position:absolute;left:-9999px">@</span>
-      <span class="em-domain">calyvent.com</span>
-    </span>
-    <span class="em-rule em-rule-bot" aria-hidden="true"></span>
-    <span class="em-cta" id="emailCta">
-      <span class="em-cta-mark" aria-hidden="true">·</span>
-      <span class="em-cta-text">click to copy</span>
-    </span>
-  </button>
-  <p class="email-tagline">Heritage is not preserved. It <em>compounds.</em></p>
-</section>
-
-<!-- ═══ FOOTER — Velocity mark + meta bar ═══ -->
+<!-- ═══ FOOTER ═══ -->
 <footer class="footer-exp" id="footerExp">
   <canvas class="footer-particle-canvas" id="footerParticles"></canvas>
-  <div class="footer-orbit"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-orbit" style="top:30%;left:50%"><div class="footer-orbit-dot"></div></div>
+  <div class="footer-content">
+    <a href="#" class="footer-email" id="footerEmail"></a>
+    <p class="footer-tagline">Heritage is not preserved. It <em>compounds.</em></p>
+  </div>
   <div class="footer-bottom">
     <span class="footer-coords" id="footerCoords"></span>
     <div class="footer-meta">
@@ -231,379 +150,15 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
 
-/* ═══ PRELOADER — generative per-percentage scene system ═══
-   Every integer 0–100 produces its own unique scene (palette, typography, position,
-   background pattern, decorations, meta text). 1 and 100 are brand-locked. ═══ */
+/* ═══ PRELOADER ═══ */
 (function(){
-  const pl=document.getElementById('preloader');
-  const numEl=document.getElementById('plNum');
-  const pageA=document.getElementById('plPageA');
-  const pageB=document.getElementById('plPageB');
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-  /* ── 36 curated palettes ── */
-  const PAL=[
-    /* 0 BRAND */ {bg:'#0D0C09',fg:'#DEC8B5',a1:'#C49C7B',a2:'#565250'},
-    {bg:'#E6DAC7',fg:'#1A1612',a1:'#6B4328',a2:'#8E745A'},
-    {bg:'#0A1320',fg:'#C8D4E2',a1:'#8AA5C0',a2:'#3D4E66'},
-    {bg:'#14221E',fg:'#E4D29C',a1:'#A88A4A',a2:'#4A5E52'},
-    {bg:'#2A130F',fg:'#F0D2B4',a1:'#D46A48',a2:'#7A3A28'},
-    {bg:'#B5AE9E',fg:'#16120C',a1:'#4A3E2C',a2:'#78705E'},
-    {bg:'#07100C',fg:'#D4E4D0',a1:'#6E8A78',a2:'#3E584A'},
-    {bg:'#1D1A2E',fg:'#E8DCC4',a1:'#A89AC4',a2:'#5A4E7E'},
-    {bg:'#F2EDE4',fg:'#2A1F18',a1:'#8B5A3C',a2:'#BFA98A'},
-    {bg:'#1A1814',fg:'#F5D580',a1:'#C89850',a2:'#6B5A3A'},
-    {bg:'#3A2420',fg:'#F0CEBE',a1:'#B5604A',a2:'#8E5240'},
-    {bg:'#0F1A14',fg:'#BED8C0',a1:'#70A088',a2:'#3A5848'},
-    {bg:'#1A0F1A',fg:'#E8C8E0',a1:'#B088B0',a2:'#4A2E4A'},
-    {bg:'#14141A',fg:'#C8D8E8',a1:'#7A96B8',a2:'#3A4A60'},
-    {bg:'#2E1A0F',fg:'#E8C8A0',a1:'#B87A48',a2:'#7E4E2E'},
-    {bg:'#F8F4E8',fg:'#1F1A14',a1:'#7A5A3C',a2:'#A89670'},
-    {bg:'#1A1F2A',fg:'#C8D0DC',a1:'#8A96AC',a2:'#4A5668'},
-    {bg:'#2A2018',fg:'#E0D4B8',a1:'#A08860',a2:'#6E5A40'},
-    {bg:'#0A1A1A',fg:'#C0D8D8',a1:'#70A0A0',a2:'#3A5858'},
-    {bg:'#1F1A14',fg:'#F0E4C8',a1:'#C8A870',a2:'#7E6848'},
-    {bg:'#181018',fg:'#E8D8E0',a1:'#A880B0',a2:'#4E3A58'},
-    {bg:'#D8CEBA',fg:'#1A1410',a1:'#4E2A1A',a2:'#8E7658'},
-    {bg:'#14181F',fg:'#BED2E0',a1:'#6E8CAC',a2:'#3E4E68'},
-    {bg:'#3A2A20',fg:'#E8CEB0',a1:'#B88860',a2:'#7A5E40'},
-    {bg:'#08100A',fg:'#B8D4B8',a1:'#5A8A68',a2:'#2A4A3A'},
-    {bg:'#1F1416',fg:'#E8D4D0',a1:'#A87878',a2:'#5A3A3E'},
-    {bg:'#EAE0CC',fg:'#2A1F18',a1:'#8E5A3E',a2:'#C0A880'},
-    {bg:'#141820',fg:'#C8D0DC',a1:'#7080A0',a2:'#3A4658'},
-    {bg:'#201810',fg:'#E8D8B0',a1:'#B8946A',a2:'#7A5E3E'},
-    {bg:'#0F1F1A',fg:'#B8E0D0',a1:'#6AA090',a2:'#3A5E50'},
-    {bg:'#1A1420',fg:'#D8C8E8',a1:'#907AB0',a2:'#4A3A5E'},
-    {bg:'#2A1418',fg:'#E8C8C0',a1:'#B87060',a2:'#7A4638'},
-    {bg:'#BEBAA8',fg:'#1F1A14',a1:'#5A4A2E',a2:'#8A7E5E'},
-    {bg:'#14201A',fg:'#C8E0C8',a1:'#70A078',a2:'#3E5E48'},
-    {bg:'#121610',fg:'#D8C8A8',a1:'#A08860',a2:'#605038'},
-    {bg:'#1E1416',fg:'#F0D8C8',a1:'#C09080',a2:'#6A4850'}
-  ];
-  const BG =['plain','grad-d','grad-r','grad-tl','split-h','split-v','split-d','stripes','dots','diag','diag-r','grid','grid-fine','ring','halo','veil'];
-  const DECOS=['line-h','line-v','line-diag','line-long-h','circle-sm','circle-md','circle-lg','dash','dots-row','dots-cluster','plus','frame-corner','tick-row','rhombus','triangle','arc','sub-text','big-sub','grid-mini','vert-text','roman','star','pill','half-ring','three-dots','square-outline'];
-
-  /* Word pools */
-  const WORDS_PLACES=['Geneva 46°12′N','Paris 48°51′N','New York 40°42′N','Zurich 47°22′N','Vienna 48°12′N','Milan 45°28′N','Kyoto 35°00′N','London 51°30′N','Florence 43°46′N','Tokyo 35°41′N','Antwerp 51°13′N','Lyon 45°45′N','Basel 47°33′N','Venice 45°26′N'];
-  const WORDS_TITLES=['Atelier','Maison','Archive','Specimen','Provenance','Horologer','Caliber','Proof','Draft','Verified','Cased','Ember','Patina','Lacquer','Enamel','Vermeil','Guilloché','Damascene','Ormolu','Repoussé','Private Viewing','Sub Rosa','Commissioned','Under Oath','Ad Honorem','Refined Rare','Mise en Scène','Chiaroscuro'];
-  const WORDS_NUMS=['N° 007','N° 013','N° 027','N° 041','N° 063','N° 089','N° 108','N° 144','N° 223','Volume I','Volume III','Volume VII','Volume XI','Volume XIX','Lot 00','Lot 07','Lot 13','Lot 42','Lot 99','AN VII','AN VIII','MMXXVI','MMXXVII','Caliber BM-001','Caliber BM-007','Édition 3/24','Édition 7/99'];
-  const WORDS_SYMS=['∴','◇','∞','⁂','✦','✧','⊛','⧫','◈','·','—','✶','❖','▲','◆ ◇ ◆','— ✶ —'];
-  const WORDS_PHRASES=['Hand-Sealed','Cased & Signed','Sub Rosa','Private Viewing','By Invitation','Verified','Under Oath','Ad Honorem','Refined Rare','Commissioned','Sealed','Notarized','Archived','Catalogued','Attested'];
-  const ROMANS=['IV','VII','XI','XIII','XVII','XIX','XXI','XXIX','XXXVII','XLIII','LXI','LXXI','LXXXIII','XCI','XCVII'];
-
-  /* Mulberry32 seeded PRNG */
-  function rng(seed){let t=(seed>>>0)+0x6D2B79F5;return function(){t=(t+0x6D2B79F5)>>>0;let r=t;r=Math.imul(r^r>>>15,r|1);r^=r+Math.imul(r^r>>>7,r|61);return((r^r>>>14)>>>0)/4294967296;};}
-  function pick(r,a){return a[Math.floor(r()*a.length)];}
-  function pickWord(r){return pick(r,[WORDS_PLACES,WORDS_TITLES,WORDS_NUMS,WORDS_PHRASES,WORDS_SYMS])[Math.floor(r()*14)%14] || pick(r,WORDS_TITLES);}
-  function hexA(hex,a){const m=hex.match(/^#(..)(..)(..)$/);if(!m)return hex;return`rgba(${parseInt(m[1],16)},${parseInt(m[2],16)},${parseInt(m[3],16)},${a})`;}
-  function shade(hex,p){const m=hex.match(/^#(..)(..)(..)$/);if(!m)return hex;const c=[1,2,3].map(i=>Math.max(0,Math.min(255,parseInt(m[i],16)+p)));return'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');}
-
-  /* Deterministic scene builder — figure/typography are LOCKED. Only palette,
-     background, decorations and meta text vary. 1 and 100 are brand-locked. */
-  function sceneFor(pct){
-    const brand=PAL[0];
-    /* Minimal elegant brand bookend — opening */
-    if(pct<=1){
-      return {pal:brand,bg:'plain',grain:0,
-        decos:[],
-        meta:{tl:'Velocity — Atelier',tr:'',bl:'',br:''}};
-    }
-    /* Minimal elegant brand bookend — closing */
-    if(pct>=100){
-      return {pal:brand,bg:'plain',grain:0,
-        decos:[{t:'line-long-h',x:88,y:15,w:90,op:.28}],
-        meta:{tl:'',tr:'Cased & Signed',bl:'',br:''}};
-    }
-    const r=rng(pct*97+13);
-    const pal=pick(r,PAL.slice(1)); /* exclude brand for mid scenes */
-    const bg =pick(r,BG);
-    const decoCount=2+Math.floor(r()*3);
-    const decos=[];
-    for(let i=0;i<decoCount;i++){
-      decos.push({
-        t:pick(r,DECOS),
-        /* Keep decos out of the bottom-left figure zone (roughly x<42%, y>56%) */
-        x: (()=>{ const rx=4+r()*92, ry=4+r()*92; return (rx<42 && ry>56) ? Math.min(96, rx+48) : rx; })(),
-        y: 4+r()*92,
-        sz:30+r()*220,
-        w:40+r()*240,
-        rot:r()*360,
-        op:.28+r()*.55,
-        txt:pickWord(r),
-        roman:pick(r,ROMANS),
-        n:3+Math.floor(r()*9),
-        fs:.7+r()*.9,
-        cx:r()<.22
-      });
-    }
-    return {
-      pal,bg,grain:.03+r()*.08,decos,
-      meta:{
-        tl:r()>.35?pick(r,[...WORDS_TITLES,...WORDS_PLACES]):'',
-        tr:r()>.35?pick(r,[...WORDS_NUMS,...WORDS_PLACES]):'',
-        bl:r()>.55?pick(r,WORDS_PHRASES):'',
-        br:r()>.45?pick(r,[...WORDS_PHRASES,...WORDS_SYMS]):''
-      }
-    };
+  const pl=document.getElementById('preloader'),brand=pl.querySelector('.pl-brand'),line=document.getElementById('plLine');
+  function go(){
+    setTimeout(()=>{brand.style.transition='opacity .5s,transform .5s';brand.style.opacity='1';brand.style.transform='translateY(0)'},80);
+    setTimeout(()=>{const l=pl.querySelector('.pl-line');l.style.transition='opacity .3s';l.style.opacity='1';line.style.transition='width .8s cubic-bezier(.16,1,.3,1)';line.style.width='100%'},350);
+    setTimeout(()=>{gsap.to(pl,{clipPath:'inset(0 0 100% 0)',duration:1,ease:'expo.inOut',onComplete:()=>{pl.classList.add('is-done');boot()}})},1300);
   }
-
-  /* Deco renderer */
-  function renderDeco(d){
-    const base=`left:${d.x}%;top:${d.y}%;opacity:${d.op.toFixed(2)};`;
-    const cx=d.cx?'transform:translate(-50%,-50%);':'';
-    switch(d.t){
-      case 'line-h':      return `<span class="d-line" style="${base}width:${d.sz|0}px;height:1px;transform:rotate(${(d.rot*.05)|0}deg);transform-origin:0 50%"></span>`;
-      case 'line-long-h': return `<span class="d-line" style="${base}width:${Math.max(80,d.w|0)}px;height:1px"></span>`;
-      case 'line-v':      return `<span class="d-line" style="${base}width:1px;height:${(d.sz*1.2)|0}px"></span>`;
-      case 'line-diag':   return `<span class="d-line" style="${base}width:${d.sz|0}px;height:1px;transform:rotate(${(d.rot*.2-45)|0}deg);transform-origin:0 50%"></span>`;
-      case 'circle-sm':   return `<span class="d-circle" style="${base}width:${(30+d.fs*20)|0}px;height:${(30+d.fs*20)|0}px;${cx}"></span>`;
-      case 'circle-md':   return `<span class="d-circle" style="${base}width:${(80+d.fs*60)|0}px;height:${(80+d.fs*60)|0}px;${cx}"></span>`;
-      case 'circle-lg':   return `<span class="d-circle" style="${base}width:${d.sz|0}px;height:${d.sz|0}px;${cx||'transform:translate(-50%,-50%);'}"></span>`;
-      case 'half-ring':   return `<svg style="position:absolute;${base}width:${(120+d.fs*80)|0}px;height:${(60+d.fs*40)|0}px;color:currentColor" viewBox="0 0 200 100"><path d="M 5 100 A 95 95 0 0 1 195 100" fill="none" stroke="currentColor" stroke-width="0.7"/></svg>`;
-      case 'arc':         return `<svg style="position:absolute;${base}width:${(70+d.fs*60)|0}px;height:${(70+d.fs*60)|0}px;color:currentColor;transform:rotate(${(d.rot)|0}deg)" viewBox="0 0 100 100"><path d="M 5 50 A 45 45 0 0 1 95 50" fill="none" stroke="currentColor" stroke-width="0.7"/></svg>`;
-      case 'dash':        return `<span class="d-dash" style="${base}width:${(d.sz*1.3)|0}px"></span>`;
-      case 'dots-row': {
-        let s='';for(let i=0;i<d.n;i++)s+=`<span class="d-dot"></span>`;
-        return `<span style="${base}display:inline-flex;gap:${6+(d.fs*6)|0}px">${s}</span>`;
-      }
-      case 'dots-cluster': {
-        let s='';for(let i=0;i<d.n;i++){const cx2=(i%3)*10,cy=((i/3)|0)*10;s+=`<span class="d-dot" style="position:absolute;left:${cx2}px;top:${cy}px"></span>`;}
-        return `<span style="${base}width:40px;height:40px;position:absolute">${s}</span>`;
-      }
-      case 'three-dots':  return `<span style="${base}display:inline-flex;gap:10px"><span class="d-dot"></span><span class="d-dot"></span><span class="d-dot"></span></span>`;
-      case 'plus':        return `<span class="d-plus" style="${base}width:${(16+d.fs*14)|0}px;height:${(16+d.fs*14)|0}px;position:absolute"></span>`;
-      case 'frame-corner':return `<span class="d-frame-c" style="${base}width:${(28+d.fs*22)|0}px;height:${(28+d.fs*22)|0}px;transform:rotate(${(d.rot*.25)|0}deg)"></span>`;
-      case 'square-outline':return `<span class="d-circle" style="${base}width:${(40+d.fs*80)|0}px;height:${(40+d.fs*80)|0}px;border-radius:0;transform:rotate(${(d.rot*.2)|0}deg)"></span>`;
-      case 'tick-row': {
-        let s='';for(let i=0;i<d.n+4;i++){const tall=i%3===0;s+=`<span style="display:inline-block;width:1px;height:${tall?18:10}px;background:currentColor;margin-right:3px;vertical-align:bottom"></span>`;}
-        return `<span style="${base}white-space:nowrap;line-height:0">${s}</span>`;
-      }
-      case 'rhombus':     return `<span class="d-rhombus" style="${base}width:${(16+d.fs*14)|0}px;height:${(16+d.fs*14)|0}px;transform:rotate(45deg)"></span>`;
-      case 'triangle': {
-        const sz=14+d.fs*18;
-        return `<span class="d-triangle" style="${base}border-left-width:${sz|0}px;border-right-width:${sz|0}px;border-bottom-width:${(sz*1.4)|0}px;transform:rotate(${(d.rot*.3)|0}deg)"></span>`;
-      }
-      case 'star':        return `<span class="d-star" style="${base}">${pick(rng(d.rot|0),['✦','✧','✶','⊛','❖'])}</span>`;
-      case 'pill':        return `<span class="d-pill" style="${base}">${d.txt}</span>`;
-      case 'sub-text':    return `<span class="d-sub" style="${base}font-size:${(.75+d.fs*.5).toFixed(2)}rem;${cx||''}">${d.txt}</span>`;
-      case 'big-sub':     return `<span class="d-sub-lg" style="${base}font-size:${(3+d.fs*5).toFixed(2)}rem;opacity:${(d.op*.4).toFixed(2)}">${d.txt}</span>`;
-      case 'grid-mini':   return `<span class="d-grid-mini" style="${base}width:${(60+d.fs*50)|0}px;height:${(60+d.fs*50)|0}px;transform:rotate(${(d.rot*.15)|0}deg)"></span>`;
-      case 'vert-text':   return `<span class="d-vert" style="${base}font-size:${(.7+d.fs*.3).toFixed(2)}rem">${d.txt}</span>`;
-      case 'roman':       return `<span class="d-sub" style="${base}font-size:${(1+d.fs*.6).toFixed(2)}rem;letter-spacing:.18em">${d.roman}</span>`;
-      default: return '';
-    }
-  }
-
-  /* Render a scene into a given page element — paints bg, decos, meta */
-  function paintPage(page,s){
-    /* Page-scoped CSS vars drive bg treatments + accent colors inside the page */
-    page.style.setProperty('--pBg',s.pal.bg);
-    page.style.setProperty('--pBgDark',shade(s.pal.bg,-18));
-    page.style.setProperty('--pBgHi',shade(s.pal.bg,14));
-    page.style.setProperty('--pFg',s.pal.fg);
-    page.style.setProperty('--pAccent',s.pal.a1);
-    page.style.setProperty('--pAccent2',s.pal.a2);
-    page.style.setProperty('--pAccentFaint',hexA(s.pal.a1,.08));
-    page.style.setProperty('--pAccentFaint2',hexA(s.pal.a2,.14));
-    page.style.setProperty('--pGrain',s.grain.toFixed(3));
-    page.setAttribute('data-bg',s.bg);
-    page.querySelector('.pl-deco').innerHTML=s.decos.map(renderDeco).join('');
-    page.querySelector('.pl-meta--tl').textContent=s.meta.tl||'';
-    page.querySelector('.pl-meta--tr').textContent=s.meta.tr||'';
-    page.querySelector('.pl-meta--bl').textContent=s.meta.bl||'';
-    page.querySelector('.pl-meta--br').textContent=s.meta.br||'';
-  }
-
-  /* Flipbook mechanics — alternating page slots */
-  let activePage=pageA, inactivePage=pageB;
-  let lastRendered=-1;
-  let initialized=false;
-
-  function flipTo(scene){
-    /* Update the locked figure's palette so number stays legible */
-    pl.style.setProperty('--plFg',scene.pal.fg);
-    pl.style.setProperty('--plAccent',scene.pal.a1);
-
-    if(!initialized){
-      /* First render — paint active page in place, no transition */
-      paintPage(activePage,scene);
-      activePage.classList.add('is-active');
-      initialized=true;
-      return;
-    }
-
-    const dirs=['wipe-down','wipe-up','wipe-right','wipe-left'];
-    const dir=dirs[Math.floor(Math.random()*dirs.length)];
-
-    /* PHASE 1: instantly hide incoming with no transition (clip to invisible) */
-    inactivePage.classList.remove('is-active','is-leaving','wipe-down','wipe-up','wipe-right','wipe-left');
-    inactivePage.style.transition='none';
-    inactivePage.classList.add(dir);
-    /* Repaint while invisible — never seen */
-    paintPage(inactivePage,scene);
-    /* Force reflow so the no-transition state is committed */
-    void inactivePage.offsetWidth;
-
-    /* PHASE 2: outgoing stays at opacity:1, fully clipped revealed, beneath */
-    activePage.classList.remove('is-active');
-    activePage.classList.add('is-leaving');
-
-    /* PHASE 3: re-enable transition and trigger the wipe */
-    inactivePage.style.transition='';
-    inactivePage.classList.add('is-active');
-
-    /* Swap references */
-    const tmp=activePage; activePage=inactivePage; inactivePage=tmp;
-  }
-
-  /* Throttle scene flips so every shown scene gets a guaranteed dwell time
-     (the integer counter still updates every change for accuracy). Without
-     this, fast integer changes (~25ms apart) cancel each wipe before it
-     completes — only the stop's slow integers were visible before. */
-  let lastFlipAt=0, pendingScene=null, flipScheduled=false;
-  const MIN_FLIP_INTERVAL=120; /* ms — minimum visible dwell per scene */
-
-  function scheduleFlip(scene){
-    pendingScene=scene;
-    if(flipScheduled) return;
-    const now=performance.now();
-    const wait=Math.max(0, MIN_FLIP_INTERVAL-(now-lastFlipAt));
-    flipScheduled=true;
-    setTimeout(()=>{
-      flipScheduled=false;
-      if(pendingScene){
-        flipTo(pendingScene);
-        lastFlipAt=performance.now();
-        pendingScene=null;
-      }
-    },wait);
-  }
-
-  function setNum(v){
-    const n=Math.max(0,Math.min(100,Math.floor(v)));
-    if(n!==lastRendered){
-      lastRendered=n;
-      numEl.textContent=String(n).padStart(2,'0');
-      /* Always schedule the new scene; throttling ensures visibility */
-      scheduleFlip(sceneFor(n));
-    }
-  }
-
-  function tween(from,to,dur,ease){
-    return new Promise(res=>{
-      if(dur<=16){setNum(to);res();return;}
-      const start=performance.now();
-      (function step(t){
-        const p=Math.min(1,(t-start)/dur);
-        const e=ease?ease(p):p;
-        setNum(from+(to-from)*e);
-        if(p>=1){setNum(to);res();}else requestAnimationFrame(step);
-      })(performance.now());
-    });
-  }
-
-  async function run(){
-    setNum(0);
-    await sleep(80);
-
-    /* Random run-shape — each "stick" is a molasses zone where loading
-       appears to hesitate by crawling across integers at a glacial pace */
-    const mr=Math.random;
-    /* Exactly one molasses zone per run, somewhere in the middle 70% */
-    const sticks=[{at:18+Math.floor(mr()*64),dwell:900+Math.floor(mr()*900),span:2.6+mr()*2.4}];
-
-    /* Capped so the loader never blocks the site for long.
-       Slightly longer than before so the fast (non-stopping) percentages
-       are visible long enough to be felt, not blurred past. */
-    const totalDur=1700+mr()*1300;   /* 1.7s–3.0s */
-    const finalHold=400+mr()*500;    /* 0.4s–0.9s on 100 */
-
-    const waypoints=[...sticks.map(s=>s.at),100];
-    let prev=0;const dists=waypoints.map(w=>{const d=w-prev;prev=w;return d;});
-
-    const easings=[
-      p=>1-Math.pow(1-p,2),
-      p=>1-Math.pow(1-p,3),
-      p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2,
-      p=>p,
-      p=>Math.pow(p,.55),
-      p=>1-Math.pow(1-p,1.35),
-      p=>p*p
-    ];
-
-    /* Molasses ease: smoothstep S-curve that distributes time roughly
-       evenly across integers — no single number dominates the crawl */
-    const molasses=p=>{
-      if(p<=0) return 0;
-      if(p>=1) return 1;
-      return p*p*(3-2*p);
-    };
-
-    let cur=0;
-    for(let i=0;i<waypoints.length;i++){
-      const target=waypoints[i];
-      const isStick=i<sticks.length;
-      const dist=dists[i];
-
-      if(isStick && dist>3){
-        const s=sticks[i];
-        /* Molasses zone centered on the stick point, spanning at least
-           2.5 integers so multiple % values are seen during the crawl */
-        const halfSpan=Math.max(s.span/2, 1.4);
-        const zoneStart=Math.max(cur+0.3, s.at-halfSpan);
-        const zoneEnd=Math.min(99.5, s.at+halfSpan);
-
-        /* Phase 1: brisk approach to zone start */
-        if(zoneStart-cur>0.4){
-          const segDur=Math.max(100,(dist/100)*totalDur*(0.4+mr()*0.6));
-          const fastDist=zoneStart-cur;
-          const fastDur=segDur*(fastDist/dist);
-          await tween(cur,zoneStart,fastDur,easings[Math.floor(mr()*easings.length)]);
-          cur=zoneStart;
-        }
-
-        /* Phase 2: molasses — crawl across 2.5-4 integers very slowly.
-           The counter visibly changes (e.g. 93→94→95→96), but each
-           integer takes an age. Never freezes on a single number. */
-        await tween(cur,zoneEnd,s.dwell,molasses);
-        cur=zoneEnd;
-
-        /* Phase 3: resume toward target if zone ended short of it */
-        if(target-cur>0.3){
-          const outDist=target-cur;
-          const outDur=Math.max(120,outDist*140);
-          await tween(cur,target,outDur,p=>1-Math.pow(1-p,2.2));
-          cur=target;
-        }
-      } else {
-        const segDur=Math.max(100,(dist/100)*totalDur*(0.55+mr()*0.9));
-        await tween(cur,target,segDur,easings[Math.floor(mr()*easings.length)]);
-        cur=target;
-      }
-    }
-
-    /* Final hold: settle with a whisper of forward motion — 100 stays
-       visible but the counter breathes imperceptibly beneath it */
-    await tween(100,100,finalHold*0.3,p=>p);
-    if(finalHold*0.7>180){
-      await tween(100,100.35,finalHold*0.3,p=>p*p*(3-2*p));
-      await tween(100.35,100,finalHold*0.4,p=>1-Math.pow(1-p,3));
-    }
-
-    /* Boot the site in parallel with the exit animation so it's ready to go. */
-    try{ boot(); }catch(e){}
-
-    /* Exit — clean vertical wipe, then fully remove preloader DOM so nothing
-       lingers behind the running site. */
-    pl.style.transition='clip-path .75s cubic-bezier(.77,0,.175,1),opacity .5s ease-out';
-    pl.style.clipPath='inset(0 0 100% 0)';
-    pl.style.opacity='0';
-    setTimeout(()=>{ if(pl.parentNode) pl.parentNode.removeChild(pl); },800);
-  }
-
-  /* Debug hook — allow forcing a specific percentage for preview */
-  window.__plPreview=function(n){setNum(n);};
-  if(document.readyState==='complete')run();else window.addEventListener('load',run);
+  if(document.readyState==='complete')go();else window.addEventListener('load',go);
 })();
 
 function boot(){
@@ -621,31 +176,15 @@ function boot(){
   heroTitle.innerHTML=text.split('').map((c,i)=>`<span class="char">${c}</span>`).join('')+'<span class="dot">.</span>';
   const chars=heroTitle.querySelectorAll('.char'),dot=heroTitle.querySelector('.dot');
 
-  /* Entry animation — runs once, then clears props so scroll timeline owns clean baseline */
-  const entryDuration=1.5;
-  const entryEndTime=text.length*.035+entryDuration+.25;
-  const entryTL=gsap.timeline({
-    onComplete:()=>{
-      /* Clear inline props so heroTL starts from a clean state */
-      gsap.set(chars,{clearProps:'transform,opacity'});
-      gsap.set(dot,{clearProps:'transform,opacity'});
-      gsap.set('#heroL1',{clearProps:'transform,opacity'});
-      buildHeroScrollTL();
-      ScrollTrigger.refresh();
-    }
-  });
-  entryTL.from(chars,{opacity:0,y:100,rotateX:-80,scale:.6,transformOrigin:'50% 100%',duration:entryDuration,ease:'expo.out',stagger:{each:.035}},0);
-  entryTL.from(dot,{opacity:0,scale:0,rotation:-360,duration:1.2,ease:'back.out(2)'},text.length*.035+.1);
-  entryTL.from('.hero-sub',{opacity:0,y:25,duration:1.3,ease:'expo.out'},.8);
+  gsap.from(chars,{opacity:0,y:100,rotateX:-80,scale:.6,transformOrigin:'50% 100%',duration:1.5,ease:'expo.out',stagger:{each:.035},delay:.15});
+  gsap.from(dot,{opacity:0,scale:0,rotation:-360,duration:1.2,ease:'back.out(2)',delay:.15+text.length*.035+.1});
+  gsap.from('.hero-sub',{opacity:0,y:25,duration:1.3,ease:'expo.out',delay:.8});
 
-  let heroTLBuilt=false;
-  function buildHeroScrollTL(){
-    if(heroTLBuilt)return;heroTLBuilt=true;
-    const heroTL=gsap.timeline({scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1.5,invalidateOnRefresh:true}});
-    /* Level 1: fly past */
-    heroTL.to('#heroL1',{scale:14,opacity:0,duration:.35,ease:'power2.in',overwrite:'auto'},0);
-    chars.forEach((c,i)=>{heroTL.to(c,{x:(i-text.length/2)*50,y:(i%2?-1:1)*30,duration:.28,overwrite:'auto'},0)});
-    heroTL.to(dot,{rotation:1440,scale:5,duration:.35,overwrite:'auto'},0);
+  const heroTL=gsap.timeline({scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1.5}});
+  /* Level 1: fly past */
+  heroTL.to('#heroL1',{scale:14,opacity:0,duration:.35,ease:'power2.in'},0);
+  chars.forEach((c,i)=>{heroTL.to(c,{x:(i-text.length/2)*50,y:(i%2?-1:1)*30,duration:.28},0)});
+  heroTL.to(dot,{rotation:1440,scale:5,duration:.35},0);
   /* Level 2: phrases converge */
   heroTL.to('#heroL2',{opacity:1,duration:.08},0.28);
   document.querySelectorAll('.hero-phrase').forEach((p,i)=>{
@@ -657,12 +196,6 @@ function boot(){
   heroTL.to('#heroL2',{scale:12,opacity:0,duration:.20,ease:'power2.in'},0.68);
   /* Portal */
   heroTL.fromTo('#heroPortal',{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(85% at 50% 50%)',duration:.18,ease:'power2.inOut'},0.82);
-  }
-  /* Pre-stage level 2 phrases so they are invisible before entry completes */
-  document.querySelectorAll('.hero-phrase').forEach(p=>{
-    const sx=+p.dataset.startX,sy=+p.dataset.startY;
-    gsap.set(p,{left:sx+'%',top:sy+'%',xPercent:-50,yPercent:-50,scale:.2,opacity:0,filter:'blur(8px)'});
-  });
 
   /* ═══ CONVICTION — pinned at center, zoom in→hold→zoom out ═══ */
   const convWrap=document.getElementById('convictionWrap');
@@ -736,7 +269,7 @@ function boot(){
 
     /* Typewriter timeline — triggers only when heading is IN VIEW */
     const typeTL=gsap.timeline({scrollTrigger:{
-      trigger:'#atelierHeading',start:'top 85%',end:'center center',scrub:true,
+      trigger:'#atelierHeading',start:'top 80%',end:'top 35%',scrub:true,
       onUpdate:function(self){
         /* Position cursor after last visible char */
         const p=self.progress;
@@ -818,36 +351,15 @@ function boot(){
   MT.from('.maison-cta-head',{y:50,opacity:0,duration:.04},0.92);
   MT.from('.maison-cta-sub',{y:30,opacity:0,duration:.04},0.94);
 
-  /* ═══ EMAIL STAGE — full-screen contact, click anywhere on the composition to copy ═══ */
-  const emailMark=document.getElementById('emailMark');
-  const copyToast=document.getElementById('copyToast');
-  if(emailMark){
+  /* ═══ FOOTER ═══ */
+  const ftEmail=document.getElementById('footerEmail');
+  if(ftEmail){
     const t='atelier@calyvent.com';
-    emailMark.setAttribute('data-email',t);
-
-    /* Glyph emerges as the monument. Labels & meta render naturally —
-       any GSAP `from` with scrollTrigger+delay was hanging at opacity:0. */
-    gsap.from('.em-glyph',{scrollTrigger:{trigger:'.email-stage',start:'top 70%'},opacity:0,scale:.88,duration:1.4,ease:'expo.out'});
-
-    let copyResetTimer=null;
-    emailMark.addEventListener('click',(e)=>{
-      e.preventDefault();
-      const email=emailMark.getAttribute('data-email');
-      const done=()=>{
-        emailMark.classList.add('is-copied');
-        if(copyToast){copyToast.classList.add('is-on');}
-        clearTimeout(copyResetTimer);
-        copyResetTimer=setTimeout(()=>{
-          emailMark.classList.remove('is-copied');
-          if(copyToast)copyToast.classList.remove('is-on');
-        },1800);
-      };
-      if(navigator.clipboard&&navigator.clipboard.writeText){
-        navigator.clipboard.writeText(email).then(done).catch(()=>{fallbackCopy(email);done();});
-      }else{fallbackCopy(email);done();}
-    });
-    function fallbackCopy(s){try{const ta=document.createElement('textarea');ta.value=s;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}catch(e){}}
+    ftEmail.href='mailto:'+t;
+    ftEmail.innerHTML=t.split('').map(c=>`<span class="char">${c}</span>`).join('');
+    gsap.from('.footer-email .char',{scrollTrigger:{trigger:'.footer-exp',start:'top 70%'},opacity:0,y:50,rotateZ:10,duration:1.4,ease:'expo.out',stagger:.015});
   }
+  gsap.from('.footer-tagline',{scrollTrigger:{trigger:'.footer-exp',start:'top 65%'},opacity:0,y:20,duration:1,ease:'expo.out',delay:.2});
 
   const coordsEl=document.getElementById('footerCoords');
   if(coordsEl){function tick(){const n=new Date();coordsEl.textContent=`40°42'N 74°00'W — ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}tick();setInterval(tick,1000)}
@@ -861,26 +373,15 @@ function boot(){
       particles=[];
       const off=document.createElement('canvas');off.width=w;off.height=h;
       const oc=off.getContext('2d');
-      const fs=Math.min(w*.14,180);
+      const fs=Math.min(w*.13,160);
       oc.font=`400 ${fs}px 'Instrument Serif',serif`;
       oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';
-      oc.fillText('Velocity.',w/2,h*.42);
+      oc.fillText('Velocity.',w/2,h*.30);
       const d=oc.getImageData(0,0,w,h).data;
       const gap=Math.max(3,Math.round(w/380));
-      /* Wider color palette — brass-warm, sand-light, deep-brass, near-white — for richness */
-      const PALS=[
-        [196,156,123], /* brass */
-        [222,200,181], /* sand */
-        [240,210,180], /* warm cream */
-        [180,130,90],  /* deep brass */
-        [255,235,210]  /* near-white warm */
-      ];
       for(let y=0;y<h;y+=gap){for(let x=0;x<w;x+=gap){
         const i=(y*w+x)*4;
-        if(d[i+3]>128){
-          const c=PALS[Math.floor(Math.random()*PALS.length)];
-          particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.9+Math.random()*1.5,r:c[0],g:c[1],b:c[2],a:.55+Math.random()*.35});
-        }
+        if(d[i+3]>128){particles.push({tx:x,ty:y,x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,sz:.8+Math.random()*1.2,r:Math.random()>.3?196:222,g:Math.random()>.3?156:200,b:Math.random()>.3?123:181})}
       }}
     }
     resize();window.addEventListener('resize',resize);
@@ -906,7 +407,7 @@ function boot(){
           p.vx+=Math.sin(Date.now()*.001+p.tx)*.1;p.vy+=Math.cos(Date.now()*.001+p.ty)*.1;
         }
         p.vx*=.88;p.vy*=.88;p.x+=p.vx;p.y+=p.vy;
-        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${p.a||.6})`;
+        ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},.6)`;
         ctx.fillRect(p.x,p.y,p.sz,p.sz);
       });
       requestAnimationFrame(draw);
@@ -915,82 +416,37 @@ function boot(){
   })();
 }
 
-/* ═══ CURSOR — "The Filament": a hairline pendulum with a brass weight.
-   The stem tilts in the direction of motion, lagging like a balance arm.
-   On text, it morphs into an i-beam mark. On interactive, into a small
-   ring. Editorial, abstract, alive. ═══ */
+/* ═══ CURSOR ═══ */
 (function(){
   if(window.matchMedia('(pointer:coarse)').matches)return;
-  const fil=document.getElementById('filament');
-  const rotor=document.getElementById('filTilt');
-  if(!fil||!rotor)return;
-
-  /* Smoothed pointer position */
-  let mx=-200,my=-200;
-  let px=-200,py=-200;
-  /* Smoothed velocity vector */
-  let vx=0,vy=0;
-  /* Current and target tilt angle (degrees) */
-  let tilt=0,tiltTarget=0;
-
-  let lastX=-200,lastY=-200,lastT=performance.now();
-  let textHover=false, actvHover=false;
-
-  document.addEventListener('mousemove',e=>{
-    const now=performance.now();
-    const dt=Math.max(1,now-lastT);
-    /* Instantaneous velocity smoothed into vx/vy */
-    vx=vx*.7 + ((e.clientX-lastX)/dt)*.3;
-    vy=vy*.7 + ((e.clientY-lastY)/dt)*.3;
-    lastX=e.clientX; lastY=e.clientY; lastT=now;
-    mx=e.clientX; my=e.clientY;
-  },{passive:true});
-
-  /* Interactive: ring blooms */
-  document.querySelectorAll('a,button,.phil-card,.footer-email,[data-hover]').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{ fil.classList.add('is-active'); actvHover=true; });
-    el.addEventListener('mouseleave',()=>{ fil.classList.remove('is-active','is-pressed'); actvHover=false; });
+  const g=document.getElementById('cursorGlow'),r=document.getElementById('cursorRing'),d=document.getElementById('cursorDot');
+  if(!r||!d||!g)return;
+  let mx=-200,my=-200,rx=-200,ry=-200,gx=-200,gy=-200,tx=-200,ty=-200,mag=false;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!mag){tx=mx;ty=my}});
+  document.querySelectorAll('a,button,.phil-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{r.classList.add('is-active');mag=true});
+    el.addEventListener('mouseleave',()=>{r.classList.remove('is-active');mag=false;tx=mx;ty=my});
+    el.addEventListener('mousemove',()=>{if(!mag)return;const b=el.getBoundingClientRect();tx=mx+((b.left+b.width/2)-mx)*.2;ty=my+((b.top+b.height/2)-my)*.2});
   });
-
-  /* Text: i-beam mark slides in */
-  document.querySelectorAll('p,h1,h2,h3,h4,.hero-phrase,.conviction-heading,.conviction-text,.phil-text,.atelier-quote,.section-heading,.hero-heading,.atelier-fact-label,.atelier-fact-value,.footer-tag').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{
-      if(actvHover) return;
-      fil.classList.add('is-text');
-      textHover=true;
-    });
-    el.addEventListener('mouseleave',()=>{
-      fil.classList.remove('is-text');
-      textHover=false;
-    });
-  });
-
-  document.addEventListener('mousedown',()=>fil.classList.add('is-pressed'),{passive:true});
-  document.addEventListener('mouseup',()=>fil.classList.remove('is-pressed'),{passive:true});
-  document.addEventListener('mouseleave',()=>{ fil.style.opacity='0'; },{passive:true});
-  document.addEventListener('mouseenter',()=>{ fil.style.opacity=''; },{passive:true});
-
-  let scale=1, scaleTarget=1;
-  (function loop(){
-    /* Pointer chase — slightly delayed for a soft feel */
-    px+=(mx-px)*.32; py+=(my-py)*.32;
-
-    const speed=Math.hypot(vx,vy);
-    /* Subtle breathing: hallmark grows ~10% with motion, settles at rest */
-    scaleTarget=(textHover||actvHover)?1:1+Math.min(0.18, speed*0.08);
-    scale+=(scaleTarget-scale)*0.16;
-
-    fil.style.transform=`translate3d(${px}px,${py}px,0)`;
-    rotor.style.transform=`scale(${scale.toFixed(3)})`;
-
-    vx*=.86; vy*=.86;
-    requestAnimationFrame(loop);
-  })();
+  (function l(){rx+=(tx-rx)*.07;ry+=(ty-ry)*.07;gx+=(mx-gx)*.05;gy+=(my-gy)*.05;r.style.transform=`translate(${rx-20}px,${ry-20}px)`;d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;g.style.transform=`translate(${gx-250}px,${gy-250}px)`;requestAnimationFrame(l)})();
 })();
 
-/* ═══ HERO CANVAS ═══ Disabled — any drawing on this canvas creates
-   localized brightness against the dark bg that reads as a bug.
-   Canvas stays in DOM for layout but renders nothing. */
+/* ═══ HERO CANVAS ═══ */
+(function(){
+  const cv=document.getElementById('heroCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');let w,h,mx=.5,my=.5;
+  function rs(){w=cv.width=cv.offsetWidth;h=cv.height=cv.offsetHeight}
+  rs();window.addEventListener('resize',rs);
+  document.addEventListener('mousemove',e=>{mx=e.clientX/window.innerWidth;my=e.clientY/window.innerHeight});
+  const C=[];for(let i=0;i<14;i++)C.push({y:Math.random(),a:.03+Math.random()*.06,f:.3+Math.random()*.5,s:.0002+Math.random()*.0003,p:Math.random()*6.28,t:.3+Math.random()*.8,o:.02+Math.random()*.035,c:i%3===0?'196,156,123':i%3===1?'222,200,181':'27,77,62'});
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    const bx=(.3+Math.sin(t*.0002)*.15+(mx-.5)*.1)*w,by=(.4+Math.cos(t*.00025)*.1+(my-.5)*.08)*h;
+    const g=ctx.createRadialGradient(bx,by,0,bx,by,w*.4);g.addColorStop(0,'rgba(196,156,123,.04)');g.addColorStop(1,'rgba(196,156,123,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    C.forEach(c=>{ctx.beginPath();ctx.strokeStyle=`rgba(${c.c},${c.o})`;ctx.lineWidth=c.t;const b=c.y*h,mi=(my-.5)*20;for(let x=0;x<=w;x+=3){const p=x/w,y=b+Math.sin(p*c.f*6.28+t*c.s+c.p)*c.a*h+Math.sin(p*1.5+t*c.s*.7)*c.a*h*.4+mi*Math.sin(p*3.14);if(!x)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()});
+    requestAnimationFrame(draw);
+  }requestAnimationFrame(draw);
+})();
 </script>
 </body>
 </html>
