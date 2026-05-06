@@ -23,6 +23,7 @@ const SINGLE_FILES = [
   'sitemap.xml',
   '404.html',
   '_headers',
+  '_redirects',
   'previews/maciej-misnik/index.html',
   'previews/maciej-misnik/styles.css',
   'previews/maciej-misnik/script.js',
