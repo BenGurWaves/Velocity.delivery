@@ -13,13 +13,80 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;
 .cursor-dot{position:fixed;width:5px;height:5px;background:var(--brass);border-radius:50%;pointer-events:none;z-index:9502;will-change:transform}
 .scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--brass);z-index:8500;width:100%;transform:scaleX(0);transform-origin:left;will-change:transform}
 
-/* PRELOADER */
-.preloader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
+/* PRELOADER — cross-dissolve sequence of unique pages; figure locked as the anchor */
+.preloader{position:fixed;inset:0;z-index:10000;overflow:hidden;font-family:var(--serif);background:#0D0C09;color:var(--plFg,#DEC8B5)}
 .preloader.is-done{display:none}
-.pl-brand{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-.02em;color:var(--sand);opacity:0;transform:translateY(10px)}
-.pl-brand em{font-style:normal;color:var(--brass)}
-.pl-line{width:80px;height:1px;background:var(--muted);overflow:hidden;opacity:0}
-.pl-line-inner{height:100%;width:0%;background:var(--brass)}
+
+/* Stacked page layers — clip-path wipe. Both pages always at opacity:1
+   so the screen is ALWAYS fully covered. Incoming wipes over outgoing. */
+.pl-pages{position:absolute;inset:0}
+.pl-page{position:absolute;inset:0;opacity:1;will-change:clip-path;pointer-events:none;clip-path:inset(0 0 100% 0);transition:clip-path .13s cubic-bezier(.55,0,.2,1)}
+.pl-page.is-active{clip-path:inset(0 0 0 0);z-index:2}
+.pl-page.is-leaving{clip-path:inset(0 0 0 0);z-index:1;transition:none}
+/* Direction variants — randomized per flip for visual variety */
+.pl-page.wipe-down{clip-path:inset(0 0 100% 0)}.pl-page.wipe-down.is-active{clip-path:inset(0 0 0 0)}
+.pl-page.wipe-up{clip-path:inset(100% 0 0 0)}.pl-page.wipe-up.is-active{clip-path:inset(0 0 0 0)}
+.pl-page.wipe-right{clip-path:inset(0 100% 0 0)}.pl-page.wipe-right.is-active{clip-path:inset(0 0 0 0)}
+.pl-page.wipe-left{clip-path:inset(0 0 0 100%)}.pl-page.wipe-left.is-active{clip-path:inset(0 0 0 0)}
+
+/* Inside each page */
+.pl-page .pl-bg{position:absolute;inset:0;pointer-events:none}
+.pl-page .pl-deco{position:absolute;inset:0;pointer-events:none;color:var(--pAccent,#C49C7B)}
+.pl-page .pl-deco > *{position:absolute;will-change:transform,opacity}
+/* Grain removed from per-page layer for perf — the site's own .grain overlay
+   is visible through the preloader when needed. */
+
+/* Locked figure — the one immovable anchor */
+.pl-figure{position:absolute;bottom:clamp(.25rem,1.5vw,1.5rem);left:clamp(1rem,3vw,3.5rem);display:flex;align-items:flex-end;line-height:.78;pointer-events:none;z-index:5}
+.pl-num{font-family:var(--serif);font-size:clamp(10rem,32vw,28rem);font-variant-numeric:tabular-nums;font-style:italic;font-weight:400;letter-spacing:-.055em;color:var(--plFg,#DEC8B5);line-height:.78;transition:color .45s cubic-bezier(.7,0,.3,1)}
+.pl-pct{font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,5vw,4rem);color:var(--plAccent,#C49C7B);padding-left:.08em;opacity:.7;transform:translateY(-.42em);transition:color .45s cubic-bezier(.7,0,.3,1)}
+
+/* Background treatments — applied on each page via data-bg */
+.pl-page[data-bg="plain"] .pl-bg{background:var(--pBg)}
+.pl-page[data-bg="grad-d"] .pl-bg{background:linear-gradient(135deg,var(--pBgHi) 0%,var(--pBg) 50%,var(--pBgDark) 100%)}
+.pl-page[data-bg="grad-r"] .pl-bg{background:radial-gradient(ellipse at 30% 70%,var(--pBgHi) 0%,var(--pBg) 55%,var(--pBgDark) 100%)}
+.pl-page[data-bg="grad-tl"] .pl-bg{background:radial-gradient(ellipse at 80% 20%,var(--pBgHi) 0%,var(--pBg) 60%)}
+.pl-page[data-bg="split-h"] .pl-bg{background:linear-gradient(to bottom,var(--pBg) 60%,var(--pBgDark) 60%)}
+.pl-page[data-bg="split-v"] .pl-bg{background:linear-gradient(to right,var(--pBg) 42%,var(--pBgDark) 42%)}
+.pl-page[data-bg="split-d"] .pl-bg{background:linear-gradient(155deg,var(--pBg) 52%,var(--pBgDark) 52%)}
+.pl-page[data-bg="stripes"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(0deg,transparent 0 3px,var(--pAccentFaint) 3px 4px)}
+.pl-page[data-bg="dots"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle,var(--pAccentFaint2) 1.4px,transparent 1.4px);background-size:32px 32px}
+.pl-page[data-bg="diag"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(45deg,transparent 0 8px,var(--pAccentFaint) 8px 9px)}
+.pl-page[data-bg="diag-r"] .pl-bg{background:var(--pBg);background-image:repeating-linear-gradient(-45deg,transparent 0 12px,var(--pAccentFaint) 12px 13px)}
+.pl-page[data-bg="grid"] .pl-bg{background:var(--pBg);background-image:linear-gradient(var(--pAccentFaint) 1px,transparent 1px),linear-gradient(90deg,var(--pAccentFaint) 1px,transparent 1px);background-size:64px 64px}
+.pl-page[data-bg="grid-fine"] .pl-bg{background:var(--pBg);background-image:linear-gradient(var(--pAccentFaint) 1px,transparent 1px),linear-gradient(90deg,var(--pAccentFaint) 1px,transparent 1px);background-size:16px 16px}
+.pl-page[data-bg="ring"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle at center,transparent 34%,var(--pAccentFaint) 34.05%,var(--pAccentFaint) 34.15%,transparent 34.2%,transparent 49%,var(--pAccentFaint) 49.05%,var(--pAccentFaint) 49.15%,transparent 49.2%)}
+.pl-page[data-bg="halo"] .pl-bg{background:var(--pBg);background-image:radial-gradient(circle at 70% 30%,var(--pAccentFaint2) 0%,transparent 50%)}
+.pl-page[data-bg="veil"] .pl-bg{background:var(--pBg);background-image:linear-gradient(180deg,transparent 0%,var(--pAccentFaint) 100%)}
+
+/* Meta text slots */
+.pl-page .pl-meta{position:absolute;font-family:var(--serif);font-style:italic;font-size:clamp(.72rem,1.05vw,1rem);letter-spacing:.04em;color:var(--pAccent,#C49C7B);opacity:.82;pointer-events:none;max-width:35vw;will-change:contents}
+.pl-page .pl-meta--tl{top:clamp(1.5rem,3.5vw,3rem);left:clamp(1.5rem,3.5vw,3rem)}
+.pl-page .pl-meta--tr{top:clamp(1.5rem,3.5vw,3rem);right:clamp(1.5rem,3.5vw,3rem);text-align:right}
+.pl-page .pl-meta--bl{top:clamp(1.5rem,3.5vw,3rem);left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:clamp(.55rem,.75vw,.72rem);letter-spacing:.28em;text-transform:uppercase;font-style:normal;opacity:.55;white-space:nowrap;text-align:center}
+.pl-page .pl-meta--br{bottom:clamp(1.5rem,3.5vw,3rem);right:clamp(1.5rem,3.5vw,3rem);text-align:right;font-family:var(--sans);font-size:clamp(.55rem,.75vw,.72rem);letter-spacing:.24em;text-transform:uppercase;font-style:normal;opacity:.6}
+
+/* Deco primitive base classes */
+.d-line{background:currentColor}
+.d-circle{border:1px solid currentColor;border-radius:50%}
+.d-circle-2{border:1px solid currentColor;border-radius:50%;box-shadow:inset 0 0 0 1px transparent,0 0 0 3px transparent,0 0 0 4px currentColor}
+.d-dash{border-top:1px dashed currentColor}
+.d-dot{width:4px;height:4px;background:currentColor;border-radius:50%;opacity:.7;display:inline-block}
+.d-plus{display:block}
+.d-plus::before,.d-plus::after{content:"";position:absolute;background:currentColor;inset:0}
+.d-plus::before{top:50%;height:1px;transform:translateY(-.5px)}
+.d-plus::after{left:50%;width:1px;transform:translateX(-.5px)}
+.d-frame-c{border-top:1px solid currentColor;border-left:1px solid currentColor}
+.d-rhombus{border:1px solid currentColor;transform-origin:center}
+.d-triangle{width:0;height:0;border-left-style:solid;border-right-style:solid;border-bottom-style:solid;border-left-color:transparent;border-right-color:transparent;border-bottom-color:currentColor}
+.d-sub{font-family:var(--serif);font-style:italic;color:currentColor;letter-spacing:.06em;white-space:nowrap}
+.d-sub-lg{font-family:var(--serif);color:currentColor;letter-spacing:-.04em;line-height:1;white-space:nowrap;font-weight:400}
+.d-mono{font-family:var(--sans);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:currentColor}
+.d-vert{writing-mode:vertical-rl;font-family:var(--serif);font-style:italic;color:currentColor;letter-spacing:.16em}
+.d-grid-mini{background-image:linear-gradient(currentColor 1px,transparent 1px),linear-gradient(90deg,currentColor 1px,transparent 1px);background-size:8px 8px;opacity:.22}
+.d-arc svg{display:block;color:currentColor}
+.d-star{color:currentColor;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1}
+.d-pill{border:1px solid currentColor;border-radius:999px;padding:.28em .8em;font-family:var(--sans);font-size:.55rem;letter-spacing:.22em;text-transform:uppercase}
 
 /* HERO */
 .hero{height:400vh;position:relative}
