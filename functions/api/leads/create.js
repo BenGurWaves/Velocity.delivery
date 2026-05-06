@@ -22,9 +22,12 @@ export async function onRequestPost(context) {
   const client_email = validateLength('client_email', (body.client_email || '').toLowerCase()) || null;
   const client_name  = validateLength('client_name',  body.client_name  || '')                || null;
 
-  // Generate a unique token for this lead
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
-  const token = Array.from(bytes, b => b.toString(16).padStart(2,'0')).join('');
+  // Generate a unique UUID token for this lead
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+  bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
+  const hex = Array.from(bytes, b => b.toString(16).padStart(2,'0')).join('');
+  const token = `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 
   try {
     const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
