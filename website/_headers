@@ -21,12 +21,12 @@
 /admin
   X-Robots-Tag: noindex, nofollow
   Location: /404.html
-  Status: 404
+  Status: 302
 
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Location: /404.html
-  Status: 404
+  Status: 302
 
 # ── Admin: never cache ────────────────────────────────────────────────────────
 /coffee/admin/*
