@@ -1,3 +1,4 @@
 # Block old admin path completely
-/admin/* /404.html 404
 /admin /404.html 404
+/admin/* /404.html 404
+/admin/ /404.html 404
