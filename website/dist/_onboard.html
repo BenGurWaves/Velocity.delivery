@@ -381,11 +381,6 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
           <label class="check-row"><input type="radio" name="showcaseChoice" id="showcaseNo" value="no" style="accent-color:var(--brass);width:14px;height:14px;flex-shrink:0;margin-top:2px"><span>No &mdash; keep my website private</span></label>
         </div>
       </div>
-      <div class="field" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border)">
-        <label class="field-label">Portfolio Permission</label>
-        <p style="font-size:.75rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">May we display your website as a live preview in our portfolio? This helps potential clients see our work in action. You can change this later.</p>
-        <label class="check-row"><input type="checkbox" id="portfolioPerm" checked><span>Yes &mdash; you may show my website as a portfolio preview</span></label>
-      </div>
       <div class="nav-btns">
         <button class="btn-back" id="back6">&larr; Back</button>
         <button class="btn-submit" id="submitBtn" style="width:100%">Submit Brief</button>
@@ -475,8 +470,6 @@ async function init() {
         helpBtn.addEventListener('click',e=>{e.stopPropagation();tooltip.style.display=tooltip.style.display==='block'?'none':'block';});
         helpBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tooltip.style.display=tooltip.style.display==='block'?'none':'block';}});
         document.addEventListener('click',()=>{if(tooltip)tooltip.style.display='none';});
-  // Upgrade permission: lock as checked when no colors filled
-  const upgradeAutoLogic=()=>{const cb=document.getElementById('upgradePerm');const bg=document.getElementById('colorBg');const sec=document.getElementById('colorSec');const acc=document.getElementById('colorAcc');if(!cb||!bg)return;const hasColors=(bg&&bg.value.trim())||(sec&&sec.value.trim())||(acc&&acc.value.trim());if(!hasColors){cb.checked=true;cb.disabled=true;cb.title='Unlock by filling in your brand colors above';}else{cb.disabled=false;cb.title='';}};['colorBg','colorSec','colorAcc'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',upgradeAutoLogic);el.addEventListener('blur',upgradeAutoLogic);}});upgradeAutoLogic();
       }
       const ddEl=document.getElementById('dueDate');if(ddEl){ddEl.min=new Date(Date.now()+48*3600000).toISOString().split('T')[0];ddEl.value=new Date(Date.now()+7*86400000).toISOString().split('T')[0];}
       bindNav();

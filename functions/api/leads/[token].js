@@ -69,6 +69,16 @@ export async function onRequestPatch(context) {
     patch.first_submitted_at = body.submitted_at;
   }
 
+  // Auto-transition status when brief is submitted
+  if (body.submitted_at && lead.status === 'onboarding_sent') {
+    patch.status = 'pending';
+  }
+  
+  // Map due_date to delivery_target_date automatically for admin view
+  if (patch.due_date) {
+    patch.delivery_target_date = patch.due_date + 'T00:00:00Z';
+  }
+
   if (!Object.keys(patch).length) return errRes('No valid fields to update');
 
   const updated = await sb.update('velocity_leads', `token=eq.${token}`, patch);

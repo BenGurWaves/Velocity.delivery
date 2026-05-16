@@ -30,7 +30,7 @@ export async function onRequestPost(context) {
   const token = `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 
   try {
-    const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'pending' });
+    const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
     const lead = Array.isArray(rows) ? rows[0] : rows;
     const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
     return secureJson({ id: lead.id, token: lead.token, onboard_url: `${base}/onboard/${lead.token}` });

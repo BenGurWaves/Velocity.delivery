@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scope of Work — Velocity</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0C09;--bg2:#121109;--sand:#DEC8B5;--brass:#C49C7B;--dim:#565250;--muted:#252320;--border:rgba(222,200,181,.07);--bord2:rgba(222,200,181,.13);--ease:cubic-bezier(0.16,1,0.3,1);--px:clamp(1.5rem,5vw,4rem)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--sand);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--brass);outline-offset:4px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;pointer-events:none;z-index:9000;animation:gr .5s steps(2) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,-2%)}50%{transform:translate(2%,1%)}75%{transform:translate(-1%,3%)}}
+
+.nav{position:fixed;inset:0 0 auto;height:64px;padding:0 var(--px);display:flex;align-items:center;justify-content:space-between;background:rgba(13,12,9,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:100}
+.nav-brand{font-family:'Instrument Serif',Georgia,serif;font-size:1.1rem;letter-spacing:-.02em}
+.nav-brand em{font-style:normal;color:var(--brass)}
+.nav-right{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+.scope-wrap{max-width:800px;margin:0 auto;padding:120px var(--px) 80px;display:none}
+.scope-header{text-align:center;margin-bottom:4rem}
+.scope-eyebrow{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1.5rem}
+.scope-title{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:-.04em;line-height:.95;color:var(--sand);margin-bottom:1rem}
+
+.canvas-layout{background:var(--bg2);border:1px solid var(--bord2);padding:clamp(2rem,6vw,4rem);position:relative}
+.canvas-inner{max-width:600px;margin:0 auto}
+
+/* Markdown parsing styles */
+.scope-content h1{font-family:'Instrument Serif',Georgia,serif;font-size:2rem;font-weight:400;letter-spacing:-.02em;color:var(--sand);margin:3rem 0 1.5rem;border-bottom:1px solid var(--bord2);padding-bottom:.75rem}
+.scope-content h1:first-child{margin-top:0}
+.scope-content h2{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin:2.5rem 0 1rem;font-weight:500}
+.scope-content p{font-size:.82rem;color:var(--dim);line-height:1.9;margin-bottom:1.25rem}
+.scope-content strong{color:var(--sand);font-weight:400}
+.scope-content ul{padding-left:1.5rem;margin-bottom:1.5rem}
+.scope-content li{font-size:.82rem;color:var(--dim);line-height:1.9;margin-bottom:.5rem}
+
+/* Token Styles */
+.token{background:rgba(196,156,123,.05);border:1px solid rgba(196,156,123,.2);color:#B87C5A;padding:.15rem .4rem;font-size:.75rem;font-family:monospace;letter-spacing:0;display:inline-flex;align-items:center;gap:.3rem}
+.color-chip{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:inline-block}
+
+/* Footer Action */
+.action-area{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center}
+.action-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem}
+.btn-accept{display:inline-block;font-size:.72rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:1rem 3rem;transition:background .3s;border:none;cursor:pointer}
+.btn-accept:hover{background:var(--brass)}
+.btn-accept:disabled{opacity:.3;pointer-events:none}
+
+.state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:1rem;text-align:center;padding:2rem}
+.state h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:-.03em}
+.state p{font-size:.82rem;color:var(--dim);line-height:1.8;max-width:38ch}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<nav class="nav">
+  <a href="/" class="nav-brand">Velocity<em>.</em></a>
+  <span class="nav-right" id="navRight">Scope of Work</span>
+</nav>
+
+<div class="state" id="stateLoading"><p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)">Loading&hellip;</p></div>
+<div class="state" id="stateError" style="display:none">
+  <h2>Not available.</h2>
+  <p id="errorMsg">This link is invalid or the scope has not been generated yet. Contact <a href="mailto:client@calyvent.com" style="color:var(--brass)">client@calyvent.com</a>.</p>
+</div>
+
+<div class="scope-wrap" id="scopeWrap">
+  <div class="scope-header">
+    <span class="scope-eyebrow">Project Brief &amp; SOW</span>
+    <h1 class="scope-title">Architecture<br>Charter<em>.</em></h1>
+  </div>
+  
+  <div class="canvas-layout">
+    <div class="canvas-inner">
+      <div class="scope-content" id="scopeContent"></div>
+    </div>
+  </div>
+  
+  <div class="action-area">
+    <div class="action-label">I have reviewed and agree to the scope of work outlined above.</div>
+    <button class="btn-accept" id="btnAccept">Digitally Sign &amp; Accept Scope</button>
+  </div>
+</div>
+
+<script>
+let TOKEN = '';
+(function(){const p=location.pathname.split('/').filter(Boolean);TOKEN=p[1]||'';})();
+
+function show(id){document.getElementById(id).style.display='';}
+function hide(id){document.getElementById(id).style.display='none';}
+
+// Extremely simple Markdown to HTML parser
+function parseMD(str) {
+  let lines = str.split('\n');
+  let html = [];
+  let inList = false;
+  
+  for(let line of lines) {
+    line = line.trim();
+    if(line === '') {
+      if(inList) { html.push('</ul>'); inList = false; }
+      continue;
+    }
+    
+    // Check if line matches "NUMBER. TEXT" (H2)
+    if(/^[0-9]+\.\s+(.*)/.test(line)) {
+      if(inList) { html.push('</ul>'); inList = false; }
+      html.push('<h2>' + line.replace(/^[0-9]+\.\s+/, '') + '</h2>');
+      continue;
+    }
+    
+    if(line.startsWith('- ')) {
+      if(!inList) { html.push('<ul>'); inList = true; }
+      html.push('<li>' + processInline(line.substring(2)) + '</li>');
+      continue;
+    }
+    
+    if(inList) { html.push('</ul>'); inList = false; }
+    html.push('<p>' + processInline(line) + '</p>');
+  }
+  if(inList) html.push('</ul>');
+  
+  return html.join('\n');
+}
+
+function processInline(str) {
+  // Bold: **text**
+  str = str.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Custom tokens: [TOKEN:text] or [TOKEN:text|#hex]
+  str = str.replace(/\[TOKEN:([^\|\]]+)(?:\|([^\]]+))?\]/g, (match, text, color) => {
+    let chip = color ? `<span class="color-chip" style="background:${color}"></span>` : '';
+    return `<span class="token">${chip}${text}</span>`;
+  });
+  
+  return str;
+}
+
+async function init(){
+  if(!TOKEN){hide('stateLoading');show('stateError');return;}
+
+  let lead;
+  try{
+    const r=await fetch('/api/leads/'+TOKEN);
+    if(!r.ok){hide('stateLoading');show('stateError');return;}
+    lead=await r.json();
+  }catch{hide('stateLoading');show('stateError');return;}
+
+  if(lead.scope_accepted){
+    location.href='/convert/'+TOKEN;return;
+  }
+  if(!lead.scope_text){
+    hide('stateLoading');
+    document.getElementById('errorMsg').textContent='Your scope document is not ready yet.';
+    show('stateError');return;
+  }
+
+  document.getElementById('scopeContent').innerHTML = parseMD(lead.scope_text);
+  
+  hide('stateLoading');
+  show('scopeWrap');
+
+  document.getElementById('btnAccept').addEventListener('click', async function() {
+    const btn=this;
+    btn.disabled=true;btn.textContent='Executing...';
+    
+    try {
+      const r=await fetch('/api/leads/'+TOKEN, {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({scope_accepted:true, scope_accepted_at:new Date().toISOString()})
+      });
+      if(r.ok) {
+        location.href='/convert/'+TOKEN;
+      } else {
+        alert('Failed to accept scope. Please try again.');
+        btn.disabled=false;btn.textContent='Digitally Sign & Accept Scope';
+      }
+    } catch(err) {
+      alert('Network error. Please try again.');
+      btn.disabled=false;btn.textContent='Digitally Sign & Accept Scope';
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
