@@ -688,7 +688,7 @@ function startPollingIfNeeded(lead) {
 function siteBlock(link){link=ensureUrl(link);
   return `<div class="site-link-block"><div><div class="site-link-label">Your Website</div><div class="site-link-url">${esc(link)}</div></div><a href="${esc(link)}" class="site-link-cta" target="_blank" rel="noopener noreferrer">Open Site ↗</a></div>`;
 }
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 // Auto-refresh — poll every 30s when tab is visible, stop when terminal state reached
 let POLL_INTERVAL = null;
