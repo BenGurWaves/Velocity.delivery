@@ -181,6 +181,17 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
         </div>
       <div class="field" id="bizTypeOtherField" style="display:none;margin-top:.75rem"><label class="field-label" for="bizTypeOther">Describe your business type</label><input type="text" id="bizTypeOther" placeholder="e.g. Independent craftsperson, gallery, private practice..."></div>
       </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label" for="companyStage">Company Stage / Scaling Vector <span class="req">*</span></label>
+        <select id="companyStage">
+          <option value="">Select stage&hellip;</option>
+          <option value="pre_launch">Pre-Launch / Concept</option>
+          <option value="early_traction">Early Traction / Building Authority</option>
+          <option value="scaling">Scaling / Aggressive Growth</option>
+          <option value="enterprise">Established Enterprise / Market Leader</option>
+        </select>
+        <div class="field-error" id="err-companyStage">Required</div>
+      </div>
       <div class="field-row">
         <div class="field"><label class="field-label" for="businessEmail">Business Email <span class="req">*</span></label><input type="email" id="businessEmail" placeholder="contact@yourbusiness.com"><div class="field-error" id="err-businessEmail">Valid email required</div></div>
         <div class="field"><label class="field-label" for="businessPhone">Business Phone</label><input type="tel" id="businessPhone" placeholder="+1 (000) 000-0000"></div>
@@ -230,6 +241,10 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
         <div id="antiList"></div>
         <button class="add-btn" type="button" id="addAnti">+ Add Site</button>
       </div>
+      <div class="field" style="margin-top:2rem">
+        <label class="field-label" for="competitorBenchmarks">Competitor Benchmarks</label>
+        <textarea id="competitorBenchmarks" rows="3" placeholder="Who are your main competitors? How do you want to be positioned relative to them?"></textarea>
+      </div>
 
       <div class="field" style="margin-top:2rem"><label class="field-label" for="sitePages">Pages &amp; Sections</label><p style="font-size:.75rem;color:var(--dim);line-height:1.75;margin-bottom:.75rem">List the pages you want on your website. If you leave this blank, we will decide what makes sense based on your brief and brand.</p><textarea id="sitePages" rows="4" placeholder="e.g. Homepage, About, Collections, Contact &mdash; or leave blank and we decide for you."></textarea></div>
             <div class="nav-btns">
@@ -254,6 +269,33 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
       </div>
       <div class="field"><label class="field-label" for="colorsExtra">Additional Palette Notes</label><textarea id="colorsExtra" rows="3" placeholder="Any other colors, gradients, or palette notes. Leave blank if unsure."></textarea></div>
       <div class="field"><label class="field-label" for="fonts">Typography Preferences</label><textarea id="fonts" rows="3" placeholder="List 2-3 font names or styles. e.g. 'Instrument Serif for headings, Inter for body' or 'something editorial and restrained'."></textarea></div>
+      <div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:2.5rem 0 1.5rem;border-bottom:1px solid var(--border);padding-bottom:.75rem">Visual Philosophy</div>
+      <div class="field" style="display:flex;flex-direction:column;gap:1.5rem">
+        <div>
+          <label class="field-label" style="display:flex;justify-content:space-between"><span>Typography Scale</span><span style="color:var(--dim);text-transform:none;letter-spacing:0">1-5</span></label>
+          <div style="display:flex;align-items:center;gap:1rem">
+            <span style="font-size:.65rem;color:var(--dim)">Restrained</span>
+            <input type="range" id="sliderTypo" min="1" max="5" value="3" style="flex:1;accent-color:var(--brass)">
+            <span style="font-size:.65rem;color:var(--dim)">Massive</span>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" style="display:flex;justify-content:space-between"><span>Layout Density</span><span style="color:var(--dim);text-transform:none;letter-spacing:0">1-5</span></label>
+          <div style="display:flex;align-items:center;gap:1rem">
+            <span style="font-size:.65rem;color:var(--dim)">High Whitespace</span>
+            <input type="range" id="sliderDensity" min="1" max="5" value="3" style="flex:1;accent-color:var(--brass)">
+            <span style="font-size:.65rem;color:var(--dim)">Information Dense</span>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" style="display:flex;justify-content:space-between"><span>Chromatographic Balance</span><span style="color:var(--dim);text-transform:none;letter-spacing:0">1-5</span></label>
+          <div style="display:flex;align-items:center;gap:1rem">
+            <span style="font-size:.65rem;color:var(--dim)">Monochrome</span>
+            <input type="range" id="sliderChroma" min="1" max="5" value="3" style="flex:1;accent-color:var(--brass)">
+            <span style="font-size:.65rem;color:var(--dim)">Vibrant</span>
+          </div>
+        </div>
+      </div>
       <div class="field"><label class="field-label">Design Direction</label>
         <label class="check-row"><input type="checkbox" id="upgradePerm" checked><span>If the Velocity team identifies a way to elevate my brand guidelines, they have permission to pivot &mdash; I trust their judgment over my specs.</span></label>
       </div>
@@ -266,6 +308,16 @@ input[type=checkbox]{width:14px;height:14px;accent-color:var(--brass);cursor:poi
         <span class="phase-label">Phase 05 / 06</span>
         <h1 class="phase-title">Logistics &amp;<br>Assets.</h1>
         <p class="phase-sub">The practical details. Leave blank wherever you don&rsquo;t have something yet &mdash; we&rsquo;ll follow up.</p>
+      </div>
+      <div class="field">
+        <label class="field-label" for="copyReadiness">Copywriting Status <span class="req">*</span></label>
+        <select id="copyReadiness">
+          <option value="">Select status&hellip;</option>
+          <option value="ready">We have all copy finalized</option>
+          <option value="drafts">We have rough drafts</option>
+          <option value="need_help">We need Velocity to write or refine the copy</option>
+        </select>
+        <div class="field-error" id="err-copyReadiness">Required</div>
       </div>
       <div class="field"><label class="field-label" for="mottos">Mottos, Taglines &amp; Copy</label><textarea id="mottos" rows="3" placeholder="Any existing slogans, taglines, or copy you want used. Leave blank and we'll write it."></textarea></div>
       <div class="field"><label class="field-label" for="copyright">Copyright / Legal Name</label><input type="text" id="copyright" placeholder="e.g. &copy; 2026 Acme Inc. &mdash; leave blank for us to fill in"></div>
@@ -457,7 +509,11 @@ function prefill(d) {
   sv('targetCustomer',p2.target_customer);sv('siteVibe',p2.site_vibe);
   sv('colorBg',p3.color_background);sv('colorSec',p3.color_secondary);sv('colorAcc',p3.color_accent);sv('colorsExtra',p3.colors_extra);sv('fonts',p3.fonts);
   if(p3.upgrade_permission)document.getElementById('upgradePerm').checked=true;
+  if(p3.visual_typography_scale)sv('sliderTypo',p3.visual_typography_scale);
+  if(p3.visual_layout_density)sv('sliderDensity',p3.visual_layout_density);
+  if(p3.visual_chromatographic)sv('sliderChroma',p3.visual_chromatographic);
   sv('mottos',p4.mottos);sv('copyright',p4.copyright);sv('assetsLinks',p4.assets_links);sv('existingUrl',p4.existing_url);
+  if(p4.copy_readiness)document.getElementById('copyReadiness').value=p4.copy_readiness;
   if(p4.starting_point){document.getElementById('startingPoint').value=p4.starting_point;if(p4.starting_point==='existing')document.getElementById('existingUrlField').style.display='';}
   if(p4.due_date)document.getElementById('dueDate').value=p4.due_date;
   if(p5.additional_notes)document.getElementById('additionalNotes').value=p5.additional_notes;
@@ -531,6 +587,8 @@ function v2(){
   if(!be||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(be)){showErr('businessEmail',true);ok=false;}else showErr('businessEmail',false);
   if(!cy){showErr('addrCountry',true);ok=false;}else showErr('addrCountry',false);
   if(!ctx){showErr('context',true);ok=false;}else showErr('context',false);
+  const cs=document.getElementById('companyStage');
+  if(cs&&!cs.value){showErr('companyStage',true);ok=false;}else if(cs)showErr('companyStage',false);
   return ok;
 }
 function v3(){
@@ -544,7 +602,9 @@ function v3(){
 function v5(){
   let ok=true;
   const due=document.getElementById('dueDate').value,agree=document.getElementById('agreeTerms').checked;
+  const cr=document.getElementById('copyReadiness');
   if(!due){showErr('dueDate',true);ok=false;}else showErr('dueDate',false);
+  if(cr&&!cr.value){showErr('copyReadiness',true);ok=false;}else if(cr)showErr('copyReadiness',false);
   if(!agree){showErr('agreeTerms',true);ok=false;}else showErr('agreeTerms',false);
   return ok;
 }
@@ -592,9 +652,9 @@ function collect(){
       context:getVal('context'),
       socials,include_socials:getChecked('includeSocials'),
     },
-    phase2:{inspiration,anti_inspiration:anti,target_customer:getVal('targetCustomer'),site_vibe:getVal('siteVibe'),site_pages:getVal('sitePages')},
-    phase3:{color_background:getVal('colorBg'),color_secondary:getVal('colorSec'),color_accent:getVal('colorAcc'),colors_extra:getVal('colorsExtra'),fonts:getVal('fonts'),upgrade_permission:getChecked('upgradePerm')},
-    phase4:{mottos:getVal('mottos'),copyright:getVal('copyright'),assets_links:getVal('assetsLinks'),starting_point:sp,existing_url:sp==='existing'?getVal('existingUrl'):'',due_date:getVal('dueDate')},
+    phase2:{inspiration,anti_inspiration:anti,target_customer:getVal('targetCustomer'),site_vibe:getVal('siteVibe'),site_pages:getVal('sitePages'),competitor_benchmarks:getVal('competitorBenchmarks')},
+    phase3:{color_background:getVal('colorBg'),color_secondary:getVal('colorSec'),color_accent:getVal('colorAcc'),colors_extra:getVal('colorsExtra'),fonts:getVal('fonts'),upgrade_permission:getChecked('upgradePerm'),visual_typography_scale:parseInt(getVal('sliderTypo')||3),visual_layout_density:parseInt(getVal('sliderDensity')||3),visual_chromatographic:parseInt(getVal('sliderChroma')||3)},
+    phase4:{mottos:getVal('mottos'),copyright:getVal('copyright'),assets_links:getVal('assetsLinks'),starting_point:sp,existing_url:sp==='existing'?getVal('existingUrl'):'',due_date:getVal('dueDate'),copy_readiness:getVal('copyReadiness')},
     phase5:{additional_notes:getVal('additionalNotes')},
     showcase_permission:showcaseChoice,
     portfolio_permission:getChecked('portfolioPerm')
@@ -632,6 +692,12 @@ async function submit(){
         portfolio_permission:data.portfolio_permission,
         terms_accepted:true,
         terms_accepted_at:new Date().toISOString(),
+        company_stage:document.getElementById('companyStage').value||null,
+        competitor_benchmarks:data.phase2.competitor_benchmarks||null,
+        copy_readiness:data.phase4.copy_readiness||null,
+        visual_typography_scale:data.phase3.visual_typography_scale||3,
+        visual_layout_density:data.phase3.visual_layout_density||3,
+        visual_chromatographic:data.phase3.visual_chromatographic||3,
       })});
     if(!r.ok){const e=await r.json();btn.disabled=false;btn.textContent='Submit Brief';alert(e.error||'Error. Please try again.');return;}
     // Show success screen

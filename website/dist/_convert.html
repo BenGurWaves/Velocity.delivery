@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Execute Agreement — Velocity</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{--bg:#0D0C09;--bg2:#121109;--bg3:#161410;--sand:#DEC8B5;--brass:#C49C7B;--dim:#565250;--muted:#252320;--border:rgba(222,200,181,.07);--bord2:rgba(222,200,181,.13);--ease:cubic-bezier(0.16,1,0.3,1);--px:clamp(1.5rem,5vw,4rem)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--sand);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}button{font-family:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--brass);outline-offset:4px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.87' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;pointer-events:none;z-index:9000;animation:gr .5s steps(2) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,-2%)}50%{transform:translate(2%,1%)}75%{transform:translate(-1%,3%)}}
+
+/* Nav */
+.nav{position:fixed;inset:0 0 auto;height:64px;padding:0 var(--px);display:flex;align-items:center;justify-content:space-between;background:rgba(13,12,9,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:100}
+.nav-brand{font-family:'Instrument Serif',Georgia,serif;font-size:1.1rem;letter-spacing:-.02em}
+.nav-brand em{font-style:normal;color:var(--brass)}
+.nav-right{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+/* Loading / Error states */
+.state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:1rem;text-align:center;padding:2rem}
+.state h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:-.03em}
+.state p{font-size:.82rem;color:var(--dim);line-height:1.8;max-width:38ch}
+
+/* Main layout */
+.convert-wrap{max-width:640px;margin:0 auto;padding:100px var(--px) 80px;display:none}
+
+/* Section A: Quote */
+.quote-section{padding-bottom:clamp(2rem,4vw,3.5rem);border-bottom:1px solid var(--border);margin-bottom:clamp(2rem,4vw,3.5rem)}
+.quote-eyebrow{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1.5rem}
+.quote-label{font-size:.72rem;color:var(--dim);letter-spacing:.04em;margin-bottom:.5rem}
+.quote-amount{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(3rem,8vw,5.5rem);letter-spacing:-.05em;line-height:.95;color:var(--sand);margin-bottom:1rem}
+.quote-terms{font-size:.72rem;color:var(--dim);line-height:1.8;letter-spacing:.03em}
+.quote-terms strong{color:var(--sand);font-weight:400}
+
+/* Section B: MSA */
+.msa-section{margin-bottom:clamp(2rem,4vw,3rem)}
+.msa-label{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1.25rem}
+.msa-viewport{max-height:400px;overflow-y:auto;border:1px solid var(--bord2);padding:clamp(1.25rem,3vw,2rem);background:var(--bg2);position:relative}
+.msa-viewport::-webkit-scrollbar{width:4px}
+.msa-viewport::-webkit-scrollbar-track{background:var(--bg2)}
+.msa-viewport::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
+.msa-viewport::-webkit-scrollbar-thumb:hover{background:var(--brass)}
+.msa-viewport h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.1rem;letter-spacing:-.02em;color:var(--sand);margin:0 0 1.25rem;text-align:center;line-height:1.3}
+.msa-viewport h3{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:2rem 0 .75rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.msa-viewport h3:first-of-type{border-top:none;margin-top:.5rem}
+.msa-viewport p{font-size:.75rem;color:var(--dim);line-height:1.9;margin:0 0 .75rem}
+.msa-viewport p strong{color:var(--sand);font-weight:400}
+.msa-viewport ol{padding-left:1.25rem;margin:0 0 .75rem}
+.msa-viewport li{font-size:.75rem;color:var(--dim);line-height:1.9;margin-bottom:.5rem}
+.msa-scroll-hint{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);text-align:center;margin-top:.75rem;transition:opacity .4s;opacity:1}
+.msa-scroll-hint.hidden{opacity:0}
+
+/* Section C: Clickwrap */
+.clickwrap-section{margin-bottom:clamp(1.5rem,3vw,2.5rem);padding:1.5rem;border:1px solid var(--bord2);transition:border-color .4s,opacity .4s;opacity:.45}
+.clickwrap-section.unlocked{opacity:1;border-color:var(--brass)}
+.check-row{display:flex;align-items:flex-start;gap:.75rem;cursor:pointer}
+.check-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--brass);cursor:pointer;flex-shrink:0;margin-top:3px}
+.check-row label{font-size:.75rem;color:var(--dim);line-height:1.75;cursor:pointer}
+
+/* Section D: Payment */
+.payment-section{margin-bottom:2rem}
+.payment-label{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1.25rem}
+.stripe-mount{background:var(--bg2);border:1px solid var(--bord2);padding:1.25rem;margin-bottom:1.5rem;min-height:60px;transition:border-color .3s}
+.stripe-mount.focused{border-color:var(--brass)}
+.pay-btn{display:block;width:100%;font-size:.72rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:1rem 2rem;transition:background .3s,opacity .3s;border:none;cursor:pointer;text-align:center}
+.pay-btn:hover{background:var(--brass)}
+.pay-btn:disabled{opacity:.3;pointer-events:none}
+.pay-error{font-size:.68rem;color:#c08080;margin-top:.75rem;display:none;line-height:1.6}
+.pay-error.show{display:block}
+
+/* Success */
+.success-screen{display:none;min-height:60vh;flex-direction:column;align-items:flex-start;justify-content:center;animation:fadeIn .6s var(--ease)}
+.success-screen.show{display:flex}
+.success-rule{width:40px;height:1px;background:var(--brass);margin-bottom:2.5rem}
+.success-eyebrow{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:1.25rem;display:block}
+.success-title{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.045em;line-height:.95;color:var(--sand);margin-bottom:1.5rem}
+.success-title em{font-style:italic;color:var(--brass)}
+.success-body{font-size:.82rem;color:var(--dim);line-height:1.9;max-width:40ch;margin-bottom:2.5rem}
+.success-cta{font-size:.68rem;letter-spacing:.1em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;transition:background .3s;border:none;cursor:pointer;display:inline-block;text-decoration:none}
+.success-cta:hover{background:var(--brass)}
+
+/* Footer */
+.convert-footer{max-width:640px;margin:0 auto;padding:2rem var(--px);border-top:1px solid var(--border)}
+.convert-footer p{font-size:.6rem;color:var(--dim);letter-spacing:.04em;line-height:1.8}
+.convert-footer a{color:var(--sand);border-bottom:1px solid var(--border)}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){.convert-wrap{padding:88px 1.5rem 60px}.quote-amount{font-size:clamp(2.5rem,12vw,4rem)}.msa-viewport{max-height:320px;padding:1rem}.pay-btn{padding:.9rem 1.5rem}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<nav class="nav">
+  <a href="/" class="nav-brand">Velocity<em>.</em></a>
+  <span class="nav-right" id="navRight">Agreement</span>
+</nav>
+
+<!-- Loading -->
+<div class="state" id="stateLoading"><p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)">Loading&hellip;</p></div>
+
+<!-- Error -->
+<div class="state" id="stateError" style="display:none">
+  <h2>Not available.</h2>
+  <p id="errorMsg">This link is invalid or the project is not ready for payment. Contact <a href="mailto:client@calyvent.com" style="color:var(--brass)">client@calyvent.com</a>.</p>
+</div>
+
+<!-- Main conversion interface -->
+<div class="convert-wrap" id="convertWrap">
+
+  <!-- Success screen (hidden initially) -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-rule"></div>
+    <span class="success-eyebrow">Agreement Executed</span>
+    <h1 class="success-title">Sprint<br>initialized<em>.</em></h1>
+    <p class="success-body">Your payment has been received and the Master Services Agreement has been executed. We will be in touch within 24 hours to begin your production sprint.</p>
+    <a id="successDashLink" href="#" class="success-cta">View your project dashboard &rarr;</a>
+  </div>
+
+  <!-- Transaction interface (hidden after success) -->
+  <div id="transactionWrap">
+
+    <!-- Section A: Quote -->
+    <div class="quote-section">
+      <span class="quote-eyebrow">Your Custom Quote</span>
+      <div class="quote-label">Corporate Web Architecture Sprint</div>
+      <div class="quote-amount" id="quoteAmount">$0.00</div>
+      <div class="quote-terms"><strong>Due Immediately</strong> &mdash; 100% Upfront Architecture Allocation</div>
+    </div>
+
+    <!-- Section B: MSA -->
+    <div class="msa-section">
+      <span class="msa-label">Master Services Agreement</span>
+      <div class="msa-viewport" id="msaViewport">
+        <h2>Velocity by Calyvent<br>Master Services Agreement</h2>
+
+        <h3>1. Production Timeline Engine &amp; Kickoff Contingencies</h3>
+        <p>The design and development cycle for custom software and web properties engineered by Velocity is a minimum of seven (7) business days up to a maximum of nine (9) business days from the formal kickoff date. Under no circumstances does the project timeline begin upon form submission. The formal kickoff date is uniquely instantiated only when:</p>
+        <ol type="a">
+          <li>One hundred percent (100%) of the financial considerations outlined in the Custom Quote have successfully cleared the transaction gateway.</li>
+          <li>The Client has populated the required asset storage bucket with all corporate vector logos, high-fidelity images, and validated copy assets required for platform assembly.</li>
+        </ol>
+        <p>Velocity retains the absolute right to deliver the finished digital platform ahead of schedule. If the Client takes longer than twenty-four (24) hours to respond to a critical operational inquiry or clarity ping, the production timeline is automatically paused, and Velocity reserves the right to re-schedule the target delivery window.</p>
+
+        <h3>2. Payment Architecture &amp; Non-Negotiable Refund Schedule</h3>
+        <p>Velocity by Calyvent operates on a strict allocation model, prioritizing a dedicated elite engineering sprint for each approved contract. Consequently, the transaction mechanics enforce a one hundred percent (100%) upfront, non-mitigatable financial deployment. All capital payments transacted are <strong>non-refundable and final</strong>. The Client possesses only two (2) narrow paths of financial restitution:</p>
+        <ol type="a">
+          <li><strong>Immediate 24-Hour Revocation:</strong> The Client may request a complete contract termination via documented written notification to the Velocity ecosystem within exactly twenty-four (24) hours of initial payment completion.</li>
+          <li><strong>Failure to Supply:</strong> If Velocity fails to engineer and provide an interactive, functional build iteration of the digital web property within nine (9) calendar days of the formal kickoff date. Any delay, asset omission, structural alteration, or slow feedback loops by the Client immediately voids this Failure to Supply clause in its entirety.</li>
+        </ol>
+
+        <h3>3. Consolidated Revision Allocations &amp; Complex Feedback Protocol</h3>
+        <p>Velocity provides a maximum allowance of <strong>three (3) iterative rounds</strong> of platform revision. To preserve operational velocity and avoid margin degradation from endless cosmetic micro-tweaks, the iteration phase is subject to strict formatting constraints:</p>
+        <ol type="a">
+          <li><strong>Anti-Token Restriction:</strong> The submission of isolated, sequential micro-requests (e.g., requesting the repositioning of a singular interface button, then waiting for execution, then requesting a font size alteration) is completely prohibited. Individual piece-meal feedback voids the active iteration round.</li>
+          <li><strong>Comprehensive Consolidation Directive:</strong> The Client is instructed and legally bound to comprehensively audit the interactive build iteration across all screen configurations and viewpoints. The Client must compile all requested adjustments into a singular, thorough, all-inclusive diagnostic document.</li>
+          <li><strong>Medium of Delivery:</strong> Feedback data must be delivered as a single, consolidated text brief, or via an explicitly clear voice note or voice-to-text transcript detailing every necessary structural alteration across all pages. Any structural modifications requested beyond the three (3) allocated rounds will be auto-billed to the Client at Velocity&rsquo;s standard emergency developer tier rate of <strong>two hundred and fifty dollars ($250.00) per hour</strong>.</li>
+        </ol>
+
+        <h3>4. Intellectual Property Distribution &amp; Structural Liability Proxy</h3>
+        <p>Upon the successful electronic verification and clearing of all open financial liabilities and the formal close of the design sprint, all copyrights, intellectual property assertions, and absolute domain ownership properties of the compiled production web application transfer unconditionally to the Client.</p>
+        <ol type="a">
+          <li><strong>Continuous Optimization Exception:</strong> If the Client enters into an active ongoing Retainer, Continuous Maintenance, or Digital Optimization Agreement with Velocity for ongoing structural updates, Velocity explicitly retains partial structural architecture and design framework engineering rights.</li>
+          <li><strong>Liability Shield:</strong> This partial right configuration serves as an ironclad operational shield. Velocity by Calyvent is held completely harmless, and the Client waives all paths of structural litigation, malpractice assertion, or business disruption indemnity claims if subsequent third-party platform modifications, server-side code alterations, dependency failures, or user-driven code breaking damages the operational integrity of the digital platform.</li>
+        </ol>
+      </div>
+      <div class="msa-scroll-hint" id="msaHint">&darr; Scroll to review the full agreement</div>
+    </div>
+
+    <!-- Section C: Clickwrap -->
+    <div class="clickwrap-section" id="clickwrapSection">
+      <div class="check-row">
+        <input type="checkbox" id="msaCheckbox" disabled>
+        <label for="msaCheckbox">I explicitly affirm that I possess full corporate authority to execute this instrument. I have read, understood, and unreservedly agree to be bound by the Master Services Agreement above &mdash; specifically acknowledging the <strong style="color:var(--sand);font-weight:400">100% upfront payment structure</strong>, the <strong style="color:var(--sand);font-weight:400">9-day delivery default</strong>, and the strict <strong style="color:var(--sand);font-weight:400">3-round consolidated feedback constraints</strong>.</label>
+      </div>
+    </div>
+
+    <!-- Section D: Payment -->
+    <div class="payment-section" id="paymentSection">
+      <span class="payment-label">Payment</span>
+      <div class="stripe-mount" id="stripeMount">
+        <p style="font-size:.68rem;color:var(--dim);text-align:center;padding:1rem 0">Initializing secure payment&hellip;</p>
+      </div>
+      <button class="pay-btn" id="payBtn" disabled>Execute Agreement &amp; Initialize Sprint</button>
+      <div class="pay-error" id="payError"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="convert-footer" id="convertFooter" style="display:none">
+  <p>Questions? Email <a href="mailto:client@calyvent.com">client@calyvent.com</a> &mdash; we reply within 24 hours.</p>
+  <p style="margin-top:.5rem;opacity:.5">&copy; 2026 Velocity by Calyvent. All rights reserved.</p>
+</div>
+
+<script>
+const STRIPE_PK = '__STRIPE_PK__';
+let TOKEN = '';
+let stripe, elements, paymentElement;
+
+(function(){const p=location.pathname.split('/').filter(Boolean);TOKEN=p[1]||'';})();
+
+function show(id){document.getElementById(id).style.display='';}
+function hide(id){document.getElementById(id).style.display='none';}
+function fmt(c){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);}
+
+async function init(){
+  if(!TOKEN){hide('stateLoading');show('stateError');return;}
+
+  // Fetch lead data
+  let lead;
+  try{
+    const r=await fetch('/api/leads/'+TOKEN);
+    if(!r.ok){hide('stateLoading');show('stateError');return;}
+    lead=await r.json();
+  }catch{hide('stateLoading');show('stateError');return;}
+
+  // Gate: must have quote, not be paid, not declined
+  if(lead.is_paid){
+    location.href='/dashboard/'+TOKEN+'?paid=1';return;
+  }
+  if(!lead.quote_amount||lead.quote_amount<=0){
+    hide('stateLoading');
+    document.getElementById('errorMsg').textContent='No quote has been set for this project yet. Check your dashboard for updates.';
+    show('stateError');return;
+  }
+  if(lead.status==='declined'){
+    hide('stateLoading');
+    document.getElementById('errorMsg').textContent='This project has been declined.';
+    show('stateError');return;
+  }
+
+  // Render quote
+  document.getElementById('quoteAmount').textContent=fmt(lead.quote_amount);
+  document.getElementById('navRight').textContent=(lead.client_name||'Agreement');
+  document.getElementById('successDashLink').href='/dashboard/'+TOKEN;
+
+  hide('stateLoading');
+  show('convertWrap');
+  show('convertFooter');
+
+  // MSA scroll-to-unlock
+  const msaVp=document.getElementById('msaViewport');
+  const msaHint=document.getElementById('msaHint');
+  const clickwrap=document.getElementById('clickwrapSection');
+  const checkbox=document.getElementById('msaCheckbox');
+
+  msaVp.addEventListener('scroll',function(){
+    const atBottom=msaVp.scrollTop+msaVp.clientHeight>=msaVp.scrollHeight-30;
+    if(atBottom){
+      msaHint.classList.add('hidden');
+      clickwrap.classList.add('unlocked');
+      checkbox.disabled=false;
+    }
+  });
+
+  // Checkbox enables payment
+  checkbox.addEventListener('change',function(){
+    document.getElementById('payBtn').disabled=!this.checked;
+  });
+
+  // Initialize Stripe
+  if(!STRIPE_PK||STRIPE_PK==='__STRIPE_PK__'){
+    document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Payment system not configured. Contact support.</p>';
+    return;
+  }
+
+  stripe=Stripe(STRIPE_PK);
+
+  // Create PaymentIntent
+  let clientSecret;
+  try{
+    const r=await fetch('/api/stripe/create-intent',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token:TOKEN})
+    });
+    const d=await r.json();
+    if(!r.ok||!d.client_secret){
+      document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">'+(d.error||'Failed to initialize payment.')+'</p>';
+      return;
+    }
+    clientSecret=d.client_secret;
+  }catch{
+    document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Network error. Please refresh.</p>';
+    return;
+  }
+
+  // Mount Payment Element
+  elements=stripe.elements({
+    clientSecret,
+    appearance:{
+      theme:'night',
+      variables:{
+        colorPrimary:'#C49C7B',
+        colorBackground:'#121109',
+        colorText:'#DEC8B5',
+        colorDanger:'#c08080',
+        fontFamily:'Inter, system-ui, sans-serif',
+        fontSizeBase:'14px',
+        borderRadius:'0px',
+        spacingUnit:'4px',
+      },
+      rules:{
+        '.Input':{
+          backgroundColor:'#0D0C09',
+          border:'1px solid rgba(222,200,181,.13)',
+          color:'#DEC8B5',
+          fontSize:'14px',
+        },
+        '.Input:focus':{
+          borderColor:'#C49C7B',
+          boxShadow:'none',
+        },
+        '.Label':{
+          color:'#565250',
+          fontSize:'11px',
+          letterSpacing:'.1em',
+          textTransform:'uppercase',
+        },
+      }
+    }
+  });
+
+  paymentElement=elements.create('payment');
+  document.getElementById('stripeMount').innerHTML='';
+  paymentElement.mount('#stripeMount');
+
+  paymentElement.on('focus',()=>document.getElementById('stripeMount').classList.add('focused'));
+  paymentElement.on('blur',()=>document.getElementById('stripeMount').classList.remove('focused'));
+
+  // Submit handler
+  document.getElementById('payBtn').addEventListener('click',async function(){
+    const btn=this;
+    const errEl=document.getElementById('payError');
+    errEl.classList.remove('show');
+
+    if(!checkbox.checked){errEl.textContent='You must accept the Master Services Agreement.';errEl.classList.add('show');return;}
+
+    btn.disabled=true;btn.textContent='Processing\u2026';
+
+    const{error,paymentIntent}=await stripe.confirmPayment({
+      elements,
+      redirect:'if_required',
+    });
+
+    if(error){
+      errEl.textContent=error.message||'Payment failed. Please try again.';
+      errEl.classList.add('show');
+      btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
+      return;
+    }
+
+    if(paymentIntent&&paymentIntent.status==='succeeded'){
+      btn.textContent='Confirming\u2026';
+      // Record MSA + payment on backend
+      try{
+        await fetch('/api/stripe/confirm-payment',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({token:TOKEN,payment_intent_id:paymentIntent.id})
+        });
+      }catch(_){}
+
+      // Show success
+      hide('transactionWrap');
+      document.getElementById('successScreen').classList.add('show');
+      document.getElementById('navRight').textContent='Confirmed';
+
+      // Redirect to dashboard after 5s
+      setTimeout(()=>{location.href='/dashboard/'+TOKEN+'?paid=1';},5000);
+    } else {
+      errEl.textContent='Payment requires additional action. Please follow the prompts.';
+      errEl.classList.add('show');
+      btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

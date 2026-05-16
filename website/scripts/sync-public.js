@@ -17,6 +17,7 @@ const root = path.join(__dirname, '..');
 const SINGLE_FILES = [
   '_onboard.html',
   '_dashboard.html',
+  '_convert.html',
   'coffee/admin/index.html',
   'favicon.svg',
   'robots.txt',
