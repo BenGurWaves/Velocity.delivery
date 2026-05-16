@@ -19,6 +19,7 @@ const SINGLE_FILES = [
   '_dashboard.html',
   '_convert.html',
   '_scope.html',
+  '_brief.html',
   'coffee/admin/index.html',
   'favicon.svg',
   'robots.txt',
