@@ -304,6 +304,42 @@ function renderLeads(){
       confirm1.querySelector('.conf-yes').onclick=async e=>{e.stopPropagation();confirm1.style.display='none';confirm2.style.display='block';};
       confirm1.querySelector('.conf-no').onclick=e=>{e.stopPropagation();confirm1.style.display='none';};
     }
+    const autoScopeBtn = card.querySelector('.auto-scope');
+    const scopeText = card.querySelector('.scope-text');
+    if(autoScopeBtn && scopeText) {
+      autoScopeBtn.onclick = (e) => {
+        e.stopPropagation();
+        const p1=(l.full_data&&l.full_data.phase1)||{};
+        const p2=(l.full_data&&l.full_data.phase2)||{};
+        const pages = p2.site_pages ? p2.site_pages : 'Homepage, About, Services, Contact (Standard configuration)';
+        const amount = l.quote_amount ? '$' + (l.quote_amount/100).toFixed(2) : '[AMOUNT PENDING]';
+        
+        let draft = `**VELOCITY DELIVERABLES & SCOPE OF WORK**
+
+**CLIENT:** ${l.client_name || p1.full_name || 'TBD'}
+**PROJECT INVESTMENT:** ${amount}
+
+**1. ARCHITECTURE & PAGES**
+The following pages will be designed and built:
+${pages}
+
+**2. CREATIVE DIRECTION**
+Velocity will execute a world-class, custom "Quiet Luxury" digital aesthetic. 
+- Company Stage: ${l.company_stage ? l.company_stage.replace('_', ' ') : 'Not specified'}
+- Competitor Alignment: ${l.competitor_benchmarks || 'Standard industry benchmarks'}
+- All custom development, interactions, and kinetic typography.
+
+**3. TIMELINE & TERMS**
+- Kickoff target: ${l.kickoff_date ? new Date(l.kickoff_date).toLocaleDateString() : 'TBD'}
+- Delivery target: ${l.delivery_target_date ? new Date(l.delivery_target_date).toLocaleDateString() : 'TBD'}
+- Includes 1 round of holistic revisions post-delivery.
+- Site delivered via Webflow, Framer, or raw code (agency discretion based on performance needs).
+
+*By executing this agreement via the conversion portal, the client accepts these deliverables as the exhaustive scope of work.*`;
+        scopeText.value = draft;
+        toast('Scope drafted. Review before sending.');
+      };
+    }
     if(confirm2){
       confirm2.querySelector('.conf-yes2').onclick=async e=>{
         e.stopPropagation();
@@ -463,7 +499,13 @@ function buildCard(l){
       <button class="cbtn sdates" style="align-self:flex-end">Save Dates</button>
 
       <!-- Scope document -->
-      <div class="cg" style="flex-basis:100%"><span class="clabel">Scope Document</span><textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea></div>
+      <div class="cg" style="flex-basis:100%">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem">
+          <span class="clabel" style="margin:0">Scope Document</span>
+          <button class="clink auto-scope" style="padding:.2rem .5rem;font-size:.5rem;border-color:var(--border)" type="button">Auto-Generate Scope</button>
+        </div>
+        <textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea>
+      </div>
       <button class="cbtn send-scope" style="align-self:flex-end">${l.scope_sent_at?'Resend Scope':'Send Scope to Client'}</button>
       ${l.scope_accepted?'<span style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#8fc98f">&#10003; Scope Accepted</span>':''}
 

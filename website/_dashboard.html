@@ -266,8 +266,8 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
 let TOKEN='', LEAD=null;
 (function(){const p=location.pathname.split('/').filter(Boolean);TOKEN=p[1]||'';})();
 
-const SL={pending:'Under Review',accepted:'Accepted',in_progress:'In Progress',declined:'Declined',completed:'Completed'};
-const SP={pending:'pill-pending',accepted:'pill-accepted',in_progress:'pill-in_progress',declined:'pill-declined',completed:'pill-completed'};
+const SL={outreach:'Initial Contact',responded:'Gathering Details',onboarding_sent:'Awaiting Brief',pending:'Under Review',scope_sent:'Scope Sent (Review)',accepted:'Scope Accepted',paid:'Payment Confirmed',in_progress:'Design & Build',completed:'Delivered',declined:'Declined',archived:'Archived'};
+const SP={outreach:'pill-pending',responded:'pill-pending',onboarding_sent:'pill-pending',pending:'pill-pending',scope_sent:'pill-pending',accepted:'pill-accepted',paid:'pill-accepted',in_progress:'pill-in_progress',declined:'pill-declined',completed:'pill-completed',archived:'pill-declined'};
 const TL=[
   {key:'submitted',label:'Brief Submitted',sub:'Your project brief has been received and is under review.'},
   {key:'accepted', label:'Project Accepted',sub:'We’re moving forward. Payment confirms your spot.'},
