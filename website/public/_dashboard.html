@@ -556,12 +556,17 @@ function renderDash(lead,justPaid=false){
     const revisionsListHtml = revs.length ? `
       <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem">
         <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)">Revision History</span>
-        ${revs.map(r => `
-          <div style="background:rgba(255,255,255,.01);border:1px solid var(--border);padding:1rem">
-            <p style="font-size:.78rem;line-height:1.65;color:var(--sand)">${esc(r.text)}</p>
-            <div style="margin-top:.5rem;font-size:.6rem;color:var(--dim);text-align:right">${new Date(r.created_at).toLocaleString()}</div>
-          </div>
-        `).join('')}
+        ${revs.map(r => {
+          const text = typeof r === 'object' && r !== null ? r.text : r;
+          const time = typeof r === 'object' && r !== null && r.created_at ? new Date(r.created_at) : null;
+          const timeStr = time && !isNaN(time.getTime()) ? time.toLocaleString() : '—';
+          return `
+            <div style="background:rgba(255,255,255,.01);border:1px solid var(--border);padding:1rem">
+              <p style="font-size:.78rem;line-height:1.65;color:var(--sand)">${esc(text)}</p>
+              <div style="margin-top:.5rem;font-size:.6rem;color:var(--dim);text-align:right">${esc(timeStr)}</div>
+            </div>
+          `;
+        }).join('')}
       </div>
     ` : '';
 
