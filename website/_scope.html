@@ -154,13 +154,20 @@ async function init(){
   if(lead.scope_accepted){
     location.href='/convert/'+TOKEN;return;
   }
+  console.log('Lead loaded:', lead);
   if(!lead.scope_text){
+    console.warn('No scope_text found on lead');
     hide('stateLoading');
     document.getElementById('errorMsg').textContent='Your scope document is not ready yet.';
     show('stateError');return;
   }
 
-  document.getElementById('scopeContent').innerHTML = parseMD(lead.scope_text);
+  try {
+    document.getElementById('scopeContent').innerHTML = parseMD(lead.scope_text);
+  } catch (err) {
+    console.error('Error parsing scope text:', err);
+    document.getElementById('scopeContent').textContent = lead.scope_text;
+  }
   
   hide('stateLoading');
   show('scopeWrap');

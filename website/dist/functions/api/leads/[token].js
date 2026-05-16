@@ -75,7 +75,7 @@ export async function onRequestPatch(context) {
   }
   
   // Map due_date to delivery_target_date automatically for admin view
-  if (patch.due_date) {
+  if (patch.due_date && /^\d{4}-\d{2}-\d{2}$/.test(patch.due_date)) {
     patch.delivery_target_date = patch.due_date + 'T00:00:00Z';
   }
 
