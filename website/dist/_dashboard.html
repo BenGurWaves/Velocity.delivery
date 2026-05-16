@@ -495,8 +495,14 @@ function renderDash(lead,justPaid=false){
   if(!lead.submitted_at){
     briefEl.style.display='none';
   } else if(lead.submitted_at){
-    const insp=(p2.inspiration||[]).filter(i=>i.url).map(i=>`<div style="margin-bottom:8px"><div style="font-size:.75rem;color:var(--brass)">${esc(i.url)}</div>${i.notes?`<div style="font-size:.7rem;color:var(--dim);margin-top:2px">${esc(i.notes)}</div>`:''}</div>`).join('');
-    const anti=(p2.anti_inspiration||[]).filter(i=>i.url).map(i=>`<div style="margin-bottom:8px"><div style="font-size:.75rem;color:#c08080">${esc(i.url)}</div>${i.notes?`<div style="font-size:.7rem;color:var(--dim);margin-top:2px">${esc(i.notes)}</div>`:''}</div>`).join('');
+    const parseList = (val) => {
+      if (Array.isArray(val)) return val;
+      if (val && typeof val === 'object') return [val];
+      if (typeof val === 'string' && val.trim()) return [{ url: val, notes: '' }];
+      return [];
+    };
+    const insp = parseList(p2.inspiration).filter(i => i && i.url).map(i => `<div style="margin-bottom:8px"><div style="font-size:.75rem;color:var(--brass)">${esc(i.url)}</div>${i.notes?`<div style="font-size:.7rem;color:var(--dim);margin-top:2px">${esc(i.notes)}</div>`:''}</div>`).join('');
+    const anti = parseList(p2.anti_inspiration).filter(i => i && i.url).map(i => `<div style="margin-bottom:8px"><div style="font-size:.75rem;color:#c08080">${esc(i.url)}</div>${i.notes?`<div style="font-size:.7rem;color:var(--dim);margin-top:2px">${esc(i.notes)}</div>`:''}</div>`).join('');
     briefEl.innerHTML=`
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
         <span class="sec-label" style="margin:0">Your Brief Summary</span>
@@ -777,14 +783,21 @@ function openFullBrief(lead) {
     </div>
   `;
 
-  const insp = (p2.inspiration || []).filter(i=>i.url).map(i=>`
+  const parseList = (val) => {
+    if (Array.isArray(val)) return val;
+    if (val && typeof val === 'object') return [val];
+    if (typeof val === 'string' && val.trim()) return [{ url: val, notes: '' }];
+    return [];
+  };
+
+  const insp = parseList(p2.inspiration).filter(i=>i && i.url).map(i=>`
     <div style="padding:1rem;background:rgba(255,255,255,.01);border:1px solid var(--border);margin-bottom:.75rem">
       <div style="font-size:.78rem;color:var(--brass);margin-bottom:.25rem">${esc(i.url)}</div>
       ${i.notes ? `<div style="font-size:.7rem;color:var(--dim)">${esc(i.notes)}</div>` : ''}
     </div>
   `).join('') || '<div style="font-size:.7rem;color:var(--dim)">None provided</div>';
 
-  const anti = (p2.anti_inspiration || []).filter(i=>i.url).map(i=>`
+  const anti = parseList(p2.anti_inspiration).filter(i=>i && i.url).map(i=>`
     <div style="padding:1rem;background:rgba(255,255,255,.01);border:1px solid var(--border);margin-bottom:.75rem">
       <div style="font-size:.78rem;color:#c08080;margin-bottom:.25rem">${esc(i.url)}</div>
       ${i.notes ? `<div style="font-size:.7rem;color:var(--dim)">${esc(i.notes)}</div>` : ''}
