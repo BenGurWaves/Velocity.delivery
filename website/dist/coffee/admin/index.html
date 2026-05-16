@@ -495,10 +495,47 @@ function renderDetail(l) {
     const ac=document.getElementById('ctrlAdminComment').value.trim();
     const acl=document.getElementById('ctrlAdminCommentLink').value.trim();
     
+    // Version increment calculation
+    const oldText = (l.admin_comment && l.admin_comment.text) || '';
+    const oldLink = (l.admin_comment && l.admin_comment.link) || '';
+    const oldSite = l.site_link || '';
+    
+    const isSiteLinkChanged = sl !== oldSite;
+    const isAdminCommentChanged = ac !== oldText || acl !== oldLink;
+    
+    let currentVersion = (l.admin_comment && l.admin_comment.version) || 0;
+    let newVersion = currentVersion;
+    if (isSiteLinkChanged || isAdminCommentChanged) {
+      newVersion = currentVersion + 1;
+    }
+    if (newVersion === 0 && (ac || acl || sl)) {
+      newVersion = 1;
+    }
+
+    let adminCommentObj = null;
+    if (ac || acl) {
+      adminCommentObj = {
+        text: ac,
+        link: acl || null,
+        version: newVersion,
+        created_at: (l.admin_comment && l.admin_comment.created_at) || new Date().toISOString()
+      };
+      if (ac !== oldText || acl !== oldLink) {
+        adminCommentObj.created_at = new Date().toISOString();
+      }
+    } else if (sl && isSiteLinkChanged) {
+      adminCommentObj = {
+        text: '',
+        link: null,
+        version: newVersion,
+        created_at: new Date().toISOString()
+      };
+    }
+    
     let patch = { 
       status: stat,
       site_link: sl || null,
-      admin_comment: ac || null,
+      admin_comment: adminCommentObj,
       admin_comment_link: acl || null
     };
     if(q) patch.quote_amount = Math.round(parseFloat(q)*100);
