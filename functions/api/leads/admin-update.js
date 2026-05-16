@@ -138,7 +138,7 @@ export async function onRequestPatch(context) {
   let body;
   try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
 
-  const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at } = body;
+  const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at, kickoff_date, delivery_target_date } = body;
   if (!token) return errRes('token required');
 
   const patch = {};
@@ -184,6 +184,8 @@ export async function onRequestPatch(context) {
     if (site_link !== undefined) {
     patch.site_link = site_link ? safeUrl(site_link) : null;
   }
+  if (kickoff_date !== undefined) { patch.kickoff_date = kickoff_date || null; }
+  if (delivery_target_date !== undefined) { patch.delivery_target_date = delivery_target_date || null; }
 
   if (!Object.keys(patch).length) return errRes('Nothing to update');
 

@@ -275,6 +275,9 @@ function renderLeads(){
     // Site link
     const sl=card.querySelector('.sl'),ss2=card.querySelector('.ssl');
     if(ss2)ss2.onclick=async()=>{ss2.disabled=true;await aupd(l.token,{site_link:ensureUrl(sl.value)});toast('Site link saved');ss2.disabled=false;await reload();};
+    // Dates
+    const kd=card.querySelector('.kd'),td=card.querySelector('.td'),sdates=card.querySelector('.sdates');
+    if(sdates)sdates.onclick=async()=>{sdates.disabled=true;await aupd(l.token,{kickoff_date:kd.value?kd.value+'T00:00:00Z':null,delivery_target_date:td.value?td.value+'T00:00:00Z':null});toast('Dates saved');sdates.disabled=false;await reload();};
     // Copy links
     card.querySelectorAll('.clink[data-copy]').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();navigator.clipboard.writeText(btn.dataset.copy);toast('Copied');};});
     // Individual client view
@@ -376,8 +379,10 @@ function buildCard(l){
           ${dr('Deadline',l.due_date?new Date(l.due_date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}):'')}
           ${dr('Submitted',l.submitted_at?new Date(l.submitted_at).toLocaleString():'')}
         </div>
+        ${l.company_stage?`<div class="dsec"><div class="dlabel">Company Stage</div><div class="drow"><span class="dval">${esc(l.company_stage.replace('_',' '))}</span></div></div>`:''}
         ${p1.context?`<div class="dsec"><div class="dlabel">Business Context</div><div class="dlong">${esc(p1.context)}</div></div>`:''}
         ${p2.target_customer?`<div class="dsec"><div class="dlabel">Target / Audience</div><div class="dlong">${esc(p2.target_customer)}</div></div>`:''}
+        ${l.competitor_benchmarks?`<div class="dsec"><div class="dlabel">Competitor Benchmarks</div><div class="dlong">${esc(l.competitor_benchmarks)}</div></div>`:''}
         ${socials?`<div class="dsec"><div class="dlabel">Social Profiles</div>${socials}${dr('Show Icons',p1.include_socials?'Yes':'No')}</div>`:''}
         ${p5.additional_notes?`<div class="dsec"><div class="dlabel">Additional Notes</div><div class="dlong">${esc(p5.additional_notes)}</div></div>`:''}
       </div>
@@ -388,9 +393,13 @@ function buildCard(l){
           ${dr('Accent',p3.color_accent)}
           ${p3.colors_extra?`<div class="drow"><span class="dkey">Add'l Palette</span><span class="dval">${esc(p3.colors_extra)}</span></div>`:''}
           ${dr('Typography',p3.fonts)}
+          ${dr('Typo Scale (1-5)',l.visual_typography_scale)}
+          ${dr('Density (1-5)',l.visual_layout_density)}
+          ${dr('Chroma (1-5)',l.visual_chromatographic)}
           ${dr('Upgrade Perm.',l.upgrade_permission?'YES — full latitude':'No')}
         </div>
         <div class="dsec"><div class="dlabel">Logistics</div>
+          ${dr('Copy Readiness',l.copy_readiness?l.copy_readiness.replace('_',' '):'')}
           ${dr('Mottos/Taglines',p4.mottos)}
           ${dr('Copyright',p4.copyright)}
           ${dr('Starting Point',p4.starting_point)}
@@ -443,6 +452,16 @@ function buildCard(l){
         <input class="cinput sl" type="url" placeholder="https://clientsite.com" style="width:200px" value="${esc(l.site_link||'')}">
       </div>
       <button class="cbtn ssl" style="align-self:flex-end">Save Link</button>
+
+      <!-- Dates -->
+      <div class="cg"><span class="clabel">Kickoff Date</span>
+        <input class="cinput kd" type="date" value="${l.kickoff_date?l.kickoff_date.split('T')[0]:''}" style="width:110px">
+      </div>
+      <div class="cg"><span class="clabel">Delivery Target</span>
+        <input class="cinput td" type="date" value="${l.delivery_target_date?l.delivery_target_date.split('T')[0]:''}" style="width:110px">
+      </div>
+      <button class="cbtn sdates" style="align-self:flex-end">Save Dates</button>
+
       <!-- Scope document -->
       <div class="cg" style="flex-basis:100%"><span class="clabel">Scope Document</span><textarea class="ctextarea scope-text" rows="8" placeholder="Describe the exact scope: pages, features, deliverables, timeline, revisions included. Client will sign this before paying." style="width:100%;min-width:320px">${esc(l.scope_text||'')}</textarea></div>
       <button class="cbtn send-scope" style="align-self:flex-end">${l.scope_sent_at?'Resend Scope':'Send Scope to Client'}</button>

@@ -1,0 +1,681 @@
+/* ======================================================================
+   TONY ANDERSON — THE EROSION SCORE
+   Palette: Nebraska Chalk Beds (Niobrara Formation)
+   Typefaces: Playfair Display / DM Sans / IBM Plex Mono
+   ====================================================================== */
+
+/* --- PALETTE — Niobrara Chalk Beds ---
+   Chalk White:      #E8E0D4
+   Fossil Cream:     #D4C8B0
+   Iron Oxide:       #8B5E3C
+   Shale Blue:       #3A4A5C
+   Deep Stratum:     #1A1714
+   Chalk Dust:       #C4B89A
+   Water Blue:       #5B7A8C
+   Erosion Amber:    #B8946A
+*/
+
+:root {
+    --chalk: #E8E0D4;
+    --fossil: #D4C8B0;
+    --iron: #8B5E3C;
+    --shale: #3A4A5C;
+    --deep: #1A1714;
+    --dust: #C4B89A;
+    --water: #5B7A8C;
+    --amber: #B8946A;
+    --surface: #2A2420;
+    --bedrock: #0F0D0B;
+}
+
+/* --- RESET --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: none;
+}
+
+body {
+    background: var(--deep);
+    color: var(--chalk);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+}
+
+a { color: inherit; text-decoration: none; cursor: none; }
+button { cursor: none; border: none; background: none; color: inherit; font: inherit; }
+
+::selection {
+    background: var(--iron);
+    color: var(--chalk);
+}
+
+/* --- SCROLL PROXY --- */
+#scroll-proxy {
+    height: 600vh;
+    position: relative;
+    z-index: 0;
+}
+
+/* --- FIXED STAGE --- */
+#fixed-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* --- GEOLOGICAL CANVAS --- */
+#geo-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.grain-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.4;
+}
+
+/* --- STRATA --- */
+.stratum {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    will-change: opacity, transform;
+}
+
+.stratum-content {
+    width: 90%;
+    max-width: 1200px;
+    padding: 2rem;
+}
+
+.stratum-line {
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dust), transparent);
+    opacity: 0.2;
+}
+
+/* --- TYPOGRAPHY --- */
+.mono-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dust);
+    display: inline-block;
+}
+
+.mono-tag.accent {
+    color: var(--amber);
+}
+
+.serif-statement {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--chalk);
+    margin-top: 1.5rem;
+}
+
+.serif-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fossil);
+    max-width: 50ch;
+    margin-top: 1rem;
+}
+
+.serif-display {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 9rem);
+    font-weight: 700;
+    line-height: 0.85;
+    color: var(--chalk);
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: none;
+}
+
+.serif-data {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 400;
+    color: var(--chalk);
+}
+
+.serif-link {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* --- STRATUM: SURFACE --- */
+#stratum-surface {
+    opacity: 1;
+    visibility: visible;
+}
+
+#stratum-surface .stratum-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.surface-coords {
+    display: flex;
+    gap: 3rem;
+    opacity: 0;
+}
+
+.excavated-name {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.name-line {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 14vw, 12rem);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    color: var(--chalk);
+    opacity: 0;
+    transform: translateY(60px);
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.name-line::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--iron), var(--amber), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.surface-descriptor {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* --- STRATUM: PHILOSOPHY --- */
+.philosophy-block {
+    max-width: 700px;
+}
+
+.philosophy-fragment {
+    margin-top: 3rem;
+    padding-left: 2rem;
+    border-left: 1px solid var(--iron);
+}
+
+/* --- STRATUM: NIOBRARA --- */
+.niobrara-block {
+    text-align: center;
+}
+
+.niobrara-title-wrap {
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.3rem, 1vw, 1rem);
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    overflow: hidden;
+}
+
+.niobrara-block .serif-body {
+    max-width: 55ch;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.niobrara-data {
+    display: flex;
+    justify-content: center;
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-top: 3rem;
+}
+
+.data-point {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+/* --- STRATUM: METHOD --- */
+.method-block {
+    max-width: 800px;
+}
+
+.method-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 3rem;
+}
+
+.channel-link {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(196, 184, 154, 0.1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.channel-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(139, 94, 60, 0.05), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.channel-link:hover::before {
+    transform: translateX(0);
+}
+
+.channel-link:hover {
+    padding-left: 1rem;
+}
+
+.channel-label {
+    min-width: 12ch;
+}
+
+.channel-arrow {
+    margin-left: auto;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--amber);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.channel-link:hover .channel-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- STRATUM: COMMISSION --- */
+.commission-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+}
+
+.commission-email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.email-copy {
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--amber);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--iron);
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.email-copy:hover {
+    color: var(--chalk);
+    border-color: var(--chalk);
+}
+
+.email-text,
+.email-copied {
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.email-copied {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    opacity: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-style: normal;
+    letter-spacing: 0.3em;
+    color: var(--amber);
+}
+
+.email-copy.copied .email-text {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.email-copy.copied .email-copied {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.commission-social {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.social-link {
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: var(--amber);
+}
+
+.social-sep {
+    color: var(--dust);
+    opacity: 0.3;
+}
+
+.commission-footer {
+    margin-top: 4rem;
+}
+
+.commission-footer .vel {
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    color: var(--dust);
+    opacity: 0.25;
+}
+
+/* --- DEPTH INDICATOR --- */
+.depth-indicator {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 120px;
+    background: rgba(196, 184, 154, 0.1);
+    z-index: 10;
+    border-radius: 1px;
+}
+
+.depth-fill {
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg, var(--amber), var(--iron));
+    border-radius: 1px;
+    transition: height 0.3s ease;
+}
+
+.depth-label {
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.55rem;
+}
+
+/* --- SCROLL PROMPT --- */
+.scroll-prompt {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--dust);
+    opacity: 0.5;
+    animation: promptPulse 3s ease-in-out infinite;
+}
+
+@keyframes promptPulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.8; transform: translateX(-50%) translateY(5px); }
+}
+
+/* --- CUSTOM CURSOR --- */
+.cursor-core {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    mix-blend-mode: screen;
+}
+
+.cursor-erosion {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--dust);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.cursor-core.hovering {
+    width: 12px;
+    height: 12px;
+    background: var(--chalk);
+}
+
+.cursor-erosion.hovering {
+    width: 60px;
+    height: 60px;
+    opacity: 0.5;
+    border-color: var(--amber);
+}
+
+/* --- LOADER --- */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bedrock);
+}
+
+.loader-strata {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.loader-layer {
+    flex: 1;
+    width: 100%;
+    transform-origin: top;
+}
+
+.loader-layer-1 { background: color-mix(in srgb, var(--deep) 90%, var(--shale)); }
+.loader-layer-2 { background: color-mix(in srgb, var(--deep) 80%, var(--iron)); }
+.loader-layer-3 { background: color-mix(in srgb, var(--deep) 70%, var(--amber)); }
+.loader-layer-4 { background: color-mix(in srgb, var(--deep) 85%, var(--fossil)); }
+.loader-layer-5 { background: var(--bedrock); }
+
+.loader-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loader-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.5em;
+    color: var(--dust);
+    opacity: 0;
+}
+
+.loader-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--chalk);
+    opacity: 0;
+}
+
+.loader-bar {
+    width: 120px;
+    height: 1px;
+    background: rgba(196, 184, 154, 0.15);
+    margin-top: 0.5rem;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.loader-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--amber);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .stratum-content {
+        padding: 1.5rem;
+    }
+
+    .niobrara-data {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .channel-link {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .channel-label {
+        width: 100%;
+    }
+
+    .depth-indicator {
+        right: 1rem;
+        height: 80px;
+    }
+
+    .philosophy-fragment {
+        padding-left: 1rem;
+    }
+
+    .surface-coords {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .serif-display {
+        font-size: clamp(2rem, 12vw, 4rem);
+    }
+
+    .niobrara-title-wrap {
+        gap: 0.2rem;
+    }
+}
+
+/* --- UTILITY --- */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

@@ -17,6 +17,10 @@
 /_dashboard.html
   Cache-Control: public, s-maxage=3600, max-age=0, must-revalidate
 
+# ── Conversion page: never cache (contains live Stripe session) ──────────────
+/_convert.html
+  Cache-Control: no-store, no-cache
+
 # ── Admin: never cache ────────────────────────────────────────────────────────
 /coffee/admin/*
   Cache-Control: no-store, no-cache
