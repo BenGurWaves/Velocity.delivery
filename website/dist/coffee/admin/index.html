@@ -286,11 +286,40 @@ function renderDetail(l) {
   const mc = document.getElementById('detailContent');
   mc.style.display = 'block';
   
-  const p1=(l.full_data&&l.full_data.phase1)||{};
-  const p2=(l.full_data&&l.full_data.phase2)||{};
-  const p3=(l.full_data&&l.full_data.phase3)||{};
-  const p4=(l.full_data&&l.full_data.phase4)||{};
-  const p5=(l.full_data&&l.full_data.phase5)||{};
+  const fd = l.full_data || {};
+  const p1 = fd.phase1 || {};
+  const p2 = fd.phase2 || {};
+  const p3 = fd.phase3 || {};
+  const p4 = fd.phase4 || {};
+  const p5 = fd.phase5 || {};
+
+  // Comprehensive fallback extraction:
+  const fullName = l.client_name || p1.full_name || '—';
+  const personalEmail = l.personal_email || l.client_email || p1.personal_email || p1.email || '—';
+  const personalPhone = l.personal_phone || p1.personal_phone || p1.phone || '—';
+  const businessName = l.business_name || p1.company_name || p1.business_name || '—';
+  const businessType = l.business_type || p1.business_type || '—';
+  const businessEmail = l.business_email || p1.business_email || '—';
+  const businessPhone = l.business_phone || p1.business_phone || '—';
+  
+  const getAddress = () => {
+    const addr = l.business_address || p1.address || '';
+    if (typeof addr === 'object' && addr !== null) {
+      return [addr.street, addr.city, addr.state, addr.zip, addr.country].filter(Boolean).join(', ');
+    }
+    return addr || '—';
+  };
+  const businessAddress = getAddress();
+  
+  const companyStage = l.company_stage || p2.company_stage || '—';
+  const targetAudience = p2.target_customer || p2.target_audience || '—';
+  const competitorBenchmarks = l.competitor_benchmarks || p2.competitors || '—';
+  const sitePages = p2.site_pages || p2.pages_needed || '—';
+  const desiredVibe = p2.site_vibe || p2.desired_feeling || '—';
+  
+  const typographyPrefs = p3.fonts || p3.typography_prefs || '—';
+  const showcasePermission = l.showcase_permission || '—';
+  const copyReadiness = l.copy_readiness || p4.copy_readiness || '—';
   
   const name = l.client_name || p1.full_name || l.client_email || 'Unnamed Client';
   const base = location.origin;
@@ -391,23 +420,25 @@ function renderDetail(l) {
   <div class="grid-2">
     <div>
       <div class="sec-title">Business Identity</div>
-      ${dr('Full Name', p1.full_name)}
-      ${dr('Company Name', p1.company_name)}
-      ${dr('Business Type', p1.business_type)}
-      ${dr('Business Address', p1.address ? p1.address.street + ', ' + p1.address.city + ', ' + p1.address.country : '')}
-      ${dr('Business Email', p1.business_email)}
-      ${dr('Business Phone', p1.business_phone)}
+      ${dr('Full Name', fullName)}
+      ${dr('Personal Email', personalEmail)}
+      ${dr('Personal Phone', personalPhone)}
+      ${dr('Company Name', businessName)}
+      ${dr('Business Type', businessType)}
+      ${dr('Business Email', businessEmail)}
+      ${dr('Business Phone', businessPhone)}
+      ${dr('Business Address', businessAddress)}
       <br>
       <div class="sec-title">Target & Context</div>
-      ${dr('Company Stage', l.company_stage ? l.company_stage.replace('_',' ') : '—')}
+      ${dr('Company Stage', companyStage.replace(/_/g,' '))}
       ${dr('Business Context', p1.context)}
-      ${dr('Target Audience', p2.target_customer)}
-      ${dr('Competitors', l.competitor_benchmarks)}
-      ${dr('Pages Needed', p2.site_pages)}
+      ${dr('Target Audience', targetAudience)}
+      ${dr('Competitors', competitorBenchmarks)}
+      ${dr('Pages Needed', sitePages)}
     </div>
     <div>
       <div class="sec-title">Visual DNA & Aesthetic</div>
-      ${dr('Desired Feeling', p2.site_vibe)}
+      ${dr('Desired Feeling', desiredVibe)}
       <br>
       ${dr('Typography Scale (1-5)', l.visual_typography_scale)}
       ${dr('Layout Density (1-5)', l.visual_layout_density)}
@@ -416,7 +447,7 @@ function renderDetail(l) {
       ${dr('Background Color', p3.color_background)}
       ${dr('Secondary Color', p3.color_secondary)}
       ${dr('Accent Color', p3.color_accent)}
-      ${dr('Typography Prefs', p3.fonts)}
+      ${dr('Typography Prefs', typographyPrefs)}
       ${dr('Upgrade Perm.', l.upgrade_permission?'Granted':'Denied')}
     </div>
   </div>
@@ -424,7 +455,7 @@ function renderDetail(l) {
   <div class="grid-2">
     <div>
       <div class="sec-title">Logistics & Content</div>
-      ${dr('Copy Readiness', l.copy_readiness ? l.copy_readiness.replace('_',' ') : '—')}
+      ${dr('Copy Readiness', copyReadiness.replace(/_/g,' '))}
       ${dr('Mottos/Taglines', p4.mottos)}
       ${dr('Copyright/Legal', p4.copyright)}
       ${dr('Asset Links', p4.assets_links)}
@@ -432,7 +463,7 @@ function renderDetail(l) {
       ${dr('Existing URL', p4.existing_url)}
       ${dr('Domain Choice', l.domain_choice)}
       ${dr('Domain Name', l.domain_name)}
-      ${dr('Showcase', l.showcase_permission)}
+      ${dr('Showcase', showcasePermission)}
     </div>
     <div>
       <div class="sec-title">Inspiration</div>

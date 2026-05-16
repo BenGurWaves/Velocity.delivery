@@ -482,17 +482,27 @@ function renderDash(lead,justPaid=false){
 
   // Feedback & Collaboration Section
   const fbEl = document.getElementById('secFeedback');
-  if (lead.submitted_at && ['pending', 'scope_sent', 'accepted', 'paid', 'in_progress', 'completed'].includes(lead.status)) {
+  if (lead.submitted_at && lead.site_link) {
     fbEl.style.display = 'block';
     const fd = lead.full_data || {};
     const revs = fd.revisions || [];
+    
+    const stagingLink = ensureUrl(lead.site_link);
+    const stagingBlock = `
+      <div style="border:1px solid var(--brass);background:rgba(196,156,123,.03);padding:1.75rem;margin-bottom:1.5rem">
+        <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:.5rem">Your Staging Site is Ready</span>
+        <p style="font-size:.8rem;line-height:1.7;color:var(--sand);margin-bottom:1.25rem">Our studio has compiled your initial design staging build. Please click below to review your live site in a new tab, then log any revisions or feedback requests below.</p>
+        <a href="${esc(stagingLink)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;font-size:.72rem;letter-spacing:.08em;color:var(--bg);background:var(--sand);padding:.75rem 2rem;text-decoration:none;transition:background .3s">Open Staging Site &rarr;</a>
+      </div>
+    `;
+
     const commentBlock = lead.admin_comment ? `
-      <div style="border:1px solid var(--brass);background:rgba(196,156,123,.03);padding:1.5rem;margin-bottom:1.5rem">
-        <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:.5rem">Studio Message</span>
+      <div style="border:1px solid rgba(222,200,181,.12);padding:1.5rem;background:rgba(255,255,255,.01);margin-bottom:1.5rem">
+        <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.5rem">Studio Message</span>
         <p style="font-size:.8rem;line-height:1.7;color:var(--sand)">${esc(lead.admin_comment.text)}</p>
         ${lead.admin_comment.link ? `
           <div style="margin-top:1rem">
-            <a href="${esc(lead.admin_comment.link)}" target="_blank" class="edit-btn" style="display:inline-block;padding:.4rem 1.25rem;font-size:.65rem;border-color:var(--brass);color:var(--brass);background:transparent">Open Design Staging Preview &rarr;</a>
+            <a href="${esc(lead.admin_comment.link)}" target="_blank" class="edit-btn" style="display:inline-block;padding:.4rem 1.25rem;font-size:.65rem;border-color:var(--brass);color:var(--brass);background:transparent">Watch Staging Walkthrough &rarr;</a>
           </div>
         ` : ''}
       </div>
@@ -513,6 +523,7 @@ function renderDash(lead,justPaid=false){
     fbEl.innerHTML = `
       <span class="sec-label">Collaboration & Revisions</span>
       <div style="margin-top:.75rem">
+        ${stagingBlock}
         ${commentBlock}
         
         <div style="border:1px solid var(--border);padding:1.5rem;background:var(--bg2)">
