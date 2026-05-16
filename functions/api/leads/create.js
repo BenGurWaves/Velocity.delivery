@@ -30,10 +30,21 @@ export async function onRequestPost(context) {
   const token = `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 
   try {
-    const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
-    const lead = Array.isArray(rows) && rows.length ? rows[0] : (rows || {});
-    const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
-    return secureJson({ id: lead.id || null, token: token, onboard_url: `${base}/onboard/${token}` });
+    try {
+      const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
+      const lead = Array.isArray(rows) && rows.length ? rows[0] : (rows || {});
+      const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
+      return secureJson({ id: lead.id || null, token: token, onboard_url: `${base}/onboard/${token}`, status: 'onboarding_sent' });
+    } catch (dbErr) {
+      if (String(dbErr.message || dbErr).includes('status_check')) {
+        console.warn('onboarding_sent status check constraint failed. Falling back to pending.');
+        const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'pending' });
+        const lead = Array.isArray(rows) && rows.length ? rows[0] : (rows || {});
+        const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
+        return secureJson({ id: lead.id || null, token: token, onboard_url: `${base}/onboard/${token}`, status: 'pending', fallback_used: true });
+      }
+      throw dbErr;
+    }
   } catch (err) {
     console.error('Create lead error:', err);
     return secureErr('Failed to create lead: ' + (err.message || String(err)), 400);
