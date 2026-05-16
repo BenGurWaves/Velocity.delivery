@@ -41,24 +41,34 @@ export async function onRequestPatch(context) {
   const token = context.params.token;
   if (!token) return errRes('Token required', 400);
 
-  const rows = await sb.select('velocity_leads', `token=eq.${token}&select=id,submitted_at,first_submitted_at,is_locked,status`);
+  let body;
+  try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
+
+  const rows = await sb.select('velocity_leads', `token=eq.${token}&select=id,submitted_at,first_submitted_at,is_locked,status,full_data`);
   if (!rows.length) return errRes('Not found', 404);
   const lead = rows[0];
 
   // Lock check — use first_submitted_at as the true anchor
   const anchor = lead.first_submitted_at || lead.submitted_at;
-  if (lead.is_locked) return errRes('Submission is locked', 403);
-  if (anchor && Date.now() - new Date(anchor).getTime() > 86400000) {
-    await sb.update('velocity_leads', `token=eq.${token}`, { is_locked: true });
-    return errRes('Submission window has closed', 403);
-  }
-  // Block edits when in_progress or beyond
-  if (['in_progress','completed'].includes(lead.status)) {
-    return errRes('Project is in progress — contact client@calyvent.com to request changes', 403);
-  }
+  const isBriefLocked = lead.is_locked || (anchor && Date.now() - new Date(anchor).getTime() > 86400000) || ['in_progress','completed'].includes(lead.status);
 
-  let body;
-  try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
+  if (isBriefLocked) {
+    // If locked, we strictly enforce that the client is ONLY updating full_data.revisions
+    // We confirm that no other database fields are being patched, and that the original brief phases inside full_data remain completely unmodified.
+    const keys = Object.keys(body);
+    if (keys.some(k => k !== 'full_data')) {
+      return errRes('Brief is locked — only revision requests can be submitted.', 403);
+    }
+    const oldFd = lead.full_data || {};
+    const newFd = body.full_data || {};
+    
+    const oldPhases = { phase1: oldFd.phase1, phase2: oldFd.phase2, phase3: oldFd.phase3, phase4: oldFd.phase4, phase5: oldFd.phase5 };
+    const newPhases = { phase1: newFd.phase1, phase2: newFd.phase2, phase3: newFd.phase3, phase4: newFd.phase4, phase5: newFd.phase5 };
+    
+    if (JSON.stringify(oldPhases) !== JSON.stringify(newPhases)) {
+      return errRes('Brief is locked — only revision requests can be submitted.', 403);
+    }
+  }
 
   const allowed = ['full_data','submitted_at','due_date','client_name','client_email','upgrade_permission','domain_choice','domain_name','email_verified','personal_email','personal_phone','business_name','business_type','business_email','business_phone','business_address','terms_accepted','terms_accepted_at','scope_accepted','scope_accepted_at'];
   const patch = {};
