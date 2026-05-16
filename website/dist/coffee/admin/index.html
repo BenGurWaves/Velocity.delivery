@@ -224,13 +224,20 @@ document.getElementById('btnNew').onclick=()=>{
 document.getElementById('mSubmit').onclick=async()=>{
   const email=document.getElementById('mEmail').value.trim();
   const btn=document.getElementById('mSubmit');btn.disabled=true;btn.textContent='Generating...';
-  const r=await fetch('/api/leads/create',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({client_email:email})});
-  const d=await r.json();btn.disabled=false;btn.textContent='Generate Onboard Link';
-  if(d.onboard_url){
-    document.getElementById('mUrl').textContent=d.onboard_url;
-    document.getElementById('mResult').style.display='block';
-    document.getElementById('mCopy').onclick=()=>{navigator.clipboard.writeText(d.onboard_url);toast('Copied!');};
-    reload();
+  try {
+    const r=await fetch('/api/leads/create',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({client_email:email})});
+    const d=await r.json();btn.disabled=false;btn.textContent='Generate Onboard Link';
+    if(d.onboard_url){
+      document.getElementById('mUrl').textContent=d.onboard_url;
+      document.getElementById('mResult').style.display='block';
+      document.getElementById('mCopy').onclick=()=>{navigator.clipboard.writeText(d.onboard_url);toast('Copied!');};
+      reload();
+    } else {
+      toast(d.error || 'Failed to generate onboard link.');
+    }
+  } catch (err) {
+    btn.disabled=false;btn.textContent='Generate Onboard Link';
+    toast('Network error. Failed to create client.');
   }
 };
 
@@ -472,10 +479,16 @@ function renderDetail(l) {
     </div>
     <div>
       <div class="sec-title">Inspiration</div>
-      ${p2.inspiration && p2.inspiration.length ? p2.inspiration.map(i=>`<div class="d-box"><strong>URL:</strong> ${esc(i.url)}<br><strong>Notes:</strong> ${esc(i.notes)}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
+      ${(() => {
+        const list = Array.isArray(p2.inspiration) ? p2.inspiration : (p2.inspiration && typeof p2.inspiration === 'object' ? [p2.inspiration] : (typeof p2.inspiration === 'string' && p2.inspiration.trim() ? [{ url: p2.inspiration, notes: '' }] : []));
+        return list.length ? list.map(i => `<div class="d-box"><strong>URL:</strong> ${esc(i.url || i)}<br><strong>Notes:</strong> ${esc(i.notes || '')}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>';
+      })()}
       <br>
       <div class="sec-title">Anti-Inspiration</div>
-      ${p2.anti_inspiration && p2.anti_inspiration.length ? p2.anti_inspiration.map(i=>`<div class="d-box"><strong>URL:</strong> ${esc(i.url)}<br><strong>Notes:</strong> ${esc(i.notes)}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
+      ${(() => {
+        const list = Array.isArray(p2.anti_inspiration) ? p2.anti_inspiration : (p2.anti_inspiration && typeof p2.anti_inspiration === 'object' ? [p2.anti_inspiration] : (typeof p2.anti_inspiration === 'string' && p2.anti_inspiration.trim() ? [{ url: p2.anti_inspiration, notes: '' }] : []));
+        return list.length ? list.map(i => `<div class="d-box"><strong>URL:</strong> ${esc(i.url || i)}<br><strong>Notes:</strong> ${esc(i.notes || '')}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>';
+      })()}
     </div>
   </div>
   ` : '<div class="empty-state" style="justify-content:flex-start">Brief has not been submitted yet.</div>'}

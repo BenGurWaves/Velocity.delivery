@@ -31,9 +31,9 @@ export async function onRequestPost(context) {
 
   try {
     const rows = await sb.insert('velocity_leads', { client_email, client_name, token, status: 'onboarding_sent' });
-    const lead = Array.isArray(rows) ? rows[0] : rows;
+    const lead = Array.isArray(rows) && rows.length ? rows[0] : (rows || {});
     const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
-    return secureJson({ id: lead.id, token: lead.token, onboard_url: `${base}/onboard/${lead.token}` });
+    return secureJson({ id: lead.id || null, token: token, onboard_url: `${base}/onboard/${token}` });
   } catch (err) {
     console.error('Create lead error:', err);
     return secureErr('Failed to create lead: ' + (err.message || String(err)), 400);
