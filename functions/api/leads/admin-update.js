@@ -3,7 +3,7 @@
  * Handles: quote_amount, status, admin_comment, site_link
  * Also triggers Resend email on status change.
  */
-import { getSupabase } from '../../_lib/supabase.js';
+import { getSupabase, errRes, jsonRes } from '../../_lib/supabase.js';
 import { checkAdminAuth, rateLimit, validateLength, safeUrl, secureJson, secureErr, secureOptions } from '../../_lib/security.js';
 
 const VALID_STATUSES = ['outreach','responded','onboarding_sent','pending','scope_sent','accepted','paid','in_progress','completed','declined','archived'];
@@ -139,7 +139,7 @@ export async function onRequestPatch(context) {
   try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
 
   const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at, kickoff_date, delivery_target_date } = body;
-  if (!token) return errRes('token required');
+  if (!token) return secureErr('token required');
 
   const patch = {};
   let prevStatus = null;
@@ -156,7 +156,7 @@ export async function onRequestPatch(context) {
     patch.quote_amount = amt;
   }
   if (status !== undefined) {
-    if (!VALID_STATUSES.includes(status)) return errRes('Invalid status');
+    if (!VALID_STATUSES.includes(status)) return secureErr('Invalid status');
     patch.status = status;
     // Lock brief when in_progress or beyond
     if (['in_progress','completed','declined'].includes(status)) {
@@ -187,7 +187,7 @@ export async function onRequestPatch(context) {
   if (kickoff_date !== undefined) { patch.kickoff_date = kickoff_date || null; }
   if (delivery_target_date !== undefined) { patch.delivery_target_date = delivery_target_date || null; }
 
-  if (!Object.keys(patch).length) return errRes('Nothing to update');
+  if (!Object.keys(patch).length) return secureErr('Nothing to update');
 
   const updated = await sb.update('velocity_leads', `token=eq.${token}`, patch);
 

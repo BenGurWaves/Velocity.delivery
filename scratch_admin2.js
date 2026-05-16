@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+const content = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -243,7 +245,7 @@ async function reload(){
 
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function dr(k,v){return v?`<div class="d-row"><span class="d-key">${k}</span><span class="d-val">${esc(String(v))}</span></div>`:'';}
+function dr(k,v){return v?\`<div class="d-row"><span class="d-key">\${k}</span><span class="d-val">\${esc(String(v))}</span></div>\`:'';}
 
 async function aupd(token, patch){
   const r=await fetch('/api/leads/admin-update',{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Secret':SEC},body:JSON.stringify({token,...patch})});
@@ -264,13 +266,13 @@ function renderSidebar() {
   list.innerHTML = fl.map(l => {
     const name = l.client_name || (l.full_data&&l.full_data.phase1&&l.full_data.phase1.full_name) || l.client_email || 'Unnamed';
     const st = SL[l.status] || l.status;
-    return `<div class="lead-item ${l.id===ACTIVE_ID?'active':''}" onclick="selectLead('${l.id}')">
-      <div class="lead-name">${esc(name)}</div>
+    return \`<div class="lead-item \${l.id===ACTIVE_ID?'active':''}" onclick="selectLead('\${l.id}')">
+      <div class="lead-name">\${esc(name)}</div>
       <div class="lead-meta">
-        <span style="color:var(--brass)">${st}</span>
-        <span>${new Date(l.created_at).toLocaleDateString()}</span>
+        <span style="color:var(--brass)">\${st}</span>
+        <span>\${new Date(l.created_at).toLocaleDateString()}</span>
       </div>
-    </div>`;
+    </div>\`;
   }).join('');
 }
 
@@ -295,19 +297,18 @@ function renderDetail(l) {
   const name = l.client_name || p1.full_name || l.client_email || 'Unnamed Client';
   const base = location.origin;
   
-  let html = `<div class="detail-header">
+  let html = \`<div class="detail-header">
     <div>
-      <h2 class="dh-title">${esc(name)}</h2>
+      <h2 class="dh-title">\${esc(name)}</h2>
       <div class="dh-meta">
-        <span>${esc(l.client_email)}</span>
-        <span class="badge ${SB[l.status]}">${SL[l.status]||l.status}</span>
-        ${l.is_paid?'<span class="badge ba">Paid</span>':''}
+        <span>\${esc(l.client_email)}</span>
+        <span class="badge \${SB[l.status]}">\${SL[l.status]||l.status}</span>
+        \${l.is_paid?'<span class="badge ba">Paid</span>':''}
       </div>
     </div>
     <div class="dh-actions">
       <button class="btn btn-secondary" id="btnDash">Copy Dashboard Link</button>
       <button class="btn btn-secondary" id="btnOnboard">Copy Onboard Link</button>
-      <a href="/brief/${l.token}" target="_blank" class="btn btn-primary" id="btnViewBrief">View Full Brief</a>
     </div>
   </div>
 
@@ -319,43 +320,25 @@ function renderDetail(l) {
       <div class="cp-group">
         <span class="cp-label">Project Status</span>
         <select id="ctrlStatus" class="cp-select">
-          <option value="onboarding_sent" ${l.status==='onboarding_sent'?'selected':''}>Onboard Sent</option>
-          <option value="pending" ${l.status==='pending'?'selected':''}>Onboard Completed</option>
-          <option value="scope_sent" ${l.status==='scope_sent'?'selected':''}>Scope Sent</option>
-          <option value="accepted" ${l.status==='accepted'?'selected':''}>Project Accepted</option>
-          <option value="paid" ${l.status==='paid'?'selected':''}>Payment Confirmed</option>
-          <option value="in_progress" ${l.status==='in_progress'?'selected':''}>Design & Build</option>
-          <option value="completed" ${l.status==='completed'?'selected':''}>Delivered</option>
-          <option value="declined" ${l.status==='declined'?'selected':''}>Declined</option>
+          <option value="onboarding_sent" \${l.status==='onboarding_sent'?'selected':''}>Onboard Sent</option>
+          <option value="pending" \${l.status==='pending'?'selected':''}>Onboard Completed</option>
+          <option value="scope_sent" \${l.status==='scope_sent'?'selected':''}>Scope Sent</option>
+          <option value="accepted" \${l.status==='accepted'?'selected':''}>Project Accepted</option>
+          <option value="paid" \${l.status==='paid'?'selected':''}>Payment Confirmed</option>
+          <option value="in_progress" \${l.status==='in_progress'?'selected':''}>Design & Build</option>
+          <option value="completed" \${l.status==='completed'?'selected':''}>Delivered</option>
+          <option value="declined" \${l.status==='declined'?'selected':''}>Declined</option>
         </select>
       </div>
       <div class="cp-group">
         <span class="cp-label">Quote Amount (USD)</span>
-        <input type="number" id="ctrlQuote" class="cp-input" value="${l.quote_amount?(l.quote_amount/100).toFixed(2):''}" placeholder="e.g. 5000">
+        <input type="number" id="ctrlQuote" class="cp-input" value="\${l.quote_amount?(l.quote_amount/100).toFixed(2):''}" placeholder="e.g. 5000">
       </div>
       <div class="cp-group">
         <span class="cp-label">Delivery Target Date</span>
-        <input type="date" id="ctrlDeliv" class="cp-input" value="${l.delivery_target_date?l.delivery_target_date.split('T')[0]:''}">
+        <input type="date" id="ctrlDeliv" class="cp-input" value="\${l.delivery_target_date?l.delivery_target_date.split('T')[0]:''}">
       </div>
-      <div class="cp-group">
-        <span class="cp-label">Completed / Staging Site Link</span>
-        <input type="url" id="ctrlSiteLink" class="cp-input" value="${l.site_link||''}" placeholder="https://staging.client.com">
-      </div>
-    </div>
-
-    <div style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem">
-      <div>
-        <span class="cp-label">Admin Staging Comment / Feedback Notes</span>
-        <textarea id="ctrlAdminComment" class="cp-textarea" style="min-height:90px;margin-top:.5rem" placeholder="Write feedback, staging updates, or design notes to display on their dashboard...">${l.admin_comment ? esc(l.admin_comment.text) : ''}</textarea>
-      </div>
-      <div>
-        <span class="cp-label">Staging Preview / Loom / Figma Link</span>
-        <input type="url" id="ctrlAdminCommentLink" class="cp-input" style="margin-top:.5rem" value="${(l.admin_comment && l.admin_comment.link) || ''}" placeholder="Optional: Link to Loom, staging site, or Figma...">
-        
-        <div style="margin-top:1.5rem;text-align:right">
-          <button class="btn btn-primary" id="btnSaveState" style="width:100%;padding:.75rem">Save Pipeline State & Feedback</button>
-        </div>
-      </div>
+      <button class="btn btn-primary" id="btnSaveState" style="align-self:flex-end">Save State</button>
     </div>
 
     <div style="border-top:1px solid var(--border);padding-top:2rem;margin-top:1rem">
@@ -363,91 +346,75 @@ function renderDetail(l) {
         <span class="cp-label" style="margin:0">Master Services Agreement & Scope of Work</span>
         <button class="btn btn-secondary" id="btnAutoScope" style="padding:.3rem .8rem;font-size:.55rem">Run Tokenized Assembly Engine</button>
       </div>
-      <textarea id="ctrlScope" class="cp-textarea" placeholder="Detailed scope required before payment...">${esc(l.scope_text||'')}</textarea>
+      <textarea id="ctrlScope" class="cp-textarea" placeholder="Detailed scope required before payment...">\${esc(l.scope_text||'')}</textarea>
       <div style="display:flex;justify-content:flex-end;margin-top:1rem">
-        <button class="btn btn-primary" id="btnSendScope">${l.scope_sent_at?'Resend Scope':'Send Scope'}</button>
+        <button class="btn btn-primary" id="btnSendScope">\${l.scope_sent_at?'Resend Scope':'Send Scope'}</button>
       </div>
     </div>
   </div>
 
-  <!-- Client Revisions Section -->
-  <div class="control-panel" style="margin-top:2rem">
-    <div class="sec-title" style="border:none;margin-bottom:1rem">Client Revision Requests</div>
-    <div id="revisionList" style="display:flex;flex-direction:column;gap:1rem">
-      ${fd.revisions && fd.revisions.length ? fd.revisions.map(r => `
-        <div style="background:rgba(255,255,255,.01);border:1px solid var(--border);padding:1.25rem">
-          <p style="font-size:.8rem;line-height:1.7;color:var(--sand)">${esc(r.text)}</p>
-          <div style="margin-top:.75rem;font-size:.62rem;color:var(--dim);display:flex;justify-content:space-between">
-            <span>Submitted by client</span>
-            <span>${new Date(r.created_at).toLocaleString()}</span>
-          </div>
-        </div>
-      `).join('') : '<div style="font-size:.7rem;color:var(--dim)">No revision requests submitted by client yet.</div>'}
-    </div>
-  </div>
-
   <!-- Brief Data -->
-  ${l.submitted_at ? `
+  \${l.submitted_at ? \`
   <div class="grid-2">
     <div>
       <div class="sec-title">Business Identity</div>
-      ${dr('Full Name', p1.full_name)}
-      ${dr('Company Name', p1.company_name)}
-      ${dr('Business Type', p1.business_type)}
-      ${dr('Business Address', p1.address ? p1.address.street + ', ' + p1.address.city + ', ' + p1.address.country : '')}
-      ${dr('Business Email', p1.business_email)}
-      ${dr('Business Phone', p1.business_phone)}
+      \${dr('Full Name', p1.full_name)}
+      \${dr('Company Name', p1.company_name)}
+      \${dr('Business Type', p1.business_type)}
+      \${dr('Business Address', p1.address ? p1.address.street + ', ' + p1.address.city + ', ' + p1.address.country : '')}
+      \${dr('Business Email', p1.business_email)}
+      \${dr('Business Phone', p1.business_phone)}
       <br>
       <div class="sec-title">Target & Context</div>
-      ${dr('Company Stage', l.company_stage ? l.company_stage.replace('_',' ') : '—')}
-      ${dr('Business Context', p1.context)}
-      ${dr('Target Audience', p2.target_customer)}
-      ${dr('Competitors', l.competitor_benchmarks)}
-      ${dr('Pages Needed', p2.site_pages)}
+      \${dr('Company Stage', l.company_stage ? l.company_stage.replace('_',' ') : '—')}
+      \${dr('Business Context', p1.context)}
+      \${dr('Target Audience', p2.target_customer)}
+      \${dr('Competitors', l.competitor_benchmarks)}
+      \${dr('Pages Needed', p2.site_pages)}
     </div>
     <div>
       <div class="sec-title">Visual DNA & Aesthetic</div>
-      ${dr('Desired Feeling', p2.site_vibe)}
+      \${dr('Desired Feeling', p2.site_vibe)}
       <br>
-      ${dr('Typography Scale (1-5)', l.visual_typography_scale)}
-      ${dr('Layout Density (1-5)', l.visual_layout_density)}
-      ${dr('Chroma Balance (1-5)', l.visual_chromatographic)}
+      \${dr('Typography Scale (1-5)', l.visual_typography_scale)}
+      \${dr('Layout Density (1-5)', l.visual_layout_density)}
+      \${dr('Chroma Balance (1-5)', l.visual_chromatographic)}
       <br>
-      ${dr('Background Color', p3.color_background)}
-      ${dr('Secondary Color', p3.color_secondary)}
-      ${dr('Accent Color', p3.color_accent)}
-      ${dr('Typography Prefs', p3.fonts)}
-      ${dr('Upgrade Perm.', l.upgrade_permission?'Granted':'Denied')}
+      \${dr('Background Color', p3.color_background)}
+      \${dr('Secondary Color', p3.color_secondary)}
+      \${dr('Accent Color', p3.color_accent)}
+      \${dr('Typography Prefs', p3.fonts)}
+      \${dr('Upgrade Perm.', l.upgrade_permission?'Granted':'Denied')}
     </div>
   </div>
   
   <div class="grid-2">
     <div>
       <div class="sec-title">Logistics & Content</div>
-      ${dr('Copy Readiness', l.copy_readiness ? l.copy_readiness.replace('_',' ') : '—')}
-      ${dr('Mottos/Taglines', p4.mottos)}
-      ${dr('Copyright/Legal', p4.copyright)}
-      ${dr('Asset Links', p4.assets_links)}
-      ${dr('Starting Point', p4.starting_point)}
-      ${dr('Existing URL', p4.existing_url)}
-      ${dr('Domain Choice', l.domain_choice)}
-      ${dr('Domain Name', l.domain_name)}
-      ${dr('Showcase', l.showcase_permission)}
+      \${dr('Copy Readiness', l.copy_readiness ? l.copy_readiness.replace('_',' ') : '—')}
+      \${dr('Mottos/Taglines', p4.mottos)}
+      \${dr('Copyright/Legal', p4.copyright)}
+      \${dr('Asset Links', p4.assets_links)}
+      \${dr('Starting Point', p4.starting_point)}
+      \${dr('Existing URL', p4.existing_url)}
+      \${dr('Domain Choice', l.domain_choice)}
+      \${dr('Domain Name', l.domain_name)}
+      \${dr('Showcase', l.showcase_permission)}
     </div>
     <div>
       <div class="sec-title">Inspiration</div>
-      ${p2.inspiration && p2.inspiration.length ? p2.inspiration.map(i=>`<div class="d-box"><strong>URL:</strong> ${esc(i.url)}<br><strong>Notes:</strong> ${esc(i.notes)}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
+      \${p2.inspiration && p2.inspiration.length ? p2.inspiration.map(i=>\`<div class="d-box"><strong>URL:</strong> \${esc(i.url)}<br><strong>Notes:</strong> \${esc(i.notes)}</div>\`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
       <br>
       <div class="sec-title">Anti-Inspiration</div>
-      ${p2.anti_inspiration && p2.anti_inspiration.length ? p2.anti_inspiration.map(i=>`<div class="d-box"><strong>URL:</strong> ${esc(i.url)}<br><strong>Notes:</strong> ${esc(i.notes)}</div>`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
+      \${p2.anti_inspiration && p2.anti_inspiration.length ? p2.anti_inspiration.map(i=>\`<div class="d-box"><strong>URL:</strong> \${esc(i.url)}<br><strong>Notes:</strong> \${esc(i.notes)}</div>\`).join('') : '<div class="d-row"><span class="d-val">None provided</span></div>'}
     </div>
   </div>
-  ` : '<div class="empty-state" style="justify-content:flex-start">Brief has not been submitted yet.</div>'}
+  \` : '<div class="empty-state" style="justify-content:flex-start">Brief has not been submitted yet.</div>'}
   
   <div style="margin-top:4rem;border-top:1px solid rgba(192,128,128,.2);padding-top:2rem;text-align:right">
     <button class="btn btn-red" id="btnDelete">Delete Client Record</button>
   </div>
-  `;
+  \`;
 
   mc.innerHTML = html;
   
@@ -460,21 +427,13 @@ function renderDetail(l) {
     const stat=document.getElementById('ctrlStatus').value;
     const q=document.getElementById('ctrlQuote').value;
     const d=document.getElementById('ctrlDeliv').value;
-    const sl=document.getElementById('ctrlSiteLink').value.trim();
-    const ac=document.getElementById('ctrlAdminComment').value.trim();
-    const acl=document.getElementById('ctrlAdminCommentLink').value.trim();
     
-    let patch = { 
-      status: stat,
-      site_link: sl || null,
-      admin_comment: ac || null,
-      admin_comment_link: acl || null
-    };
+    let patch = { status: stat };
     if(q) patch.quote_amount = Math.round(parseFloat(q)*100);
     patch.delivery_target_date = d ? d+'T00:00:00Z' : null;
     
-    if(await aupd(l.token, patch)){ toast('State & Feedback saved.'); reload(); }
-    else { toast('Error saving state.'); btn.textContent='Save Pipeline State & Feedback'; btn.disabled=false; }
+    if(await aupd(l.token, patch)){ toast('State saved successfully.'); reload(); }
+    else { toast('Error saving state.'); btn.textContent='Save State'; btn.disabled=false; }
   };
   
   document.getElementById('btnAutoScope').onclick=()=>{
@@ -488,42 +447,43 @@ function renderDetail(l) {
     
     let messaging_clause = "";
     if (l.copy_readiness === 'need_help' || l.copy_readiness === 'drafts') {
-      messaging_clause = "Component 02: Narrative Architecture & Structural Copywriting.\nVelocity will actively author, refine, and engineer all core brand headers, interface micro-copy, value propositions, and operational text layouts to optimize conversion pathways.";
+      messaging_clause = "Component 02: Narrative Architecture & Structural Copywriting.\\nVelocity will actively author, refine, and engineer all core brand headers, interface micro-copy, value propositions, and operational text layouts to optimize conversion pathways.";
     } else {
-      messaging_clause = "Component 02: Typography Typesetting & Integration.\nThe Client will deliver finalized, production-ready copy strings via the active asset pipeline. Velocity will structurally typeset and align this content within the architectural grid framework.";
+      messaging_clause = "Component 02: Typography Typesetting & Integration.\\nThe Client will deliver finalized, production-ready copy strings via the active asset pipeline. Velocity will structurally typeset and align this content within the architectural grid framework.";
     }
 
-    const target_audience = p2.target_customer ? p2.target_customer.replace(/\n/g, ' ') : 'Target Demographic';
-    const amount = document.getElementById('ctrlQuote').value ? '$' + parseFloat(document.getElementById('ctrlQuote').value).toLocaleString('en-US',{minimumFractionDigits:2}) : 'AMOUNT PENDING';
+    const target_audience = p2.target_customer ? p2.target_customer.replace(/\\n/g, ' ') : '[Target Demographic]';
+    const amount = document.getElementById('ctrlQuote').value ? '$' + parseFloat(document.getElementById('ctrlQuote').value).toLocaleString('en-US',{minimumFractionDigits:2}) : '[AMOUNT PENDING]';
     const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     
-    const draft = `PROJECT BRIEF & DIGITAL ARCHITECTURE CHARTER
-PREPARED FOR: [TOKEN:${l.client_name || p1.company_name || p1.full_name || 'TBD'}]
-PRINCIPAL STAKEHOLDER: [TOKEN:${p1.full_name || 'TBD'}]
-DATE OF INITIATION: [TOKEN:${date}]
+    const draft = \`PROJECT BRIEF & DIGITAL ARCHITECTURE CHARTER
+PREPARED FOR: \${l.client_name || p1.company_name || p1.full_name || 'TBD'}
+PRINCIPAL STAKEHOLDER: \${p1.full_name || 'TBD'}
+DATE OF INITIATION: \${date}
 
-1. STRATEGIC POSITIONING & BRAND FOCUS
-The digital infrastructure engineered under this sprint cycle is strategically calibrated to capture, engage, and convert your primary audience:
-**${target_audience}**
+1. STRATEGIC POSITIONING & TARGET FOCUS
+The infrastructure engineered under this sprint cycle is explicitly built to capture, engage, and convert the following target segment: \${target_audience}. The interface layout will be optimized to visually command authority over specified market adversaries, ensuring your digital presence out-scales legacy competitors.
 
-The interface layout will be optimized to visually command authority over specified market adversaries, ensuring your digital presence out-scales legacy competitors.
+2. CHROMATOGRAPHIC & TYPOGRAPHIC DNA
+The platform will be programmatically restricted to your validated corporate design system, locking down visual cohesion across all micro-interactions:
+Primary Structural Canvas: \${p3.color_background || 'Velocity Default Noir'}
+High-Impact Interface Accents: \${p3.color_accent || 'Velocity Primary Accent'}
 
-2. VISUAL PHILOSOPHY & DESIGN SYSTEM WAIVER
-To maintain an elite, high-performance execution, Velocity operates with absolute creative discretion. The platform will be structured around your brand essence:
-- **Design Philosophy**: ${density_clause}
-- **Directional Waiver**: If the Velocity creative team identifies an opportunity to elevate your brand layout, they hold full authorization to pivot design details. Velocity's high-performance layout engines prioritize conversion density over static constraints to guarantee a world-class outcome.
+\${density_clause}
+
+Velocity retains full creative discretion under the signed waiver to elevate, modify, or pivot these color and spacing constraints to guarantee an elite, high-performance execution.
 
 3. STATEMENT OF WORKS (SOW) DELIVERABLES
 Component 01: Core Systems Engineering.
 Full responsive platform layout optimization for high-end desktop displays and mobile hardware frameworks. Includes custom dark-mode balancing, semantic SEO tagging, deployment to global content delivery networks (CDNs), and rate-limiting infrastructure setup.
 
-${messaging_clause}
+\${messaging_clause}
 
 Component 03: Asset Storage Infrastructure.
 Assembly of an optimized asset delivery framework linking your vector assets, raw media files, and high-resolution corporate logos directly into the live development pipeline.
 
 4. TRANSACTIONAL TERMS & COMPLIANCE
-Execution of this sprint requires a 100% upfront capital allocation of [TOKEN:${amount}]. Payment activates a hard 7-to-9 business day production countdown. This project includes a maximum of three (3) consolidated revision rounds via single-text or voice-to-text transcript submission. By processing the gateway transaction below, you execute this entire Statement of Work and explicitly bind your organization to the Master Services Agreement.`;
+Execution of this sprint requires a 100% upfront capital allocation of \${amount}. Payment activates a hard 7-to-9 business day production countdown. This project includes a maximum of three (3) consolidated revision rounds via single-text or voice-to-text transcript submission. By processing the gateway transaction below, you execute this entire Statement of Work and explicitly bind your organization to the Master Services Agreement.\`;
 
     document.getElementById('ctrlScope').value = draft;
     toast('Tokenized scope assembled.');
@@ -549,4 +509,6 @@ Execution of this sprint requires a 100% upfront capital allocation of [TOKEN:${
 }
 </script>
 </body>
-</html>
+</html>`;
+fs.writeFileSync('/Users/bengur/CascadeProjects/velocity/website/coffee/admin/index.html', content);
+console.log('Done rewritten again');

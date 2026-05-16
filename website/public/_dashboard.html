@@ -252,6 +252,9 @@ button{font-family:inherit;background:none;border:none;cursor:pointer}
       <div class="timeline" id="timeline"></div>
     </div>
 
+    <!-- Collaboration & Feedback -->
+    <div class="section" id="secFeedback" style="display:none"></div>
+
     <!-- Brief summary -->
     <div class="section" id="secBrief"></div>
 
@@ -476,8 +479,105 @@ function renderDash(lead,justPaid=false){
       ${anti?`<div style="margin-top:1.5rem"><div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Anti-Inspiration</div>${anti}</div>`:''}
       ${p5.additional_notes?`<div style="margin-top:1.5rem"><div style="font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.6rem">Additional Notes</div><div class="brief-long">${esc(p5.additional_notes)}</div></div>`:''}`;
   } else { briefEl.style.display='none'; }
+
+  // Feedback & Collaboration Section
+  const fbEl = document.getElementById('secFeedback');
+  if (lead.submitted_at && ['pending', 'scope_sent', 'accepted', 'paid', 'in_progress', 'completed'].includes(lead.status)) {
+    fbEl.style.display = 'block';
+    const fd = lead.full_data || {};
+    const revs = fd.revisions || [];
+    const commentBlock = lead.admin_comment ? `
+      <div style="border:1px solid var(--brass);background:rgba(196,156,123,.03);padding:1.5rem;margin-bottom:1.5rem">
+        <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:.5rem">Studio Message</span>
+        <p style="font-size:.8rem;line-height:1.7;color:var(--sand)">${esc(lead.admin_comment.text)}</p>
+        ${lead.admin_comment.link ? `
+          <div style="margin-top:1rem">
+            <a href="${esc(lead.admin_comment.link)}" target="_blank" class="edit-btn" style="display:inline-block;padding:.4rem 1.25rem;font-size:.65rem;border-color:var(--brass);color:var(--brass);background:transparent">Open Design Staging Preview &rarr;</a>
+          </div>
+        ` : ''}
+      </div>
+    ` : '';
+
+    const revisionsListHtml = revs.length ? `
+      <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem">
+        <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)">Revision History</span>
+        ${revs.map(r => `
+          <div style="background:rgba(255,255,255,.01);border:1px solid var(--border);padding:1rem">
+            <p style="font-size:.78rem;line-height:1.65;color:var(--sand)">${esc(r.text)}</p>
+            <div style="margin-top:.5rem;font-size:.6rem;color:var(--dim);text-align:right">${new Date(r.created_at).toLocaleString()}</div>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    fbEl.innerHTML = `
+      <span class="sec-label">Collaboration & Revisions</span>
+      <div style="margin-top:.75rem">
+        ${commentBlock}
+        
+        <div style="border:1px solid var(--border);padding:1.5rem;background:var(--bg2)">
+          <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.75rem">Request a Design Adjustment</span>
+          <textarea id="ctrlRevisionText" style="width:100%;min-height:90px;background:var(--bg);border:1px solid var(--border);color:var(--sand);font-size:.78rem;padding:.75rem;outline:none;resize:vertical;line-height:1.6" placeholder="Describe the typography, layout, or copy change you need..."></textarea>
+          <div style="margin-top:1rem;text-align:right">
+            <button class="pay-btn" id="btnSubmitRevision" style="width:auto;padding:.6rem 1.75rem;font-size:.65rem">Submit Revision Request</button>
+          </div>
+        </div>
+        
+        ${revisionsListHtml}
+      </div>
+    `;
+
+    document.getElementById('btnSubmitRevision').onclick = async () => {
+      const txt = document.getElementById('ctrlRevisionText').value.trim();
+      if (!txt) return;
+      const btn = document.getElementById('btnSubmitRevision');
+      btn.disabled = true; btn.textContent = 'Submitting...';
+
+      const freshFd = lead.full_data || {};
+      if (!freshFd.revisions) freshFd.revisions = [];
+      freshFd.revisions.unshift({
+        text: txt,
+        created_at: new Date().toISOString()
+      });
+
+      try {
+        const r = await fetch('/api/leads/' + TOKEN, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_data: freshFd })
+        });
+        if (r.ok) {
+          toast('Revision request logged successfully.');
+          lead.full_data = freshFd;
+          renderDash(lead, justPaid);
+        } else {
+          toast('Could not log revision. Please try again.');
+          btn.disabled = false; btn.textContent = 'Submit Revision Request';
+        }
+      } catch (err) {
+        toast('Network error. Try again.');
+        btn.disabled = false; btn.textContent = 'Submit Revision Request';
+      }
+    };
+  } else {
+    fbEl.style.display = 'none';
+  }
+
   LEAD = lead;
   startPollingIfNeeded(lead);
+}
+
+function toast(msg){
+  const el = document.createElement('div');
+  el.style = "position:fixed;bottom:2rem;right:2rem;background:#121109;border:1px solid rgba(222,200,181,.15);color:#DEC8B5;padding:.75rem 1.5rem;font-size:.7rem;letter-spacing:.04em;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,sans-serif;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.5);transition:opacity .3s,transform .3s;transform:translateY(8px);opacity:0";
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 50);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    setTimeout(() => el.remove(), 300);
+  }, 3200);
 }
 
 // Called after renderDash — start polling now that we have the lead

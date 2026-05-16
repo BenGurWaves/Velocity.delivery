@@ -69,10 +69,7 @@ export async function onRequestPatch(context) {
     patch.first_submitted_at = body.submitted_at;
   }
 
-  // Auto-transition status when brief is submitted
-  if (body.submitted_at && lead.status === 'onboarding_sent') {
-    patch.status = 'pending';
-  }
+
   
   // Map due_date to delivery_target_date automatically for admin view
   if (patch.due_date && /^\d{4}-\d{2}-\d{2}$/.test(patch.due_date)) {
