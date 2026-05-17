@@ -128,122 +128,125 @@ const STATUS_EMAIL = {
 export async function onRequestOptions() { return secureOptions(); }
 
 export async function onRequestPatch(context) {
+  try {
+    const auth = await checkAdminAuth(context.request, context.env);
+    if (auth.locked) return secureErr('Too many failed attempts. Try again in 15 minutes.', 429);
+    if (!auth.ok)    return secureErr('Unauthorized', 401);
+    const sb = getSupabase(context.env);
+    if (!sb) return secureErr('Service unavailable', 503);
 
-  const auth = await checkAdminAuth(context.request, context.env);
-  if (auth.locked) return secureErr('Too many failed attempts. Try again in 15 minutes.', 429);
-  if (!auth.ok)    return secureErr('Unauthorized', 401);
-  const sb = getSupabase(context.env);
-  if (!sb) return secureErr('Service unavailable', 503);
+    let body;
+    try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
 
-  let body;
-  try { body = await context.request.json(); } catch { return errRes('Invalid JSON'); }
+    const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at, kickoff_date, delivery_target_date } = body;
+    if (!token) return secureErr('token required');
 
-  const { token, quote_amount, status, admin_comment, site_link, scope_text, scope_sent_at, kickoff_date, delivery_target_date } = body;
-  if (!token) return secureErr('token required');
+    const patch = {};
+    let prevStatus = null;
 
-  const patch = {};
-  let prevStatus = null;
+    // Fetch current lead for email / name
+    const rows = await sb.select('velocity_leads', `token=eq.${token}&select=status,client_email,client_name,full_data,site_link,admin_comment`);
+    if (!rows.length) return errRes('Not found', 404);
+    const lead = rows[0];
+    prevStatus = lead.status;
 
-  // Fetch current lead for email / name
-  const rows = await sb.select('velocity_leads', `token=eq.${token}&select=status,client_email,client_name,full_data,site_link`);
-  if (!rows.length) return errRes('Not found', 404);
-  const lead = rows[0];
-  prevStatus = lead.status;
-
-  if (quote_amount !== undefined) {
-    if (quote_amount === null) {
-      patch.quote_amount = null;
-    } else {
-      const amt = parseInt(quote_amount, 10);
-      if (isNaN(amt) || amt < 0) return errRes('Invalid quote_amount');
-      patch.quote_amount = amt;
-    }
-  }
-  if (status !== undefined) {
-    if (!VALID_STATUSES.includes(status)) return secureErr('Invalid status');
-    patch.status = status;
-    // Lock brief when in_progress or beyond
-    if (['in_progress','completed','declined'].includes(status)) {
-      patch.is_locked = true;
-    }
-  }
-  if (admin_comment !== undefined || body.admin_comment_link !== undefined) {
-    if (admin_comment !== undefined) {
-      patch.admin_comment = admin_comment
-        ? { text: admin_comment, created_at: new Date().toISOString() }
-        : null;
-    } else {
-      // Only link is being updated — fetch existing comment to merge
-      const existing = lead.admin_comment || {};
-      if (existing.text) {
-        patch.admin_comment = { ...existing };
-      }
-    }
-    if (body.admin_comment_link !== undefined && patch.admin_comment) {
-      patch.admin_comment.link = body.admin_comment_link ? safeUrl(body.admin_comment_link) : null;
-    }
-  }
-  if (scope_text !== undefined) { patch.scope_text = scope_text || null; }
-  if (scope_sent_at !== undefined) { patch.scope_sent_at = scope_sent_at || null; }
-    if (site_link !== undefined) {
-    patch.site_link = site_link ? safeUrl(site_link) : null;
-  }
-  if (kickoff_date !== undefined) { patch.kickoff_date = kickoff_date || null; }
-  if (delivery_target_date !== undefined) { patch.delivery_target_date = delivery_target_date || null; }
-
-  if (!Object.keys(patch).length) return secureErr('Nothing to update');
-
-  const updated = await sb.update('velocity_leads', `token=eq.${token}`, patch);
-
-  // Auto-sync to Google Sheets on status change
-  if (status && context.env.SHEETS_WEBHOOK_URL && context.env.ADMIN_SECRET) {
-    try {
-      context.waitUntil(fetch(new URL(context.request.url).origin + '/api/leads/sync-sheet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': context.env.ADMIN_SECRET },
-        body: JSON.stringify({ token }),
-      }));
-    } catch (_) {}
-  }
-
-  // Send status change email via Resend
-  let emailResult = null;
-  if (status && status !== prevStatus && context.env.RESEND_API_KEY) {
-    const tpl = STATUS_EMAIL[status];
-    if (tpl) {
-      const p1 = (lead.full_data && lead.full_data.phase1) || {};
-      const name = lead.client_name || p1.full_name || 'there';
-      const email = lead.client_email || p1.email;
-      const siteLink = patch.site_link || lead.site_link;
-      const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
-      const dashboardUrl = `${base}/dashboard/${token}`;
-      const fromAddr = context.env.RESEND_FROM_EMAIL
-        ? `Velocity <${context.env.RESEND_FROM_EMAIL}>`
-        : `Velocity <client@calyvent.com>`;
-      if (email) {
-        try {
-          const emailRes = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${context.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: fromAddr,
-              to: [email],
-              subject: tpl.subject,
-              html: tpl.body(name, dashboardUrl, siteLink),
-            }),
-          });
-          const emailData = await emailRes.json();
-          emailResult = emailRes.ok
-            ? { sent: true, id: emailData.id }
-            : { sent: false, error: emailData.message || emailData.name || JSON.stringify(emailData) };
-        } catch (emailErr) {
-          emailResult = { sent: false, error: String(emailErr) };
-        }
+    if (quote_amount !== undefined) {
+      if (quote_amount === null) {
+        patch.quote_amount = null;
       } else {
-        emailResult = { sent: false, error: 'No email address on lead' };
+        const amt = parseInt(quote_amount, 10);
+        if (isNaN(amt) || amt < 0) return errRes('Invalid quote_amount');
+        patch.quote_amount = amt;
       }
     }
-  }
+    if (status !== undefined) {
+      if (!VALID_STATUSES.includes(status)) return secureErr('Invalid status');
+      patch.status = status;
+      // Lock brief when in_progress or beyond
+      if (['in_progress','completed','declined'].includes(status)) {
+        patch.is_locked = true;
+      }
+    }
+    if (admin_comment !== undefined || body.admin_comment_link !== undefined) {
+      if (admin_comment !== undefined) {
+        patch.admin_comment = admin_comment
+          ? { text: admin_comment, created_at: new Date().toISOString() }
+          : null;
+      } else {
+        // Only link is being updated — fetch existing comment to merge
+        const existing = lead.admin_comment || {};
+        if (existing.text) {
+          patch.admin_comment = { ...existing };
+        }
+      }
+      if (body.admin_comment_link !== undefined && patch.admin_comment) {
+        patch.admin_comment.link = body.admin_comment_link ? safeUrl(body.admin_comment_link) : null;
+      }
+    }
+    if (scope_text !== undefined) { patch.scope_text = scope_text || null; }
+    if (scope_sent_at !== undefined) { patch.scope_sent_at = scope_sent_at || null; }
+    if (site_link !== undefined) {
+      patch.site_link = site_link ? safeUrl(site_link) : null;
+    }
+    if (kickoff_date !== undefined) { patch.kickoff_date = kickoff_date || null; }
+    if (delivery_target_date !== undefined) { patch.delivery_target_date = delivery_target_date || null; }
 
-  return secureJson({ success: true, lead: Array.isArray(updated) ? updated[0] : updated, email: emailResult });
+    if (!Object.keys(patch).length) return secureErr('Nothing to update');
+
+    const updated = await sb.update('velocity_leads', `token=eq.${token}`, patch);
+
+    // Auto-sync to Google Sheets on status change
+    if (status && context.env.SHEETS_WEBHOOK_URL && context.env.ADMIN_SECRET) {
+      try {
+        context.waitUntil(fetch(new URL(context.request.url).origin + '/api/leads/sync-sheet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': context.env.ADMIN_SECRET },
+          body: JSON.stringify({ token }),
+        }));
+      } catch (_) {}
+    }
+
+    // Send status change email via Resend
+    let emailResult = null;
+    if (status && status !== prevStatus && context.env.RESEND_API_KEY) {
+      const tpl = STATUS_EMAIL[status];
+      if (tpl) {
+        const p1 = (lead.full_data && lead.full_data.phase1) || {};
+        const name = lead.client_name || p1.full_name || 'there';
+        const email = lead.client_email || p1.email;
+        const siteLink = patch.site_link || lead.site_link;
+        const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
+        const dashboardUrl = `${base}/dashboard/${token}`;
+        const fromAddr = context.env.RESEND_FROM_EMAIL
+          ? `Velocity <${context.env.RESEND_FROM_EMAIL}>`
+          : `Velocity <client@calyvent.com>`;
+        if (email) {
+          try {
+            const emailRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${context.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                from: fromAddr,
+                to: [email],
+                subject: tpl.subject,
+                html: tpl.body(name, dashboardUrl, siteLink),
+              }),
+            });
+            const emailData = await emailRes.json();
+            emailResult = emailRes.ok
+              ? { sent: true, id: emailData.id }
+              : { sent: false, error: emailData.message || emailData.name || JSON.stringify(emailData) };
+          } catch (emailErr) {
+            emailResult = { sent: false, error: String(emailErr) };
+          }
+        } else {
+          emailResult = { sent: false, error: 'No email address on lead' };
+        }
+      }
+    }
+
+    return secureJson({ success: true, lead: Array.isArray(updated) ? updated[0] : updated, email: emailResult });
+  } catch (err) {
+    return errRes(err.stack || err.message || String(err), 500);
+  }
 }
