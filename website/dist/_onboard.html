@@ -96,6 +96,19 @@ select option{background:var(--bg2)}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){.wrap{padding:140px 1.5rem 80px}.phase-title{font-size:3.2rem}.btn-next,.btn-submit{width:100%;text-align:center}}
+.btn-signin{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sand);padding:.8rem 2.5rem;background:var(--muted);transition:all .4s var(--ease);border:none;cursor:pointer}
+.btn-signin:hover{background:var(--brass);color:var(--bg)}
+.signin-box{max-width:420px;margin:0 auto}
+.color-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-top:.5rem}
+@media(max-width:600px){.color-fields{grid-template-columns:1fr;gap:1.5rem}}
+.disclaimer{background:rgba(255,255,255,.01);border:1px solid var(--border);padding:1.5rem;margin-top:2.5rem;font-size:.72rem;color:var(--dim);line-height:1.8}
+.disclaimer strong{color:var(--sand);font-weight:400}
+.disclaimer p{margin-bottom:.75rem}
+.disclaimer p:last-child{margin-bottom:0}
+.success-eyebrow{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:1.5rem}
+.success-cta{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--sand);padding:1rem 2.5rem;transition:all .4s var(--ease);display:inline-block;margin-bottom:2rem}
+.success-cta:hover{background:var(--brass);transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+.success-note{font-size:.68rem;color:var(--dim);letter-spacing:.04em}
 </style>
 </head>
 <body>

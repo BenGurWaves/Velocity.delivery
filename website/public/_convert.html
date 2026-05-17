@@ -228,7 +228,7 @@ async function init(){
   if(lead.is_paid){
     location.href='/dashboard/'+TOKEN+'?paid=1';return;
   }
-  if(!lead.quote_amount||lead.quote_amount<=0){
+  if(lead.quote_amount===null||lead.quote_amount===undefined){
     hide('stateLoading');
     document.getElementById('errorMsg').textContent='No quote has been set for this project yet. Check your dashboard for updates.';
     show('stateError');return;
@@ -268,75 +268,80 @@ async function init(){
     document.getElementById('payBtn').disabled=!this.checked;
   });
 
-  // Initialize Stripe
-  if(!STRIPE_PK||STRIPE_PK==='__STRIPE_PK__'){
-    document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Payment system not configured. Contact support.</p>';
-    return;
-  }
-
-  stripe=Stripe(STRIPE_PK);
-
-  // Create PaymentIntent
-  let clientSecret;
-  try{
-    const r=await fetch('/api/stripe/create-intent',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({token:TOKEN})
-    });
-    const d=await r.json();
-    if(!r.ok||!d.client_secret){
-      document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">'+(d.error||'Failed to initialize payment.')+'</p>';
+  if(lead.quote_amount===0){
+    document.getElementById('stripeMount').innerHTML='<div style="font-size:.78rem;color:var(--dim);text-align:center;padding:1.5rem 0;line-height:1.8">Complimentary / Included. <strong style="color:var(--sand);font-weight:400">No payment or credit card required.</strong></div>';
+    document.getElementById('payBtn').textContent='Confirm Terms & Complete Onboarding';
+  } else {
+    // Initialize Stripe
+    if(!STRIPE_PK||STRIPE_PK==='__STRIPE_PK__'){
+      document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Payment system not configured. Contact support.</p>';
       return;
     }
-    clientSecret=d.client_secret;
-  }catch{
-    document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Network error. Please refresh.</p>';
-    return;
-  }
 
-  // Mount Payment Element
-  elements=stripe.elements({
-    clientSecret,
-    appearance:{
-      theme:'night',
-      variables:{
-        colorPrimary:'#C49C7B',
-        colorBackground:'#121109',
-        colorText:'#DEC8B5',
-        colorDanger:'#c08080',
-        fontFamily:'Inter, system-ui, sans-serif',
-        fontSizeBase:'14px',
-        borderRadius:'0px',
-        spacingUnit:'4px',
-      },
-      rules:{
-        '.Input':{
-          backgroundColor:'#0D0C09',
-          border:'1px solid rgba(222,200,181,.13)',
-          color:'#DEC8B5',
-          fontSize:'14px',
-        },
-        '.Input:focus':{
-          borderColor:'#C49C7B',
-          boxShadow:'none',
-        },
-        '.Label':{
-          color:'#565250',
-          fontSize:'11px',
-          letterSpacing:'.1em',
-          textTransform:'uppercase',
-        },
+    stripe=Stripe(STRIPE_PK);
+
+    // Create PaymentIntent
+    let clientSecret;
+    try{
+      const r=await fetch('/api/stripe/create-intent',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({token:TOKEN})
+      });
+      const d=await r.json();
+      if(!r.ok||!d.client_secret){
+        document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">'+(d.error||'Failed to initialize payment.')+'</p>';
+        return;
       }
+      clientSecret=d.client_secret;
+    }catch{
+      document.getElementById('stripeMount').innerHTML='<p style="font-size:.68rem;color:#c08080;text-align:center;padding:1rem 0">Network error. Please refresh.</p>';
+      return;
     }
-  });
 
-  paymentElement=elements.create('payment');
-  document.getElementById('stripeMount').innerHTML='';
-  paymentElement.mount('#stripeMount');
+    // Mount Payment Element
+    elements=stripe.elements({
+      clientSecret,
+      appearance:{
+        theme:'night',
+        variables:{
+          colorPrimary:'#C49C7B',
+          colorBackground:'#121109',
+          colorText:'#DEC8B5',
+          colorDanger:'#c08080',
+          fontFamily:'Inter, system-ui, sans-serif',
+          fontSizeBase:'14px',
+          borderRadius:'0px',
+          spacingUnit:'4px',
+        },
+        rules:{
+          '.Input':{
+            backgroundColor:'#0D0C09',
+            border:'1px solid rgba(222,200,181,.13)',
+            color:'#DEC8B5',
+            fontSize:'14px',
+          },
+          '.Input:focus':{
+            borderColor:'#C49C7B',
+            boxShadow:'none',
+          },
+          '.Label':{
+            color:'#565250',
+            fontSize:'11px',
+            letterSpacing:'.1em',
+            textTransform:'uppercase',
+          },
+        }
+      }
+    });
 
-  paymentElement.on('focus',()=>document.getElementById('stripeMount').classList.add('focused'));
-  paymentElement.on('blur',()=>document.getElementById('stripeMount').classList.remove('focused'));
+    paymentElement=elements.create('payment');
+    document.getElementById('stripeMount').innerHTML='';
+    paymentElement.mount('#stripeMount');
+
+    paymentElement.on('focus',()=>document.getElementById('stripeMount').classList.add('focused'));
+    paymentElement.on('blur',()=>document.getElementById('stripeMount').classList.remove('focused'));
+  }
 
   // Submit handler
   document.getElementById('payBtn').addEventListener('click',async function(){
@@ -348,40 +353,67 @@ async function init(){
 
     btn.disabled=true;btn.textContent='Processing\u2026';
 
-    const{error,paymentIntent}=await stripe.confirmPayment({
-      elements,
-      redirect:'if_required',
-    });
-
-    if(error){
-      errEl.textContent=error.message||'Payment failed. Please try again.';
-      errEl.classList.add('show');
-      btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
-      return;
-    }
-
-    if(paymentIntent&&paymentIntent.status==='succeeded'){
+    if(lead.quote_amount===0){
       btn.textContent='Confirming\u2026';
-      // Record MSA + payment on backend
       try{
-        await fetch('/api/stripe/confirm-payment',{
+        const r=await fetch('/api/stripe/confirm-payment',{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({token:TOKEN,payment_intent_id:paymentIntent.id})
+          body:JSON.stringify({token:TOKEN})
         });
-      }catch(_){}
+        const d=await r.json();
+        if(!r.ok){
+          throw new Error(d.error||'Failed to confirm agreement.');
+        }
 
-      // Show success
-      hide('transactionWrap');
-      document.getElementById('successScreen').classList.add('show');
-      document.getElementById('navRight').textContent='Confirmed';
+        // Show success
+        hide('transactionWrap');
+        document.getElementById('successScreen').classList.add('show');
+        document.getElementById('navRight').textContent='Confirmed';
 
-      // Redirect to dashboard after 5s
-      setTimeout(()=>{location.href='/dashboard/'+TOKEN+'?paid=1';},5000);
+        // Redirect to dashboard after 5s
+        setTimeout(()=>{location.href='/dashboard/'+TOKEN+'?paid=1';},5000);
+      } catch(err) {
+        errEl.textContent=err.message||'Failed to confirm agreement. Please try again.';
+        errEl.classList.add('show');
+        btn.disabled=false;btn.textContent='Confirm Terms & Complete Onboarding';
+      }
     } else {
-      errEl.textContent='Payment requires additional action. Please follow the prompts.';
-      errEl.classList.add('show');
-      btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
+      const{error,paymentIntent}=await stripe.confirmPayment({
+        elements,
+        redirect:'if_required',
+      });
+
+      if(error){
+        errEl.textContent=error.message||'Payment failed. Please try again.';
+        errEl.classList.add('show');
+        btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
+        return;
+      }
+
+      if(paymentIntent&&paymentIntent.status==='succeeded'){
+        btn.textContent='Confirming\u2026';
+        // Record MSA + payment on backend
+        try{
+          await fetch('/api/stripe/confirm-payment',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({token:TOKEN,payment_intent_id:paymentIntent.id})
+          });
+        }catch(_){}
+
+        // Show success
+        hide('transactionWrap');
+        document.getElementById('successScreen').classList.add('show');
+        document.getElementById('navRight').textContent='Confirmed';
+
+        // Redirect to dashboard after 5s
+        setTimeout(()=>{location.href='/dashboard/'+TOKEN+'?paid=1';},5000);
+      } else {
+        errEl.textContent='Payment requires additional action. Please follow the prompts.';
+        errEl.classList.add('show');
+        btn.disabled=false;btn.textContent='Execute Agreement & Initialize Sprint';
+      }
     }
   });
 }

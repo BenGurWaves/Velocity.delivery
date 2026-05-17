@@ -52,11 +52,15 @@ export async function onRequestPost(context) {
   if (context.env.RESEND_API_KEY && lead.client_email) {
     const p1 = (lead.full_data && lead.full_data.phase1) || {};
     const name = lead.client_name || p1.full_name || 'there';
-    const amount = lead.quote_amount
+    const amount = lead.quote_amount !== undefined && lead.quote_amount !== null
       ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(lead.quote_amount / 100)
       : '';
     const base = context.env.SITE_URL || 'https://velocity.calyvent.com';
     const dashUrl = `${base}/dashboard/${token}`;
+
+    const emailBodyText = lead.quote_amount === 0
+      ? `Your project has been confirmed and the Master Services Agreement has been executed.`
+      : `Your payment of <strong style="color:#DEC8B5;font-weight:400">${amount}</strong> has been received and the Master Services Agreement has been executed.`;
 
     try {
       await fetch('https://api.resend.com/emails', {
@@ -70,7 +74,7 @@ export async function onRequestPost(context) {
             ? `Velocity <${context.env.RESEND_FROM_EMAIL}>`
             : 'Velocity <client@calyvent.com>',
           to: [lead.client_email],
-          subject: 'Agreement executed — project confirmed.',
+          subject: lead.quote_amount === 0 ? 'Agreement executed — project confirmed.' : 'Agreement executed — project confirmed.',
           html: `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"></head>
 <body style="margin:0;padding:0;background:#0D0C09;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#0D0C09">
@@ -82,7 +86,7 @@ export async function onRequestPost(context) {
 <tr><td style="background:rgba(222,200,181,.08);height:1px;padding:0;font-size:0;line-height:0">&nbsp;</td></tr>
 <tr><td style="padding:40px 0 0">
   <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:30px;color:#DEC8B5;letter-spacing:-.035em;margin:0 0 22px;line-height:1.12">Confirmed,<br>${name}.</h1>
-  <p style="font-size:13px;color:#8a8680;line-height:1.95;margin:0 0 18px">Your payment of <strong style="color:#DEC8B5;font-weight:400">${amount}</strong> has been received and the Master Services Agreement has been executed.</p>
+  <p style="font-size:13px;color:#8a8680;line-height:1.95;margin:0 0 18px">${emailBodyText}</p>
   <p style="font-size:13px;color:#8a8680;line-height:1.95;margin:0 0 18px">Your project is booked. We will be in touch within 24 hours to align on next steps and begin the production sprint.</p>
   <table cellpadding="0" cellspacing="0" style="margin:32px 0"><tr><td style="background:#DEC8B5">
     <a href="${dashUrl}" style="display:block;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#0D0C09;text-decoration:none;padding:13px 30px;font-weight:500">View Dashboard &rarr;</a>
@@ -106,6 +110,7 @@ export async function onRequestPost(context) {
   if (context.env.RESEND_API_KEY) {
     const p1 = (lead.full_data && lead.full_data.phase1) || {};
     const nm = lead.client_name || p1.full_name || 'Unknown';
+    const amountLabel = lead.quote_amount === 0 ? 'complimentary project (free)' : `$${(lead.quote_amount / 100).toFixed(2)}`;
     try {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -116,8 +121,8 @@ export async function onRequestPost(context) {
         body: JSON.stringify({
           from: 'Velocity System <client@calyvent.com>',
           to: ['atelier@calyvent.com'],
-          subject: `Payment received: ${nm}`,
-          text: `${nm} has executed the MSA and paid ${lead.quote_amount ? '$' + (lead.quote_amount / 100).toFixed(2) : 'unknown amount'}. Dashboard: ${(context.env.SITE_URL || 'https://velocity.calyvent.com')}/coffee/admin/`,
+          subject: lead.quote_amount === 0 ? `Agreement executed: ${nm} (Free)` : `Payment received: ${nm}`,
+          text: `${nm} has executed the MSA and confirmed their ${amountLabel}. Dashboard: ${(context.env.SITE_URL || 'https://velocity.calyvent.com')}/coffee/admin/`,
         }),
       });
     } catch (_) {}
