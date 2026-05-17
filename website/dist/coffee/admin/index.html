@@ -367,7 +367,7 @@ function renderDetail(l) {
       </div>
       <div class="cp-group">
         <span class="cp-label">Quote Amount (USD)</span>
-        <input type="number" id="ctrlQuote" class="cp-input" value="${l.quote_amount?(l.quote_amount/100).toFixed(2):''}" placeholder="e.g. 5000">
+        <input type="number" id="ctrlQuote" class="cp-input" value="${(l.quote_amount !== null && l.quote_amount !== undefined) ? (l.quote_amount/100).toFixed(2) : ''}" placeholder="e.g. 5000">
       </div>
       <div class="cp-group">
         <span class="cp-label">Delivery Target Date</span>
@@ -519,7 +519,8 @@ function renderDetail(l) {
       admin_comment: ac || null,
       admin_comment_link: acl || null
     };
-    if(q) patch.quote_amount = Math.round(parseFloat(q)*100);
+    if(q.trim()===''){ patch.quote_amount = null; }
+    else { patch.quote_amount = Math.round(parseFloat(q)*100); }
     patch.delivery_target_date = d ? d+'T00:00:00Z' : null;
     
     if(await aupd(l.token, patch)){ toast('State & Feedback saved.'); reload(); }

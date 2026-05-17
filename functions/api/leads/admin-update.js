@@ -151,9 +151,13 @@ export async function onRequestPatch(context) {
   prevStatus = lead.status;
 
   if (quote_amount !== undefined) {
-    const amt = parseInt(quote_amount, 10);
-    if (isNaN(amt) || amt < 0) return errRes('Invalid quote_amount');
-    patch.quote_amount = amt;
+    if (quote_amount === null) {
+      patch.quote_amount = null;
+    } else {
+      const amt = parseInt(quote_amount, 10);
+      if (isNaN(amt) || amt < 0) return errRes('Invalid quote_amount');
+      patch.quote_amount = amt;
+    }
   }
   if (status !== undefined) {
     if (!VALID_STATUSES.includes(status)) return secureErr('Invalid status');
