@@ -7,6 +7,11 @@ import { getSupabase, errRes, jsonRes } from '../../_lib/supabase.js';
 import { checkAdminAuth, rateLimit, validateLength, safeUrl, secureJson, secureErr, secureOptions } from '../../_lib/security.js';
 
 const VALID_STATUSES = ['outreach','responded','onboarding_sent','pending','scope_sent','accepted','paid','in_progress','completed','declined','archived'];
+const STATUS_FALLBACKS = {
+  'onboarding_sent': 'pending',
+  'scope_sent': 'pending',
+  'paid': 'accepted'
+};
 
 // Shared email shell
 function emailShell(innerHtml) {
@@ -151,7 +156,7 @@ export async function onRequestPatch(context) {
     prevStatus = lead.status;
 
     if (quote_amount !== undefined) {
-      if (quote_amount === null) {
+      if (quote_amount === null || quote_amount === '') {
         patch.quote_amount = null;
       } else {
         const amt = parseInt(quote_amount, 10);
@@ -161,9 +166,18 @@ export async function onRequestPatch(context) {
     }
     if (status !== undefined) {
       if (!VALID_STATUSES.includes(status)) return secureErr('Invalid status');
-      patch.status = status;
+      
+      const dbStatus = STATUS_FALLBACKS[status] || status;
+      patch.status = dbStatus;
+      
+      const existingFd = lead.full_data || {};
+      patch.full_data = {
+        ...existingFd,
+        current_status: status
+      };
+
       // Lock brief when in_progress or beyond
-      if (['in_progress','completed','declined'].includes(status)) {
+      if (['in_progress','completed','declined'].includes(dbStatus)) {
         patch.is_locked = true;
       }
     }
@@ -177,6 +191,9 @@ export async function onRequestPatch(context) {
         const existing = lead.admin_comment || {};
         if (existing.text) {
           patch.admin_comment = { ...existing };
+        } else {
+          // Create new comment object with just the link
+          patch.admin_comment = {};
         }
       }
       if (body.admin_comment_link !== undefined && patch.admin_comment) {
@@ -245,7 +262,11 @@ export async function onRequestPatch(context) {
       }
     }
 
-    return secureJson({ success: true, lead: Array.isArray(updated) ? updated[0] : updated, email: emailResult });
+    const leadRes = Array.isArray(updated) && updated.length ? updated[0] : (updated || {});
+    if (leadRes.full_data && leadRes.full_data.current_status) {
+      leadRes.status = leadRes.full_data.current_status;
+    }
+    return jsonRes({ success: true, lead: leadRes });
   } catch (err) {
     return errRes(err.stack || err.message || String(err), 500);
   }
