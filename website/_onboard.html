@@ -633,7 +633,7 @@ function collect(){
   const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
   const getChecked = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
   const socials=[...document.querySelectorAll('#socialsList .social-row input')].map(i=>i.value.trim()).filter(Boolean);
-  const inspiration=[]; // Phase 3 doesn't exist in current form
+  const inspiration=document.getElementById('inspirationList')?[...document.querySelectorAll('#inspirationList .url-block')].map(b=>({url:b.querySelector('.ub-url').value.trim(),notes:b.querySelector('.ub-notes').value.trim()})).filter(b=>b.url):[];
   const anti=document.getElementById('antiList')?[...document.querySelectorAll('#antiList .url-block')].map(b=>({url:b.querySelector('.ub-url').value.trim(),notes:b.querySelector('.ub-notes').value.trim()})).filter(b=>b.url):[];
   const sp=getVal('startingPoint');
   const showcaseSel=document.querySelector('input[name="showcaseChoice"]:checked');

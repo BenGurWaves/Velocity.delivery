@@ -280,14 +280,17 @@ function renderBrief(lead){
   if(bg){
     document.getElementById('chipBg').style.background = bg;
     document.getElementById('badgeBg').style.display = 'inline-flex';
+    document.getElementById('badgeBg').innerHTML = '<span class="color-chip" id="chipBg"></span>Background <span style="color:var(--dim);font-size:.65rem;font-family:monospace">' + bg + '</span>';
   } else { document.getElementById('badgeBg').style.display = 'none'; }
   if(sec){
     document.getElementById('chipSec').style.background = sec;
     document.getElementById('badgeSec').style.display = 'inline-flex';
+    document.getElementById('badgeSec').innerHTML = '<span class="color-chip" id="chipSec"></span>Secondary <span style="color:var(--dim);font-size:.65rem;font-family:monospace">' + sec + '</span>';
   } else { document.getElementById('badgeSec').style.display = 'none'; }
   if(acc){
     document.getElementById('chipAcc').style.background = acc;
     document.getElementById('badgeAcc').style.display = 'inline-flex';
+    document.getElementById('badgeAcc').innerHTML = '<span class="color-chip" id="chipAcc"></span>Accent <span style="color:var(--dim);font-size:.65rem;font-family:monospace">' + acc + '</span>';
   } else { document.getElementById('badgeAcc').style.display = 'none'; }
 
   // Logistics
