@@ -148,8 +148,13 @@ Auto-sent on status change:
 
 ## Previews
 
-15 prospect preview sites in `website/previews/`:
-A. Caraceni, Holistic Health NYC, JAR, Kent & Haste, Liondale Medical, Michael Mansshardt, Moneybag Speaks (x2), MYSTMMXX, Orkin, Poehlmann Bresan, Pure Change, Taffin, The Integrative Medical Group, Vedic Astrology Guru, BenGurWaves, Hulsman Timepieces.
+6 prospect preview sites in `website/previews/`:
+- ballouard
+- btsd
+- daviesanderson
+- maciej-misnik
+- naoyahida
+- tonyanderson
 
 ---
 
